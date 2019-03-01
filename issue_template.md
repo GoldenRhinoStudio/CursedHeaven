@@ -1,9 +1,9 @@
 ## ISSUE TEMPLATE
 
 ### Summary
-[ ] Which is the bug: 
-[ ] Type of the bug:
-[ ] Severity of the bug:
+- [ ] Which is the bug: 
+- [ ] Type of the bug:
+- [ ] Severity of the bug:
 
 ***
 

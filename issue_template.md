@@ -1,14 +1,18 @@
 ## ISSUE TEMPLATE
 
 ### Summary
-- Which is the bug: 
-- Type of the bug:
+- Description: 
+- Type:
   - [ ] A (crash)
   - [ ] B (severe)
   - [ ] C (general)
   - [ ] D (minor)
   - [ ] E (cosmetic)
-- Severity of the bug:
+- Severity:
+  - [ ] Critical
+  - [ ] High
+  - [ ] Medium
+  - [ ] Low
 
 ***
 

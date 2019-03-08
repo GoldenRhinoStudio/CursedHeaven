@@ -1,7 +1,6 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
-#include "j1Scene2.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -21,7 +20,7 @@
 
 j1SceneMenu::j1SceneMenu()
 {
-	name.create("menu");
+	name.assign("menu");
 
 	player.LoadAnimations("idle");
 	harpy.LoadEnemyAnimations("idle", "harpy");
@@ -130,70 +129,70 @@ bool j1SceneMenu::Update(float dt)
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 
 	// Button actions
-	for (p2List_item<j1Button*>* item = menuButtons.start; item != nullptr; item = item->next) {
-		if (item->data->visible) {
-			switch (item->data->state)
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
+		if ((*item)->visible) {
+			switch ((*item)->state)
 			{
 			case IDLE:
-				item->data->situation = item->data->idle;
+				(*item)->situation = (*item)->idle;
 				break;
 
 			case HOVERED:
-				item->data->situation = item->data->hovered;
+				(*item)->situation = (*item)->hovered;
 				break;
 
 			case RELEASED:
-				item->data->situation = item->data->idle;
-				if (item->data->bfunction == PLAY_GAME) {
+				(*item)->situation = (*item)->idle;
+				if ((*item)->bfunction == PLAY_GAME) {
 					startGame = true;
 					App->fade->FadeToBlack();
 				}
-				else if (item->data->bfunction == LOAD_GAME) {
+				else if ((*item)->bfunction == LOAD_GAME) {
 					loadGame = true;
 					App->fade->FadeToBlack();
 				}
-				else if (item->data->bfunction == CLOSE_GAME) {
+				else if ((*item)->bfunction == CLOSE_GAME) {
 					continueGame = false;
 				}
 				else 
-				if ((item->data->bfunction == SETTINGS && !settings_window->visible) 
-					|| (item->data->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
+				if (((*item)->bfunction == SETTINGS && !settings_window->visible)
+					|| ((*item)->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
 					settings_window->visible = !settings_window->visible;
 					settings_window->position = App->gui->settingsPosition;
 
-					for (p2List_item<j1Button*>* item = menuButtons.start; item != nullptr; item = item->next) {
-						if (item->data->parent == settings_window) {
-							item->data->visible = !item->data->visible;
-							item->data->position.x = settings_window->position.x + item->data->initialPosition.x;
-							item->data->position.y = settings_window->position.y + item->data->initialPosition.y;
+					for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
+						if ((*item)->parent == settings_window) {
+							(*item)->visible = !(*item)->visible;
+							(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+							(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 						}
 					}
-					for (p2List_item<j1Label*>* item = menuLabels.start; item != nullptr; item = item->next) {
-						if (item->data->parent == settings_window) {
-							item->data->visible = !item->data->visible;
-							item->data->position.x = settings_window->position.x + item->data->initialPosition.x;
-							item->data->position.y = settings_window->position.y + item->data->initialPosition.y;
+					for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
+						if ((*item)->parent == settings_window) {
+							(*item)->visible = !(*item)->visible;
+							(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+							(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 						}
 					}
-					for (p2List_item<j1Box*>* item = menuBoxes.start; item != nullptr; item = item->next) {
-						if (item->data->parent == settings_window) {
-							item->data->visible = !item->data->visible;
-							item->data->position.x = settings_window->position.x + item->data->initialPosition.x;
-							item->data->position.y = settings_window->position.y + item->data->initialPosition.y;
+					for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
+						if ((*item)->parent == settings_window) {
+							(*item)->visible = !(*item)->visible;
+							(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+							(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 
-							item->data->minimum = item->data->originalMinimum + settings_window->position.x;
-							item->data->maximum = item->data->originalMaximum + settings_window->position.x;
+							(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
+							(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
 						}
 					}
 				}
-				else if (item->data->bfunction == OPEN_CREDITS) {
+				else if ((*item)->bfunction == OPEN_CREDITS) {
 					openCredits = true;
 					App->fade->FadeToBlack();
 				}
 				break;
 
 			case CLICKED:
-				item->data->situation = item->data->clicked;
+				(*item)->situation = (*item)->clicked;
 				break;
 			}
 		}
@@ -224,13 +223,15 @@ bool j1SceneMenu::Update(float dt)
 	App->render->Blit(harpy_tex, 205, 35, &h, SDL_FLIP_HORIZONTAL);
 
 	// Blitting the buttons and labels of the menu
-	for (p2List_item<j1Button*>* item = menuButtons.start; item != nullptr; item = item->next) {
-		if (item->data->parent != nullptr) continue;
-		item->data->Draw(App->gui->buttonsScale);
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) 
+	{
+		if ((*item)->parent != nullptr) continue;
+		(*item)->Draw(App->gui->buttonsScale);
 	}
-	for (p2List_item<j1Label*>* item = menuLabels.start; item != nullptr; item = item->next) {
-		if (item->data->parent != nullptr) continue;
-		if (item->data->visible) item->data->Draw();
+	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item)
+	{
+		if ((*item)->parent != nullptr) continue;
+		if ((*item)->visible) (*item)->Draw();
 	}
 
 	// Blitting the logo
@@ -253,34 +254,34 @@ bool j1SceneMenu::Update(float dt)
 		settings_window->Draw(App->gui->settingsWindowScale);
 
 	// Blitting the buttons, labels and boxes (sliders) of the window
-	for (p2List_item<j1Button*>* item = menuButtons.start; item != nullptr; item = item->next) {
-		if (item->data->parent == nullptr) continue;
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
+		if ((*item)->parent == nullptr) continue;
 
-		if (item->data->parent->visible == false)
-			item->data->visible = false;
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
 		else
-			item->data->Draw(App->gui->buttonsScale);
+			(*item)->Draw(App->gui->buttonsScale);
 		
 	}
-	for (p2List_item<j1Label*>* item = menuLabels.start; item != nullptr; item = item->next) {
-		if (item->data->parent == nullptr) continue;
+	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
+		if ((*item)->parent == nullptr) continue;
 
-		if (item->data->parent->visible == false)
-			item->data->visible = false;
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
 		else {
-			if(item->data->text == "Settings")
-				item->data->Draw();
+			if((*item)->text == "Settings")
+				(*item)->Draw();
 			else
-				item->data->Draw(App->gui->buttonsScale);
+				(*item)->Draw(App->gui->buttonsScale);
 		}
 	}
-	for (p2List_item<j1Box*>* item = menuBoxes.start; item != nullptr; item = item->next) {
-		if (item->data->parent == nullptr) continue;
+	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
+		if ((*item)->parent == nullptr) continue;
 
-		if (item->data->parent->visible == false)
-			item->data->visible = false;
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
 		else
-			item->data->Draw(App->gui->buttonsScale);
+			(*item)->Draw(App->gui->buttonsScale);
 	}
 
 	return true;
@@ -307,19 +308,19 @@ bool j1SceneMenu::CleanUp()
 	App->map->CleanUp();
 	App->tex->CleanUp();
 
-	for (p2List_item<j1Button*>* item = menuButtons.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		menuButtons.del(item);
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
+		(*item)->CleanUp();
+		menuButtons.remove(*item);
 	}
 
-	for (p2List_item<j1Label*>* item = menuLabels.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		menuLabels.del(item);
+	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
+		(*item)->CleanUp();
+		menuLabels.remove(*item);
 	}
 
-	for (p2List_item<j1Box*>* item = menuBoxes.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		menuBoxes.del(item);
+	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
+		(*item)->CleanUp();
+		menuBoxes.remove(*item);
 	}
 
 	delete settings_window;
@@ -361,10 +362,6 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 			if (objectiveScene == SCENE::SCENE1) {
 				App->scene1->active = true;
 				App->scene1->Start();
-			}
-			else if (objectiveScene == SCENE::SCENE2) {
-				App->scene2->active = true;
-				App->scene2->Start();
 			}
 
 			App->entity->active = true;

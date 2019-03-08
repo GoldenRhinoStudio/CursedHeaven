@@ -46,7 +46,7 @@ public:
 	uint		scale;
 
 private:
-	p2SString	title;
+	std::string	title;
 };
 
 #endif // __j1WINDOW_H__

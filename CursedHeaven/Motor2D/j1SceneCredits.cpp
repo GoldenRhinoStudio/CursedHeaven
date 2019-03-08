@@ -17,7 +17,7 @@
 
 j1SceneCredits::j1SceneCredits()
 {
-	name.create("credits");
+	name.assign("credits");
 }
 
 j1SceneCredits::~j1SceneCredits() {}
@@ -99,33 +99,33 @@ bool j1SceneCredits::Update(float dt)
 	App->gui->UpdateButtonsState(&creditsButtons);
 
 	// Button actions
-	for (p2List_item<j1Button*>* item = creditsButtons.start; item != nullptr; item = item->next) {
-		switch (item->data->state)
+	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
+		switch ((*item)->state)
 		{
 		case IDLE:
-			item->data->situation = item->data->idle;
+			(*item)->situation = (*item)->idle;
 			break;
 
 		case HOVERED:
-			item->data->situation = item->data->hovered;
+			(*item)->situation = (*item)->hovered;
 			break;
 
 		case RELEASED:
-			item->data->situation = item->data->idle;
-			if (item->data->bfunction == GO_TO_MENU) {
+			(*item)->situation = (*item)->idle;
+			if ((*item)->bfunction == GO_TO_MENU) {
 				backToMenu = true;
 				App->fade->FadeToBlack();
 			}
-			else if (item->data->bfunction == CLOSE_GAME) {
+			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
 			}
-			else if (item->data->bfunction == LINK) {
+			else if ((*item)->bfunction == LINK) {
 				ShellExecuteA(NULL, "open", "https://goo.gl/SUk3ra", NULL, NULL, SW_SHOWNORMAL);
 			}
 			break;
 
 		case CLICKED:
-			item->data->situation = item->data->clicked;
+			(*item)->situation = (*item)->clicked;
 			break;
 	}
 }
@@ -141,13 +141,13 @@ bool j1SceneCredits::Update(float dt)
 	App->map->Draw();
 
 	// Blitting the buttons
-	for (p2List_item<j1Button*>* item = creditsButtons.start; item != nullptr; item = item->next) {
-		item->data->Draw(App->gui->buttonsScale);
+	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
+		(*item)->Draw(App->gui->buttonsScale);
 	}
 
 	// Blitting the labels
-	for (p2List_item<j1Label*>* item = creditsLabels.start; item != nullptr; item = item->next) {
-		item->data->Draw();
+	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end(); ++item) {
+		(*item)->Draw();
 	}
 
 	App->render->Blit(license, 42, 37, NULL, SDL_FLIP_NONE, 1.0f, 0.25);
@@ -173,13 +173,13 @@ bool j1SceneCredits::CleanUp()
 	App->map->CleanUp();
 	App->tex->CleanUp();
 	
-	for (p2List_item<j1Button*>* item = creditsButtons.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		creditsButtons.del(item);
+	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
+		(*item)->CleanUp();
+		creditsButtons.remove(*item);
 	}
 
-	for (p2List_item<j1Label*>* item = creditsLabels.start; item != nullptr; item = item->next) {
-		creditsLabels.del(item);
+	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end(); ++item) {
+		creditsLabels.remove(*item);
 	}
 
 	return true;

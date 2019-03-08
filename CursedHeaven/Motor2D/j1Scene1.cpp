@@ -1,5 +1,6 @@
 #include "p2Defs.h"
 #include "p2Log.h"
+
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Textures.h"
@@ -8,11 +9,9 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Hook.h"
 #include "j1Player.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
-#include "j1Scene2.h"
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
@@ -26,7 +25,7 @@
 
 j1Scene1::j1Scene1() : j1Module()
 {
-	name.create("scene1");
+	name.assign("scene1");
 }
 
 // Destructor
@@ -55,8 +54,6 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene1::Start()
 {
-	if (App->scene2->active == true) { active = false; }
-
 	if (active)
 	{
 		// The map is loaded
@@ -157,30 +154,30 @@ bool j1Scene1::Update(float dt)
 		else
 			settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / 4;
 
-		for (p2List_item<j1Button*>* item = scene1Buttons.start; item != nullptr; item = item->next) {
-			if (item->data->parent == settings_window) {
-				item->data->visible = !item->data->visible;
-				item->data->position.x = settings_window->position.x + item->data->initialPosition.x;
-				item->data->position.y = settings_window->position.y + item->data->initialPosition.y;
+		for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
+			if ((*item)->parent == settings_window) {
+				(*item)->visible = !(*item)->visible;
+				(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+				(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 			}
 		}
-		for (p2List_item<j1Label*>* item = scene1Labels.start; item != nullptr; item = item->next) {
-			if (item->data->parent == settings_window) {
-				item->data->visible = !item->data->visible;
-				item->data->position.x = settings_window->position.x + item->data->initialPosition.x;
-				item->data->position.y = settings_window->position.y + item->data->initialPosition.y;
+		for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end(); ++item) {
+			if ((*item)->parent == settings_window) {
+				(*item)->visible = !(*item)->visible;
+				(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+				(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 			}
 		}
-		for (p2List_item<j1Box*>* item = scene1Boxes.start; item != nullptr; item = item->next) {
-			if (item->data->parent == settings_window) {
-				item->data->visible = !item->data->visible;
-				item->data->position.x = settings_window->position.x + item->data->initialPosition.x;
-				item->data->position.y = settings_window->position.y + item->data->initialPosition.y;
+		for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end(); ++item) {
+			if ((*item)->parent == settings_window) {
+				(*item)->visible = !(*item)->visible;
+				(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+				(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 
-				item->data->minimum = item->data->originalMinimum + settings_window->position.x;
-				item->data->maximum = item->data->originalMaximum + settings_window->position.x;
+				(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
+				(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
 
-				item->data->distanceCalculated = false;
+				(*item)->distanceCalculated = false;
 			}
 		}
 
@@ -190,44 +187,44 @@ bool j1Scene1::Update(float dt)
 	App->gui->UpdateSliders(&scene1Boxes);
 
 	// Button actions
-	for (p2List_item<j1Button*>* item = scene1Buttons.start; item != nullptr; item = item->next) {
-		switch (item->data->state)
+	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
+		switch ((*item)->state)
 		{
 		case IDLE:
-			item->data->situation = item->data->idle;
+			(*item)->situation = (*item)->idle;
 			break;
 
 		case HOVERED:
-			item->data->situation = item->data->hovered;
+			(*item)->situation = (*item)->hovered;
 			break;
 
 		case RELEASED:
-			item->data->situation = item->data->idle;
-			if (item->data->bfunction == GO_TO_MENU) {
+			(*item)->situation = (*item)->idle;
+			if ((*item)->bfunction == GO_TO_MENU) {
 				backToMenu = true;
 				App->gamePaused = false;
 				settings_window->visible = false;
 				App->fade->FadeToBlack();
 			}
-			else if (item->data->bfunction == CLOSE_SETTINGS) {
+			else if ((*item)->bfunction == CLOSE_SETTINGS) {
 				closeSettings = true;
 			}
-			else if (item->data->bfunction == OTHER_LEVEL) {
+			else if ((*item)->bfunction == OTHER_LEVEL) {
 				changingScene = true;
 				App->gamePaused = false;
 				settings_window->visible = false;
 				App->fade->FadeToBlack();
 			}
-			else if (item->data->bfunction == SAVE_GAME) {
+			else if ((*item)->bfunction == SAVE_GAME) {
 				App->SaveGame("save_game.xml");
 			}
-			else if (item->data->bfunction == CLOSE_GAME) {
+			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
 			}
 			break;
 
 		case CLICKED:
-			item->data->situation = item->data->clicked;
+			(*item)->situation = (*item)->clicked;
 			break;
 		}
 	}
@@ -261,7 +258,7 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0)
-			ChangeScene();
+			ChangeSceneMenu(); 
 	}
 
 	if (backToMenu && App->fade->IsFading() == 0)
@@ -275,12 +272,12 @@ bool j1Scene1::Update(float dt)
 
 	// Blitting patfhinding if debug is activated
 	if (App->collisions->debug) {
-		
-		const p2DynArray<iPoint>* path = App->path->GetLastPath();
 
-		for (uint i = 0; i < path->Count(); ++i)
+		const std::vector<iPoint>* path = App->path->GetLastPath();
+
+		for (uint i = 0; i < path->size(); ++i)
 		{
-			iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			iPoint pos = App->map->MapToWorld((*path).at(i).x, (*path).at(i).y);
 			App->render->Blit(debug_tex, pos.x, pos.y);
 		}
 	}
@@ -298,13 +295,6 @@ bool j1Scene1::PostUpdate()
 
 bool j1Scene1::Load(pugi::xml_node& node)
 {
-	pugi::xml_node activated = node.child("activated");
-
-	bool scene_activated = activated.attribute("true").as_bool();
-
-	if ((scene_activated == false) && active)
-		ChangeScene();
-
 	return true;
 }
 
@@ -319,32 +309,6 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities()
 {
-	p2SString folder;
-	pugi::xml_document	map_file;
-
-	p2SString tmp("%s%s", folder.GetString(), "maps/lvl1.tmx");
-
-	pugi::xml_parse_result result = map_file.load_file(tmp.GetString());
-
-	pugi::xml_node obj;
-	pugi::xml_node group;
-
-	const char* object_name;
-
-	for (group = map_file.child("map").child("objectgroup"); group; group = group.next_sibling("objectgroup"))
-	{
-		object_name = group.attribute("name").as_string();
-
-		for (obj = group.child("object"); obj; obj = obj.next_sibling("object"))
-		{
-			if (strcmp(object_name, "coins") == 0)
-				App->entity->AddEnemy(obj.attribute("x").as_int(), obj.attribute("y").as_int(), COIN);
-			else if (strcmp(object_name, "skeleton") == 0)
-				App->entity->AddEnemy(obj.attribute("x").as_int(), obj.attribute("y").as_int(), SKELETON);
-			else if (strcmp(object_name, "harpy") == 0)
-				App->entity->AddEnemy(obj.attribute("x").as_int(), obj.attribute("y").as_int(), HARPY);
-		}
-	}
 }
 
 // Called before quitting
@@ -362,22 +326,20 @@ bool j1Scene1::CleanUp()
 
 	if (App->entity->player)
 		App->entity->player->CleanUp();
-	if (App->entity->hook)
-		App->entity->hook->CleanUp();
 
-	for (p2List_item<j1Button*>* item = scene1Buttons.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		scene1Buttons.del(item);
+	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
+		(*item)->CleanUp();
+		scene1Buttons.remove(*item);
 	}
 
-	for (p2List_item<j1Label*>* item = scene1Labels.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		scene1Labels.del(item);
+	for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end(); ++item) {
+		(*item)->CleanUp();
+		scene1Labels.remove(*item);
 	}
 
-	for (p2List_item<j1Box*>* item = scene1Boxes.start; item != nullptr; item = item->next) {
-		item->data->CleanUp();
-		scene1Boxes.del(item);
+	for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end(); ++item) {
+		(*item)->CleanUp();
+		scene1Boxes.remove(*item);
 	}
 
 	delete settings_window;
@@ -388,19 +350,6 @@ bool j1Scene1::CleanUp()
 	return true;
 }
 
-void j1Scene1::ChangeScene()
-{
-	App->scene2->active = true;
-	App->scene1->active = false;
-	CleanUp();
-	App->entity->Start();
-	App->scene2->Start();
-	App->render->camera = { 0,0 };
-	App->path->Start();
-	App->entity->player->initialPosition = App->scene2->initialScene2Position;
-	App->entity->player->position = App->scene2->initialScene2Position;
-	changingScene = false;
-}
 
 void j1Scene1::ChangeSceneMenu()
 {

@@ -3,9 +3,11 @@
 #include "j1App.h"
 #include "j1Pathfinding.h"
 
+#include <algorithm>
+
 j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
-	name.create("pathfinding");
+	name.assign("pathfinding");
 }
 
 // Destructor
@@ -19,7 +21,7 @@ bool j1PathFinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
 
-	last_path.Clear();
+	last_path.clear();
 	RELEASE_ARRAY(map);
 	return true;
 }
@@ -58,9 +60,9 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
-Movement j1PathFinding::CheckDirection(p2DynArray<iPoint>& path) const
+Movement j1PathFinding::CheckDirection(std::vector<iPoint>& path) const
 {
-	if (path.Count() >= 2)
+	if (path.size() >= 2)
 	{
 		iPoint tile = path[0];
 		iPoint next_tile = path[1];
@@ -81,9 +83,9 @@ Movement j1PathFinding::CheckDirection(p2DynArray<iPoint>& path) const
 	else return NONE;
 }
 
-Movement j1PathFinding::CheckDirectionGround(p2DynArray<iPoint>& path) const
+Movement j1PathFinding::CheckDirectionGround(std::vector<iPoint>& path) const
 {
-	if (path.Count() >= 2)
+	if (path.size() >= 2)
 	{
 		iPoint tile = path[0];
 		iPoint next_tile = path[1];
@@ -101,7 +103,7 @@ Movement j1PathFinding::CheckDirectionGround(p2DynArray<iPoint>& path) const
 }
 
 // To request all tiles involved in the last generated path
-const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
+const std::vector<iPoint>* j1PathFinding::GetLastPath() const
 {
 	return &last_path;
 }
@@ -109,36 +111,34 @@ const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-p2List_item<PathNode>* PathList::Find(const iPoint& point) const
+PathNode* PathList::Find(const iPoint& point)
 {
-	p2List_item<PathNode>* item = list.start;
-	while (item)
+	for (std::list<PathNode>::iterator item = list.begin(); item != list.end(); ++item)
 	{
-		if (item->data.pos == point)
-			return item;
-		item = item->next;
+		if ((*item).pos == point)
+			return &(*item);
 	}
+
 	return NULL;
 }
 
 // PathList ------------------------------------------------------------------------
 // Returns the Pathnode with lowest score in this list or NULL if empty
 // ---------------------------------------------------------------------------------
-p2List_item<PathNode>* PathList::GetNodeLowestScore() const
+const PathNode* PathList::GetNodeLowestScore() const
 {
-	p2List_item<PathNode>* ret = NULL;
+	const PathNode* ret = NULL;
 	int min = 65535;
 
-	p2List_item<PathNode>* item = list.end;
-	while (item)
+	for (std::list<PathNode>::const_iterator item = list.end(); item != list.begin(); --item)
 	{
-		if (item->data.Score() < min)
+		if ((*item).Score() < min)
 		{
-			min = item->data.Score();
-			ret = item;
+			min = (*item).Score();
+			ret = &(*item);
 		}
-		item = item->prev;
 	}
+
 	return ret;
 }
 
@@ -160,52 +160,52 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
-	uint before = list_to_fill.list.count();
+	uint before = list_to_fill.list.size();
 
 
 	//north-east
 	cell.create(pos.x + 1, pos.y + 1);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	//north-west
 	cell.create(pos.x - 1, pos.y + 1);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// south-east
 	cell.create(pos.x + 1, pos.y - 1);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// south-west
 	cell.create(pos.x - 1, pos.y - 1);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// north
 	cell.create(pos.x, pos.y + 1);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// south
 	cell.create(pos.x, pos.y - 1);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// east
 	cell.create(pos.x + 1, pos.y);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// west
 	cell.create(pos.x - 1, pos.y);
 	if (App->path->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 
 
-	return list_to_fill.list.count();
+	return list_to_fill.list.size();
 }
 
 // PathNode -------------------------------------------------------------------------
@@ -234,76 +234,78 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 // Actual A* algorithm: return number of steps in the creation of the path or -1 ----
 // ----------------------------------------------------------------------------------
-p2DynArray<iPoint>* j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
+std::vector<iPoint>* j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 {
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::SlateGray)
 
-	last_path.Clear();
-	// If origin or destination are not walkable, return -1
-	if (IsWalkable(origin) && IsWalkable(destination)) {
+	//last_path.clear();
+	//// If origin or destination are not walkable, return -1
+	//if (IsWalkable(origin) && IsWalkable(destination)) {
 
-		// We create two lists: open, close, and we add the origin tile to open, and iterate while we have tile in the open list
-		PathList open, close;
-		PathNode origin(0, origin.DistanceNoSqrt(destination), origin, nullptr);
-		open.list.add(origin);
+	//	// We create two lists: open, close, and we add the origin tile to open, and iterate while we have tile in the open list
+	//	PathList open, close;
+	//	PathNode origin(0, origin.DistanceNoSqrt(destination), origin, nullptr);
+	//	open.list.push_back(origin);
 
-		while (open.list.count() > 0)
-		{
-			// We move the lowest score cell from open list to the closed list
-			close.list.add(open.GetNodeLowestScore()->data);
-			open.list.del(open.GetNodeLowestScore());
+	//	while (open.list.size() > 0)
+	//	{
+	//		// We move the lowest score cell from open list to the closed list
+	//		close.list.push_back(*open.GetNodeLowestScore());
+	//		open.list.remove(*open.GetNodeLowestScore());
 
-			if (close.list.end->data.pos != destination)
-			{
-				// We fill a list of all adjancent nodes
-				PathList adjancent;
+	//		if (close.list.end->data.pos != destination)
+	//		{
+	//			// We fill a list of all adjancent nodes
+	//			PathList adjancent;
 
-				// We iterate adjancent nodes:
-				close.list.end->data.FindWalkableAdjacents(adjancent);
+	//			// We iterate adjancent nodes:
+	//			close.list.end->data.FindWalkableAdjacents(adjancent);
 
-				for (p2List_item<PathNode>* iterator = adjancent.list.start; iterator != nullptr; iterator = iterator->next)
-				{
-					// Ignore nodes in the closed list
-					if (close.Find(iterator->data.pos))
-						continue;
+	//			for (std::list<PathNode>::iterator item = adjancent.list.begin(); item != adjancent.list.end(); ++item)
+	//			{
+	//				// Ignore nodes in the closed list
+	//				if (close.Find((*item).pos))
+	//					continue;
 
-					// If it is already in the open list, check if it is a better path (compare G)
-					else if (open.Find(iterator->data.pos))
-					{
-						PathNode tmp = open.Find(iterator->data.pos)->data;
-						iterator->data.CalculateF(destination);
-						if (tmp.g > iterator->data.g)
-						{
-							// If it is a better path, Update the parent
-							tmp.parent = iterator->data.parent;
-						}
-					}
-					// If it is NOT found, calculate its F and add it to the open list
-					else
-					{
-						iterator->data.CalculateF(destination);
-						open.list.add(iterator->data);
-					}
-				}
-				adjancent.list.clear();
-			}
-			else
-			{
-				// If we just added the destination, we are done!
-				for (p2List_item<PathNode>* iterator = close.list.end; iterator->data.parent != nullptr; iterator = close.Find(iterator->data.parent->pos))
-				{
-					// Backtrack to create the final path
-					last_path.PushBack(iterator->data.pos);
-					if (iterator->data.parent == nullptr)
-						last_path.PushBack(close.list.start->data.pos);
-				}
+	//				// If it is already in the open list, check if it is a better path (compare G)
+	//				else if (open.Find((*item).pos))
+	//				{
+	//					PathNode tmp = *open.Find((*item).pos);
+	//					(*item).CalculateF(destination);
+	//					if (tmp.g > (*item).g)
+	//					{
+	//						// If it is a better path, Update the parent
+	//						tmp.parent = (*item).parent;
+	//					}
+	//				}
+	//				// If it is NOT found, calculate its F and add it to the open list
+	//				else
+	//				{
+	//					(*item).CalculateF(destination);
+	//					open.list.push_back(*item);
+	//				}
+	//			}
+	//			adjancent.list.clear();
+	//		}
+	//		else
+	//		{
+	//			// If we just added the destination, we are done!
+	//			//for (p2List_item<PathNode>* iterator = close.list.end; iterator->data.parent != nullptr; iterator = close.Find(iterator->data.parent->pos))
+	//			for (std::list<PathNode>::iterator item = close.list.end(); (*item).parent != nullptr; item = close.Find((*item).parent->pos))
+	//			{
+	//				// Backtrack to create the final path
+	//				last_path.push_back((*item).pos);
+	//				if ((*item).parent == nullptr)
+	//					last_path.push_back((*close.list.begin()).pos);
+	//			}
 
-				// We use the Pathnode::parent and Flip() the path when you are finish
-				last_path.Flip();
-				return &last_path;
-			}
-		}
-	}
+	//			// We use the Pathnode::parent and Flip() the path when you are finish
+	//			reverse(last_path.begin(), last_path.end());
+
+	//			return &last_path;
+	//		}
+	//	}
+	//}
 
 	return nullptr;
 }

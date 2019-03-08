@@ -7,11 +7,8 @@
 #include "j1Player.h"
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
-#include "j1Hook.h"
 #include "j1Audio.h"
 #include "j1Scene1.h"
-#include "j1Scene2.h"
-#include "j1Harpy.h"
 #include "j1Fonts.h"
 #include "j1Label.h"
 #include "j1Box.h"
@@ -132,9 +129,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 				if (wallInFront == false && dead == false) {
 					position.x += horizontalSpeed * dt;
 					animation = &run;
-
-					if (App->entity->hook->thrown == false)
-						facingRight = true;
+					facingRight = true;
 				}
 				else if (dead == true) {
 					facingRight = true;
@@ -148,9 +143,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 				if (wallBehind == false && dead == false) {
 					position.x -= horizontalSpeed * dt;
 					animation = &run;
-
-					if (App->entity->hook->thrown == false)
-						facingRight = false;
+					facingRight = false;
 				}
 				else if (dead == true) {
 					facingRight = false;
@@ -164,8 +157,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 			if (feetOnGround == false && jumping == false) {
 
 				freefall = true;
-				if (((App->scene2->active && App->scene2->startup_time.Read() > 85))
-					|| (App->scene1->active && App->scene1->startup_time.Read() > 85)) {
+				if ((App->scene1->active && App->scene1->startup_time.Read() > 85)) {
 					position.y += fallingSpeed * dt;
 					fallingSpeed += verticalAcceleration * dt;
 				}
@@ -200,7 +192,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 				}
 				else {
 
-					if (wallAbove == false && App->entity->hook->somethingHit == false) {
+					if (wallAbove == false) {
 						position.y += verticalSpeed * dt;
 						verticalSpeed += verticalAcceleration * dt;
 					}
@@ -292,8 +284,6 @@ bool j1Player::Update(float dt, bool do_logic) {
 			App->entity->DestroyEntities();
 			if (App->scene1->active)
 				App->scene1->PlaceEntities();
-			else if (App->scene2->active)
-				App->scene2->PlaceEntities();
 
 			// Resetting the animation
 			death.Reset();
@@ -466,8 +456,6 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 
 			if (App->scene1->active)
 				App->scene1->changingScene = true;
-			else if (App->scene2->active)
-				App->scene2->backToMenu = true;
 		}
 		else
 		{
@@ -511,7 +499,7 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 						&& collider->rect.x <= col_2->rect.x && !wallAbove) {
 
 						wallInFront = true;
-						App->entity->hook->arrived = true;
+
 
 						if (position.x + (collider->rect.w * 3 / 4) < col_2->rect.x)
 							position.x = col_2->rect.x - collider->rect.w - 1;
@@ -522,7 +510,7 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 						&& collider->rect.x + collider->rect.w >= col_2->rect.x + col_2->rect.w && !wallAbove) {
 
 						wallBehind = true;
-						App->entity->hook->arrived = true;
+
 
 						if (position.x + (collider->rect.w / 4) < col_2->rect.x + col_2->rect.w)
 							position.x = col_2->rect.x + col_2->rect.w - colisionMargin;
@@ -535,8 +523,6 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 			{
 				if(App->scene1->active)
 					App->scene1->settings_window->position = App->gui->settingsPosition;
-				if (App->scene2->active)
-					App->scene2->settings_window->position = App->gui->settingsPosition;
 
 				App->fade->FadeToBlack(3.0f);
 
@@ -563,8 +549,6 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 				}
 				else if (App->scene1->active)					
 					App->scene1->backToMenu = true;
-				else if (App->scene2->active)
-					App->scene2->backToMenu = true;
 			}
 		}
 		

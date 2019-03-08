@@ -2,44 +2,40 @@
 #define __j1MAP_H__
 
 #include "PugiXml/src/pugixml.hpp"
-#include "p2List.h"
-#include "p2Point.h"
+#include <list>
+#include <string>
 #include "j1Module.h"
 
 struct Properties
 {
 	struct Property
 	{
-		p2SString name;
+		std::string  name;
 		int value;
 	};
 
 	~Properties()
 	{
-		p2List_item<Property*>* item;
-		item = list.start;
-
-		while (item != NULL)
+		for (std::list<Property*>::const_iterator item = properties.begin(); item != properties.end(); ++item)
 		{
-			RELEASE(item->data);
-			item = item->next;
+			delete *item;
 		}
-
-		list.clear();
+			   
+		properties.clear();
 	}
 
 	int Get(const char* name, int default_value = 0) const;
 
-	p2List<Property*>	list;
+	std::list<Property*>	properties;
 };
 
 struct MapLayer
 {
-	p2SString	name;
-	int			width;
-	int			height;
-	uint*		data;
-	Properties	properties;
+	std::string		name;
+	int				width;
+	int				height;
+	uint*			data;
+	Properties		properties;
 
 	MapLayer() : data(NULL)
 	{}
@@ -61,7 +57,7 @@ struct TileSet
 {
 	SDL_Rect GetTileRect(int id) const;
 
-	p2SString			name;
+	std::string			name;
 	int					firstgid;
 	int					margin;
 	int					spacing;
@@ -86,14 +82,14 @@ enum MapTypes
 // ----------------------------------------------------
 struct MapData
 {
-	int					width;
-	int					height;
-	int					tile_width;
-	int					tile_height;
-	SDL_Color			background_color;
-	MapTypes			type;
-	p2List<TileSet*>	tilesets;
-	p2List<MapLayer*>	layers;
+	int						width;
+	int						height;
+	int						tile_width;
+	int						tile_height;
+	SDL_Color				background_color;
+	MapTypes				type;
+	std::list<TileSet*>		tilesets;
+	std::list<MapLayer*>	layers;
 };
 
 // ----------------------------------------------------
@@ -145,7 +141,7 @@ private:
 	float mapBlitSpeed;
 
 	pugi::xml_document	map_file;
-	p2SString			folder;
+	std::string			folder;
 	bool				map_loaded;
 };
 

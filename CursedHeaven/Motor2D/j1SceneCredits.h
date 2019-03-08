@@ -2,7 +2,7 @@
 #define __j1SCENECREDITS_H__
 
 #include "j1Module.h"
-#include "p2List.h"
+#include <list>
 
 struct SDL_Texture;
 class j1Button;
@@ -39,8 +39,8 @@ public:
 	void ChangeScene();
 
 public:
-	p2List<j1Button*> creditsButtons;
-	p2List<j1Label*> creditsLabels;
+	std::list<j1Button*> creditsButtons;
+	std::list<j1Label*> creditsLabels;
 
 private:
 

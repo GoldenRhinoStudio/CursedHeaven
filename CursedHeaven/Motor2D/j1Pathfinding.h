@@ -3,8 +3,8 @@
 
 #include "j1Module.h"
 #include "p2Point.h"
-#include "p2DynArray.h"
-#include "p2List.h"
+#include <vector>
+#include <list>
 
 #include "Brofiler/Brofiler.h"
 
@@ -46,10 +46,10 @@ public:
 	void SetMap(uint width, uint height, uchar* data);
 
 	// Main function to request a path from A to B
-	p2DynArray<iPoint>* CreatePath(iPoint& origin, iPoint& destination);
+	std::vector<iPoint>* CreatePath(iPoint& origin, iPoint& destination);
 
 	// To request all tiles involved in the last generated path
-	const p2DynArray<iPoint>* GetLastPath() const;
+	const std::vector<iPoint>* GetLastPath() const;
 
 	// Utility: return true if pos is inside the map boundaries
 	bool CheckBoundaries(const iPoint& pos) const;
@@ -60,19 +60,19 @@ public:
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
 
-	Movement CheckDirection(p2DynArray<iPoint>& path)const;
-	Movement CheckDirectionGround(p2DynArray<iPoint>& path)const;
+	Movement CheckDirection(std::vector<iPoint>& path)const;
+	Movement CheckDirectionGround(std::vector<iPoint>& path)const;
 
 
 private:
-	p2DynArray<iPoint>*	_path = nullptr;
+	std::vector<iPoint>*	_path = nullptr;
 	// size of the map
 	uint width;
 	uint height;
 	// all map walkability values [0..255]
 	uchar* map = nullptr;
 	// we store the created path here
-	p2DynArray<iPoint> last_path;
+	std::vector<iPoint> last_path;
 };
 
 /// forward declaration
@@ -108,14 +108,14 @@ struct PathNode
 struct PathList
 {
 	// Looks for a node in this list and returns it's list node or NULL
-	p2List_item<PathNode>* Find(const iPoint& point) const;
+	PathNode* Find(const iPoint& point);
 
 	// Returns the Pathnode with lowest score in this list or NULL if empty
-	p2List_item<PathNode>* GetNodeLowestScore() const;
+	const PathNode* GetNodeLowestScore() const;
 
 	// -----------
 	// The list itself, note they are not pointers!
-	p2List<PathNode> list;
+	std::list<PathNode> list;
 };
 
 

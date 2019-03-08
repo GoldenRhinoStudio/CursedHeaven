@@ -3,7 +3,7 @@
 
 #include "j1Module.h"
 #include "j1Render.h"
-#include "p2List.h"
+#include <list>
 #include "p2Point.h"
 #include "p2Animation.h"
 
@@ -55,9 +55,9 @@ public:
 public:
 	j1Box* settings_window = nullptr;
 
-	p2List<j1Button*> menuButtons; 
-	p2List<j1Label*> menuLabels;
-	p2List<j1Box*> menuBoxes;
+	std::list<j1Button*> menuButtons; 
+	std::list<j1Label*> menuLabels;
+	std::list<j1Box*> menuBoxes;
 
 private:
 

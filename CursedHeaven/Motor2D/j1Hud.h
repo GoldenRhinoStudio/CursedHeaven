@@ -2,8 +2,8 @@
 #define __j1HUD_H__
 
 #include "j1Timer.h"
-#include "p2SString.h"
-#include "p2List.h"
+#include <string>
+#include <list>
 #include "PugiXml/src/pugixml.hpp"
 #include "p2Animation.h"
 
@@ -31,11 +31,11 @@ public:
 	SDL_Texture* lives_tex = nullptr;
 	j1Timer	startup_time;
 	
-	p2SString time_text;
-	p2SString min_text;
-	p2SString min_text_left = "0";
-	p2SString score;
-	p2SString score_points;
+	std::string time_text;
+	std::string min_text;
+	std::string min_text_left = "0";
+	std::string score;
+	std::string score_points;
 
 	j1Label* seconds;
 	j1Label* minutes;
@@ -50,7 +50,7 @@ public:
 	Animation* animation = nullptr;
 	Animation idle;
 
-	p2List<j1Label*> labels_list;
+	std::list<j1Label*> labels_list;
 };
 
 #endif // __j1LHUD_H__

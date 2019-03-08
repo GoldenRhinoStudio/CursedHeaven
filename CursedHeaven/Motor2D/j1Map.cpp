@@ -1,5 +1,6 @@
 #include "p2Defs.h"
 #include "p2Log.h"
+
 #include "j1App.h"
 #include "j1Render.h"
 #include "j1Textures.h"
@@ -13,7 +14,7 @@
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
-	name.create("map");
+	name.assign("map");
 }
 
 // Destructor
@@ -26,7 +27,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	LOG("Loading Map Parser");
 	bool ret = true;
 
-	folder.create(config.child("folder").child_value());
+	folder.assign(config.child("folder").child_value());
 
 	bgBlitSpeed = config.child("blitSpeed").attribute("backgrounds").as_float();
 	fogBlitSpeed = config.child("blitSpeed").attribute("fog").as_float();
@@ -42,20 +43,17 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
-	p2List_item<MapLayer*>* item = data.layers.start;
-
-	for (; item != NULL; item = item->next)
+	for (std::list<MapLayer*>::iterator layer = data.layers.begin(); layer != data.layers.end(); ++layer)
 	{
-		MapLayer* layer = item->data;
 
-		if (layer->properties.Get("MustDraw") != 0)
+		if ((*layer)->properties.Get("MustDraw") != 0)
 			continue;
 
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
 			{
-				int tile_id = layer->Get(x, y);
+				int tile_id = (*layer)->Get(x, y);
 				if (tile_id > 0)
 				{
 					TileSet* tileset = GetTilesetFromTileId(tile_id);
@@ -63,10 +61,10 @@ void j1Map::Draw()
 					SDL_Rect r = tileset->GetTileRect(tile_id);
 					iPoint pos = MapToWorld(x, y);
 
-					if (item->data->name == "bg1" || item->data->name == "bg2" || item->data->name == "bg3")
+					if ((*layer)->name == "bg1" || (*layer)->name == "bg2" || (*layer)->name == "bg3")
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, bgBlitSpeed);
 
-					else if (item->data->name == "Fog")
+					else if ((*layer)->name == "Fog")
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, fogBlitSpeed);
 
 					else
@@ -79,13 +77,10 @@ void j1Map::Draw()
 
 int Properties::Get(const char* value, int default_value) const
 {
-	p2List_item<Property*>* item = list.start;
-
-	while (item)
+	for (std::list<Property*>::const_iterator item = properties.begin(); item != properties.end(); ++item)
 	{
-		if (item->data->name == value)
-			return item->data->value;
-		item = item->next;
+		if ((*item)->name == value)
+			return (*item)->value;
 	}
 
 	return default_value;
@@ -93,18 +88,18 @@ int Properties::Get(const char* value, int default_value) const
 
 TileSet* j1Map::GetTilesetFromTileId(int id) const
 {
-	p2List_item<TileSet*>* item = data.tilesets.start;
-	TileSet* set = item->data;
+	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
+	TileSet* set = *item;
 
-	while (item != NULL)
+	for ( item; item != data.tilesets.end(); ++item)
 	{
-		if (id < item->data->firstgid)
+		if (id < (*item)->firstgid)
 		{
-			set = item->prev->data;
+			set = *prev(item, 1);
 			break;
 		}
-		set = item->data;
-		item = item->next;
+
+		set = *item;
 	}
 
 	return set;
@@ -163,24 +158,16 @@ bool j1Map::CleanUp()
 	LOG("Unloading map");
 
 	// Remove all tilesets
-	p2List_item<TileSet*>* item;
-	item = data.tilesets.start;
-
-	while(item != NULL)
+	for (std::list<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
 	{
-		RELEASE(item->data);
-		item = item->next;
+		delete (*item);
 	}
 	data.tilesets.clear();
 
 	// Remove all layers
-	p2List_item<MapLayer*>* item2;
-	item2 = data.layers.start;
-
-	while(item2 != NULL)
+	for (std::list<MapLayer*>::iterator item = data.layers.begin(); item != data.layers.end(); ++item)
 	{
-		RELEASE(item2->data);
-		item2 = item2->next;
+		delete (*item);
 	}
 	data.layers.clear();
 
@@ -194,9 +181,10 @@ bool j1Map::CleanUp()
 bool j1Map::Load(const char* file_name)
 {
 	bool ret = true;
-	p2SString tmp("%s%s", folder.GetString(), file_name);
+	std::string tmp = folder.data();
+	tmp += file_name;
 
-	pugi::xml_parse_result result = map_file.load_file(tmp.GetString());
+	pugi::xml_parse_result result = map_file.load_file(tmp.data());
 
 	if(result == NULL)
 	{
@@ -226,7 +214,7 @@ bool j1Map::Load(const char* file_name)
 			ret = LoadTilesetImage(tileset, set);
 		}
 
-		data.tilesets.add(set);
+		data.tilesets.push_back(set);
 	}
 
 	// Load layer info ----------------------------------------------
@@ -238,7 +226,7 @@ bool j1Map::Load(const char* file_name)
 		ret = LoadLayer(layer, lay);
 
 		if(ret == true)
-			data.layers.add(lay);
+			data.layers.push_back(lay);
 	}
 
 	if(ret == true)
@@ -247,25 +235,21 @@ bool j1Map::Load(const char* file_name)
 		LOG("width: %d height: %d", data.width, data.height);
 		LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height);
 
-		p2List_item<TileSet*>* item = data.tilesets.start;
-		while(item != NULL)
+		for (std::list<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
 		{
-			TileSet* s = item->data;
+			TileSet* s = (*item);
 			LOG("Tileset ----");
-			LOG("name: %s firstgid: %d", s->name.GetString(), s->firstgid);
+			LOG("name: %s firstgid: %d", s->name.data(), s->firstgid);
 			LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);
 			LOG("spacing: %d margin: %d", s->spacing, s->margin);
-			item = item->next;
 		}
 
-		p2List_item<MapLayer*>* item_layer = data.layers.start;
-		while(item_layer != NULL)
+		for (std::list<MapLayer*>::iterator item = data.layers.begin(); item != data.layers.end(); ++item)
 		{
-			MapLayer* l = item_layer->data;
+			MapLayer* l = (*item);
 			LOG("Layer ----");
-			LOG("name: %s", l->name.GetString());
+			LOG("name: %s", l->name.data());
 			LOG("tile width: %d tile height: %d", l->width, l->height);
-			item_layer = item_layer->next;
 		}
 	}
 
@@ -293,33 +277,33 @@ bool j1Map::LoadMap()
 		data.height = map.attribute("height").as_int();
 		data.tile_width = map.attribute("tilewidth").as_int();
 		data.tile_height = map.attribute("tileheight").as_int();
-		p2SString bg_color(map.attribute("backgroundcolor").as_string());
+		std::string bg_color(map.attribute("backgroundcolor").as_string());
 
 		data.background_color.r = 0;
 		data.background_color.g = 0;
 		data.background_color.b = 0;
 		data.background_color.a = 0;
 
-		if(bg_color.Length() > 0)
+		if(bg_color.size() > 0)
 		{
-			p2SString red, green, blue;
-			bg_color.SubString(1, 2, red);
-			bg_color.SubString(3, 4, green);
-			bg_color.SubString(5, 6, blue);
+			std::string red, green, blue;
+			red = bg_color.substr(1, 2);
+			green = bg_color.substr(3, 4);
+			blue = bg_color.substr(5, 6);
 
 			int v = 0;
 
-			sscanf_s(red.GetString(), "%x", &v);
+			sscanf_s(red.data(), "%x", &v);
 			if(v >= 0 && v <= 255) data.background_color.r = v;
 
-			sscanf_s(green.GetString(), "%x", &v);
+			sscanf_s(green.data(), "%x", &v);
 			if(v >= 0 && v <= 255) data.background_color.g = v;
 
-			sscanf_s(blue.GetString(), "%x", &v);
+			sscanf_s(blue.data(), "%x", &v);
 			if(v >= 0 && v <= 255) data.background_color.b = v;
 		}
 
-		p2SString orientation(map.attribute("orientation").as_string());
+		std::string orientation(map.attribute("orientation").as_string());
 
 		if(orientation == "orthogonal")
 		{
@@ -345,7 +329,7 @@ bool j1Map::LoadMap()
 bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
-	set->name.create(tileset_node.attribute("name").as_string());
+	set->name.assign(tileset_node.attribute("name").as_string());
 	set->firstgid = tileset_node.attribute("firstgid").as_int();
 	set->tile_width = tileset_node.attribute("tilewidth").as_int();
 	set->tile_height = tileset_node.attribute("tileheight").as_int();
@@ -379,7 +363,7 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	}
 	else
 	{
-		set->texture = App->tex->Load(PATH(folder.GetString(), image.attribute("source").as_string()));
+		set->texture = App->tex->Load(PATH(folder.data(), image.attribute("source").as_string()));
 		int w, h;
 		SDL_QueryTexture(set->texture, NULL, NULL, &w, &h);
 		set->tex_width = image.attribute("width").as_int();
@@ -452,7 +436,7 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 			p->name = prop.attribute("name").as_string();
 			p->value = prop.attribute("value").as_int();
 
-			properties.list.add(p);
+			properties.properties.push_back(p);
 		}
 	}
 
@@ -463,9 +447,10 @@ bool j1Map::PutColliders(const char * file_name)
 {
 	bool ret = true;
 
-	p2SString tmp("%s%s", folder.GetString(), file_name);
+	std::string tmp = folder.data();
+	tmp += file_name;
 
-	pugi::xml_parse_result result = map_file.load_file(tmp.GetString());
+	pugi::xml_parse_result result = map_file.load_file(tmp.data());
 
 	if (result == NULL)
 	{
@@ -496,12 +481,10 @@ bool j1Map::PutColliders(const char * file_name)
 bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 {
 	bool ret = false;
-	p2List_item<MapLayer*>* item;
-	item = data.layers.start;
 
-	for (item = data.layers.start; item != NULL; item = item->next)
+	for (std::list<MapLayer*>::const_iterator item = data.layers.begin(); item != data.layers.end(); ++item)
 	{
-		MapLayer* layer = item->data;
+		MapLayer* layer = (*item);
 
 		if (layer->properties.Get("Navigation", 0) == 0)
 			continue;

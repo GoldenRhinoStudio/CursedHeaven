@@ -4,9 +4,6 @@
     <ClCompile Include="j1Textures.cpp">
       <Filter>Development\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="p2Log.cpp">
-      <Filter>Programation 2</Filter>
-    </ClCompile>
     <ClCompile Include="PugiXml\src\pugixml.cpp">
       <Filter>Development\Tools\PuguiXML</Filter>
     </ClCompile>
@@ -14,9 +11,6 @@
       <Filter>Development\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Scene1.cpp">
-      <Filter>Development\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Scene2.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1Timer.cpp">
@@ -46,14 +40,8 @@
     <ClCompile Include="j1Input.cpp">
       <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
-    <ClCompile Include="j1Hook.cpp">
-      <Filter>Development\Modules\Entities\Player</Filter>
-    </ClCompile>
     <ClCompile Include="j1Pathfinding.cpp">
       <Filter>Development\Modules\Interactions</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Harpy.cpp">
-      <Filter>Development\Modules\Entities</Filter>
     </ClCompile>
     <ClCompile Include="j1Entity.cpp">
       <Filter>Development\Modules\Entities</Filter>
@@ -67,9 +55,6 @@
     <ClCompile Include="j1Main.cpp">
       <Filter>Development\Core</Filter>
     </ClCompile>
-    <ClCompile Include="j1Skeleton.cpp">
-      <Filter>Development\Modules\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="j1Gui.cpp">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClCompile>
@@ -81,9 +66,6 @@
     </ClCompile>
     <ClCompile Include="j1SceneMenu.cpp">
       <Filter>Development\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Coin.cpp">
-      <Filter>Development\Modules\Entities</Filter>
     </ClCompile>
     <ClCompile Include="j1Label.cpp">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
@@ -97,6 +79,9 @@
     <ClCompile Include="j1Hud.cpp">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="p2Log.cpp">
+      <Filter>Programation 2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -105,19 +90,7 @@
     <ClInclude Include="p2Defs.h">
       <Filter>Programation 2</Filter>
     </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Programation 2</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Log.h">
-      <Filter>Programation 2</Filter>
-    </ClInclude>
-    <ClInclude Include="p2SString.h">
-      <Filter>Programation 2</Filter>
-    </ClInclude>
     <ClInclude Include="p2Point.h">
-      <Filter>Programation 2</Filter>
-    </ClInclude>
-    <ClInclude Include="p2DynArray.h">
       <Filter>Programation 2</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugiconfig.hpp">
@@ -134,9 +107,6 @@
     </ClInclude>
     <ClInclude Include="p2Animation.h">
       <Filter>Programation 2</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Scene2.h">
-      <Filter>Development\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="j1Timer.h">
       <Filter>Development\Tools</Filter>
@@ -165,14 +135,8 @@
     <ClInclude Include="j1Input.h">
       <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
-    <ClInclude Include="j1Hook.h">
-      <Filter>Development\Modules\Entities\Player</Filter>
-    </ClInclude>
     <ClInclude Include="j1Pathfinding.h">
       <Filter>Development\Modules\Interactions</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Harpy.h">
-      <Filter>Development\Modules\Entities</Filter>
     </ClInclude>
     <ClInclude Include="j1Entity.h">
       <Filter>Development\Modules\Entities</Filter>
@@ -185,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="j1App.h">
       <Filter>Development\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Skeleton.h">
-      <Filter>Development\Modules\Entities</Filter>
     </ClInclude>
     <ClInclude Include="j1Gui.h">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
@@ -207,9 +168,6 @@
     <ClInclude Include="j1SceneMenu.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="j1Coin.h">
-      <Filter>Development\Modules\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="j1Box.h">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClInclude>
@@ -218,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="j1Hud.h">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Log.h">
+      <Filter>Programation 2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

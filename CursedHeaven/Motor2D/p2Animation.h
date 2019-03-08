@@ -2,7 +2,7 @@
 #define __P2ANIMATION_H__
 
 #include "SDL/include/SDL_rect.h"
-#include "p2SString.h"
+#include <string>
 #define MAX_FRAMES 100
 
 class Animation
@@ -26,12 +26,12 @@ public:
 		frames[last_frame++] = rect;
 	}
 
-	void LoadAnimations(p2SString name)
+	void LoadAnimations(std::string name)
 	{
 		pugi::xml_parse_result result = animations_file.load_file("animations.xml");
 		if (result != NULL)
 		{
-			pugi::xml_node animation_name = animations_file.child("animations").child("player").child(name.GetString());
+			pugi::xml_node animation_name = animations_file.child("animations").child("player").child(name.data());
 			loop = animation_name.attribute("loop").as_bool();
 			speed = animation_name.attribute("speed").as_float();
 			for (pugi::xml_node animation = animation_name.child("animation"); animation; animation = animation.next_sibling("animation"))
@@ -41,12 +41,12 @@ public:
 		}
 	}
 
-	void LoadEnemyAnimations(p2SString name, p2SString enemy)
+	void LoadEnemyAnimations(std::string name, std::string enemy)
 	{
 		pugi::xml_parse_result result = animations_file.load_file("animations.xml");
 		if (result != NULL)
 		{
-			pugi::xml_node animation_name = animations_file.child("animations").child("enemies").child(enemy.GetString()).child(name.GetString());
+			pugi::xml_node animation_name = animations_file.child("animations").child("enemies").child(enemy.data()).child(name.data());
 			loop = animation_name.attribute("loop").as_bool();
 			speed = animation_name.attribute("speed").as_float();
 			for (pugi::xml_node animation = animation_name.child("animation"); animation; animation = animation.next_sibling("animation"))

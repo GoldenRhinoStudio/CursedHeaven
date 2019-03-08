@@ -5,6 +5,7 @@
 #include "j1Button.h"
 #include "j1Timer.h"
 #include "PugiXml/src/pugixml.hpp"
+#include <list>
 
 struct SDL_Texture;
 struct _TTF_Font;
@@ -38,7 +39,6 @@ public:
 	bool CleanUp();
 
 	// Called to change scene
-	void ChangeScene();
 	void ChangeSceneMenu();
 
 	// Load and Save
@@ -53,9 +53,9 @@ public:
 	bool player_created = false;
 	bool backToMenu = false;
 
-	p2List<j1Button*> scene1Buttons;
-	p2List<j1Label*> scene1Labels;
-	p2List<j1Box*> scene1Boxes;
+	std::list<j1Button*> scene1Buttons;
+	std::list<j1Label*> scene1Labels;
+	std::list<j1Box*> scene1Boxes;
 
 	j1Timer	startup_time;
 	int time_scene1;

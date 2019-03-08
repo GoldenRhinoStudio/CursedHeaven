@@ -7,26 +7,22 @@
 #include "j1EntityManager.h"
 #include "j1Entity.h"
 #include "j1Scene1.h"
-#include "j1Scene2.h"
-#include "j1Harpy.h"
 #include "j1Player.h"
-#include "j1Hook.h"
-#include "j1Skeleton.h"
-#include "j1Coin.h"
 #include "Brofiler/Brofiler.h"
 
 j1EntityManager::j1EntityManager()
 {
-	name.create("entityManager");
+	name.assign("entityManager");
 }
 
 j1EntityManager::~j1EntityManager() {}
 
 bool j1EntityManager::Start()
 {
-	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
-	{ 
-		iterator->data->Start();
+
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+		(*item)->Start();
 	}
 
 	return true;
@@ -64,9 +60,9 @@ bool j1EntityManager::Update(float dt)
 	if (accumulatedTime >= updateMsCycle)
 		do_logic = true;
 
-	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
-		iterator->data->Update(dt, do_logic);
+		(*item)->Update(dt, do_logic);
 	}
 
 	if (do_logic) {
@@ -81,9 +77,9 @@ bool j1EntityManager::PostUpdate()
 {
 	BROFILER_CATEGORY("EntityManagerPostUpdate", Profiler::Color::Yellow)
 
-	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
-		iterator->data->PostUpdate();
+		(*item)->PostUpdate();
 	}
 
 	return true;
@@ -94,9 +90,9 @@ bool j1EntityManager::CleanUp()
 	LOG("Freeing all enemies");
 
 	
-	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next) 
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
-		iterator->data->CleanUp();
+		(*item)->CleanUp();
 	}
 
 	entities.clear();
@@ -114,11 +110,9 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 	{
 	case PLAYER: 
 		ret = new j1Player(x, y, type);
-	if (ret != nullptr) entities.add(ret); break;
-
-	case HOOK:
-		ret = new j1Hook(x, y, type);
-		if (ret != nullptr) entities.add(ret); break; 
+		if (ret != nullptr) 
+			entities.push_back(ret); 
+		break;
 	}
 	return ret;
 }
@@ -144,16 +138,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
 		{
 			j1Entity* entity;
-			if (queue[i].type == HARPY) 
-				entity = new j1Harpy(info.position.x, info.position.y, info.type); 
 
-			else if (queue[i].type == SKELETON)
-				entity = new j1Skeleton(info.position.x, info.position.y, info.type);
-
-			else if (queue[i].type == COIN)
-				entity = new j1Coin(info.position.x, info.position.y, info.type);
-
-			entities.add(entity);
+			entities.push_back(entity);
 			entity->Start();
 			break;
 		}
@@ -167,14 +153,9 @@ void j1EntityManager::DestroyEntities()
 		queue[i].type = ENTITY_TYPES::UNKNOWN; 
 	}	
 	
-	for (p2List_item<j1Entity*>* iterator = entities.start; iterator; iterator = iterator->next) {
-		if (iterator->data->type != ENTITY_TYPES::PLAYER && iterator->data->type != ENTITY_TYPES::HOOK)
-		{
-			iterator->data->CleanUp();
-			int num = entities.find(iterator->data);
-			RELEASE(entities.At(num)->data);
-			entities.del(entities.At(num));
-		}
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+
 	}
 }
 
@@ -186,11 +167,11 @@ void j1EntityManager::CreatePlayer()
 
 void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 {
-	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
-		if (iterator->data->collider == c1) 
+		if ((*item)->collider == c1) 
 		{ 
-			iterator->data->OnCollision(c1, c2); 	
+			(*item)->OnCollision(c1, c2); 	
 			break; 
 		}
 	}
@@ -205,73 +186,12 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 		player->Load(data);
 	}
 
-	for (pugi::xml_node harpy = data.child("harpy").child("position"); harpy; harpy = harpy.next_sibling()) 
-	{
-		iPoint pos = { harpy.attribute("x").as_int(), harpy.attribute("y").as_int() };
-		AddEnemy(pos.x, pos.y, HARPY);
-	}
-
-	for (pugi::xml_node skeleton = data.child("skeleton").child("position"); skeleton; skeleton = skeleton.next_sibling())
-	{
-		iPoint pos = { skeleton.attribute("x").as_int(), skeleton.attribute("y").as_int() };
-		AddEnemy(pos.x, pos.y, SKELETON);
-	}
-
-	for (pugi::xml_node coin = data.child("coin").child("position"); coin; coin = coin.next_sibling())
-	{
-		iPoint pos = { coin.attribute("x").as_int(), coin.attribute("y").as_int() };
-		AddEnemy(pos.x, pos.y, COIN);
-	}
-
 	return true;
 }
 
 bool j1EntityManager::Save(pugi::xml_node& data) const
 {
 	player->Save(data.append_child("player"));
-
-	pugi::xml_node harpy = data.append_child("harpy");
-	pugi::xml_node skeleton = data.append_child("skeleton");
-	pugi::xml_node coin = data.append_child("coin");
-
-	p2List_item<j1Entity*>* iterator;
-	for (iterator = entities.start; iterator; iterator = iterator->next)
-	{
-		if (iterator->data->type == HARPY) 
-			iterator->data->Save(harpy);
-		
-		else if (iterator->data->type == SKELETON) 
-			iterator->data->Save(skeleton);
-		
-		else if (iterator->data->type == COIN) 
-			iterator->data->Save(coin);
-	}
-
-	for (int i = 0; i < MAX_ENTITIES; ++i)
-	{
-		if (queue[i].type != ENTITY_TYPES::UNKNOWN) 
-		{
-			if (queue[i].type == HARPY)
-			{
-				pugi::xml_node harpy_pos = harpy.append_child("position");
-				harpy_pos.append_attribute("x") = queue[i].position.x;
-				harpy_pos.append_attribute("y") = queue[i].position.y;
-			}
-			else if (queue[i].type == SKELETON) 
-			{
-				pugi::xml_node skeleton_pos = skeleton.append_child("position");
-				skeleton_pos.append_attribute("x") = queue[i].position.x;
-				skeleton_pos.append_attribute("y") = queue[i].position.y;
-			}
-			else if (queue[i].type == COIN) 
-			{
-				pugi::xml_node coin_pos = coin.append_child("position");
-				coin_pos.append_attribute("x") = queue[i].position.x;
-				coin_pos.append_attribute("y") = queue[i].position.y;
-			}
-		}
-	}
-
 
 
 	return true;

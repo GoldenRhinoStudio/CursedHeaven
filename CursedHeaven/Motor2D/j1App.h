@@ -1,7 +1,8 @@
 #ifndef __j1APP_H__
 #define __j1APP_H__
 
-#include "p2List.h"
+#include <list>
+#include <string>
 #include "j1Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
@@ -58,7 +59,6 @@ public:
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
-	void GetSaveGames(p2List<p2SString>& list_to_fill) const;
 
 private:
 
@@ -95,7 +95,6 @@ public:
 	j1SceneMenu*		menu = nullptr;
 	j1SceneCredits*		credits = nullptr;
 	j1Scene1*			scene1 = nullptr;
-	j1Scene2*			scene2 = nullptr;
 	j1Map*				map = nullptr;
 	j1FadeToBlack*		fade = nullptr;
 	j1Collisions*		collisions = nullptr;
@@ -108,30 +107,30 @@ public:
 
 private:
 
-	p2List<j1Module*>	modules;
-	uint				frames;
-	int					argc;
-	char**				args = nullptr;
+	std::list<j1Module*>	modules;
+	uint					frames;
+	int						argc;
+	char**					args = nullptr;
 
-	p2SString			title;
-	p2SString			organization;
+	std::string				title;
+	std::string				organization;
 
-	mutable bool		want_to_save;
-	bool				want_to_load;
-	p2SString			load_game;
-	mutable p2SString	save_game;
+	mutable bool			want_to_save;
+	bool					want_to_load;
+	std::string				load_game;
+	mutable std::string		save_game;
 
-	j1PerfTimer			ptimer;
-	uint64				frame_count = 0;
-	j1Timer				startup_time;
-	j1Timer				frame_time;
-	j1Timer				last_sec_frame_time;
-	uint32				last_sec_frame_count = 0;
-	uint32				prev_last_sec_frame_count = 0;
-	uint32				framerate_cap = 0;
+	j1PerfTimer				ptimer;
+	uint64					frame_count = 0;
+	j1Timer					startup_time;
+	j1Timer					frame_time;
+	j1Timer					last_sec_frame_time;
+	uint32					last_sec_frame_count = 0;
+	uint32					prev_last_sec_frame_count = 0;
+	uint32					framerate_cap = 0;
 
-	float				dt = 0.0f;
-	bool				cappedFPS = true;
+	float					dt = 0.0f;
+	bool					cappedFPS = true;
 };
 
 extern j1App* App;

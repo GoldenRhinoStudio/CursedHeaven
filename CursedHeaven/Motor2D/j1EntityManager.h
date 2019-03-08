@@ -3,7 +3,7 @@
 
 #include "j1Module.h"
 #include "j1UserInterfaceElement.h"
-
+#include <list>
 
 #define MAX_ENTITIES 1000
 
@@ -63,7 +63,7 @@ private:
 
 public:
 
-	p2List<j1Entity*>	entities;
+	std::list<j1Entity*>	entities;
 
 	j1Player*			player = nullptr;
 	j1Hook*				hook = nullptr;

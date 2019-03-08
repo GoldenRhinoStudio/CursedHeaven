@@ -21,7 +21,7 @@ j1FadeToBlack::j1FadeToBlack()
 	int scale = file.child("config").child("window").child("resolution").attribute("scale").as_int();
 
 	screen = { 0, 0, width * scale, height * scale };
-	name.create("fade");
+	name.assign("fade");
 }
 
 j1FadeToBlack::~j1FadeToBlack()

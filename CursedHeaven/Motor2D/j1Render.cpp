@@ -9,7 +9,7 @@
 
 j1Render::j1Render() : j1Module()
 {
-	name.create("renderer");
+	name.assign("renderer");
 	background.r = 0;
 	background.g = 0;
 	background.b = 0;
@@ -51,8 +51,6 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera.h = App->win->screen_surface->h;
 		camera.x = initialCameraX = 0;
 		camera.y = initialCameraY =0;
-		/*camera.x = initialCameraX = config.child("camera").attribute("initialX").as_int();
-		camera.y = initialCameraY = config.child("camera").attribute("initialY").as_int();*/
 	}	
 
 	return ret;

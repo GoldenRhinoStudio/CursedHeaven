@@ -12,7 +12,6 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
-#include "j1Scene2.h"
 #include "j1Map.h"
 #include "j1FadeToBlack.h"
 #include "j1Collisions.h"
@@ -38,7 +37,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	menu = new j1SceneMenu();
 	credits = new j1SceneCredits();
 	scene1 = new j1Scene1();
-	scene2 = new j1Scene2();
 	map = new j1Map();
 	collisions = new j1Collisions();
 	entity = new j1EntityManager();
@@ -58,7 +56,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(menu);
 	AddModule(credits);
 	AddModule(scene1);
-	AddModule(scene2);
 	AddModule(entity);
 	AddModule(collisions);
 	AddModule(font);
@@ -72,13 +69,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 // Destructor
 j1App::~j1App()
 {
-	// release modules
-	p2List_item<j1Module*>* item = modules.end;
-
-	while(item != NULL)
+	for (std::list<j1Module*>::iterator item = modules.end(); item != modules.begin(); --item)
 	{
-		RELEASE(item->data);
-		item = item->prev;
+		RELEASE(*item);
 	}
 
 	modules.clear();
@@ -87,7 +80,7 @@ j1App::~j1App()
 void j1App::AddModule(j1Module* module)
 {
 	module->Init();
-	modules.add(module);
+	modules.push_back(module);
 }
 
 // Called before render is available
@@ -106,8 +99,8 @@ bool j1App::Awake()
 		// Self-config
 		ret = true;
 		app_config = config.child("app");
-		title.create(app_config.child("title").child_value());
-		organization.create(app_config.child("organization").child_value());
+		title.assign(app_config.child("title").child_value());
+		organization.assign(app_config.child("organization").child_value());
 
 		// We read from config file your framerate cap
 		framerate_cap = config.child("app").attribute("framerate_cap").as_uint();
@@ -115,13 +108,9 @@ bool j1App::Awake()
 
 	if(ret == true)
 	{
-		p2List_item<j1Module*>* item;
-		item = modules.start;
-
-		while(item != NULL && ret == true)
+		for (std::list<j1Module*>::iterator item = modules.begin(); item != modules.end(); ++item)
 		{
-			ret = item->data->Awake(config.child(item->data->name.GetString()));
-			item = item->next;
+			ret = (*item)->Awake(config.child((*item)->name.data()));
 		}
 	}
 
@@ -132,13 +121,10 @@ bool j1App::Awake()
 bool j1App::Start()
 {
 	bool ret = true;
-	p2List_item<j1Module*>* item;
-	item = modules.start;
 
-	while(item != NULL && ret == true)
+	for (std::list<j1Module*>::iterator item = modules.begin(); item != modules.end(); ++item)
 	{
-		ret = item->data->Start();
-		item = item->next;
+		ret = (*item)->Start();
 	}
 
 	return ret;
@@ -252,19 +238,18 @@ bool j1App::PreUpdate()
 	BROFILER_CATEGORY("AppPreUpdate", Profiler::Color::Orange)
 
 	bool ret = true;
-	p2List_item<j1Module*>* item;
-	item = modules.start;
+	std::list<j1Module*>::const_iterator item;
+	item = modules.begin();
 	j1Module* pModule = NULL;
 
-	for(item = modules.start; item != NULL && ret == true; item = item->next)
+	for (item = modules.begin(); item != modules.end() && ret == true; ++item)
 	{
-		pModule = item->data;
+		pModule = *item;
 
-		if(pModule->active == false) {
+		if (pModule->active == false)
 			continue;
-		}
 
-		ret = item->data->PreUpdate();
+		ret = (*item)->PreUpdate();
 	}
 
 	return ret;
@@ -274,21 +259,22 @@ bool j1App::PreUpdate()
 bool j1App::DoUpdate()
 {
 	bool ret = true;
-	p2List_item<j1Module*>* item;
-	item = modules.start;
+	std::list<j1Module*>::const_iterator item;
+	item = modules.begin();
+
 	j1Module* pModule = NULL;
 
-	for(item = modules.start; item != NULL && ret == true; item = item->next)
+	for (item = modules.begin(); item != modules.end() && ret; ++item)
 	{
-		pModule = item->data;
+		pModule = *item;
 
-		if(pModule->active == false) {
+		if (pModule->active == false) 
 			continue;
-		}
-
+		
 		if (gamePaused) dt = 0.0f;
-		ret = item->data->Update(dt);
+			ret = (*item)->Update(dt);
 	}
+
 
 	return ret;
 }
@@ -299,20 +285,19 @@ bool j1App::PostUpdate()
 	BROFILER_CATEGORY("AppPostUpdate", Profiler::Color::Yellow)
 
 	bool ret = true;
-	p2List_item<j1Module*>* item;
+	std::list<j1Module*>::const_iterator item;
 	j1Module* pModule = NULL;
 
-	for(item = modules.start; item != NULL && ret == true; item = item->next)
+	for (item = modules.begin(); item != modules.end() && ret; ++item)
 	{
-		pModule = item->data;
+		pModule = *item;
 
-		if(pModule->active == false) {
+		if (!pModule->active) {
 			continue;
 		}
 
-		ret = item->data->PostUpdate();
+		ret = (*item)->PostUpdate();
 	}
-
 	return ret;
 }
 
@@ -320,13 +305,10 @@ bool j1App::PostUpdate()
 bool j1App::CleanUp()
 {
 	bool ret = true;
-	p2List_item<j1Module*>* item;
-	item = modules.end;
 
-	while(item != NULL && ret == true)
+	for (std::list<j1Module*>::iterator item = modules.begin(); item != modules.end(); ++item)
 	{
-		ret = item->data->CleanUp();
-		item = item->prev;
+		ret = (*item)->CleanUp();
 	}
 
 	return ret;
@@ -350,13 +332,13 @@ const char* j1App::GetArgv(int index) const
 // ---------------------------------------
 const char* j1App::GetTitle() const
 {
-	return title.GetString();
+	return title.data();
 }
 
 // ---------------------------------------
 const char* j1App::GetOrganization() const
 {
-	return organization.GetString();
+	return organization.data();
 }
 
 // Load / Save
@@ -374,49 +356,45 @@ void j1App::SaveGame(const char* file) const
 	// from the "GetSaveGames" list ... should we overwrite ?
 
 	want_to_save = true;
-	save_game.create(file);
+	save_game.assign(file);
 }
 
-// ---------------------------------------
-void j1App::GetSaveGames(p2List<p2SString>& list_to_fill) const
-{
-	// need to add functionality to file_system module for this to work
-}
 
 bool j1App::LoadGameNow()
 {
 	bool ret = false;
 
-	load_game.create("save_game.xml");
+	load_game.assign("save_game.xml");
 
 	pugi::xml_document data;
 	pugi::xml_node root;
 
-	pugi::xml_parse_result result = data.load_file(load_game.GetString());
+	pugi::xml_parse_result result = data.load_file(load_game.data());
 
 	if(result != NULL)
 	{
-		LOG("Loading new Game State from %s...", load_game.GetString());
+		LOG("Loading new Game State from %s...", load_game.data());
 
 		root = data.child("game_state");
 
-		p2List_item<j1Module*>* item = modules.start;
 		ret = true;
 
-		while(item != NULL && ret == true)
+		std::list<j1Module*>::iterator item;
+
+		for (item = modules.begin(); item != modules.end(); ++item)
 		{
-			ret = item->data->Load(root.child(item->data->name.GetString()));
-			item = item->next;
+			ret = (*item)->Load(root.child((*item)->name.c_str()));
 		}
+
 
 		data.reset();
 		if(ret == true)
 			LOG("...finished loading");
 		else
-			LOG("...loading process interrupted with error on module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
+			LOG("...loading process interrupted with error on module %s", ((*item) != NULL) ? (*item)->name.data() : "unknown");
 	}
 	else
-		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.GetString(), result.description());
+		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.data(), result.description());
 
 	want_to_load = false;
 	return ret;
@@ -426,9 +404,9 @@ bool j1App::SavegameNow() const
 {
 	bool ret = true;
 
-	save_game.create("save_game.xml");
+	save_game.assign("save_game.xml");
 
-	LOG("Saving Game State to %s...", save_game.GetString());
+	LOG("Saving Game State to %s...", save_game.data());
 
 	// xml object were we will store all data
 	pugi::xml_document data;
@@ -436,21 +414,21 @@ bool j1App::SavegameNow() const
 	
 	root = data.append_child("game_state");
 
-	p2List_item<j1Module*>* item = modules.start;
+	std::list<j1Module*>::const_iterator item;
 
-	while(item != NULL && ret == true)
+	for (item = modules.begin(); item != modules.end(); ++item)
 	{
-		ret = item->data->Save(root.append_child(item->data->name.GetString()));
-		item = item->next;
+		ret = (*item)->Save(root.append_child((*item)->name.c_str()));
 	}
 
 	if (ret == true)
 	{
-		data.save_file(save_game.GetString());
-		LOG("... finished saving", save_game.GetString());
+		data.save_file(save_game.data());
+		LOG("... finished saving", save_game.data());
 	}
+
 	else
-		LOG("Save process halted from an error in module %s", (item != NULL) ? item->data->name.GetString() : "unknown");
+		LOG("Save process halted from an error in module %s", ((*item) != NULL) ? (*item)->name.data() : "unknown");
 
 	data.reset();
 	want_to_save = false;

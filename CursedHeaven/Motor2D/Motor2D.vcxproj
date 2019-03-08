@@ -77,7 +77,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="j1Button.cpp" />
-    <ClCompile Include="j1Coin.cpp" />
     <ClCompile Include="j1Collisions.cpp" />
     <ClCompile Include="j1Hud.cpp" />
     <ClCompile Include="j1SceneCredits.cpp" />
@@ -86,8 +85,6 @@
     <ClCompile Include="j1FadeToBlack.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Gui.cpp" />
-    <ClCompile Include="j1Harpy.cpp" />
-    <ClCompile Include="j1Hook.cpp" />
     <ClCompile Include="j1Label.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
@@ -98,20 +95,17 @@
     <ClCompile Include="j1PerfTimer.cpp" />
     <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1Scene1.cpp" />
-    <ClCompile Include="j1Scene2.cpp" />
     <ClCompile Include="j1SceneMenu.cpp" />
     <ClCompile Include="j1Box.cpp" />
-    <ClCompile Include="j1Skeleton.cpp" />
     <ClCompile Include="j1Timer.cpp" />
-    <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
     <ClCompile Include="j1Window.cpp" />
+    <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Button.h" />
-    <ClInclude Include="j1Coin.h" />
     <ClInclude Include="j1Collisions.h" />
     <ClInclude Include="j1Hud.h" />
     <ClInclude Include="j1SceneCredits.h" />
@@ -120,34 +114,27 @@
     <ClInclude Include="j1FadeToBlack.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Gui.h" />
-    <ClInclude Include="j1Harpy.h" />
-    <ClInclude Include="j1Hook.h" />
     <ClInclude Include="j1Label.h" />
     <ClInclude Include="j1Map.h" />
     <ClInclude Include="j1Pathfinding.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Player.h" />
     <ClInclude Include="j1Scene1.h" />
-    <ClInclude Include="j1Scene2.h" />
     <ClInclude Include="j1SceneMenu.h" />
     <ClInclude Include="j1Box.h" />
-    <ClInclude Include="j1Skeleton.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1UserInterfaceElement.h" />
     <ClInclude Include="p2Animation.h" />
-    <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="j1Audio.h" />
     <ClInclude Include="j1Input.h" />
-    <ClInclude Include="p2Log.h" />
     <ClInclude Include="j1App.h" />
     <ClInclude Include="p2Defs.h" />
-    <ClInclude Include="p2List.h" />
     <ClInclude Include="j1Module.h" />
+    <ClInclude Include="p2Log.h" />
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="j1Render.h" />
     <ClInclude Include="j1Textures.h" />
     <ClInclude Include="j1Window.h" />
-    <ClInclude Include="p2SString.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
   </ItemGroup>

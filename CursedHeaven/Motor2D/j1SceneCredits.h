@@ -2,6 +2,7 @@
 #define __j1SCENECREDITS_H__
 
 #include "j1Module.h"
+#include "j1Timer.h"
 #include <list>
 
 struct SDL_Texture;
@@ -41,6 +42,8 @@ public:
 public:
 	std::list<j1Button*> creditsButtons;
 	std::list<j1Label*> creditsLabels;
+
+	j1Timer	startup_time;
 
 private:
 

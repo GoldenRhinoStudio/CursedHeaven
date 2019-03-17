@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "j1Render.h"
+#include "j1Timer.h"
 #include <list>
 #include "p2Point.h"
 #include "p2Animation.h"
@@ -59,6 +60,8 @@ public:
 	std::list<j1Label*> menuLabels;
 	std::list<j1Box*> menuBoxes;
 
+	j1Timer	startup_time;
+
 private:
 
 	SDL_Texture* gui_tex = nullptr;
@@ -73,6 +76,7 @@ private:
 	bool loadGame = false;
 	bool openCredits = false;
 	bool player_created = false;
+	uint times = 0;
 
 	Animation player;
 	Animation harpy;

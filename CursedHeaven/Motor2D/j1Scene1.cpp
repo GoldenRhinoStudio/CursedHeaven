@@ -145,43 +145,45 @@ bool j1Scene1::Update(float dt)
 	App->gui->UpdateButtonsState(&scene1Buttons);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
 
-	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings) {
-		settings_window->visible = !settings_window->visible;
-		App->gamePaused = !App->gamePaused;
+	if (App->scene1->startup_time.Read() > 1700) {
+		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings) {
+			settings_window->visible = !settings_window->visible;
+			App->gamePaused = !App->gamePaused;
 
-		if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
-			settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
-		else
-			settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / 4;
+			if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
+				settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
+			else
+				settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / 4;
 
-		for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
-			if ((*item)->parent == settings_window) {
-				(*item)->visible = !(*item)->visible;
-				(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-				(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+			for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
+				if ((*item)->parent == settings_window) {
+					(*item)->visible = !(*item)->visible;
+					(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+					(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+				}
 			}
-		}
-		for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end(); ++item) {
-			if ((*item)->parent == settings_window) {
-				(*item)->visible = !(*item)->visible;
-				(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-				(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+			for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end(); ++item) {
+				if ((*item)->parent == settings_window) {
+					(*item)->visible = !(*item)->visible;
+					(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+					(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+				}
 			}
-		}
-		for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end(); ++item) {
-			if ((*item)->parent == settings_window) {
-				(*item)->visible = !(*item)->visible;
-				(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-				(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+			for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end(); ++item) {
+				if ((*item)->parent == settings_window) {
+					(*item)->visible = !(*item)->visible;
+					(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+					(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
 
-				(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
-				(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
+					(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
+					(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
 
-				(*item)->distanceCalculated = false;
+					(*item)->distanceCalculated = false;
+				}
 			}
-		}
 
-		if (!settings_window->visible) closeSettings = false;
+			if (!settings_window->visible) closeSettings = false;
+		}
 	}
 
 	App->gui->UpdateSliders(&scene1Boxes);

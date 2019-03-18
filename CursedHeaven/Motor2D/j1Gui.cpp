@@ -282,6 +282,9 @@ void j1Gui::UpdateWindow(j1Box* window, std::list<j1Button*>* buttons, std::list
 					if ((*item)->parent == window) {
 						(*item)->position.x = window->position.x + (*item)->initialPosition.x;
 						(*item)->position.y = window->position.y + (*item)->initialPosition.y;
+						
+						(*item)->minimum = (*item)->originalMinimum + window->position.x;
+						(*item)->maximum = (*item)->originalMaximum + window->position.x;
 					}
 				}
 			}

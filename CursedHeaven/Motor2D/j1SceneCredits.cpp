@@ -77,6 +77,8 @@ bool j1SceneCredits::Start()
 		App->gui->CreateButton(&creditsButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, GO_TO_MENU);
 
 		App->gui->CreateLabel(&creditsLabels, LABEL, 90, 165, font, "Webpage", App->gui->beige);
+
+		startup_time.Start();
 	}						 
 
 	return true;
@@ -107,28 +109,32 @@ bool j1SceneCredits::Update(float dt)
 			break;
 
 		case HOVERED:
+			if (startup_time.Read() > 2000)
 			(*item)->situation = (*item)->hovered;
 			break;
 
 		case RELEASED:
-			(*item)->situation = (*item)->idle;
-			if ((*item)->bfunction == GO_TO_MENU) {
-				backToMenu = true;
-				App->fade->FadeToBlack();
-			}
-			else if ((*item)->bfunction == CLOSE_GAME) {
-				continueGame = false;
-			}
-			else if ((*item)->bfunction == LINK) {
-				ShellExecuteA(NULL, "open", "https://goo.gl/SUk3ra", NULL, NULL, SW_SHOWNORMAL);
+			if (startup_time.Read() > 2000) {
+				(*item)->situation = (*item)->idle;
+				if ((*item)->bfunction == GO_TO_MENU) {
+					backToMenu = true;
+					App->fade->FadeToBlack();
+				}
+				else if ((*item)->bfunction == CLOSE_GAME) {
+					continueGame = false;
+				}
+				else if ((*item)->bfunction == LINK && App->fade->IsFading() == 0) {
+					ShellExecuteA(NULL, "open", "https://goo.gl/SUk3ra", NULL, NULL, SW_SHOWNORMAL);
+				}
 			}
 			break;
 
 		case CLICKED:
+			if (startup_time.Read() > 2000)
 			(*item)->situation = (*item)->clicked;
 			break;
+		}
 	}
-}
 	
 	if (backToMenu && App->fade->IsFading() == 0) {
 		ChangeScene();

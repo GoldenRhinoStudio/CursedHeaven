@@ -104,6 +104,9 @@ bool j1SceneMenu::Start()
 		App->gui->CreateLabel(&menuLabels, LABEL, 30, 89, font, "Music", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 
 		player_created = false;
+		
+		startup_time.Start();
+		times++;
 	}
 
 	return true;
@@ -138,65 +141,73 @@ bool j1SceneMenu::Update(float dt)
 				break;
 
 			case HOVERED:
+
+				if (startup_time.Read() > 1900 && times > 1 || times == 1)
 				(*item)->situation = (*item)->hovered;
 				break;
 
+
 			case RELEASED:
-				(*item)->situation = (*item)->idle;
-				if ((*item)->bfunction == PLAY_GAME) {
-					startGame = true;
-					App->fade->FadeToBlack();
-				}
-				else if ((*item)->bfunction == LOAD_GAME) {
-					loadGame = true;
-					App->fade->FadeToBlack();
-				}
-				else if ((*item)->bfunction == CLOSE_GAME) {
-					continueGame = false;
-				}
-				else 
-				if (((*item)->bfunction == SETTINGS && !settings_window->visible)
-					|| ((*item)->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
-					settings_window->visible = !settings_window->visible;
-					settings_window->position = App->gui->settingsPosition;
 
-					for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
-						if ((*item)->parent == settings_window) {
-							(*item)->visible = !(*item)->visible;
-							(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-							(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-						}
+				if (startup_time.Read() > 1900 && times > 1 || times == 1) {
+					(*item)->situation = (*item)->idle;
+					if ((*item)->bfunction == PLAY_GAME) {
+						startGame = true;
+						App->fade->FadeToBlack();
 					}
-					for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
-						if ((*item)->parent == settings_window) {
-							(*item)->visible = !(*item)->visible;
-							(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-							(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-						}
+					else if ((*item)->bfunction == LOAD_GAME) {
+						loadGame = true;
+						App->fade->FadeToBlack();
 					}
-					for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
-						if ((*item)->parent == settings_window) {
-							(*item)->visible = !(*item)->visible;
-							(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-							(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+					else if ((*item)->bfunction == CLOSE_GAME) {
+						continueGame = false;
+					}
+					else
+						if (((*item)->bfunction == SETTINGS && !settings_window->visible)
+							|| ((*item)->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
+							settings_window->visible = !settings_window->visible;
+							settings_window->position = App->gui->settingsPosition;
 
-							(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
-							(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
+							for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
+								if ((*item)->parent == settings_window) {
+									(*item)->visible = !(*item)->visible;
+									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+								}
+							}
+							for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
+								if ((*item)->parent == settings_window) {
+									(*item)->visible = !(*item)->visible;
+									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+								}
+							}
+							for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
+								if ((*item)->parent == settings_window) {
+									(*item)->visible = !(*item)->visible;
+									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
+									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
+
+									(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
+									(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
+								}
+							}
 						}
-					}
+						else if ((*item)->bfunction == OPEN_CREDITS) {
+							openCredits = true;
+							App->fade->FadeToBlack();
+						}
 				}
-				else if ((*item)->bfunction == OPEN_CREDITS) {
-					openCredits = true;
-					App->fade->FadeToBlack();
-				}
-				break;
+					break;
 
 			case CLICKED:
+
+				if (startup_time.Read() > 1900 && times > 1 || times == 1)
 				(*item)->situation = (*item)->clicked;
 				break;
 			}
 		}
-	}
+	}	
 
 	// Managing scene transitions
 	if (App->fade->IsFading() == 0) {

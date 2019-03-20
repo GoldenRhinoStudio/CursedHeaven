@@ -427,6 +427,7 @@ bool j1Player::CleanUp() {
 
 void j1Player::UpdateCameraPosition()
 {
+	/*
 	if(App->render->camera.x > cameraLimit)
 		App->render->camera.x = -position.x * 4 + 400;	
 
@@ -441,7 +442,19 @@ void j1Player::UpdateCameraPosition()
 	// To force the player to go forward at the start of the level
 	if (App->entity->player->position.x < 0)
 		App->entity->player->position.x = 0;
+	*/
 
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == j1KeyState::KEY_REPEAT)
+		App->render->camera.x -= 10;
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == j1KeyState::KEY_REPEAT)
+		App->render->camera.x += 10;
+
+	if (App->input->GetKey(SDL_SCANCODE_UP) == j1KeyState::KEY_REPEAT)
+		App->render->camera.y += 10;
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == j1KeyState::KEY_REPEAT)
+		App->render->camera.y -= 10;
 }
 // Detects collisions
 void j1Player::OnCollision(Collider* col_1, Collider* col_2)

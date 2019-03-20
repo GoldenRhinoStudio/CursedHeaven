@@ -45,8 +45,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 		LOG("Scene1 not active.");
 
 	// Copying the position of the player
-	initialScene1Position.x = config.child("initialPlayerPosition").attribute("x").as_int();
-	initialScene1Position.y = config.child("initialPlayerPosition").attribute("y").as_int();
+	initialScene1Position.x = 0;
+	initialScene1Position.y = 0;
 
 	return ret;
 }
@@ -57,7 +57,7 @@ bool j1Scene1::Start()
 	if (active)
 	{
 		// The map is loaded
-		if (App->map->Load("lvl1.tmx"))
+		if (App->map->Load("Test.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;

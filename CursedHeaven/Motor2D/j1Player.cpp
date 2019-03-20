@@ -58,15 +58,15 @@ bool j1Player::Start() {
 	lives = 2;
 
 	// Setting player position
-	position.x = initialPosition.x;
-	position.y = initialPosition.y;
-
+	position.x = 200;
+	position.y = 750;
+	GodMode = true;
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, 10, 5}, COLLIDER_NONE, App->entity); //CHECK
 	else
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 	
-	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+	//attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
 
 	hud = new j1Hud();
 	hud->Start();
@@ -191,8 +191,8 @@ bool j1Player::Update(float dt, bool do_logic) {
 
 				freefall = true;
 				if ((App->scene1->active && App->scene1->startup_time.Read() > 85)) {
-					position.y += fallingSpeed * dt;
-					fallingSpeed += verticalAcceleration * dt;
+					//position.y += fallingSpeed * dt;
+					//fallingSpeed += verticalAcceleration * dt;
 				}
 
 				if (!attacking)

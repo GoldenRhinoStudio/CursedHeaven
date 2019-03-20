@@ -99,23 +99,56 @@ bool j1Player::Update(float dt, bool do_logic) {
 
 			animation = &godmode;
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
 				position.x += godModeSpeed * dt;
 				facingRight = true;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			{
+				position.x += godModeSpeed * dt;
+				position.y -= (godModeSpeed / 2) * dt;
+				facingRight = true;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			{
+				position.x += godModeSpeed * dt;
+				position.y += (godModeSpeed / 2) * dt;
+				facingRight = true;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
 				position.x -= godModeSpeed * dt;
 				facingRight = false;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			{
+				position.x -= godModeSpeed * dt;
+				position.y -= (godModeSpeed / 2) * dt;
+				facingRight = true;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			{
+				position.x -= godModeSpeed * dt;
+				position.y += (godModeSpeed / 2) * dt;
+				facingRight = true;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
 				position.y -= godModeSpeed * dt;
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) 
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
 				position.y += godModeSpeed * dt;
+
+
+
+
+
 		}
 		else {
 			// Idle

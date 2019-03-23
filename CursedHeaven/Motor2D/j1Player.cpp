@@ -13,6 +13,7 @@
 #include "j1Label.h"
 #include "j1Box.h"
 #include "j1Hud.h"
+#include "j1Map.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -103,6 +104,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 			{
 				position.x += godModeSpeed * dt;
 				facingRight = true;
+				direction = DIRECTION::RIGHT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
@@ -110,6 +112,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 				position.x += godModeSpeed * dt;
 				position.y -= (godModeSpeed / 2) * dt;
 				facingRight = true;
+				direction = DIRECTION::UP_RIGHT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
@@ -117,12 +120,14 @@ bool j1Player::Update(float dt, bool do_logic) {
 				position.x += godModeSpeed * dt;
 				position.y += (godModeSpeed / 2) * dt;
 				facingRight = true;
+				direction = DIRECTION::DOWN_RIGHT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
 				position.x -= godModeSpeed * dt;
 				facingRight = false;
+				direction = DIRECTION::LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
@@ -130,6 +135,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 				position.x -= godModeSpeed * dt;
 				position.y -= (godModeSpeed / 2) * dt;
 				facingRight = true;
+				direction = DIRECTION::UP_LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
@@ -137,25 +143,37 @@ bool j1Player::Update(float dt, bool do_logic) {
 				position.x -= godModeSpeed * dt;
 				position.y += (godModeSpeed / 2) * dt;
 				facingRight = true;
+				direction = DIRECTION::DOWN_LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+			{
 				position.y -= godModeSpeed * dt;
+				direction = DIRECTION::UP_;
+			}
+				
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+			{
 				position.y += godModeSpeed * dt;
+				direction = DIRECTION::DOWN_;
+			}
 
-
-
-
-
+			// Idle
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& attacking == false) {
+				direction = DIRECTION::NONE_;
+			}
 		}
 		else {
 			// Idle
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-				&& attacking == false)
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& attacking == false) {
+				direction = DIRECTION::NONE_;
 				animation = &idle;
+			}
 
 			// Direction controls	
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && attacking == false) {
@@ -327,6 +345,8 @@ bool j1Player::Update(float dt, bool do_logic) {
 			dead = false;
 		}
 	}
+
+	App->map->EntityMovement(App->entity->player);
 
 	// Update collider position to player position
 	if (collider != nullptr)

@@ -45,8 +45,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 		LOG("Scene1 not active.");
 
 	// Copying the position of the player
-	initialScene1Position.x = 0;
-	initialScene1Position.y = 0;
+	initialScene1Position.x = 250;
+	initialScene1Position.y = 1080;
 
 	return ret;
 }

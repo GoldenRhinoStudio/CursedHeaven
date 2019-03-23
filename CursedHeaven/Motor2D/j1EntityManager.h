@@ -13,6 +13,18 @@ class j1Hook;
 
 struct SDL_Texture;
 
+enum DIRECTION {
+	UP_,
+	DOWN_,
+	RIGHT_,
+	LEFT_,
+	UP_RIGHT_,
+	UP_LEFT_,
+	DOWN_RIGHT_,
+	DOWN_LEFT_,
+	NONE_
+};
+
 enum ENTITY_TYPES
 {
 	PLAYER,

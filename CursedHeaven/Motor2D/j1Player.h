@@ -10,6 +10,7 @@ struct SDL_Texture;
 struct Collider;
 class j1Hud;
 
+
 class j1Player : public j1Entity
 {
 

@@ -373,6 +373,7 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 			if (objectiveScene == SCENE::SCENE1) {
 				App->scene1->active = true;
 				App->scene1->Start();
+				App->render->camera = { 250, -1080 };
 			}
 
 			App->entity->active = true;

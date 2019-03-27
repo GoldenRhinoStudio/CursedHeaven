@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include "j1Module.h"
+#include "j1Entity.h"
 
 struct Properties
 {
@@ -119,6 +120,8 @@ public:
 	iPoint WorldToMap(int x, int y) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
+	void EntityMovement(j1Entity* entity);
+
 private:
 
 	bool LoadMap();
@@ -129,6 +132,7 @@ private:
 	bool PutColliders(const char* file_name);
 
 	TileSet* GetTilesetFromTileId(int id) const;
+
 
 public:
 

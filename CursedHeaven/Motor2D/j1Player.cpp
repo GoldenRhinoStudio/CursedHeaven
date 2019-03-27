@@ -13,6 +13,7 @@
 #include "j1Label.h"
 #include "j1Box.h"
 #include "j1Hud.h"
+#include "j1Map.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -58,15 +59,15 @@ bool j1Player::Start() {
 	lives = 2;
 
 	// Setting player position
-	position.x = initialPosition.x;
-	position.y = initialPosition.y;
-
+	position.x = 200;
+	position.y = 750;
+	GodMode = true;
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, 10, 5}, COLLIDER_NONE, App->entity); //CHECK
 	else
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 	
-	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+	//attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
 
 	hud = new j1Hud();
 	hud->Start();
@@ -99,30 +100,80 @@ bool j1Player::Update(float dt, bool do_logic) {
 
 			animation = &godmode;
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
 				position.x += godModeSpeed * dt;
 				facingRight = true;
+				direction = DIRECTION::RIGHT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			{
+				position.x += godModeSpeed * dt;
+				position.y -= (godModeSpeed / 2) * dt;
+				facingRight = true;
+				direction = DIRECTION::UP_RIGHT_;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			{
+				position.x += godModeSpeed * dt;
+				position.y += (godModeSpeed / 2) * dt;
+				facingRight = true;
+				direction = DIRECTION::DOWN_RIGHT_;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
 				position.x -= godModeSpeed * dt;
 				facingRight = false;
+				direction = DIRECTION::LEFT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
-				position.y -= godModeSpeed * dt;
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			{
+				position.x -= godModeSpeed * dt;
+				position.y -= (godModeSpeed / 2) * dt;
+				facingRight = true;
+				direction = DIRECTION::UP_LEFT_;
+			}
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) 
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			{
+				position.x -= godModeSpeed * dt;
+				position.y += (godModeSpeed / 2) * dt;
+				facingRight = true;
+				direction = DIRECTION::DOWN_LEFT_;
+			}
+
+			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+			{
+				position.y -= godModeSpeed * dt;
+				direction = DIRECTION::UP_;
+			}
+				
+
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+			{
 				position.y += godModeSpeed * dt;
+				direction = DIRECTION::DOWN_;
+			}
+
+			// Idle
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& attacking == false) {
+				direction = DIRECTION::NONE_;
+			}
 		}
 		else {
 			// Idle
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-				&& attacking == false)
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& attacking == false) {
+				direction = DIRECTION::NONE_;
 				animation = &idle;
+			}
 
 			// Direction controls	
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && attacking == false) {
@@ -158,8 +209,8 @@ bool j1Player::Update(float dt, bool do_logic) {
 
 				freefall = true;
 				if ((App->scene1->active && App->scene1->startup_time.Read() > 85)) {
-					position.y += fallingSpeed * dt;
-					fallingSpeed += verticalAcceleration * dt;
+					//position.y += fallingSpeed * dt;
+					//fallingSpeed += verticalAcceleration * dt;
 				}
 
 				if (!attacking)
@@ -295,6 +346,8 @@ bool j1Player::Update(float dt, bool do_logic) {
 		}
 	}
 
+	App->map->EntityMovement(App->entity->player);
+
 	// Update collider position to player position
 	if (collider != nullptr)
 		collider->SetPos(position.x + margin.x, position.y + margin.y);
@@ -427,6 +480,7 @@ bool j1Player::CleanUp() {
 
 void j1Player::UpdateCameraPosition()
 {
+	/*
 	if(App->render->camera.x > cameraLimit)
 		App->render->camera.x = -position.x * 4 + 400;	
 
@@ -441,7 +495,19 @@ void j1Player::UpdateCameraPosition()
 	// To force the player to go forward at the start of the level
 	if (App->entity->player->position.x < 0)
 		App->entity->player->position.x = 0;
+	*/
 
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == j1KeyState::KEY_REPEAT)
+		App->render->camera.x -= 10;
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == j1KeyState::KEY_REPEAT)
+		App->render->camera.x += 10;
+
+	if (App->input->GetKey(SDL_SCANCODE_UP) == j1KeyState::KEY_REPEAT)
+		App->render->camera.y += 10;
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == j1KeyState::KEY_REPEAT)
+		App->render->camera.y -= 10;
 }
 // Detects collisions
 void j1Player::OnCollision(Collider* col_1, Collider* col_2)

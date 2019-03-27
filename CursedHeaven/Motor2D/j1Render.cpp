@@ -4,6 +4,7 @@
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1EntityManager.h"
+#include "j1Player.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -77,7 +78,12 @@ bool j1Render::PreUpdate()
 
 bool j1Render::Update(float dt)
 {
-	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen)
+	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen);
+
+	if (App->entity->player != nullptr) {
+		camera.x = -App->entity->player->position.x;
+		camera.y = -App->entity->player->position.y;
+	}
 
 	return true;
 }

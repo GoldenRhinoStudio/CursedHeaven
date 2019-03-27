@@ -59,8 +59,9 @@ bool j1Player::Start() {
 	lives = 2;
 
 	// Setting player position
-	position.x = 200;
-	position.y = 750;
+	position.x = 400;
+	position.y = 400;
+
 	GodMode = true;
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, 10, 5}, COLLIDER_NONE, App->entity); //CHECK

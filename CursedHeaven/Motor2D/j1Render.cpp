@@ -61,7 +61,7 @@ bool j1Render::Start()
 {
 	LOG("render start");
 
-	SDL_RenderSetLogicalSize(renderer, App->win->width, App->win->height);
+	//SDL_RenderSetLogicalSize(renderer, App->win->width, App->win->height); //LIMIT SCREEN VIEW
 	SDL_RenderGetViewport(renderer, &viewport);
 	return true;
 }

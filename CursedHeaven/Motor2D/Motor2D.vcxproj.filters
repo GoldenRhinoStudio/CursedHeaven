@@ -82,6 +82,8 @@
     <ClCompile Include="p2Log.cpp">
       <Filter>Programation 2</Filter>
     </ClCompile>
+    <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="TileQuadtree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -180,6 +182,8 @@
     <ClInclude Include="p2Log.h">
       <Filter>Programation 2</Filter>
     </ClInclude>
+    <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="TileQuadtree.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -217,6 +221,9 @@
     </Filter>
     <Filter Include="Development\Modules\GraphicUserInterface">
       <UniqueIdentifier>{12d42398-2970-43ff-8668-cdab242895b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Tools\Quadtrees">
+      <UniqueIdentifier>{01c82455-fa91-4281-9b2c-a3b333f54257}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

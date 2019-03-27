@@ -6,6 +6,7 @@
 #include <string>
 #include "j1Module.h"
 #include "j1Entity.h"
+#include "TileQuadtree.h"
 
 struct Properties
 {
@@ -35,6 +36,7 @@ struct MapLayer
 	std::string		name;
 	int				width;
 	int				height;
+	TileQuadtree*	tile_tree;
 	uint*			data;
 	Properties		properties;
 
@@ -96,6 +98,8 @@ struct MapData
 // ----------------------------------------------------
 class j1Map : public j1Module
 {
+	friend TileQuadtree;
+
 public:
 
 	j1Map();
@@ -137,6 +141,10 @@ private:
 public:
 
 	MapData data;
+
+	bool draw_with_quadtrees;
+	//TEST
+	uint tiles_rendered;
 
 private:
 

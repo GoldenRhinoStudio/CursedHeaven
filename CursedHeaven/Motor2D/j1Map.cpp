@@ -15,6 +15,7 @@
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
 	name.assign("map");
+	draw_with_quadtrees = true;
 }
 
 // Destructor
@@ -43,18 +44,20 @@ void j1Map::Draw()
 	if (map_loaded == false)
 		return;
 
+	tiles_rendered = 0;
+
 	for (std::list<MapLayer*>::iterator layer = data.layers.begin(); layer != data.layers.end(); ++layer)
 	{
 
 		if ((*layer)->properties.Get("MustDraw") != 0)
 			continue;
 
-		for (int y = 0; y < data.height; ++y)
+		/*for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
 			{
 				int tile_id = (*layer)->Get(x, y);
-				if (tile_id > 0)
+				if (tile_id != 0)
 				{
 					TileSet* tileset = GetTilesetFromTileId(tile_id);
 
@@ -69,10 +72,14 @@ void j1Map::Draw()
 
 					else
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, mapBlitSpeed);
+					tiles_rendered++;
 				}
 			}
-		}
+		}*/
+		(*layer)->tile_tree->DrawMap();
+		(*layer)->tile_tree->DrawQuadtree();
 	}
+	LOG("Tiles drawn: %d ", tiles_rendered);
 }
 
 int Properties::Get(const char* value, int default_value) const
@@ -397,7 +404,26 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	LoadProperties(node, layer->properties);
 	pugi::xml_node layer_data = node.child("data");
 
-	if(layer_data == NULL)
+	//TEST
+	iPoint layer_size;
+	iPoint quadT_position(0, 0);
+	switch (data.type)
+	{
+	case MAPTYPE_ORTHOGONAL:
+		layer_size.x = layer->width*App->map->data.tile_width;
+		layer_size.y = layer->height*App->map->data.tile_height;
+		quadT_position.x = 0;
+		break;
+	case MAPTYPE_ISOMETRIC:
+		layer_size.x = (layer->width + layer->height)*(App->map->data.tile_width *0.5f);
+		layer_size.y = (layer->width + layer->height + 1) * (data.tile_height *0.5f);
+		quadT_position.x = -layer_size.x + ((layer->width + 1)*App->map->data.tile_width / 2);
+		break;
+	}
+	layer->tile_tree = new TileQuadtree(4, { quadT_position.x, 0, layer_size.x,layer_size.y }, layer->width*layer->height * 3);
+	//TEST
+
+	if (layer_data == NULL)
 	{
 		LOG("Error parsing map xml file: Cannot find 'layer/data' tag.");
 		ret = false;
@@ -409,8 +435,14 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		memset(layer->data, 0, layer->width*layer->height);
 
 		int i = 0;
-		for(pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
+			//TEST
+			iPoint tile_map_coordinates(App->map->MapToWorld((i - int(i / layer->width)*layer->width), int(i / layer->width)));
+			TileData tiledd(tile.attribute("gid").as_int(0), tile_map_coordinates);
+			layer->tile_tree->InsertTile(tiledd);
+			//TEST
+
 			layer->data[i++] = tile.attribute("gid").as_int(0);
 		}
 	}

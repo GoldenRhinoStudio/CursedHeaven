@@ -98,223 +98,227 @@ bool j1Player::Update(float dt, bool do_logic) {
 	{
 		ChangeRoom(position.x, position.y);
 
-		// GodMode controls
-		if (GodMode) {
+		if (!changing_room) {
 
-			animation = &godmode;
+			// GodMode controls
+			if (GodMode) {
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
-			{
-				position.x += godModeSpeed * dt;
-				facingRight = true;
-				direction = DIRECTION::RIGHT_;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
-			{
-				position.x += godModeSpeed * dt;
-				position.y -= (godModeSpeed / 2) * dt;
-				facingRight = true;
-				direction = DIRECTION::UP_RIGHT_;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
-			{
-				position.x += godModeSpeed * dt;
-				position.y += (godModeSpeed / 2) * dt;
-				facingRight = true;
-				direction = DIRECTION::DOWN_RIGHT_;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
-			{
-				position.x -= godModeSpeed * dt;
-				facingRight = false;
-				direction = DIRECTION::LEFT_;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
-			{
-				position.x -= godModeSpeed * dt;
-				position.y -= (godModeSpeed / 2) * dt;
-				facingRight = true;
-				direction = DIRECTION::UP_LEFT_;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
-			{
-				position.x -= godModeSpeed * dt;
-				position.y += (godModeSpeed / 2) * dt;
-				facingRight = true;
-				direction = DIRECTION::DOWN_LEFT_;
-			}
-
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
-			{
-				position.y -= godModeSpeed * dt;
-				direction = DIRECTION::UP_;
-			}
-				
-
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
-			{
-				position.y += godModeSpeed * dt;
-				direction = DIRECTION::DOWN_;
-			}
-
-			// Idle
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
-				&& attacking == false) {
-				direction = DIRECTION::NONE_;
-			}
-		}
-		else {
-			// Idle
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
-				&& attacking == false) {
-				direction = DIRECTION::NONE_;
-				animation = &idle;
-			}
-
-			// Direction controls	
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && attacking == false) {
-				if (wallInFront == false && dead == false) {
-					position.x += horizontalSpeed * dt;
-					animation = &run;
-					facingRight = true;
-				}
-				else if (dead == true) {
-					facingRight = true;
-					animation = &idle;
-				}
-				else
-					animation = &idle;
-			}
-
-			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && attacking == false)) {
-				if (wallBehind == false && dead == false) {
-					position.x -= horizontalSpeed * dt;
-					animation = &run;
-					facingRight = false;
-				}
-				else if (dead == true) {
-					facingRight = false;
-					animation = &idle;
-				}
-				else
-					animation = &idle;
-			}
-
-			// The player falls if he has no ground
-			if (feetOnGround == false && jumping == false) {
-
-				freefall = true;
-				if ((App->scene1->active && App->scene1->startup_time.Read() > 85)) {
-					//position.y += fallingSpeed * dt;
-					//fallingSpeed += verticalAcceleration * dt;
-				}
-
-				if (!attacking)
-					animation = &fall;
-			}
-
-			// Jump controls
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN) {
-				if ((currentJumps == initialJumps && freefall == true) || (currentJumps < maxJumps && freefall == false)) {
-					jumping = true;
-					verticalSpeed = initialVerticalSpeed;
-					currentJumps++;
-
-					if(freefall == true || (currentJumps > 1 && freefall == false))
-						App->audio->PlayFx(jumpSound);
-				}
-			}
-
-			// Reseting the jump every frame
-			feetOnGround = false;
-			if (dead && deathByFall == false)
-				animation = &death;
-
-			if (jumping == true && animation != &death) {
-				// If the player touches a wall collider
-				if (feetOnGround) {
-
-					animation = &idle;
-					jumping = false;
-				}
-				else {
-
-					if (wallAbove == false) {
-						position.y += verticalSpeed * dt;
-						verticalSpeed += verticalAcceleration * dt;
-					}
-
-					// While the player is falling
-					if (!attacking) {
-						if (verticalSpeed <= 0) {
-							animation = &jump;
-						}
-						else if (verticalSpeed > 0) {
-							animation = &fall;
-						}
-					}
-				}
-			}
-		}
-
-		// Attack control
-		if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X)) == KEY_DOWN)
-			&& attacking == false && GodMode == false && dead == false) {
-			attacking = true;
-			App->audio->PlayFx(attackSound);
-			attackCollider->type = COLLIDER_ATTACK;
-						
-			if (facingRight) {
-				animation = &attackRight;
-			}
-			else {
-				animation = &attackLeft;
-			}
-		}
-
-		// Attack management
-		if ((facingRight && attackRight.Finished())
-			|| (!facingRight && attackLeft.Finished()) || dead == true) {
-
-			attackCollider->type = COLLIDER_NONE;
-
-			attackLeft.Reset();
-			attackRight.Reset();
-			animation = &idle;
-			attacking = false;
-		}
-		else if(attackCollider != nullptr) {
-			if (facingRight)
-				attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-			else
-				attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
-		}
-
-		// God mode
-		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
-		{
-			GodMode = !GodMode;
-
-			if (GodMode == true)
-			{
-				collider->type = COLLIDER_NONE;
 				animation = &godmode;
 
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
+				{
+					position.x += godModeSpeed * dt;
+					facingRight = true;
+					direction = DIRECTION::RIGHT_;
+				}
+
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+				{
+					position.x += godModeSpeed * dt;
+					position.y -= (godModeSpeed / 2) * dt;
+					facingRight = true;
+					direction = DIRECTION::UP_RIGHT_;
+				}
+
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+				{
+					position.x += godModeSpeed * dt;
+					position.y += (godModeSpeed / 2) * dt;
+					facingRight = true;
+					direction = DIRECTION::DOWN_RIGHT_;
+				}
+
+				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
+				{
+					position.x -= godModeSpeed * dt;
+					facingRight = false;
+					direction = DIRECTION::LEFT_;
+				}
+
+				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+				{
+					position.x -= godModeSpeed * dt;
+					position.y -= (godModeSpeed / 2) * dt;
+					facingRight = true;
+					direction = DIRECTION::UP_LEFT_;
+				}
+
+				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+				{
+					position.x -= godModeSpeed * dt;
+					position.y += (godModeSpeed / 2) * dt;
+					facingRight = true;
+					direction = DIRECTION::DOWN_LEFT_;
+				}
+
+				if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+				{
+					position.y -= godModeSpeed * dt;
+					direction = DIRECTION::UP_;
+				}
+
+
+				if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+				{
+					position.y += godModeSpeed * dt;
+					direction = DIRECTION::DOWN_;
+				}
+
+				// Idle
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+					&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+					&& attacking == false) {
+					direction = DIRECTION::NONE_;
+				}
 			}
-			else if (GodMode == false)
+			else {
+				// Idle
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+					&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+					&& attacking == false) {
+					direction = DIRECTION::NONE_;
+					animation = &idle;
+				}
+
+				// Direction controls	
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && attacking == false) {
+					if (wallInFront == false && dead == false) {
+						position.x += horizontalSpeed * dt;
+						animation = &run;
+						facingRight = true;
+					}
+					else if (dead == true) {
+						facingRight = true;
+						animation = &idle;
+					}
+					else
+						animation = &idle;
+				}
+
+				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && attacking == false)) {
+					if (wallBehind == false && dead == false) {
+						position.x -= horizontalSpeed * dt;
+						animation = &run;
+						facingRight = false;
+					}
+					else if (dead == true) {
+						facingRight = false;
+						animation = &idle;
+					}
+					else
+						animation = &idle;
+				}
+
+				// The player falls if he has no ground
+				if (feetOnGround == false && jumping == false) {
+
+					freefall = true;
+					if ((App->scene1->active && App->scene1->startup_time.Read() > 85)) {
+						//position.y += fallingSpeed * dt;
+						//fallingSpeed += verticalAcceleration * dt;
+					}
+
+					if (!attacking)
+						animation = &fall;
+				}
+
+				// Jump controls
+				if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN) {
+					if ((currentJumps == initialJumps && freefall == true) || (currentJumps < maxJumps && freefall == false)) {
+						jumping = true;
+						verticalSpeed = initialVerticalSpeed;
+						currentJumps++;
+
+						if (freefall == true || (currentJumps > 1 && freefall == false))
+							App->audio->PlayFx(jumpSound);
+					}
+				}
+
+				// Reseting the jump every frame
+				feetOnGround = false;
+				if (dead && deathByFall == false)
+					animation = &death;
+
+				if (jumping == true && animation != &death) {
+					// If the player touches a wall collider
+					if (feetOnGround) {
+
+						animation = &idle;
+						jumping = false;
+					}
+					else {
+
+						if (wallAbove == false) {
+							position.y += verticalSpeed * dt;
+							verticalSpeed += verticalAcceleration * dt;
+						}
+
+						// While the player is falling
+						if (!attacking) {
+							if (verticalSpeed <= 0) {
+								animation = &jump;
+							}
+							else if (verticalSpeed > 0) {
+								animation = &fall;
+							}
+						}
+					}
+				}
+			}
+
+			// Attack control
+			if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X)) == KEY_DOWN)
+				&& attacking == false && GodMode == false && dead == false) {
+				attacking = true;
+				App->audio->PlayFx(attackSound);
+				attackCollider->type = COLLIDER_ATTACK;
+
+				if (facingRight) {
+					animation = &attackRight;
+				}
+				else {
+					animation = &attackLeft;
+				}
+			}
+
+			// Attack management
+			if ((facingRight && attackRight.Finished())
+				|| (!facingRight && attackLeft.Finished()) || dead == true) {
+
+				attackCollider->type = COLLIDER_NONE;
+
+				attackLeft.Reset();
+				attackRight.Reset();
+				animation = &idle;
+				attacking = false;
+			}
+			else if (attackCollider != nullptr) {
+				if (facingRight)
+					attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
+				else
+					attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+			}
+
+			// God mode
+			if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
 			{
-				collider->type = COLLIDER_PLAYER;
+				GodMode = !GodMode;
+
+				if (GodMode == true)
+				{
+					collider->type = COLLIDER_NONE;
+					animation = &godmode;
+
+				}
+				else if (GodMode == false)
+				{
+					collider->type = COLLIDER_PLAYER;
+				}
 			}
+			if (dead && App->fade->IsFading() == false)
+				lives--;
+
 		}
-		if (dead && App->fade->IsFading() == false)
-			lives--;
 	}
 
 	if (dead) {
@@ -628,60 +632,70 @@ void j1Player::ChangeRoom(int x, int y) {
 	// Room 1 to 2 (42,28) to (42,17)
 	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 28)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(42, 17).x;
 		position.y = App->map->MapToWorld(42, 17).y;
 	}
 	// Room 2 to 1 (42,18) to (42,29)
 	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 18) 
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(42, 29).x;
 		position.y = App->map->MapToWorld(42, 29).y;
 	}
 	// Room 1 to 3 (38,32) to (20,32)
 	if (App->map->WorldToMap((int)x, (int)y).x == 38 && App->map->WorldToMap((int)x, (int)y).y == 32)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(20, 32).x;
 		position.y = App->map->MapToWorld(20, 32).y;
 	}
 	// Room 3 to 1 (21,32) to (39,32)
 	if (App->map->WorldToMap((int)x, (int)y).x == 21 && App->map->WorldToMap((int)x, (int)y).y == 32)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(39, 32).x;
 		position.y = App->map->MapToWorld(39, 32).y;
 	}
 	// Room 1 to 4 (46,32) to (72,32)
 	if (App->map->WorldToMap((int)x, (int)y).x == 46 && App->map->WorldToMap((int)x, (int)y).y == 32)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(72, 32).x;
 		position.y = App->map->MapToWorld(72, 32).y;
 	}
 	// Room 4 to 1 (71,32) to (45,32)
 	if (App->map->WorldToMap((int)x, (int)y).x == 71 && App->map->WorldToMap((int)x, (int)y).y == 32)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(45, 32).x;
 		position.y = App->map->MapToWorld(45, 32).y;
 	}
 	// Room 1 to 5 (42,36) to (42,48)
 	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 36)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(42, 48).x;
 		position.y = App->map->MapToWorld(42, 48).y;
 	}
 	// Room 5 to 1 (42,47) to (42,35)
 	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 47)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(42, 35).x;
 		position.y = App->map->MapToWorld(42, 35).y;
 	}
-	// Room 6 to 5 (43,77) to (43,60)
+	// Room 6 to 5 (42,77) to (42,60)
 	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 77)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(43, 60).x;
 		position.y = App->map->MapToWorld(43, 60).y;
 	}
-	// Room 5 to 6 (43,61) to (43,78)
+	// Room 5 to 6 (42,61) to (42,78)
 	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 61)
 	{
+		changing_room = true;
 		position.x = App->map->MapToWorld(43, 78).x;
 		position.y = App->map->MapToWorld(43, 78).y;
 	}

@@ -81,49 +81,28 @@ bool j1Render::Update(float dt)
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen);
 
 	// Camera follows player
-	if (App->entity->player != nullptr /*&& !App->entity->player->changing_room*/) {
+	if (App->entity->player != nullptr && !App->entity->player->changing_room) {
 		camera.x = -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2;
 		camera.y = -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2;
 	}
 
 	// Moving camera when player changes room
-	if (App->entity->player != nullptr && App->entity->player->changing_room) {
-		if (-App->entity->player->position.x > camera.x && -App->entity->player->position.y > camera.y) {
-			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
-				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
-				App->entity->player->changing_room = false;
-			}
-			else {
-				
-			}
+	if (App->entity->player != nullptr && App->entity->player->changing_room == true) {
+		if (camera.x < -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+			camera.x += 500 * dt;
 		}
-		else if (-App->entity->player->position.x < camera.x && -App->entity->player->position.y > camera.y) {
-			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
-				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
-				App->entity->player->changing_room = false;
-			}
-			else {
-				
-			}
+		else if (camera.x > -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+			camera.x -= 500 * dt;
 		}
-		else if (-App->entity->player->position.x < camera.x && -App->entity->player->position.y < camera.y) {
-			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
-				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
-				App->entity->player->changing_room = false;
-			}
-			else {
+		else App->entity->player->changing_room = false;
 
-			}
+		if (camera.y < -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+			camera.y += 250 * dt;
 		}
-		else if (-App->entity->player->position.x > camera.x && -App->entity->player->position.y < camera.y) {
-			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
-				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
-				App->entity->player->changing_room = false;
-			}
-			else {
-
-			}
+		else if (camera.y > -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+			camera.y -= 250 * dt;
 		}
+		else App->entity->player->changing_room = false;
 	}
 
 	return true;

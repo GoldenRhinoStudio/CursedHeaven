@@ -81,8 +81,8 @@ bool j1Render::Update(float dt)
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen);
 
 	if (App->entity->player != nullptr) {
-		camera.x = -App->entity->player->position.x;
-		camera.y = -App->entity->player->position.y;
+		camera.x = -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2;
+		camera.y = -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2;
 	}
 
 	return true;

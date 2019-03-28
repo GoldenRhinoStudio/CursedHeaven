@@ -80,9 +80,50 @@ bool j1Render::Update(float dt)
 {
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen);
 
-	if (App->entity->player != nullptr) {
+	// Camera follows player
+	if (App->entity->player != nullptr /*&& !App->entity->player->changing_room*/) {
 		camera.x = -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2;
 		camera.y = -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2;
+	}
+
+	// Moving camera when player changes room
+	if (App->entity->player != nullptr && App->entity->player->changing_room) {
+		if (-App->entity->player->position.x > camera.x && -App->entity->player->position.y > camera.y) {
+			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
+				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				App->entity->player->changing_room = false;
+			}
+			else {
+				
+			}
+		}
+		else if (-App->entity->player->position.x < camera.x && -App->entity->player->position.y > camera.y) {
+			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
+				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				App->entity->player->changing_room = false;
+			}
+			else {
+				
+			}
+		}
+		else if (-App->entity->player->position.x < camera.x && -App->entity->player->position.y < camera.y) {
+			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
+				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				App->entity->player->changing_room = false;
+			}
+			else {
+
+			}
+		}
+		else if (-App->entity->player->position.x > camera.x && -App->entity->player->position.y < camera.y) {
+			if (camera.x == -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2 &&
+				camera.y == -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				App->entity->player->changing_room = false;
+			}
+			else {
+
+			}
+		}
 	}
 
 	return true;

@@ -96,6 +96,8 @@ bool j1Player::Update(float dt, bool do_logic) {
 	
 	if (player_start)
 	{
+		ChangeRoom(position.x, position.y);
+
 		// GodMode controls
 		if (GodMode) {
 
@@ -621,6 +623,69 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 		
 	}
 };
+
+void j1Player::ChangeRoom(int x, int y) {
+	// Room 1 to 2 (42,28) to (42,17)
+	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 28)
+	{
+		position.x = App->map->MapToWorld(42, 17).x;
+		position.y = App->map->MapToWorld(42, 17).y;
+	}
+	// Room 2 to 1 (42,18) to (42,29)
+	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 18) 
+	{
+		position.x = App->map->MapToWorld(42, 29).x;
+		position.y = App->map->MapToWorld(42, 29).y;
+	}
+	// Room 1 to 3 (38,32) to (20,32)
+	if (App->map->WorldToMap((int)x, (int)y).x == 38 && App->map->WorldToMap((int)x, (int)y).y == 32)
+	{
+		position.x = App->map->MapToWorld(20, 32).x;
+		position.y = App->map->MapToWorld(20, 32).y;
+	}
+	// Room 3 to 1 (21,32) to (39,32)
+	if (App->map->WorldToMap((int)x, (int)y).x == 21 && App->map->WorldToMap((int)x, (int)y).y == 32)
+	{
+		position.x = App->map->MapToWorld(39, 32).x;
+		position.y = App->map->MapToWorld(39, 32).y;
+	}
+	// Room 1 to 4 (46,32) to (72,32)
+	if (App->map->WorldToMap((int)x, (int)y).x == 46 && App->map->WorldToMap((int)x, (int)y).y == 32)
+	{
+		position.x = App->map->MapToWorld(72, 32).x;
+		position.y = App->map->MapToWorld(72, 32).y;
+	}
+	// Room 4 to 1 (71,32) to (45,32)
+	if (App->map->WorldToMap((int)x, (int)y).x == 71 && App->map->WorldToMap((int)x, (int)y).y == 32)
+	{
+		position.x = App->map->MapToWorld(45, 32).x;
+		position.y = App->map->MapToWorld(45, 32).y;
+	}
+	// Room 1 to 5 (42,36) to (42,48)
+	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 36)
+	{
+		position.x = App->map->MapToWorld(42, 48).x;
+		position.y = App->map->MapToWorld(42, 48).y;
+	}
+	// Room 5 to 1 (42,47) to (42,35)
+	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 47)
+	{
+		position.x = App->map->MapToWorld(42, 35).x;
+		position.y = App->map->MapToWorld(42, 35).y;
+	}
+	// Room 6 to 5 (43,77) to (43,60)
+	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 77)
+	{
+		position.x = App->map->MapToWorld(43, 60).x;
+		position.y = App->map->MapToWorld(43, 60).y;
+	}
+	// Room 5 to 6 (43,61) to (43,78)
+	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 61)
+	{
+		position.x = App->map->MapToWorld(43, 78).x;
+		position.y = App->map->MapToWorld(43, 78).y;
+	}
+}
 
 void j1Player::LoadPlayerProperties() {
 

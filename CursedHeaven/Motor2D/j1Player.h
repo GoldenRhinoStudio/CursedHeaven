@@ -40,6 +40,7 @@ public:
 
 	void LoadPlayerProperties();
 	void UpdateCameraPosition();
+	void ChangeRoom(int x, int y);
 
 public:
 
@@ -117,6 +118,8 @@ public:
 	bool deathByFall = false;
 	bool attacking = false;
 	bool extra_life = false;
+
+	bool changing_room = false;
 
 	int cameraLimit;
 

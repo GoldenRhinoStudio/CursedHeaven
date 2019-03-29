@@ -10,7 +10,6 @@ struct SDL_Texture;
 struct Collider;
 class j1Hud;
 
-
 class j1Player : public j1Entity
 {
 
@@ -21,62 +20,53 @@ public:
 	virtual ~j1Player();
 
 	// Called before the first frame
-	bool Start();
+	virtual bool Start() {
+		return true;
+	};
 
 	// Called each loop iteration
-	bool PreUpdate();
-	bool Update(float dt, bool do_logic);
-	bool PostUpdate();
+	virtual bool PreUpdate() {
+		return true;
+	};
+	virtual bool Update(float dt, bool do_logic) {
+		return true;
+	};
+	virtual bool PostUpdate() {
+		return true;
+	};
 
 	// Called before quitting
-	bool CleanUp();
+	virtual bool CleanUp() {
+		return true;
+	};
 
 	// Called to check collisions
 	void OnCollision(Collider* col_1, Collider* col_2);
 
 	// Load / Save
-	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
+	virtual bool Load(pugi::xml_node&) {
+		return true;
+	};
+	virtual bool Save(pugi::xml_node&) const {
+		return true;
+	};
 
-	void LoadPlayerProperties();
+	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition();
+	bool CheckWalkability(iPoint pos) const;
+	void ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* godmode, Animation* idle, Animation* run);
 
 public:
 
-	// Animations of the player
-	Animation idle;
-	Animation run;
-	Animation jump;
-	Animation fall;
-	Animation godmode;
-	Animation attackRight;
-	Animation attackLeft;
-	Animation death;
-
-	// Sounds
-	uint deathSound;
-	uint jumpSound;
-	uint playerHurt;
-	uint attackSound;
-	uint lifeup;
-
 	// To know the last direction the character was moving to
 	bool facingRight = true;
-
-	fPoint initialPosition;
 
 	// Size of the player collider, where x = w and y = h
 	iPoint playerSize;
 	iPoint margin;
 
-	uint currentJumps;
-	uint initialJumps;
-	uint maxJumps;
-	uint colisionMargin;
-	uint deathByFallColliderHeight;
 	uint points = 0;
 	uint score_points = 0;
-	uint lives;
 
 	Collider* attackCollider = nullptr;
 
@@ -90,40 +80,13 @@ public:
 
 	float godModeSpeed;
 	float horizontalSpeed;
-	//Jumping speed
-	float initialVerticalSpeed;
-	float verticalSpeed;
-	// Free fall speed
-	float fallingSpeed;
-	float initialFallingSpeed;
-	// "Gravity"
-	float verticalAcceleration;
-
-	// It tells you wether the player has landed, has a wall in front, a wall behind or a wall above
-	bool feetOnGround = false;
-	bool wallInFront = false;
-	bool wallBehind = false;
-	bool wallAbove = false;
-
-	bool GodMode = false;
-	bool playerIdle = false;
-	bool jumping = false;
-	bool freefall = false;
 
 	bool player_start = false;
-	bool loading = false;
 	bool dead = false;
 	bool playedSound = false;
-	bool deathByFall = false;
 	bool attacking = false;
-	bool extra_life = false;
-
-	int cameraLimit;
-
-private:
-	int playerLimit;
-
 	bool loadedAudios = false;
+	bool GodMode = false;
 };
 
-#endif // __jPLAYER_H__
+#endif // __j1PLAYER_H__

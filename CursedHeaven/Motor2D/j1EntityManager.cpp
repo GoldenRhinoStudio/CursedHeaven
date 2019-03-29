@@ -7,7 +7,13 @@
 #include "j1EntityManager.h"
 #include "j1Entity.h"
 #include "j1Scene1.h"
+#include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
+#include "j1Rogue.h"
+#include "j1Tank.h"
+
 #include "j1Player.h"
+
 #include "Brofiler/Brofiler.h"
 
 j1EntityManager::j1EntityManager()
@@ -97,8 +103,10 @@ bool j1EntityManager::CleanUp()
 
 	entities.clear();
 
-	player = nullptr;
-	hook = nullptr;
+	knight = nullptr;
+	mage = nullptr;
+	tank = nullptr;
+	rogue = nullptr;
 
 	return true;
 }
@@ -109,7 +117,11 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 	switch (type)
 	{
 	case PLAYER: 
-		ret = new j1Player(x, y, type);
+		if (player_type == KNIGHT) ret = new j1DragoonKnight(x, y, type);
+		/*else if (player_type == TANK) ret = new j1Tank(x, y, type);
+		else if (player_type == ROGUE) ret = new j1Rogue(x, y, type);
+		else if (player_type == MAGE) ret = new j1BlackMage(x, y, type);*/
+
 		if (ret != nullptr) 
 			entities.push_back(ret); 
 		break;
@@ -159,10 +171,12 @@ void j1EntityManager::DestroyEntities()
 	}
 }
 
-void j1EntityManager::CreatePlayer() 
+void j1EntityManager::CreatePlayer()
 {
-	hook = (j1Hook*)CreateEntity(HOOK);
-	player = (j1Player*)CreateEntity(PLAYER);
+	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER);
+	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
+	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);
+	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);*/
 }
 
 void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
@@ -181,18 +195,21 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 {
 	DestroyEntities();
 
-	if (player != nullptr)
-	{
-		player->Load(data);
-	}
+	if (knight != nullptr) knight->Load(data);
+	/*else if (mage != nullptr) mage->Load(data);
+	else if (rogue != nullptr) rogue->Load(data);
+	else if (tank != nullptr) tank->Load(data);*/
 
 	return true;
 }
 
 bool j1EntityManager::Save(pugi::xml_node& data) const
 {
-	player->Save(data.append_child("player"));
 
+	if (player_type == KNIGHT) knight->Save(data.append_child("player"));
+	/*else if (player_type == TANK) tank->Save(data.append_child("player"));
+	else if (player_type == ROGUE) rogue->Save(data.append_child("player"));
+	else if (player_type == MAGE) mage->Save(data.append_child("player"));*/
 
 	return true;
 }

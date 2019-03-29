@@ -9,7 +9,7 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1DragoonKnight.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
 #include "j1FadeToBlack.h"
@@ -150,10 +150,10 @@ bool j1Scene1::Update(float dt)
 			settings_window->visible = !settings_window->visible;
 			App->gamePaused = !App->gamePaused;
 
-			if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
-				settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
-			else
-				settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / 4;
+			//if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
+			//	settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
+			//else
+				settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale();
 
 			for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 				if ((*item)->parent == settings_window) {
@@ -247,9 +247,7 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
-			App->entity->player->position = initialScene1Position;
 			App->render->camera.x = 0;
-			App->entity->player->facingRight = true;
 			resettingLevel = false;
 		}
 	}
@@ -326,8 +324,10 @@ bool j1Scene1::CleanUp()
 	App->entity->DestroyEntities();
 	App->gui->CleanUp();
 
-	if (App->entity->player)
-		App->entity->player->CleanUp();
+	if (App->entity->knight) App->entity->knight->CleanUp();
+	/*if (App->entity->mage) App->entity->mage->CleanUp();
+	if (App->entity->rogue) App->entity->rogue->CleanUp();
+	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		(*item)->CleanUp();
@@ -351,7 +351,6 @@ bool j1Scene1::CleanUp()
 
 	return true;
 }
-
 
 void j1Scene1::ChangeSceneMenu()
 {

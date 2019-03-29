@@ -82,6 +82,12 @@
     <ClCompile Include="p2Log.cpp">
       <Filter>Programation 2</Filter>
     </ClCompile>
+    <ClCompile Include="j1BlackMage.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="j1DragoonKnight.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -179,6 +185,18 @@
     </ClInclude>
     <ClInclude Include="p2Log.h">
       <Filter>Programation 2</Filter>
+    </ClInclude>
+    <ClInclude Include="j1BlackMage.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1DragoonKnight.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Tank.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Rogue.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

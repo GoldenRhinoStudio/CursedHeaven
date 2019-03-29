@@ -6,7 +6,10 @@
 #include "j1Textures.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
+#include "j1Tank.h"
+#include "j1Rogue.h"
 #include "j1Collisions.h"
 #include <math.h>
 
@@ -588,7 +591,13 @@ void j1Map::EntityMovement(j1Entity* entity)
 	uint next_gid = 0;
 	bool height0_semiblock = false, height1_semiblock = false, height2_semiblock = false;
 	bool height0_next = false, height1_next = false, height2_next = false;
-	DIRECTION direction = App->entity->player->direction;
+
+	DIRECTION direction;
+	
+	if (App->entity->player_type == KNIGHT) direction = App->entity->knight->direction;
+	/*if (App->entity->player_type == ROGUE) direction = App->entity->rogue->direction;
+	if (App->entity->player_type == TANK) direction = App->entity->tank->direction;
+	if (App->entity->player_type == MAGE) direction = App->entity->mage->direction;*/
 	
 	if (current_gid != 0) {
 		switch (direction)

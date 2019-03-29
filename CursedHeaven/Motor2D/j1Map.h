@@ -146,6 +146,8 @@ public:
 	//TEST
 	uint tiles_rendered;
 
+	int current_height = 0;
+
 private:
 
 	float bgBlitSpeed;

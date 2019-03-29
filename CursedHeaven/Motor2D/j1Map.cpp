@@ -573,13 +573,18 @@ void j1Map::EntityMovement(j1Entity* entity)
 
 	uint current_gid;
 
-	if (height2_gid != 0)				//entity is on the third layer
+	if (height2_gid != 0) {				//entity is on the third layer
 		current_gid = height2_gid;
-	else if (height1_gid != 0)			//entity is on the second layer
+		current_height = 3;
+	}
+	else if (height1_gid != 0) {		//entity is on the second layer
 		current_gid = height1_gid;
-	else                                //entity is on the first layer
+		current_height = 2;
+	}
+	else {                                //entity is on the first layer
 		current_gid = height0_gid;
-	
+		current_height = 1;
+	}
 	
 	// tiles of the first layer | height == 0
 	uint up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);

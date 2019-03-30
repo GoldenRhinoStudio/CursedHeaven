@@ -41,9 +41,8 @@ public:
 	Animation idle;
 	Animation run;
 	Animation godmode;
-	Animation attackRight;
-	Animation attackLeft;
-	Animation death;
+	Animation runRight_Up;
+	Animation runRight_Down;
 
 	// Attack values
 

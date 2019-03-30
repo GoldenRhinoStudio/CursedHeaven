@@ -27,7 +27,7 @@ void j1Player::UpdateCameraPosition()
 		App->render->camera.y -= 20;
 }
 
-void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* idle, Animation* run) {
+void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* idle, Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down) {
 
 	// GodMode controls
 	if (GodMode) {
@@ -125,7 +125,7 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 			CheckWalkability(right)) {
 			if (dead == false) {
 				position.x += horizontalSpeed * dt;
-				animation = run;
+				animation = lateral;
 				facingRight = true;
 			}
 			else
@@ -136,7 +136,7 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 			CheckWalkability(left)) {
 			if (dead == false) {
 				position.x -= horizontalSpeed * dt;
-				animation = run;
+				animation = lateral;
 				facingRight = false;
 			}
 			else
@@ -146,14 +146,17 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 		if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
 			if (dead == false) {
 				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && CheckWalkability(up_left))
-					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && CheckWalkability(up_right)))
+					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && CheckWalkability(up_right))) {
+					
+					animation = diagonal_up;
 					position.y -= (horizontalSpeed * dt) / 2;
-
+				}
 				else if (CheckWalkability(up) && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE)
-					&& (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
-					position.y -= horizontalSpeed * dt;
+					&& (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)){
 
-				animation = run;
+					position.y -= horizontalSpeed * dt;
+					animation = go_up;
+				}
 			}
 			else
 				animation = idle;
@@ -162,12 +165,16 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 		if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {
 			if (dead == false) {
 				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && CheckWalkability(down_left))
-					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && CheckWalkability(down_right)))
-					position.y += (horizontalSpeed * dt) / 2;
-				else if (CheckWalkability(down))
-					position.y += horizontalSpeed * dt;
+					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && CheckWalkability(down_right))) {
 
-				animation = run;
+					animation = diagonal_down;
+					position.y += (horizontalSpeed * dt) / 2;
+				}
+				else if (CheckWalkability(down)) {
+
+					position.y += horizontalSpeed * dt;
+					animation = go_down;
+				}
 			}
 			else
 				animation = idle;

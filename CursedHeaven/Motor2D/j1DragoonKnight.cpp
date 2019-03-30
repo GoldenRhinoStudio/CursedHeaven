@@ -18,7 +18,11 @@ j1DragoonKnight::j1DragoonKnight(int x, int y, ENTITY_TYPES type) : j1Player(x, 
 	animation = NULL;
 
 	idle.LoadAnimation("idle", "knight");
-	run.LoadAnimation("run", "knight");
+	up.LoadAnimation("up", "knight");
+	down.LoadAnimation("down", "knight");
+	lateral.LoadAnimation("lateral", "knight");
+	diagonal_up.LoadAnimation("diagonalUp", "knight");
+	diagonal_down.LoadAnimation("diagonalDown", "knight");
 	godmode.LoadAnimation("godmode", "knight");
 }
 
@@ -29,7 +33,7 @@ bool j1DragoonKnight::Start() {
 
 	// Textures are loaded
 	LOG("Loading player textures");
-	sprites = App->tex->Load("textures/character/character.png");
+	sprites = App->tex->Load("textures/character/dragoonknight/Dragoon.png");
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -77,7 +81,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		ManagePlayerMovement(App->entity->knight, dt, &idle, &run);
+		ManagePlayerMovement(App->entity->knight, dt, &idle, &diagonal_up, &diagonal_down, &lateral, &up, &down);
 
 		// Attack control
 		if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X)) == KEY_DOWN)

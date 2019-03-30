@@ -2,6 +2,41 @@
 
   <player>    
 	<knight>
+      <diagonalUp loop="true" speed="7.0f">
+        <animation x="0" y="92" w="45" h="46"/>
+        <animation x="45" y="92" w="44" h="46"/>
+        <animation x="0" y="92" w="45" h="46"/>
+        <animation x="89" y="92" w="45" h="46"/>
+      </diagonalUp>
+	  
+      <diagonalDown loop="true" speed="7.0f">
+        <animation x="0" y="0" w="40" h="46"/>
+        <animation x="40" y="0" w="41" h="46"/>
+        <animation x="0" y="0" w="40" h="46"/>
+        <animation x="81" y="0" w="40" h="46"/>
+      </diagonalDown>		 
+
+      <lateral loop="true" speed="7.0f">
+        <animation x="0" y="46" w="40" h="46"/>
+        <animation x="40" y="46" w="40" h="46"/>
+        <animation x="0" y="46" w="40" h="46"/>
+        <animation x="80" y="46" w="40" h="46"/>
+      </lateral>			
+  	  	  
+      <up loop="true" speed="7.0f">
+        <animation x="0" y="139" w="30" h="46"/>
+        <animation x="30" y="139" w="30" h="46"/>
+        <animation x="0" y="139" w="30" h="46"/>
+        <animation x="60" y="139" w="30" h="46"/>
+      </up>
+	  
+      <down loop="true" speed="7.0f">
+        <animation x="0" y="185" w="29" h="46"/>
+        <animation x="29" y="185" w="29" h="46"/>
+        <animation x="0" y="185" w="29" h="46"/>
+        <animation x="58" y="185" w="29" h="46"/>
+      </down>		
+	  
       <idle loop="true" speed="15.0f">
         <animation x="2" y="184" w="22" h="25"/>
         <animation x="33" y="184" w="24" h="25"/>

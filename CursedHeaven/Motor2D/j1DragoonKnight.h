@@ -39,10 +39,16 @@ public:
 
 	// Animations of the player
 	Animation idle;
-	Animation run;
 	Animation godmode;
-	Animation runRight_Up;
-	Animation runRight_Down;
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+	Animation death;
+
+	Animation attackLeft;
+	Animation attackRight;
 
 	// Attack values
 

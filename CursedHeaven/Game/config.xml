@@ -24,8 +24,8 @@
   </file_system>
   
   <player>
-	<size width="18" height="23"/>
-	<margin x="12" y="20" colisionMargin="3"/>
+	<size width="18" height="8"/>
+	<margin x="2" y="20" colisionMargin="3"/>
 	<deathByFallCollider h="8"/>
 	<speed>
 	  <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="80.0f"/>

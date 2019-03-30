@@ -92,6 +92,7 @@ public:
 	j1Rogue*			rogue = nullptr;
 
 	PLAYER_TYPES player_type = KNIGHT;
+	uint current_height = 0;
 
 private:
 

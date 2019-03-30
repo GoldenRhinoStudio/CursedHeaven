@@ -44,8 +44,6 @@ bool j1DragoonKnight::Start() {
 	position.x = 200;
 	position.y = 750;
 
-	GodMode = true;
-
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
 	else
@@ -79,7 +77,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		ManagePlayerMovement(App->entity->knight, dt, &godmode, &idle, &run);
+		ManagePlayerMovement(App->entity->knight, dt, &idle, &run);
 
 		// Attack control
 		if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X)) == KEY_DOWN)
@@ -111,6 +109,23 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
 			else
 				attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+		}
+
+		// God mode
+		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
+		{
+			GodMode = !GodMode;
+
+			if (GodMode == true)
+			{
+				collider->type = COLLIDER_NONE;
+				animation = &godmode;
+
+			}
+			else if (GodMode == false)
+			{
+				collider->type = COLLIDER_PLAYER;
+			}
 		}
 	}
 	if (dead) {

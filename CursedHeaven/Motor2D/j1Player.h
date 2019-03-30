@@ -54,7 +54,7 @@ public:
 	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition();
 	bool CheckWalkability(iPoint pos) const;
-	void ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* godmode, Animation* idle, Animation* run);
+	void ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* idle, Animation* run);
 
 public:
 

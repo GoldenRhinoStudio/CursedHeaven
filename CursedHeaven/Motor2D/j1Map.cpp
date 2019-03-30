@@ -64,14 +64,8 @@ void j1Map::Draw()
 					SDL_Rect r = tileset->GetTileRect(tile_id);
 					iPoint pos = MapToWorld(x, y);
 
-					if ((*layer)->name == "bg1" || (*layer)->name == "bg2" || (*layer)->name == "bg3")
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, bgBlitSpeed);
-
-					else if ((*layer)->name == "Fog")
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, fogBlitSpeed);
-
-					else
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, mapBlitSpeed);
+					//if ((*layer)->name != "Meta0" && (*layer)->name != "Meta1" && (*layer)->name != "Meta2")
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}
 		}
@@ -544,13 +538,18 @@ void j1Map::EntityMovement(j1Entity* entity)
 
 	uint current_gid;
 
-	if (height2_gid != 0)				//entity is on the third layer
+	if (height2_gid != 0) {				//entity is on the third layer
 		current_gid = height2_gid;
-	else if (height1_gid != 0)			//entity is on the second layer
+		App->entity->current_height = 2;
+	}
+	else if (height1_gid != 0) {		//entity is on the second layer
 		current_gid = height1_gid;
-	else                                //entity is on the first layer
+		App->entity->current_height = 1;
+	}
+	else {				                //entity is on the first layer
 		current_gid = height0_gid;
-	
+		App->entity->current_height = 0;
+	}	
 	
 	// tiles of the first layer | height == 0
 	uint up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);

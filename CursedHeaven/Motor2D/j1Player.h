@@ -53,8 +53,10 @@ public:
 
 	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition();
+
 	bool CheckWalkability(iPoint pos) const;
 	void ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* godmode, Animation* idle, Animation* run);
+	void ChangeRoom(int x, int y);
 
 public:
 
@@ -85,6 +87,15 @@ public:
 	bool dead = false;
 	bool playedSound = false;
 	bool attacking = false;
+
+	bool extra_life = false;
+
+	bool changing_room = false;
+
+	int cameraLimit;
+
+private:
+	int playerLimit;
 	bool loadedAudios = false;
 	bool GodMode = false;
 };

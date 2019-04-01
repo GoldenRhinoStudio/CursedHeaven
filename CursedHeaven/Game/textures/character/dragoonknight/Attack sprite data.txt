@@ -1,0 +1,7 @@
+Attack diagonal down
+Fila altura 54 px
+Horizontal    30px   39px   49px  47px
+
+Attack diagonal UP
+Fila altura 49 px
+Horizontal    34 px   49px   46px   40px (Height on last one 55 px) 

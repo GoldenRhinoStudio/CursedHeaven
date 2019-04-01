@@ -162,8 +162,8 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	hud->Update(dt);
 
-	// We update the camera to followe the player every frame
-	UpdateCameraPosition();
+	// We update the camera to follow the player every frame
+	 UpdateCameraPosition(dt);
 
 	return true;
 }

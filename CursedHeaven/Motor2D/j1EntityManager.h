@@ -57,6 +57,7 @@ public:
 
 	// Destructor
 	~j1EntityManager();
+	j1Player* player;
 
 	bool Awake(pugi::xml_node&);
 	bool Start();

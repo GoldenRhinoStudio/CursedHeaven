@@ -5,3 +5,18 @@ Horizontal    30px   39px   49px  47px
 Attack diagonal UP
 Fila altura 49 px
 Horizontal    34 px   49px   46px   40px (Height on last one 55 px) 
+
+
+Attack Horizontal
+Fila altura 54px
+Horizontal    33px   44px  47px  47px
+
+
+Attack down
+Fila altura 48px
+Horizontal    35px   31px  33px  35px (Height on last one 50 px) 
+
+
+Attack down
+Fila altura 46px
+Horizontal    33px   30px  31px  30px (Height on last one 50 px) 

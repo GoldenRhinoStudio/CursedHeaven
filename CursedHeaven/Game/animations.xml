@@ -1,7 +1,27 @@
 <animations>
 
   <player>    
-	<knight>
+	<knight>	
+      <idleD_up loop="true" speed="7.0f">
+        <animation x="0" y="92" w="45" h="46"/>
+	  </idleD_up>
+	  
+      <idleD_down loop="true" speed="7.0f">
+        <animation x="0" y="0" w="40" h="46"/>
+	  </idleD_down>
+	  
+      <idleLateral loop="true" speed="7.0f">
+        <animation x="0" y="46" w="40" h="46"/>
+      </idleLateral>		
+	  
+      <idleUp loop="true" speed="7.0f">
+        <animation x="0" y="139" w="30" h="46"/>
+      </idleUp>
+	  
+      <idleDown loop="true" speed="7.0f">
+        <animation x="0" y="185" w="29" h="46"/>
+      </idleDown>		
+		
       <diagonalUp loop="true" speed="7.0f">
         <animation x="0" y="92" w="45" h="46"/>
         <animation x="45" y="92" w="44" h="46"/>
@@ -36,47 +56,46 @@
         <animation x="0" y="185" w="29" h="46"/>
         <animation x="58" y="185" w="29" h="46"/>
       </down>		
-	  
-      <idle loop="true" speed="15.0f">
-        <animation x="2" y="184" w="22" h="25"/>
-        <animation x="33" y="184" w="24" h="25"/>
-        <animation x="65" y="184" w="24" h="25"/>
-        <animation x="97" y="184" w="24" h="25"/>
-        <animation x="130" y="184" w="22" h="25"/>
-        <animation x="163" y="184" w="21" h="25"/>
-      </idle>
-      
-      <run loop="true" speed="18.0f">
-        <animation x="1" y="96" w="23" h="25"/>
-        <animation x="32" y="99" w="25" h="25"/>
-        <animation x="65" y="99" w="23" h="25"/>
-        <animation x="100" y="98" w="20" h="25"/>
-        <animation x="133" y="97" w="20" h="25"/>
-        <animation x="165" y="99" w="17" h="25"/>
-        <animation x="199" y="99" w="18" h="25"/>
-        <animation x="228" y="98" w="20" h="25"/>
-      </run>
 	   
-	   <godmode loop="true" speed="7.5f">	
+	  <godmode loop="true" speed="7.5f">	
         <animation x="85" y="34" w="29" h="27"/>
         <animation x="118" y="34" w="28" h="27"/>
-	   </godmode>
+	  </godmode>
       
-      <attackRight loop="false" speed="20.0f">
-        <animation x="1" y="271" w="29" h="29"/>
-        <animation x="64" y="271" w="29" h="29"/>
-        <animation x="135" y="271" w="35" h="29"/>
-        <animation x="198" y="271" w="40" h="29"/>
-        <animation x="253" y="271" w="42" h="29"/>
-      </attackRight>
-	   
-      <attackLeft loop="false" speed="20.0f">
-        <animation x="266" y="123" w="42" h="27"/>
-        <animation x="266" y="151" w="42" h="27"/>
-        <animation x="246" y="180" w="42" h="27"/>
-        <animation x="246" y="209" w="42" h="27"/>
-        <animation x="246" y="239" w="42" h="27"/>
-      </attackLeft>
+      <attackLateral loop="false" speed="7.0f">
+        <animation x="0" y="340" w="33" h="52"/>
+        <animation x="33" y="340" w="44" h="52"/>
+        <animation x="77" y="340" w="47" h="52"/>
+        <animation x="124" y="340" w="47" h="52"/>
+      </attackLateral>
+	  
+	  <attackD_up loop="false" speed="7.0f">
+        <animation x="0" y="285" w="34" h="49"/>
+        <animation x="34" y="285" w="49" h="49"/>
+        <animation x="83" y="285" w="46" h="49"/>
+        <animation x="129" y="285" w="40" h="55"/>
+	  </attackD_up>
+	  
+      <attackD_down loop="false" speed="7.0f">
+        <animation x="0" y="231" w="30" h="54"/>
+        <animation x="30" y="231" w="39" h="54"/>
+        <animation x="69" y="231" w="49" h="54"/>
+        <animation x="118" y="231" w="47" h="54"/>
+	  </attackD_down>	
+	  
+      <attackUp loop="false" speed="7.0f">
+        <animation x="0" y="442" w="33" h="46"/>
+        <animation x="0" y="442" w="30" h="46"/>
+        <animation x="0" y="442" w="31" h="46"/>
+        <animation x="0" y="442" w="30" h="46"/>
+      </attackUp>
+	  
+      <attackDown loop="false" speed="7.0f">
+        <animation x="0" y="392" w="35" h="48"/>
+        <animation x="35" y="392" w="31" h="48"/>
+        <animation x="66" y="392" w="33" h="48"/>
+        <animation x="99" y="392" w="35" h="50"/>
+      </attackDown>		
 	   
 	  <death loop="false" speed="10.0f">
         <animation x="1" y="128" w="30" h="28"/>

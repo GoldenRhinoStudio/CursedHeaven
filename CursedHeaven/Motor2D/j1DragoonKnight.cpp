@@ -17,13 +17,24 @@ j1DragoonKnight::j1DragoonKnight(int x, int y, ENTITY_TYPES type) : j1Player(x, 
 {
 	animation = NULL;
 
-	idle.LoadAnimation("idle", "knight");
+	idle_diagonal_up.LoadAnimation("idleD_up", "knight");
+	idle_diagonal_down.LoadAnimation("idleD_down", "knight");
+	idle_lateral.LoadAnimation("idleLateral", "knight");
+	idle_down.LoadAnimation("idleDown", "knight");
+	idle_up.LoadAnimation("idleUp", "knight");
+
 	up.LoadAnimation("up", "knight");
 	down.LoadAnimation("down", "knight");
 	lateral.LoadAnimation("lateral", "knight");
 	diagonal_up.LoadAnimation("diagonalUp", "knight");
 	diagonal_down.LoadAnimation("diagonalDown", "knight");
 	godmode.LoadAnimation("godmode", "knight");
+
+	attack_diagonal_up.LoadAnimation("attackD_up", "knight");
+	attack_diagonal_down.LoadAnimation("attackD_down", "knight");
+	attack_lateral.LoadAnimation("attackLateral", "knight");
+	attack_down.LoadAnimation("attackDown", "knight");
+	attack_up.LoadAnimation("attackUp", "knight");
 }
 
 j1DragoonKnight::~j1DragoonKnight() {}
@@ -42,7 +53,7 @@ bool j1DragoonKnight::Start() {
 	}
 
 	LoadPlayerProperties();
-	animation = &idle;
+	animation = &idle_diagonal_up;
 
 	// Setting player position
 	position.x = 200;
@@ -81,7 +92,9 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		ManagePlayerMovement(App->entity->knight, dt, &idle, &diagonal_up, &diagonal_down, &lateral, &up, &down);
+		if (!attacking) 
+			ManagePlayerMovement(App->entity->knight, dt, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 
 		// Attack control
 		if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X)) == KEY_DOWN)
@@ -89,23 +102,21 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			attacking = true;
 			attackCollider->type = COLLIDER_ATTACK;
 
-			if (facingRight) {
-				animation = &attackRight;
-			}
+			//if (facingRight) {
+				animation = &attack_lateral;
+			/*}
 			else {
 				animation = &attackLeft;
-			}
+			}*/
 		}
 
 		// Attack management
-		if ((facingRight && attackRight.Finished())
-			|| (!facingRight && attackLeft.Finished()) || dead == true) {
+		if (attack_lateral.Finished() || dead == true) {
 
 			attackCollider->type = COLLIDER_NONE;
 
-			attackLeft.Reset();
-			attackRight.Reset();
-			animation = &idle;
+			attack_lateral.Reset();
+			//animation = &idle;
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
@@ -144,9 +155,8 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 			// Resetting the animation
 			death.Reset();
-			attackLeft.Reset();
-			attackRight.Reset();
-			animation = &idle;
+			attack_lateral.Reset();
+			animation = &idle_diagonal_up;
 
 			dead = false;
 		}
@@ -172,7 +182,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		else
 			Draw(r, true);
 	}
-	else if (animation == &attackLeft || animation == &attackRight) {
+	else if (animation == &attack_lateral /*|| animation == &attackRight*/) {
 		if (facingRight)
 			Draw(r, false, 0, attackBlittingY);
 		else

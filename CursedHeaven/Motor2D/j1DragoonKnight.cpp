@@ -102,21 +102,30 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			attacking = true;
 			attackCollider->type = COLLIDER_ATTACK;
 
-			//if (facingRight) {
-				animation = &attack_lateral;
-			/*}
-			else {
-				animation = &attackLeft;
-			}*/
+			if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
+			else if (animation == &up || animation == &idle_up) animation = &attack_up;
+			else if (animation == &down || animation == &idle_down)	animation = &attack_down;
+			else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
+			else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
 		}
 
 		// Attack management
-		if (attack_lateral.Finished() || dead == true) {
+		if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() ||
+			attack_diagonal_up.Finished() || attack_diagonal_down.Finished() || dead == true) {
 
 			attackCollider->type = COLLIDER_NONE;
 
 			attack_lateral.Reset();
-			//animation = &idle;
+			attack_up.Reset();
+			attack_down.Reset();
+			attack_diagonal_up.Reset();
+			attack_diagonal_down.Reset();
+
+			if (animation == &attack_lateral) animation = &idle_lateral;
+			else if (animation == &attack_up) animation = &idle_up;
+			else if (animation == &attack_down) animation = &idle_down;
+			else if (animation == &attack_diagonal_up) animation = &idle_diagonal_up;
+			else if (animation == &attack_diagonal_down) animation = &idle_diagonal_down;
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
@@ -182,11 +191,11 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		else
 			Draw(r, true);
 	}
-	else if (animation == &attack_lateral /*|| animation == &attackRight*/) {
+	else /*if (animation !)*/ {
 		if (facingRight)
 			Draw(r, false, 0, attackBlittingY);
 		else
-			Draw(r, false, attackBlittingX, attackBlittingY);
+			Draw(r, true, attackBlittingX, attackBlittingY);
 	}
 
 	hud->Update(dt);

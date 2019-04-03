@@ -1,0 +1,13 @@
+Enemy Flan Info
+
+Diagonal Down
+Vertical   37
+Horizontal    31  33   31  30
+
+Diagonal Down
+Vertical   35
+Horizontal    30  29   32  31
+
+Horizontal
+Vertical   36
+Horizontal    30  30   32  33

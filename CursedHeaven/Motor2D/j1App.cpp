@@ -20,6 +20,7 @@
 #include "j1Fonts.h"
 #include "j1Gui.h"
 #include "j1App.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -38,12 +39,14 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	credits = new j1SceneCredits();
 	scene1 = new j1Scene1();
 	map = new j1Map();
-	collisions = new j1Collisions();
+
 	entity = new j1EntityManager();
 	path = new j1PathFinding();
 	fade = new j1FadeToBlack();
 	font = new j1Fonts();
 	gui = new j1Gui();
+	particles = new j1Particles();
+	collisions = new j1Collisions();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -61,6 +64,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(font);
 	AddModule(gui);
 	AddModule(fade);
+	AddModule(particles);
 	
 	// render last to swap buffer
 	AddModule(render);
@@ -230,6 +234,11 @@ void j1App::FinishUpdate()
 	if ((last_frame_ms < (1000 / framerate_cap)) && cappedFPS) {
 		SDL_Delay((1000 / framerate_cap) - last_frame_ms);
 	}
+}
+
+float j1App::GetDt()
+{
+	return dt;
 }
 
 // Call modules before each loop iteration

@@ -56,6 +56,7 @@ public:
 	bool CheckWalkability(iPoint pos) const;
 	void ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* godmode, Animation* idle, Animation* run);
 	void ChangeRoom(int x, int y);
+	void Shot(float x, float y);
 
 public:
 

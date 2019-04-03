@@ -88,6 +88,9 @@
     <ClCompile Include="j1DragoonKnight.cpp">
       <Filter>Development\Modules\Entities\Player</Filter>
     </ClCompile>
+    <ClCompile Include="j1Particles.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -197,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="j1Rogue.h">
       <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Particles.h">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

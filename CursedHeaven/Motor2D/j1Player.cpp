@@ -128,23 +128,23 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 		}
 
 		// Direction controls	
-		if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT &&	CheckWalkability(right)) {
+		if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(right)) {
 			position.x += horizontalSpeed * dt;
 			animation = lateral;
 			facingRight = true;
 			currentPlayer->direction = DIRECTION::RIGHT_;			
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT &&	CheckWalkability(left)) {
+		if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(left)) {
 			position.x -= horizontalSpeed * dt;
 			animation = lateral;
 			facingRight = false;
 			currentPlayer->direction = DIRECTION::LEFT_;
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
-			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && CheckWalkability(up_left))
-			|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && CheckWalkability(up_right))) {
+		if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY < -6400) {
+			if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(up_left))
+			|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(up_right))) {
 				
 				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::UP_LEFT_;
 				else currentPlayer->direction = DIRECTION::UP_RIGHT_;
@@ -162,9 +162,9 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {			
-			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && CheckWalkability(down_left))
-				|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && CheckWalkability(down_right))) {
+		if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY > 6400) {
+			if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(down_left))
+				|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(down_right))) {
 				
 				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::DOWN_LEFT_;
 				else currentPlayer->direction = DIRECTION::DOWN_RIGHT_;

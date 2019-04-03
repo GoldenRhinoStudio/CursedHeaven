@@ -63,10 +63,10 @@
 	  </godmode>
       
       <attackLateral loop="false" speed="15.0f">
-        <animation x="0" y="340" w="33" h="52"/>
-        <animation x="33" y="340" w="44" h="52"/>
-        <animation x="77" y="340" w="47" h="52"/>
-        <animation x="124" y="340" w="47" h="52"/>
+        <animation x="0" y="340" w="33" h="53"/>
+        <animation x="33" y="340" w="44" h="53"/>
+        <animation x="77" y="340" w="47" h="53"/>
+        <animation x="124" y="340" w="47" h="53"/>
       </attackLateral>
 	  
 	  <attackD_up loop="false" speed="15.0f">
@@ -84,17 +84,17 @@
 	  </attackD_down>	
 	  
       <attackUp loop="false" speed="15.0f">
-        <animation x="0" y="442" w="33" h="46"/>
-        <animation x="0" y="442" w="30" h="46"/>
-        <animation x="0" y="442" w="31" h="46"/>
-        <animation x="0" y="442" w="30" h="46"/>
+        <animation x="0" y="443" w="33" h="46"/>
+        <animation x="33" y="443" w="30" h="46"/>
+        <animation x="63" y="443" w="31" h="46"/>
+        <animation x="94" y="443" w="30" h="46"/>
       </attackUp>
 	  
       <attackDown loop="false" speed="15.0f">
-        <animation x="0" y="392" w="35" h="48"/>
-        <animation x="35" y="392" w="31" h="48"/>
-        <animation x="66" y="392" w="33" h="48"/>
-        <animation x="99" y="392" w="35" h="50"/>
+        <animation x="0" y="393" w="35" h="48"/>
+        <animation x="35" y="393" w="31" h="48"/>
+        <animation x="66" y="393" w="33" h="48"/>
+        <animation x="99" y="393" w="35" h="50"/>
       </attackDown>		
 	   
 	  <death loop="false" speed="10.0f">

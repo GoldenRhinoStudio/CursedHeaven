@@ -86,27 +86,38 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	BROFILER_CATEGORY("DragoonKnightUpdate", Profiler::Color::LightSeaGreen)
 
-	// ---------------------------------------------------------------------------------------------------------------------
-	// MANAGEMENT OF THE PLAYER
-	// ---------------------------------------------------------------------------------------------------------------------
-
 	if (player_start)
 	{
 		if (!attacking) 
 			ManagePlayerMovement(App->entity->knight, dt, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 
-		// Attack control
-		if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X)) == KEY_DOWN)
-			&& attacking == false && GodMode == false && dead == false) {
-			attacking = true;
-			attackCollider->type = COLLIDER_ATTACK;
+		// ---------------------------------------------------------------------------------------------------------------------
+		// COMBAT
+		// ---------------------------------------------------------------------------------------------------------------------
 
-			if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
-			else if (animation == &up || animation == &idle_up) animation = &attack_up;
-			else if (animation == &down || animation == &idle_down)	animation = &attack_down;
-			else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
-			else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
+		if (attacking == false && GodMode == false && dead == false) {
+			// Attack control
+			if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
+				attacking = true;
+				attackCollider->type = COLLIDER_ATTACK;
+
+				if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
+				else if (animation == &up || animation == &idle_up) animation = &attack_up;
+				else if (animation == &down || animation == &idle_down)	animation = &attack_down;
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
+			}
+
+			// Ability control
+			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)){
+
+			}
+
+
+			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)) {
+
+			}
 		}
 
 		// Attack management
@@ -158,7 +169,6 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		if (App->fade->IsFading() == 0)
 		{
 			facingRight = true;
-			playedSound = false;
 
 			App->entity->DestroyEntities();
 
@@ -186,16 +196,22 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	SDL_Rect r = animation->GetCurrentFrame(dt);
 
 	if (!attacking) {
-		if (facingRight)
+		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
 			Draw(r);
 		else
 			Draw(r, true);
 	}
-	else /*if (animation !)*/ {
-		if (facingRight)
-			Draw(r, false, 0, attackBlittingY);
-		else
-			Draw(r, true, attackBlittingX, attackBlittingY);
+	else {
+		if (facingRight || animation == &attack_up || animation == &attack_down) {
+			if (animation == &attack_lateral) Draw(r, false, 0, -6);
+			else if (animation == &attack_up) Draw(r, false, 0, -2);
+			else if (animation == &attack_down) Draw(r, false, -4, -4);
+			else Draw(r, false, 0, attackBlittingY);
+		}
+		else {
+			if (animation == &attack_lateral) Draw(r, true, 0, -6);
+			else Draw(r, true, attackBlittingX, attackBlittingY);
+		}
 	}
 
 	hud->Update(dt);

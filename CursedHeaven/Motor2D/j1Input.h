@@ -92,16 +92,8 @@ private:
 public:
 	// Controller
 	SDL_GameController* controller = nullptr;
-	bool gamepadCon = false;
 	int gamepadLAxisX = 0;
 	int gamepadLAxisY = 0;
-	bool gamepadAPressed = false;
-	bool gamepadBPressed = false;
-	bool gamepadYPressed = false;
-	bool gamepadStartPressed = false;
-
-	bool use_controller = false;
-	int controller_index = 0;
 };
 
 #endif // __j1INPUT_H__

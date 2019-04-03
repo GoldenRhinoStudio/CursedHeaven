@@ -84,10 +84,12 @@ public:
 
 	bool player_start = false;
 	bool dead = false;
-	bool playedSound = false;
-	bool attacking = false;
 	bool loadedAudios = false;
 	bool GodMode = false;
+
+	bool attacking = false;
+	bool active_Q = false;
+	bool active_E = false;
 };
 
 #endif // __j1PLAYER_H__

@@ -10,6 +10,7 @@
 #include "j1Audio.h"
 #include "j1Hud.h"
 #include "j1Map.h"
+#include "j1Timer.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -69,6 +70,10 @@ bool j1DragoonKnight::Start() {
 	hud = new j1Hud();
 	hud->Start();
 
+	// Starting ability timers
+	cooldown_Q.Start();
+	cooldown_E.Start();
+
 	player_start = true;
 	return true;
 }
@@ -110,13 +115,33 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			}
 
 			// Ability control
-			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)){
+			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+				&& active_Q == false && cooldown_Q.Read() > lastTime_Q + 5000){
 
+				if (direction == UP_) position.y -= 100;
+				else if (direction == DOWN_) position.y += 100;
+				else if (direction == LEFT_) position.x -= 100;
+				else if (direction == RIGHT_) position.x += 100;
+				else if (direction == UP_RIGHT_) { position.x += 50; position.y -= 50; }
+				else if (direction == UP_LEFT_) { position.x -= 50; position.y -= 50; }
+				else if (direction == DOWN_RIGHT_) { position.x += 50; position.y += 50; }
+				else if (direction == DOWN_LEFT_) { position.x -= 50; position.y += 50; }
+
+				if (direction != NONE_) {
+					cooldown_Q.Start();
+					lastTime_Q = cooldown_Q.Read();
+					//active_Q = true;
+				}
 			}
 
+			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				&& active_E == false && cooldown_E.Read() > lastTime_E + 25000) {
 
-			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)) {
+				basicDamage += rageDamage;
 
+				cooldown_E.Start();
+				lastTime_E = cooldown_Q.Read();
+				active_E = true;
 			}
 		}
 
@@ -315,6 +340,8 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	attackBlittingY = player.child("attack").attribute("blittingY").as_int();
 	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
 	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
+	basicDamage = player.child("attack").attribute("basicDamage").as_uint();
+	rageDamage = player.child("attack").attribute("rageDamage").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");

@@ -68,12 +68,15 @@ public:
 
 	uint points = 0;
 	uint score_points = 0;
+	uint playerLife = 0;
 
 	Collider* attackCollider = nullptr;
 
 	j1Hud* hud = nullptr;
 
 	// Attack values
+	uint basicDamage = 0;
+
 	int attackBlittingX;
 	int attackBlittingY;
 	int rightAttackSpawnPos;

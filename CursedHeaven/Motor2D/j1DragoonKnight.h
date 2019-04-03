@@ -6,6 +6,7 @@
 #include "p2Animation.h"
 #include "j1Player.h"
 
+class j1Timer;
 struct SDL_Texture;
 enum ENTITY_TYPES;
 
@@ -59,7 +60,12 @@ public:
 	Animation godmode;
 	Animation death;
 
-	// Attack values
+	// Attacks
+	j1Timer cooldown_Q;
+	uint lastTime_Q = 0;
+	j1Timer cooldown_E;
+	uint lastTime_E = 0;
+	uint rageDamage = 0;
 
 	// Sounds
 

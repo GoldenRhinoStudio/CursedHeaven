@@ -27,8 +27,7 @@ void j1Player::UpdateCameraPosition()
 		App->render->camera.y -= 20;
 }
 
-void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
-	Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down) {
+void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt) {
 
 	// GodMode controls
 	if (GodMode) {
@@ -112,32 +111,15 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 		iPoint down = { mapPos.x + 1, mapPos.y + 1 };;
 		iPoint left = { mapPos.x - 1, mapPos.y + 1 };
 
-		// Idle
-		if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
-			&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-			&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
-			&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE) {
-
-			if (animation == go_up) animation = idle_up;
-			else if (animation == go_down) animation = idle_down;
-			else if (animation == diagonal_up) animation = idle_diagonal_up;
-			else if (animation == diagonal_down) animation = idle_diagonal_down;
-			else if (animation == lateral) animation = idle_lateral;
-
-			currentPlayer->direction = DIRECTION::NONE_;
-		}
-
 		// Direction controls	
 		if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(right)) {
 			position.x += horizontalSpeed * dt;
-			animation = lateral;
 			facingRight = true;
 			currentPlayer->direction = DIRECTION::RIGHT_;			
 		}
 
 		if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(left)) {
 			position.x -= horizontalSpeed * dt;
-			animation = lateral;
 			facingRight = false;
 			currentPlayer->direction = DIRECTION::LEFT_;
 		}
@@ -145,11 +127,10 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 		if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY < -6400) {
 			if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(up_left))
 			|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(up_right))) {
-				
-				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::UP_LEFT_;
-				else currentPlayer->direction = DIRECTION::UP_RIGHT_;
 
-				animation = diagonal_up;
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::UP_RIGHT_;
+				else currentPlayer->direction = DIRECTION::UP_LEFT_;
+
 				position.y -= (horizontalSpeed * dt) / 2;
 			}
 			else 
@@ -157,7 +138,6 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 				&& (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)){
 
 				position.y -= horizontalSpeed * dt;
-				animation = go_up;
 				currentPlayer->direction = DIRECTION::UP_;
 			}
 		}
@@ -166,16 +146,14 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation
 			if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(down_left))
 				|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(down_right))) {
 				
-				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::DOWN_LEFT_;
-				else currentPlayer->direction = DIRECTION::DOWN_RIGHT_;
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::DOWN_RIGHT_;
+				else currentPlayer->direction = DIRECTION::DOWN_LEFT_;
 
-				animation = diagonal_down;
 				position.y += (horizontalSpeed * dt) / 2;
 			}
 			else if (CheckWalkability(down)) {
 
 				position.y += horizontalSpeed * dt;
-				animation = go_down;
 				currentPlayer->direction = DIRECTION::DOWN_;
 			}			
 		}

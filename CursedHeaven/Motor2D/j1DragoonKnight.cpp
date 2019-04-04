@@ -93,14 +93,34 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		if (!attacking) 
-			ManagePlayerMovement(App->entity->knight, dt, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
-				&diagonal_up, &diagonal_down, &lateral, &up, &down);
+		if (!attacking && !active_Q) {
+			ManagePlayerMovement(App->entity->knight, dt);
+
+			if (direction == UP_LEFT_ || direction == UP_RIGHT_) animation = &diagonal_up;
+			else if (direction == DOWN_LEFT_ || direction == DOWN_RIGHT_) animation = &diagonal_down;
+			else if (direction == RIGHT_ || direction == LEFT_) animation = &lateral;
+			else if (direction == DOWN_) animation = &down;
+			else if (direction == UP_) animation = &up;
+
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE) {
+
+				if (animation == &up) animation = &idle_up;
+				else if (animation == &down) animation = &idle_down;
+				else if (animation == &diagonal_up) animation = &idle_diagonal_up;
+				else if (animation == &diagonal_down) animation = &idle_diagonal_down;
+				else if (animation == &lateral) animation = &idle_lateral;
+
+				direction = DIRECTION::NONE_;
+			}
+		}
 
 		// ---------------------------------------------------------------------------------------------------------------------
 		// COMBAT
 		// ---------------------------------------------------------------------------------------------------------------------
-
+		
 		if (attacking == false && GodMode == false && dead == false) {
 			// Attack control
 			if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
@@ -118,20 +138,43 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 				&& active_Q == false && cooldown_Q.Read() > lastTime_Q + 5000){
 
-				if (direction == UP_) position.y -= 100;
-				else if (direction == DOWN_) position.y += 100;
-				else if (direction == LEFT_) position.x -= 100;
-				else if (direction == RIGHT_) position.x += 100;
-				else if (direction == UP_RIGHT_) { position.x += 50; position.y -= 50; }
-				else if (direction == UP_LEFT_) { position.x -= 50; position.y -= 50; }
-				else if (direction == DOWN_RIGHT_) { position.x += 50; position.y += 50; }
-				else if (direction == DOWN_LEFT_) { position.x -= 50; position.y += 50; }
+				lastPosition = position;
 
 				if (direction != NONE_) {
 					cooldown_Q.Start();
 					lastTime_Q = cooldown_Q.Read();
-					//active_Q = true;
+					active_Q = true;
 				}
+			}
+
+			if (active_Q) {
+
+				if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
+					position.x += dashSpeed * dt;
+				else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
+					position.x -= dashSpeed * dt;
+				else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
+					position.y -= dashSpeed * dt;
+				else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
+					position.y += dashSpeed * dt;
+				else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)){ 
+					position.x -= dashSpeed * dt;
+					position.y -= dashSpeed * dt;
+				}
+				else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
+					position.x += dashSpeed * dt;
+					position.y -= dashSpeed * dt;
+				}
+				else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x -120.0f) && (position.y <= lastPosition.y + 60.0f)) {
+					position.x -= dashSpeed * dt;
+					position.y += dashSpeed * dt;
+				}
+				else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
+					position.x += dashSpeed * dt;
+					position.y += dashSpeed * dt;
+				}
+				else
+					active_Q = false;
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
@@ -340,8 +383,11 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	attackBlittingY = player.child("attack").attribute("blittingY").as_int();
 	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
 	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
-	basicDamage = player.child("attack").attribute("basicDamage").as_uint();
-	rageDamage = player.child("attack").attribute("rageDamage").as_uint();
+
+	// Copying attackcombat values
+	basicDamage = player.child("combat").attribute("basicDamage").as_uint();
+	rageDamage = player.child("combat").attribute("rageDamage").as_uint();
+	dashSpeed= player.child("combat").attribute("dashSpeed").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");

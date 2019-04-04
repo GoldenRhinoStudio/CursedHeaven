@@ -67,6 +67,9 @@ public:
 	uint lastTime_E = 0;
 	uint rageDamage = 0;
 
+	fPoint lastPosition;
+	uint dashSpeed = 0;
+
 	// Sounds
 
 };

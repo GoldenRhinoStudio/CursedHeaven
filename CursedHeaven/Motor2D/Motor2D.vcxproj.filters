@@ -91,6 +91,9 @@
     <ClCompile Include="j1Judge.cpp">
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClCompile>
+    <ClCompile Include="j1ChooseCharacter.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -203,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="j1Judge.h">
       <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ChooseCharacter.h">
+      <Filter>Development\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

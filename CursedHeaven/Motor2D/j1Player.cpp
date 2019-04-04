@@ -251,7 +251,7 @@ void j1Player::Shot(float x, float y) {
 
 	fPoint edge;
 	edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
-	edge.y = (position.y + margin.y) - y - (App->render->camera.y / (int)App->win->GetScale());
+	edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
 
 	//float distance = sqrt(((edge.x) ^ 2) + ((edge.y) ^ 2));
 	//edge.NormalizeVector();

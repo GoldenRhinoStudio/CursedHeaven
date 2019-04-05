@@ -152,7 +152,7 @@ bool j1SceneMenu::Update(float dt)
 					if ((*item)->bfunction == PLAY_GAME) {
 						LOG("Choose Character Scene Loading");
 						chooseChar = true;
-						App->scene1->active = false;
+						// App->scene1->active = false;
 						App->fade->FadeToBlack();
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
@@ -214,7 +214,6 @@ bool j1SceneMenu::Update(float dt)
 		if (chooseChar) {
 			ChangeScene(CHOOSE);
 			App->choose_character->active = true;
-			LOG("Choose Character Scene Loading 2");
 			//player_created = false;
 		}
 		else if (openCredits)
@@ -361,7 +360,6 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 	if (!player_created)
 	{
 		this->active = false;
-		startGame = false;
 		loadGame = false;
 		openCredits = false;
 

@@ -36,8 +36,10 @@ bool j1ChooseCharacter::Awake(pugi::xml_node& config) {
 	LOG("Loading Choose Character Scene");
 	bool ret = true;
 
-	if (App->menu->active = true)
+	if (App->menu->active)
 		active = false;
+	else if (!App->menu->active && !App->scene1->active)
+		active = true;
 
 	if (App->choose_character->active == false)
 	{
@@ -52,32 +54,31 @@ bool j1ChooseCharacter::Start() {
 
 	if (active) {
 
+		// Loading textures
 		graphics = App->tex->Load("textures/choose_character/bg.png");
 		button_tex = App->tex->Load("textures/choose_character/characters.png");
 
-		background = { 0,0,1500,1007 };
+		SDL_Rect BG_idle = { 0,0,234,498 };
+		SDL_Rect BG_hover = { 468,0,236,500 };
 
-		App->render->Blit(graphics, 0, 0, &background);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 15, 55, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
 
-		SDL_Rect BG_idle = { 0,0,570,1200 };
-		SDL_Rect BG_hover = { 1140,0,600,1263 };
+		SDL_Rect DK_idle = { 0,498,234,498 };
+		SDL_Rect DK_hover = { 468,500,236,500 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 0, 0, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 150, 55, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
 
-		SDL_Rect DK_idle = { 0,1200,570,1200 };
-		SDL_Rect DK_hover = { 1140,1263,600,1263 };
+		SDL_Rect RG_idle = { 234,0,234,498 };
+		SDL_Rect RG_hover = { 704,0,236,500 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 600, 0, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 280, 55, RG_idle, RG_idle, RG_idle, button_tex, ROGUE_BUT);
 
-		SDL_Rect RG_idle = { 570,0,570,1200 };
-		SDL_Rect RG_hover = { 1740,0,600,1263 };
+		SDL_Rect TK_idle = { 234,498,234,498 };
+		SDL_Rect TK_hover = { 704,500,236,500 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 1200, 0, RG_idle, RG_hover, RG_hover, button_tex, ROGUE_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 410, 55, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
 
-		SDL_Rect TK_idle = { 570,1200,570,1200 };
-		SDL_Rect TK_hover = { 1740,1263,600,1263 };
-
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 1800, 0, TK_idle, TK_hover, TK_hover, button_tex, TANK_BUT);
+		App->menu->player_created = false;
 	}
 
 	return true;
@@ -86,7 +87,6 @@ bool j1ChooseCharacter::Start() {
 bool j1ChooseCharacter::PreUpdate()
 {
 	BROFILER_CATEGORY("ChooseCharacterPreUpdate", Profiler::Color::Orange)
-
 
 	return true;
 }
@@ -104,47 +104,53 @@ bool j1ChooseCharacter::Update(float dt) {
 
 			case HOVERED:
 				(*item)->situation = (*item)->hovered;
+				break;
 
 			case RELEASED:
 				(*item)->situation = (*item)->idle;
 				if ((*item)->bfunction == BLACKMAGE_BUT) {
-					App->menu->startGame = true;
+					startGame = true;
 					App->fade->FadeToBlack();
+					LOG("Black Mage activated");
 				}
 				else if ((*item)->bfunction == ROGUE_BUT) {
-					App->menu->startGame = true;
-					App->fade->FadeToBlack();
+					//startGame = true;
+					//App->fade->FadeToBlack();
+					//LOG("Rogue activated");
 				}
 				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
-					App->menu->startGame = true;
+					startGame = true;
 					App->fade->FadeToBlack();
+					LOG("Dragoon Knight activated");
 				}
 				else if ((*item)->bfunction == TANK_BUT) {
-					App->menu->startGame = true;
-					App->fade->FadeToBlack();
+					//startGame = true;
+					//App->fade->FadeToBlack();
+					//LOG("Tank activated");
 				}
+				break;
 
 			case CLICKED:
 				(*item)->situation = (*item)->clicked;
+				break;
 			}
 		}
 	}
 
+	background = { 0,0,1024,768 };
+
+	App->render->Blit(graphics, 0, 0, &background);
+
 	if (App->fade->IsFading() == 0) {
-		if (App->menu->startGame) {
-			ChangeScene();
+		if (startGame) {
+			ChangeSceneChoose();
 			LOG("Scene1");
 			App->menu->player_created = true;
 		}
 	}
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else
-			(*item)->Draw(App->gui->buttonsScale);
+		(*item)->Draw(App->gui->buttonsScale);
 	}
 
 	return true;
@@ -166,7 +172,7 @@ bool j1ChooseCharacter::CleanUp() {
 	return true;
 }
 
-void j1ChooseCharacter::ChangeScene() {
+void j1ChooseCharacter::ChangeSceneChoose() {
 	
 	this->active = false;
 

@@ -38,7 +38,7 @@ public:
 	bool CleanUp();
 
 	// Called to change scene
-	void ChangeScene();
+	void ChangeSceneChoose();
 
 public:
 
@@ -48,6 +48,8 @@ public:
 	bool chosenKnight = false;
 	bool chosenTank = false;
 	bool chosenRogue = false;
+
+	bool startGame = false;
 
 private:
 

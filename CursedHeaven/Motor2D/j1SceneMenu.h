@@ -64,7 +64,6 @@ public:
 	j1Timer	startup_time;
 
 	bool continueGame = true;
-	bool startGame = false;
 	bool loadGame = false;
 	bool openCredits = false;
 	bool player_created = false;

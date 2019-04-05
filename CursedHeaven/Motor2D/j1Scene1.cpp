@@ -10,6 +10,7 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1DragoonKnight.h"
+#include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
 #include "j1FadeToBlack.h"
@@ -68,6 +69,10 @@ bool j1Scene1::Start()
 
 			RELEASE_ARRAY(data);
 		}
+
+		//Judge
+		App->entity->CreateNPC();
+		App->entity->judge->Start();
 
 		// The audio is played	
 		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);

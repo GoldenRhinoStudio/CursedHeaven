@@ -11,6 +11,7 @@
 #include "j1BlackMage.h"
 #include "j1Rogue.h"
 #include "j1Tank.h"
+#include "j1Judge.h"
 
 #include "j1Player.h"
 
@@ -125,6 +126,15 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 		if (ret != nullptr) 
 			entities.push_back(ret); 
 		break;
+
+	case NPC:
+		if (npc_type == JUDGE) ret = new j1Judge(x, y, type);
+		/*else if (npc_type == OLDMAN) ret = new j1OldMan(x, y, type);
+		else if (npc_type == MERCHANT) ret = new j1Merchant(x, y, type);*/
+
+		if (ret != nullptr)
+			entities.push_back(ret);
+		break;
 	}
 	return ret;
 }
@@ -177,6 +187,13 @@ void j1EntityManager::CreatePlayer()
 	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
 	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);
 	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);*/
+}
+
+void j1EntityManager::CreateNPC()
+{
+	if (npc_type == JUDGE) judge = (j1Judge*)CreateEntity(NPC);
+	/*else if (npc_type == OLDMAN) oldman = (j1OldMan*)CreateEntity(NPC);
+	else if (npc_type == MERCHANT) rogue = (j1Merchant*)CreateEntity(NPC);*/
 }
 
 void j1EntityManager::OnCollision(Collider* c1, Collider* c2)

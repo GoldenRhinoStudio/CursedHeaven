@@ -13,6 +13,7 @@ class j1BlackMage;
 class j1Rogue;
 class j1Tank;
 class j1Player;
+class j1Judge;
 
 struct SDL_Texture;
 
@@ -32,6 +33,7 @@ enum ENTITY_TYPES
 {
 	PLAYER,
 	COIN,
+	NPC,
 	UNKNOWN
 };
 
@@ -41,6 +43,13 @@ enum PLAYER_TYPES
 	MAGE,
 	TANK,
 	ROGUE
+};
+
+enum NPC_TYPES 
+{
+	JUDGE,
+	OLDMAN,
+	MERCHANT 
 };
 
 struct EntityInfo
@@ -57,6 +66,7 @@ public:
 
 	// Destructor
 	~j1EntityManager();
+	j1Player* player;
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
@@ -71,9 +81,10 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	j1Entity* CreateEntity(ENTITY_TYPES type, int x = 0, int y = 0);
-
+	
 	void OnCollision(Collider* c1, Collider* c2);
 	void CreatePlayer();
+	void CreateNPC();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
 
@@ -91,8 +102,12 @@ public:
 	j1Tank*				tank = nullptr;
 	j1Rogue*			rogue = nullptr;
 
+	j1Judge*			judge = nullptr;
+
+
 	PLAYER_TYPES player_type = KNIGHT;
 	uint current_height = 0;
+	NPC_TYPES npc_type = JUDGE;
 
 private:
 

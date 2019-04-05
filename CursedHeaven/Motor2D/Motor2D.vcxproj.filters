@@ -88,6 +88,9 @@
     <ClCompile Include="j1DragoonKnight.cpp">
       <Filter>Development\Modules\Entities\Player</Filter>
     </ClCompile>
+    <ClCompile Include="j1Judge.cpp">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="j1Rogue.h">
       <Filter>Development\Modules\Entities\Player</Filter>
     </ClInclude>
+    <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -235,6 +241,9 @@
     </Filter>
     <Filter Include="Development\Modules\GraphicUserInterface">
       <UniqueIdentifier>{12d42398-2970-43ff-8668-cdab242895b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\NPCs">
+      <UniqueIdentifier>{2670424e-a11c-4ec3-9e7c-599e5dd5a136}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

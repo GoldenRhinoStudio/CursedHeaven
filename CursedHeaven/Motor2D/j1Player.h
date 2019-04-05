@@ -52,11 +52,12 @@ public:
 	};
 
 	virtual void LoadPlayerProperties() {};
-	void UpdateCameraPosition();
+	void UpdateCameraPosition(float dt);
 	bool CheckWalkability(iPoint pos) const;
 	void ManagePlayerMovement(j1Player* currentPlayer, float dt);
 	void SetMovementAnimations(Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
 		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down);
+	void ChangeRoom(int x, int y);
 
 public:
 
@@ -89,8 +90,9 @@ public:
 	bool player_start = false;
 	bool dead = false;
 	bool loadedAudios = false;
-	bool GodMode = false;
+	bool changing_room = false;
 
+	bool GodMode = false;
 	bool attacking = false;
 	bool active_Q = false;
 	bool active_E = false;

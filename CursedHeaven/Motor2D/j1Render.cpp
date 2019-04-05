@@ -4,6 +4,7 @@
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1EntityManager.h"
+#include "j1Player.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -78,6 +79,32 @@ bool j1Render::PreUpdate()
 bool j1Render::Update(float dt)
 {
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen)
+
+	if (App->entity->player != nullptr) {
+		
+		if (!App->entity->player->changing_room) {
+			camera.x = -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2;
+			camera.y = -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2;
+		}
+
+		if (App->entity->player->changing_room == true) {
+			if (camera.x < -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+				camera.x += 500 * dt;
+			}
+			else if (camera.x > -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+				camera.x -= 500 * dt;
+			}
+			else App->entity->player->changing_room = false;
+
+			if (camera.y < -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				camera.y += 250 * dt;
+			}
+			else if (camera.y > -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				camera.y -= 250 * dt;
+			}
+			else App->entity->player->changing_room = false;
+		}
+	}
 
 	return true;
 }

@@ -262,7 +262,7 @@ void j1BlackMage::LoadPlayerProperties() {
 	pugi::xml_node config;
 	config = config_file.child("config");
 	pugi::xml_node player;
-	player = config.child("player");
+	player = config.child("player").child("blackMage");
 
 	// Copying the size of the player
 	playerSize.x = player.child("size").attribute("width").as_int();

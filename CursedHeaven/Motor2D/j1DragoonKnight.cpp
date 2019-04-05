@@ -263,10 +263,12 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			if (animation == &attack_lateral) Draw(r, false, 0, -6);
 			else if (animation == &attack_up) Draw(r, false, 0, -2);
 			else if (animation == &attack_down) Draw(r, false, -4, -4);
+			else if (animation == &attack_diagonal_down) Draw(r, false, 0, -6);
 			else Draw(r, false, 0, attackBlittingY);
 		}
 		else {
 			if (animation == &attack_lateral) Draw(r, true, 0, -6);
+			else if (animation == &attack_diagonal_down) Draw(r, true, -4, -6);
 			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}

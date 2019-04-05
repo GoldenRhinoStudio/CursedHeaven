@@ -151,14 +151,12 @@ bool j1Scene1::Update(float dt)
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
 
 	if (App->scene1->startup_time.Read() > 1700) {
-		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings) {
+		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN || closeSettings) {
 			settings_window->visible = !settings_window->visible;
 			App->gamePaused = !App->gamePaused;
 
-			//if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
-			//	settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
-			//else
-				settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale();
+			settings_window->position = { App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale(),
+				App->gui->settingsPosition.y - App->render->camera.y / (int)App->win->GetScale() };
 
 			for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 				if ((*item)->parent == settings_window) {

@@ -222,7 +222,7 @@ void j1App::FinishUpdate()
 	else
 		vsync = "off";
 
-	sprintf_s(title, 256, "Cursed Heaven v0.1 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s",
+	sprintf_s(title, 256, "Cursed Heaven v0.2 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s",
 		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync);
 	App->win->SetTitle(title);
 

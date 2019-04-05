@@ -106,6 +106,7 @@ public:
 
 
 	PLAYER_TYPES player_type = KNIGHT;
+	uint current_height = 0;
 	NPC_TYPES npc_type = JUDGE;
 
 private:

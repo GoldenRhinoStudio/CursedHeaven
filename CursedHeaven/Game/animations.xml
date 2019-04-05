@@ -1,47 +1,122 @@
 <animations>
 
   <player>    
-	<knight>
-      <idle loop="true" speed="15.0f">
-        <animation x="2" y="184" w="22" h="25"/>
-        <animation x="33" y="184" w="24" h="25"/>
-        <animation x="65" y="184" w="24" h="25"/>
-        <animation x="97" y="184" w="24" h="25"/>
-        <animation x="130" y="184" w="22" h="25"/>
-        <animation x="163" y="184" w="21" h="25"/>
-      </idle>
-      
-      <run loop="true" speed="18.0f">
-        <animation x="1" y="96" w="23" h="25"/>
-        <animation x="32" y="99" w="25" h="25"/>
-        <animation x="65" y="99" w="23" h="25"/>
-        <animation x="100" y="98" w="20" h="25"/>
-        <animation x="133" y="97" w="20" h="25"/>
-        <animation x="165" y="99" w="17" h="25"/>
-        <animation x="199" y="99" w="18" h="25"/>
-        <animation x="228" y="98" w="20" h="25"/>
-      </run>
+	<knight>	
+      <idleD_up loop="true" speed="7.0f">
+        <animation x="0" y="92" w="45" h="46"/>
+	  </idleD_up>
+	  
+      <idleD_down loop="true" speed="7.0f">
+        <animation x="0" y="0" w="40" h="46"/>
+	  </idleD_down>
+	  
+      <idleLateral loop="true" speed="7.0f">
+        <animation x="0" y="46" w="40" h="46"/>
+      </idleLateral>		
+	  
+      <idleUp loop="true" speed="7.0f">
+        <animation x="0" y="139" w="30" h="46"/>
+      </idleUp>
+	  
+      <idleDown loop="true" speed="7.0f">
+        <animation x="0" y="185" w="29" h="46"/>
+      </idleDown>		
+		
+      <diagonalUp loop="true" speed="7.0f">
+        <animation x="0" y="92" w="45" h="46"/>
+        <animation x="45" y="92" w="44" h="46"/>
+        <animation x="0" y="92" w="45" h="46"/>
+        <animation x="89" y="92" w="45" h="46"/>
+      </diagonalUp>
+	  
+      <diagonalDown loop="true" speed="7.0f">
+        <animation x="0" y="0" w="40" h="46"/>
+        <animation x="40" y="0" w="41" h="46"/>
+        <animation x="0" y="0" w="40" h="46"/>
+        <animation x="81" y="0" w="40" h="46"/>
+      </diagonalDown>		 
+
+      <lateral loop="true" speed="7.0f">
+        <animation x="0" y="46" w="40" h="46"/>
+        <animation x="40" y="46" w="40" h="46"/>
+        <animation x="0" y="46" w="40" h="46"/>
+        <animation x="80" y="46" w="40" h="46"/>
+      </lateral>			
+  	  	  
+      <up loop="true" speed="7.0f">
+        <animation x="0" y="139" w="30" h="46"/>
+        <animation x="30" y="139" w="30" h="46"/>
+        <animation x="0" y="139" w="30" h="46"/>
+        <animation x="60" y="139" w="30" h="46"/>
+      </up>
+	  
+      <down loop="true" speed="7.0f">
+        <animation x="0" y="185" w="29" h="46"/>
+        <animation x="29" y="185" w="29" h="46"/>
+        <animation x="0" y="185" w="29" h="46"/>
+        <animation x="58" y="185" w="29" h="46"/>
+      </down>		
 	   
-	   <godmode loop="true" speed="7.5f">	
+	  <godmode loop="true" speed="7.5f">	
         <animation x="85" y="34" w="29" h="27"/>
         <animation x="118" y="34" w="28" h="27"/>
-	   </godmode>
+	  </godmode>
       
-      <attackRight loop="false" speed="20.0f">
-        <animation x="1" y="271" w="29" h="29"/>
-        <animation x="64" y="271" w="29" h="29"/>
-        <animation x="135" y="271" w="35" h="29"/>
-        <animation x="198" y="271" w="40" h="29"/>
-        <animation x="253" y="271" w="42" h="29"/>
-      </attackRight>
-	   
-      <attackLeft loop="false" speed="20.0f">
-        <animation x="266" y="123" w="42" h="27"/>
-        <animation x="266" y="151" w="42" h="27"/>
-        <animation x="246" y="180" w="42" h="27"/>
-        <animation x="246" y="209" w="42" h="27"/>
-        <animation x="246" y="239" w="42" h="27"/>
-      </attackLeft>
+      <attackLateral_right loop="false" speed="15.0f">
+        <animation x="0" y="340" w="33" h="53"/>
+        <animation x="33" y="340" w="44" h="53"/>
+        <animation x="77" y="340" w="47" h="53"/>
+        <animation x="124" y="340" w="47" h="53"/>
+      </attackLateral_right>
+	  
+      <attackLateral_left loop="false" speed="15.0f">
+        <animation x="235" y="0" w="47" h="53"/>
+        <animation x="235" y="53" w="47" h="53"/>
+        <animation x="235" y="106" w="47" h="53"/>
+        <animation x="235" y="159" w="47" h="53"/>
+      </attackLateral_left>
+	  
+	  <attackD_up_right loop="false" speed="15.0f">
+        <animation x="0" y="285" w="34" h="49"/>
+        <animation x="34" y="285" w="49" h="49"/>
+        <animation x="83" y="285" w="46" h="49"/>
+        <animation x="129" y="285" w="40" h="55"/>
+	  </attackD_up_right>	  
+	  
+	  <attackD_up_left loop="false" speed="15.0f">
+        <animation x="331" y="0" w="49" h="49"/>
+        <animation x="331" y="49" w="49" h="49"/>
+        <animation x="331" y="98" w="49" h="49"/>
+        <animation x="331" y="147" w="49" h="55"/>
+	  </attackD_up_left>
+	  
+      <attackD_down_right loop="false" speed="15.0f">
+        <animation x="0" y="231" w="30" h="54"/>
+        <animation x="30" y="231" w="39" h="54"/>
+        <animation x="69" y="231" w="49" h="54"/>
+        <animation x="118" y="231" w="47" h="54"/>
+	  </attackD_down_right>		 
+	  
+      <attackD_down_left loop="false" speed="15.0f">
+        <animation x="282" y="0" w="49" h="54"/>
+        <animation x="282" y="54" w="49" h="54"/>
+        <animation x="282" y="108" w="49" h="54"/>
+        <animation x="282" y="162" w="49" h="54"/>
+	  </attackD_down_left>	
+	  
+      <attackUp loop="false" speed="15.0f">
+        <animation x="0" y="443" w="33" h="46"/>
+        <animation x="33" y="443" w="30" h="46"/>
+        <animation x="63" y="443" w="31" h="46"/>
+        <animation x="94" y="443" w="30" h="46"/>
+      </attackUp>
+	  
+      <attackDown loop="false" speed="15.0f">
+        <animation x="0" y="393" w="35" h="48"/>
+        <animation x="35" y="393" w="31" h="48"/>
+        <animation x="66" y="393" w="33" h="48"/>
+        <animation x="99" y="393" w="35" h="50"/>
+      </attackDown>		
 	   
 	  <death loop="false" speed="10.0f">
         <animation x="1" y="128" w="30" h="28"/>

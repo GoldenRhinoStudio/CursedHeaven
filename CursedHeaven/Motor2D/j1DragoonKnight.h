@@ -6,6 +6,7 @@
 #include "p2Animation.h"
 #include "j1Player.h"
 
+class j1Timer;
 struct SDL_Texture;
 enum ENTITY_TYPES;
 
@@ -37,15 +38,43 @@ public:
 
 public:
 
-	// Animations of the player
-	Animation idle;
-	Animation run;
+	// Animations of the player	
+	Animation idle_diagonal_up;
+	Animation idle_diagonal_down;
+	Animation idle_lateral;
+	Animation idle_down;
+	Animation idle_up;
+
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+
+	Animation attack_up;
+	Animation attack_down;
+	Animation attack_diagonal_up_right;
+	Animation attack_diagonal_up_left;
+	Animation attack_diagonal_down_right;
+	Animation attack_diagonal_down_left;
+	Animation attack_lateral_right;
+	Animation attack_lateral_left;
+
 	Animation godmode;
-	Animation attackRight;
-	Animation attackLeft;
 	Animation death;
 
-	// Attack values
+	// Attacks
+	j1Timer cooldown_Q;
+	uint lastTime_Q = 0;
+
+	j1Timer cooldown_E;
+	j1Timer cooldown_Rage;
+	uint lastTime_E = 0;
+	uint lastTime_Rage = 0;
+	uint rageDamage = 0;
+
+	fPoint lastPosition;
+	uint dashSpeed = 0;
 
 	// Sounds
 

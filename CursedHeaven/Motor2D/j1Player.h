@@ -54,7 +54,9 @@ public:
 	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition(float dt);
 	bool CheckWalkability(iPoint pos) const;
-	void ManagePlayerMovement(j1Player* currentPlayer, float dt, Animation* godmode, Animation* idle, Animation* run);
+	void ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic);
+	void SetMovementAnimations(Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
+		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down);
 	void ChangeRoom(int x, int y);
 
 public:
@@ -68,12 +70,15 @@ public:
 
 	uint points = 0;
 	uint score_points = 0;
+	uint playerLife = 0;
 
 	Collider* attackCollider = nullptr;
 
 	j1Hud* hud = nullptr;
 
 	// Attack values
+	uint basicDamage = 0;
+
 	int attackBlittingX;
 	int attackBlittingY;
 	int rightAttackSpawnPos;
@@ -84,11 +89,13 @@ public:
 
 	bool player_start = false;
 	bool dead = false;
-	bool playedSound = false;
-	bool attacking = false;
 	bool loadedAudios = false;
-	bool GodMode = false;
 	bool changing_room = false;
+
+	bool GodMode = false;
+	bool attacking = false;
+	bool active_Q = false;
+	bool active_E = false;
 };
 
 #endif // __j1PLAYER_H__

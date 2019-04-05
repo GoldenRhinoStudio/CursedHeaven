@@ -31,9 +31,12 @@ j1DragoonKnight::j1DragoonKnight(int x, int y, ENTITY_TYPES type) : j1Player(x, 
 	diagonal_down.LoadAnimation("diagonalDown", "knight");
 	godmode.LoadAnimation("godmode", "knight");
 
-	attack_diagonal_up.LoadAnimation("attackD_up", "knight");
-	attack_diagonal_down.LoadAnimation("attackD_down", "knight");
-	attack_lateral.LoadAnimation("attackLateral", "knight");
+	attack_diagonal_up_right.LoadAnimation("attackD_up_right", "knight");
+	attack_diagonal_up_left.LoadAnimation("attackD_up_left", "knight");
+	attack_diagonal_down_right.LoadAnimation("attackD_down_right", "knight");
+	attack_diagonal_down_left.LoadAnimation("attackD_down_left", "knight");
+	attack_lateral_right.LoadAnimation("attackLateral_right", "knight");
+	attack_lateral_left.LoadAnimation("attackLateral_left", "knight");
 	attack_down.LoadAnimation("attackDown", "knight");
 	attack_up.LoadAnimation("attackUp", "knight");
 }
@@ -109,11 +112,20 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					attacking = true;
 					attackCollider->type = COLLIDER_ATTACK;
 
-					if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
+					if (animation == &lateral || animation == &idle_lateral) {
+						if (facingRight) animation = &attack_lateral_right;
+						else animation = &attack_lateral_left;
+					}
 					else if (animation == &up || animation == &idle_up) animation = &attack_up;
 					else if (animation == &down || animation == &idle_down)	animation = &attack_down;
-					else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
-					else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
+					else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+						if(facingRight) animation = &attack_diagonal_up_right;
+						else animation = &attack_diagonal_up_left;
+					}
+					else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+						if (facingRight) animation = &attack_diagonal_down_right;
+						else animation = &attack_diagonal_down_left;
+					}
 				}
 
 				// Ability control
@@ -178,22 +190,25 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		}
 
 		// Attack management
-		if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() ||
-			attack_diagonal_up.Finished() || attack_diagonal_down.Finished() || dead == true) {
+		if (attack_lateral_right.Finished() || attack_lateral_left.Finished() || attack_up.Finished() || attack_down.Finished() || attack_diagonal_up_right.Finished() || attack_diagonal_up_left.Finished()
+			|| attack_diagonal_down_right.Finished() || attack_diagonal_down_left.Finished() || dead == true) {
 
 			attackCollider->type = COLLIDER_NONE;
 
-			attack_lateral.Reset();
+			attack_lateral_right.Reset();
+			attack_lateral_left.Reset();
 			attack_up.Reset();
 			attack_down.Reset();
-			attack_diagonal_up.Reset();
-			attack_diagonal_down.Reset();
+			attack_diagonal_up_right.Reset();
+			attack_diagonal_up_left.Reset();
+			attack_diagonal_down_right.Reset();
+			attack_diagonal_down_left.Reset();
 
-			if (animation == &attack_lateral) animation = &idle_lateral;
+			if (animation == &attack_lateral_right || animation == &attack_lateral_left) animation = &idle_lateral;
 			else if (animation == &attack_up) animation = &idle_up;
 			else if (animation == &attack_down) animation = &idle_down;
-			else if (animation == &attack_diagonal_up) animation = &idle_diagonal_up;
-			else if (animation == &attack_diagonal_down) animation = &idle_diagonal_down;
+			else if (animation == &attack_diagonal_up_right || animation == &attack_diagonal_up_left) animation = &idle_diagonal_up;
+			else if (animation == &attack_diagonal_down_right || animation == &attack_diagonal_down_left) animation = &idle_diagonal_down;
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
@@ -231,7 +246,14 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 			// Resetting the animation
 			death.Reset();
-			attack_lateral.Reset();
+			attack_lateral_right.Reset();
+			attack_lateral_left.Reset();
+			attack_up.Reset();
+			attack_down.Reset();
+			attack_diagonal_up_right.Reset();
+			attack_diagonal_up_left.Reset();
+			attack_diagonal_down_right.Reset();
+			attack_diagonal_down_left.Reset();
 			animation = &idle_diagonal_up;
 
 			dead = false;
@@ -260,15 +282,16 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral) Draw(r, false, 0, -6);
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6);
 			else if (animation == &attack_up) Draw(r, false, 0, -2);
 			else if (animation == &attack_down) Draw(r, false, -4, -4);
-			else if (animation == &attack_diagonal_down) Draw(r, false, 0, -6);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6);
 			else Draw(r, false, 0, attackBlittingY);
 		}
 		else {
-			if (animation == &attack_lateral) Draw(r, true, 0, -6);
-			else if (animation == &attack_diagonal_down) Draw(r, true, -4, -6);
+			if (animation == &attack_lateral_left) Draw(r, false, -6, -6);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2);
 			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}

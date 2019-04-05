@@ -53,9 +53,12 @@ public:
 
 	Animation attack_up;
 	Animation attack_down;
-	Animation attack_diagonal_up;
-	Animation attack_diagonal_down;
-	Animation attack_lateral;
+	Animation attack_diagonal_up_right;
+	Animation attack_diagonal_up_left;
+	Animation attack_diagonal_down_right;
+	Animation attack_diagonal_down_left;
+	Animation attack_lateral_right;
+	Animation attack_lateral_left;
 
 	Animation godmode;
 	Animation death;

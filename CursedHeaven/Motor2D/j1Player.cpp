@@ -61,9 +61,11 @@ void j1Player::UpdateCameraPosition(float dt)
 		App->render->camera.y -= 20;
 }
 
-void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt) {
+void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic) {
 
-	ChangeRoom(position.x, position.y);
+	if (do_logic)
+		ChangeRoom(position.x, position.y);
+
 	if (!changing_room) {
 
 		// GodMode controls

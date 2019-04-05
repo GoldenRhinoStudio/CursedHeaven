@@ -95,96 +95,85 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	{
 		if (!attacking && !active_Q) {
 			ManagePlayerMovement(App->entity->knight, dt);
-
-			if (direction == UP_LEFT_ || direction == UP_RIGHT_) animation = &diagonal_up;
-			else if (direction == DOWN_LEFT_ || direction == DOWN_RIGHT_) animation = &diagonal_down;
-			else if (direction == RIGHT_ || direction == LEFT_) animation = &lateral;
-			else if (direction == DOWN_) animation = &down;
-			else if (direction == UP_) animation = &up;
-
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE) {
-
-				if (animation == &up) animation = &idle_up;
-				else if (animation == &down) animation = &idle_down;
-				else if (animation == &diagonal_up) animation = &idle_diagonal_up;
-				else if (animation == &diagonal_down) animation = &idle_diagonal_down;
-				else if (animation == &lateral) animation = &idle_lateral;
-
-				direction = DIRECTION::NONE_;
-			}
+			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
 
 		// ---------------------------------------------------------------------------------------------------------------------
 		// COMBAT
 		// ---------------------------------------------------------------------------------------------------------------------
-		
-		if (attacking == false && GodMode == false && dead == false) {
-			// Attack control
-			if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
-				attacking = true;
-				attackCollider->type = COLLIDER_ATTACK;
+		if (GodMode == false && dead == false) {
+			if (!attacking) {
+				// Attack control
+				if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
+					attacking = true;
+					attackCollider->type = COLLIDER_ATTACK;
 
-				if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
-				else if (animation == &up || animation == &idle_up) animation = &attack_up;
-				else if (animation == &down || animation == &idle_down)	animation = &attack_down;
-				else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
-				else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
-			}
-
-			// Ability control
-			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-				&& active_Q == false && cooldown_Q.Read() > lastTime_Q + 5000){
-
-				lastPosition = position;
-
-				if (direction != NONE_) {
-					cooldown_Q.Start();
-					lastTime_Q = cooldown_Q.Read();
-					active_Q = true;
+					if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
+					else if (animation == &up || animation == &idle_up) animation = &attack_up;
+					else if (animation == &down || animation == &idle_down)	animation = &attack_down;
+					else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
+					else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
 				}
-			}
 
-			if (active_Q) {
+				// Ability control
+				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+					&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + 5000) {
 
-				if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
-					position.x += dashSpeed * dt;
-				else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
-					position.x -= dashSpeed * dt;
-				else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
-					position.y -= dashSpeed * dt;
-				else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
-					position.y += dashSpeed * dt;
-				else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)){ 
-					position.x -= dashSpeed * dt;
-					position.y -= dashSpeed * dt;
+					lastPosition = position;
+
+					if (direction != NONE_) active_Q = true;
 				}
-				else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-					position.x += dashSpeed * dt;
-					position.y -= dashSpeed * dt;
+
+				if (active_Q) {
+
+					if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
+						position.x += dashSpeed * dt;
+					else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
+						position.x -= dashSpeed * dt;
+					else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
+						position.y -= dashSpeed * dt;
+					else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
+						position.y += dashSpeed * dt;
+					else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
+						position.x -= dashSpeed * dt;
+						position.y -= dashSpeed * dt;
+					}
+					else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
+						position.x += dashSpeed * dt;
+						position.y -= dashSpeed * dt;
+					}
+					else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
+						position.x -= dashSpeed * dt;
+						position.y += dashSpeed * dt;
+					}
+					else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
+						position.x += dashSpeed * dt;
+						position.y += dashSpeed * dt;
+					}
+					else {
+						cooldown_Q.Start();
+						lastTime_Q = cooldown_Q.Read();
+						active_Q = false;
+					}
 				}
-				else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x -120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-					position.x -= dashSpeed * dt;
-					position.y += dashSpeed * dt;
-				}
-				else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-					position.x += dashSpeed * dt;
-					position.y += dashSpeed * dt;
-				}
-				else
-					active_Q = false;
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-				&& active_E == false && cooldown_E.Read() > lastTime_E + 25000) {
+				&& active_E == false && cooldown_E.Read() >= lastTime_E + 25000) {
 
 				basicDamage += rageDamage;
+				cooldown_Rage.Start();
+				lastTime_Rage =	cooldown_Rage.Read();
+				active_E = true;
+			}
 
+			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + 5000) {
+
+				basicDamage -= rageDamage;
 				cooldown_E.Start();
 				lastTime_E = cooldown_Q.Read();
-				active_E = true;
+				active_E = false;
 			}
 		}
 

@@ -160,6 +160,31 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt) {
 	}	
 }
 
+void j1Player::SetMovementAnimations(Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
+	Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down) {
+
+
+	if (direction == UP_LEFT_ || direction == UP_RIGHT_) animation = diagonal_up;
+	else if (direction == DOWN_LEFT_ || direction == DOWN_RIGHT_) animation = diagonal_down;
+	else if (direction == RIGHT_ || direction == LEFT_) animation = lateral;
+	else if (direction == DOWN_) animation = go_down;
+	else if (direction == UP_) animation = go_up;
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE) {
+
+		if (animation == go_up) animation = idle_up;
+		else if (animation == go_down) animation = idle_down;
+		else if (animation == diagonal_up) animation = idle_diagonal_up;
+		else if (animation == diagonal_down) animation = idle_diagonal_down;
+		else if (animation == lateral) animation = idle_lateral;
+
+		direction = DIRECTION::NONE_;
+	}
+}
+
 // Detects collisions
 void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {

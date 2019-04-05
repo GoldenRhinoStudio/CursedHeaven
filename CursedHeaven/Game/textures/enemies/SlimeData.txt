@@ -11,3 +11,12 @@ Horizontal    30  29   32  31
 Horizontal
 Vertical   36
 Horizontal    30  30   32  33
+
+Up
+Vertical 34
+Horizontal    32  34  35   37
+
+Down
+
+Vertical 34
+Horizontal    32  34  35   37

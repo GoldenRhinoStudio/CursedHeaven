@@ -21,6 +21,10 @@ private:
 
 public:
 
+	Animation::Animation() {}
+
+	Animation::Animation(const Animation&) {}
+
 	void PushBack(const SDL_Rect& rect)
 	{
 		frames[last_frame++] = rect;

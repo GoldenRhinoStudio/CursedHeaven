@@ -21,6 +21,7 @@
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -73,6 +74,7 @@ bool j1Scene1::Start()
 		//Judge
 		App->entity->CreateNPC();
 		App->entity->judge->Start();
+		App->particles->Start();
 
 		// The audio is played	
 		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);

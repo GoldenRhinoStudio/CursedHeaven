@@ -11,6 +11,7 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Window.h"
+#include "j1Particles.h"
 
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER) {}
 
@@ -214,7 +215,6 @@ void j1Player::SetMovementAnimations(Animation* idle_up, Animation* idle_down, A
 		&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE) {
-
 		if (animation == go_up) animation = idle_up;
 		else if (animation == go_down) animation = idle_down;
 		else if (animation == diagonal_up) animation = idle_diagonal_up;
@@ -223,6 +223,35 @@ void j1Player::SetMovementAnimations(Animation* idle_up, Animation* idle_down, A
 
 		direction = DIRECTION::NONE_;
 	}
+}
+
+void j1Player::Shot(float x, float y) {
+
+	//to change where the particle is born (in this case: from the centre of the player aprox (+8,+8))
+	fPoint margin;
+	margin.x = 8;
+	margin.y = 8;
+
+	fPoint edge;
+	edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
+	edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
+
+	//float distance = sqrt(((edge.x) ^ 2) + ((edge.y) ^ 2));
+	//edge.NormalizeVector();
+
+	//if the map is very big and its not enough accurate, we should use long double for the var angle
+	double angle = -(atan2(edge.y, edge.x));
+
+	//float angle = 1 / cos(edge.x / distance);
+
+	fPoint speed_particle;
+
+	App->particles->particle_speed = { 200,200 };
+
+	speed_particle.x = App->particles->particle_speed.x * cos(angle);
+	speed_particle.y = App->particles->particle_speed.y * sin(angle);
+
+	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, speed_particle, COLLIDER_SHOT);
 }
 
 void j1Player::ChangeRoom(int x, int y) {

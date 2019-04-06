@@ -81,7 +81,11 @@
     <ClCompile Include="j1Collisions.cpp" />
     <ClCompile Include="j1DragoonKnight.cpp" />
     <ClCompile Include="j1Hud.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="j1Judge.cpp" />
+=======
+    <ClCompile Include="j1Particles.cpp" />
+>>>>>>> origin/particles_2
     <ClCompile Include="j1SceneCredits.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
@@ -113,7 +117,11 @@
     <ClInclude Include="j1Collisions.h" />
     <ClInclude Include="j1DragoonKnight.h" />
     <ClInclude Include="j1Hud.h" />
+<<<<<<< HEAD
     <ClInclude Include="j1Judge.h" />
+=======
+    <ClInclude Include="j1Particles.h" />
+>>>>>>> origin/particles_2
     <ClInclude Include="j1Rogue.h" />
     <ClInclude Include="j1SceneCredits.h" />
     <ClInclude Include="j1Entity.h" />

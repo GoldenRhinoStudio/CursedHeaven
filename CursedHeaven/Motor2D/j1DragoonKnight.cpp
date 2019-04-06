@@ -187,6 +187,13 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				lastTime_E = cooldown_Q.Read();
 				active_E = false;
 			}
+
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN))
+			{
+				iPoint mouse_pos;
+				App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+				Shot(mouse_pos.x, mouse_pos.y);
+			}
 		}
 
 		// Attack management

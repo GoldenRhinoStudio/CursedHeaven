@@ -105,7 +105,7 @@ public:
 	j1Judge*			judge = nullptr;
 
 
-	PLAYER_TYPES player_type = KNIGHT;
+	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;
 
 private:

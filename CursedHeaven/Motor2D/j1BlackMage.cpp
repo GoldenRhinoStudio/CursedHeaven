@@ -18,18 +18,18 @@ j1BlackMage::j1BlackMage(int x, int y, ENTITY_TYPES type) : j1Player(x, y, ENTIT
 {
 	animation = NULL;
 
-	idle_diagonal_up.LoadAnimation("idleD_up", "knight");
-	idle_diagonal_down.LoadAnimation("idleD_down", "knight");
-	idle_lateral.LoadAnimation("idleLateral", "knight");
-	idle_down.LoadAnimation("idleDown", "knight");
-	idle_up.LoadAnimation("idleUp", "knight");
+	idle_diagonal_up.LoadAnimation("idleD_up", "mage");
+	idle_diagonal_down.LoadAnimation("idleD_down", "mage");
+	idle_lateral.LoadAnimation("idleLateral", "mage");
+	idle_down.LoadAnimation("idleDown", "mage");
+	idle_up.LoadAnimation("idleUp", "mage");
 
-	up.LoadAnimation("up", "knight");
-	down.LoadAnimation("down", "knight");
-	lateral.LoadAnimation("lateral", "knight");
-	diagonal_up.LoadAnimation("diagonalUp", "knight");
-	diagonal_down.LoadAnimation("diagonalDown", "knight");
-	godmode.LoadAnimation("godmode", "knight");
+	up.LoadAnimation("up", "mage");
+	down.LoadAnimation("down", "mage");
+	lateral.LoadAnimation("lateral", "mage");
+	diagonal_up.LoadAnimation("diagonalUp", "mage");
+	diagonal_down.LoadAnimation("diagonalDown", "mage");
+	godmode.LoadAnimation("godmode", "mage");
 }
 
 j1BlackMage::~j1BlackMage() {}
@@ -99,6 +99,14 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
 				
+			}
+
+
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN))
+			{
+				iPoint mouse_pos;
+				App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+				Shot(mouse_pos.x, mouse_pos.y);
 			}
 			
 		}

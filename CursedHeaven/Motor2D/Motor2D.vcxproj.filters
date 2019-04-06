@@ -88,13 +88,8 @@
     <ClCompile Include="j1DragoonKnight.cpp">
       <Filter>Development\Modules\Entities\Player</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="j1Judge.cpp">
       <Filter>Development\Modules\Entities\NPCs</Filter>
-=======
-    <ClCompile Include="j1Particles.cpp">
-      <Filter>Development\Modules\Interactions</Filter>
->>>>>>> origin/particles_2
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,13 +201,8 @@
     <ClInclude Include="j1Rogue.h">
       <Filter>Development\Modules\Entities\Player</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="j1Judge.h">
       <Filter>Development\Modules\Entities\NPCs</Filter>
-=======
-    <ClInclude Include="j1Particles.h">
-      <Filter>Development\Modules\Interactions</Filter>
->>>>>>> origin/particles_2
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

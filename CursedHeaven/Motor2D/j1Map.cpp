@@ -64,7 +64,7 @@ void j1Map::Draw()
 					SDL_Rect r = tileset->GetTileRect(tile_id);
 					iPoint pos = MapToWorld(x, y);
 
-					//if ((*layer)->name != "Meta0" && (*layer)->name != "Meta1" && (*layer)->name != "Meta2")
+					if ((*layer)->name != "Meta0" && (*layer)->name != "Meta1" && (*layer)->name != "Meta2")
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 				}
 			}

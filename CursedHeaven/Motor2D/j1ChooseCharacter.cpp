@@ -180,6 +180,7 @@ bool j1ChooseCharacter::CleanUp() {
 void j1ChooseCharacter::ChangeSceneChoose() {
 	
 	this->active = false;
+	startGame = false;
 
 	CleanUp();
 

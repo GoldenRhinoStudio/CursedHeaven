@@ -362,6 +362,7 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 		this->active = false;
 		loadGame = false;
 		openCredits = false;
+		chooseChar = false;
 
 		CleanUp();
 

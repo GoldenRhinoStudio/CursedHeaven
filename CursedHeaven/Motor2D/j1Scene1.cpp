@@ -21,6 +21,7 @@
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
+#include "j1ChooseCharacter.h"
 
 #include "Brofiler/Brofiler.h"
 

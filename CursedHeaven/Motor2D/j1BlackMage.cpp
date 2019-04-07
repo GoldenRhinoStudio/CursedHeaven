@@ -39,7 +39,7 @@ bool j1BlackMage::Start() {
 
 	// Textures are loaded
 	LOG("Loading player textures");
-	sprites = App->tex->Load("textures/character/dragoonknight/Dragoon.png");
+	sprites = App->tex->Load("textures/character/mage/Mage.png");
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -101,14 +101,12 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				
 			}
 
-
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN))
 			{
 				iPoint mouse_pos;
 				App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 				Shot(mouse_pos.x, mouse_pos.y);
-			}
-			
+			}			
 		}
 		
 		else if (attackCollider != nullptr) {

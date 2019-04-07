@@ -91,6 +91,16 @@ j1Collisions::j1Collisions() : j1Module()
 	matrix[COLLIDER_COIN][COLLIDER_ENEMY] = false;
 	matrix[COLLIDER_COIN][COLLIDER_PLAYER] = true;
 	matrix[COLLIDER_COIN][COLLIDER_COIN] = false;
+
+	matrix[COLLIDER_SHOT][COLLIDER_ATTACK] = false;
+	matrix[COLLIDER_SHOT][COLLIDER_NONE] = false;
+	matrix[COLLIDER_SHOT][COLLIDER_WALL] = true;
+	matrix[COLLIDER_SHOT][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_SHOT][COLLIDER_WIN] = false;
+	matrix[COLLIDER_SHOT][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_SHOT][COLLIDER_ENEMY] = true;
+	matrix[COLLIDER_SHOT][COLLIDER_COIN] = false;
+	matrix[COLLIDER_SHOT][COLLIDER_SHOT] = false;
 }
 
 j1Collisions::~j1Collisions() {}
@@ -125,7 +135,8 @@ bool j1Collisions::Update(float dt)
 	{
 		if (colliders[i] == nullptr) continue;
 
-		if (colliders[i]->type == COLLIDER_PLAYER || colliders[i]->type == COLLIDER_NONE || colliders[i]->type == COLLIDER_ENEMY || colliders[i]->type == COLLIDER_COIN)
+		if (colliders[i]->type == COLLIDER_PLAYER || colliders[i]->type == COLLIDER_NONE || colliders[i]->type == COLLIDER_ENEMY || 
+			colliders[i]->type == COLLIDER_COIN || colliders[i]->type == COLLIDER_SHOT)
 		{
 			collider1 = colliders[i];
 
@@ -206,6 +217,9 @@ void j1Collisions::DrawColliders()
 			break;
 		case COLLIDER_COIN:		//Yellow
 			App->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
+			break;
+		case COLLIDER_SHOT:		//Brown
+			App->render->DrawQuad(colliders[i]->rect, 155, 0, 0, alpha);
 			break;
 		}
 	}

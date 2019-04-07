@@ -9,7 +9,8 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1DragoonKnight.h"
+#include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
 #include "j1FadeToBlack.h"
@@ -20,6 +21,8 @@
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
+#include "j1Particles.h"
+#include "j1ChooseCharacter.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -45,8 +48,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 		LOG("Scene1 not active.");
 
 	// Copying the position of the player
-	initialScene1Position.x = config.child("initialPlayerPosition").attribute("x").as_int();
-	initialScene1Position.y = config.child("initialPlayerPosition").attribute("y").as_int();
+	initialScene1Position.x = 250;
+	initialScene1Position.y = 1080;
 
 	return ret;
 }
@@ -57,7 +60,7 @@ bool j1Scene1::Start()
 	if (active)
 	{
 		// The map is loaded
-		if (App->map->Load("lvl1.tmx"))
+		if (App->map->Load("Openland_map.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -68,6 +71,11 @@ bool j1Scene1::Start()
 
 			RELEASE_ARRAY(data);
 		}
+
+		//Judge
+		App->entity->CreateNPC();
+		App->entity->judge->Start();
+		App->particles->Start();
 
 		// The audio is played	
 		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);
@@ -146,14 +154,12 @@ bool j1Scene1::Update(float dt)
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
 
 	if (App->scene1->startup_time.Read() > 1700) {
-		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings) {
+		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN || closeSettings) {
 			settings_window->visible = !settings_window->visible;
 			App->gamePaused = !App->gamePaused;
 
-			if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
-				settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
-			else
-				settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / 4;
+			settings_window->position = { App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale(),
+				App->gui->settingsPosition.y - App->render->camera.y / (int)App->win->GetScale() };
 
 			for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 				if ((*item)->parent == settings_window) {
@@ -247,9 +253,7 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
-			App->entity->player->position = initialScene1Position;
 			App->render->camera.x = 0;
-			App->entity->player->facingRight = true;
 			resettingLevel = false;
 		}
 	}
@@ -326,8 +330,10 @@ bool j1Scene1::CleanUp()
 	App->entity->DestroyEntities();
 	App->gui->CleanUp();
 
-	if (App->entity->player)
-		App->entity->player->CleanUp();
+	if (App->entity->knight) App->entity->knight->CleanUp();
+	/*if (App->entity->mage) App->entity->mage->CleanUp();
+	if (App->entity->rogue) App->entity->rogue->CleanUp();
+	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		(*item)->CleanUp();
@@ -351,7 +357,6 @@ bool j1Scene1::CleanUp()
 
 	return true;
 }
-
 
 void j1Scene1::ChangeSceneMenu()
 {

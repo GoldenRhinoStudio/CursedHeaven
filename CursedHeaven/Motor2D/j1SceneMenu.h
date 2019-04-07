@@ -16,6 +16,7 @@ class j1Label;
 
 enum SCENE {
 	MENU = 0,
+	CHOOSE,
 	SCENE1,
 	SCENE2,
 	CREDITS
@@ -62,6 +63,12 @@ public:
 
 	j1Timer	startup_time;
 
+	bool continueGame = true;
+	bool loadGame = false;
+	bool openCredits = false;
+	bool player_created = false;
+	bool chooseChar = false;
+
 private:
 
 	SDL_Texture* gui_tex = nullptr;
@@ -71,11 +78,7 @@ private:
 
 	_TTF_Font* font = nullptr;
 
-	bool continueGame = true;
-	bool startGame = false;
-	bool loadGame = false;
-	bool openCredits = false;
-	bool player_created = false;
+	
 	uint times = 0;
 
 	Animation player;

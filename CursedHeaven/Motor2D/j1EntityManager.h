@@ -8,19 +8,48 @@
 #define MAX_ENTITIES 1000
 
 class j1Entity;
+class j1DragoonKnight;
+class j1BlackMage;
+class j1Rogue;
+class j1Tank;
 class j1Player;
-class j1Hook;
+class j1Judge;
 
 struct SDL_Texture;
+
+enum DIRECTION {
+	UP_,
+	DOWN_,
+	RIGHT_,
+	LEFT_,
+	UP_RIGHT_,
+	UP_LEFT_,
+	DOWN_RIGHT_,
+	DOWN_LEFT_,
+	NONE_
+};
 
 enum ENTITY_TYPES
 {
 	PLAYER,
-	HOOK,
-	HARPY,
-	SKELETON,
 	COIN,
+	NPC,
 	UNKNOWN
+};
+
+enum PLAYER_TYPES
+{
+	KNIGHT,
+	MAGE,
+	TANK,
+	ROGUE
+};
+
+enum NPC_TYPES 
+{
+	JUDGE,
+	OLDMAN,
+	MERCHANT 
 };
 
 struct EntityInfo
@@ -37,6 +66,7 @@ public:
 
 	// Destructor
 	~j1EntityManager();
+	j1Player* player;
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
@@ -51,9 +81,10 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	j1Entity* CreateEntity(ENTITY_TYPES type, int x = 0, int y = 0);
-
+	
 	void OnCollision(Collider* c1, Collider* c2);
 	void CreatePlayer();
+	void CreateNPC();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
 
@@ -62,14 +93,21 @@ private:
 	void SpawnEnemy(const EntityInfo& info);
 
 public:
-
+	
 	std::list<j1Entity*>	entities;
 
-	j1Player*			player = nullptr;
-	j1Hook*				hook = nullptr;
+	// Pointers to diferent playable classes
+	j1DragoonKnight*	knight = nullptr;
+	j1BlackMage*		mage = nullptr;
+	j1Tank*				tank = nullptr;
+	j1Rogue*			rogue = nullptr;
 
-	SDL_Texture*		player_texture = nullptr;
-	SDL_Texture*		harpy_texture = nullptr;
+	j1Judge*			judge = nullptr;
+
+
+	uint current_height = 0;
+	PLAYER_TYPES player_type;
+	NPC_TYPES npc_type = JUDGE;
 
 private:
 

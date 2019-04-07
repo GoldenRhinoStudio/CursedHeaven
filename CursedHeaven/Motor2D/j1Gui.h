@@ -41,7 +41,11 @@ enum ButtonFunction {
 	SETTINGS,
 	CLOSE_SETTINGS,
 	OTHER_LEVEL,
-	LINK
+	LINK,
+	BLACKMAGE_BUT,
+	DRAGOONKNIGHT_BUT,
+	ROGUE_BUT,
+	TANK_BUT
 };
 
 // ---------------------------------------------------

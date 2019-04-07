@@ -11,6 +11,7 @@ class Animation;
 struct SDL_Texture;
 
 enum ENTITY_TYPES;
+enum DIRECTION;
 
 class j1Entity
 {
@@ -44,6 +45,7 @@ public:
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 
 	ENTITY_TYPES type;
+	DIRECTION direction;
 
 	fPoint position;
 	fPoint initialPosition;

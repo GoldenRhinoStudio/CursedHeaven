@@ -8,6 +8,8 @@
 #include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
 
+#define PI 3.14159265359
+
 // Modules
 class j1Window;
 class j1Input;
@@ -16,6 +18,7 @@ class j1Textures;
 class j1Audio;
 class j1SceneMenu;
 class j1SceneCredits;
+class j1ChooseCharacter;
 class j1Scene1;
 class j1Scene2;
 class j1Map;
@@ -25,6 +28,7 @@ class j1PathFinding;
 class j1EntityManager;
 class j1Fonts;
 class j1Gui;
+class j1Particles;
 
 class j1App
 {
@@ -56,6 +60,7 @@ public:
 	const char* GetArgv(int index) const;
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
+	float GetDt();
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
@@ -94,6 +99,7 @@ public:
 	j1Audio*			audio = nullptr;
 	j1SceneMenu*		menu = nullptr;
 	j1SceneCredits*		credits = nullptr;
+	j1ChooseCharacter*	choose_character = nullptr;
 	j1Scene1*			scene1 = nullptr;
 	j1Map*				map = nullptr;
 	j1FadeToBlack*		fade = nullptr;
@@ -102,6 +108,7 @@ public:
 	j1EntityManager*	entity = nullptr;
 	j1Fonts*			font = nullptr;
 	j1Gui*				gui = nullptr;
+	j1Particles*		particles = nullptr;
 
 	bool				gamePaused = false;
 

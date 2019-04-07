@@ -21,32 +21,27 @@ private:
 
 public:
 
+	Animation::Animation() {}
+
+	Animation::Animation(const Animation&) {}
+
 	void PushBack(const SDL_Rect& rect)
 	{
 		frames[last_frame++] = rect;
 	}
 
-	void LoadAnimations(std::string name)
+	void LoadAnimation(std::string name, std::string entity, bool player = true)
 	{
 		pugi::xml_parse_result result = animations_file.load_file("animations.xml");
 		if (result != NULL)
 		{
-			pugi::xml_node animation_name = animations_file.child("animations").child("player").child(name.data());
-			loop = animation_name.attribute("loop").as_bool();
-			speed = animation_name.attribute("speed").as_float();
-			for (pugi::xml_node animation = animation_name.child("animation"); animation; animation = animation.next_sibling("animation"))
-			{
-				PushBack({ animation.attribute("x").as_int(), animation.attribute("y").as_int(), animation.attribute("w").as_int(), animation.attribute("h").as_int() });
-			}
-		}
-	}
+			pugi::xml_node animation_name;
 
-	void LoadEnemyAnimations(std::string name, std::string enemy)
-	{
-		pugi::xml_parse_result result = animations_file.load_file("animations.xml");
-		if (result != NULL)
-		{
-			pugi::xml_node animation_name = animations_file.child("animations").child("enemies").child(enemy.data()).child(name.data());
+			if (player)
+				animation_name = animations_file.child("animations").child("player").child(entity.data()).child(name.data());
+			else
+				animation_name = animations_file.child("animations").child("enemies").child(entity.data()).child(name.data());
+
 			loop = animation_name.attribute("loop").as_bool();
 			speed = animation_name.attribute("speed").as_float();
 			for (pugi::xml_node animation = animation_name.child("animation"); animation; animation = animation.next_sibling("animation"))

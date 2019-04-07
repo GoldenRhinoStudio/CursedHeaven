@@ -20,3 +20,6 @@ Horizontal    35px   31px  33px  35px (Height on last one 50 px)
 Attack down
 Fila altura 46px
 Horizontal    33px   30px  31px  30px (Height on last one 50 px) 
+
+
+Idle Loop1 Loop2

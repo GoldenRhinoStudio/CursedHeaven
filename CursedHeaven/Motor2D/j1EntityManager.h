@@ -105,8 +105,8 @@ public:
 	j1Judge*			judge = nullptr;
 
 
-	PLAYER_TYPES player_type = KNIGHT;
 	uint current_height = 0;
+	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;
 
 private:

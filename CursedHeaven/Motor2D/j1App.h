@@ -18,6 +18,7 @@ class j1Textures;
 class j1Audio;
 class j1SceneMenu;
 class j1SceneCredits;
+class j1ChooseCharacter;
 class j1Scene1;
 class j1Scene2;
 class j1Map;
@@ -98,6 +99,7 @@ public:
 	j1Audio*			audio = nullptr;
 	j1SceneMenu*		menu = nullptr;
 	j1SceneCredits*		credits = nullptr;
+	j1ChooseCharacter*	choose_character = nullptr;
 	j1Scene1*			scene1 = nullptr;
 	j1Map*				map = nullptr;
 	j1FadeToBlack*		fade = nullptr;

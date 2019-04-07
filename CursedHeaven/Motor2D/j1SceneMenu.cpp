@@ -15,6 +15,7 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1ChooseCharacter.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -149,7 +150,9 @@ bool j1SceneMenu::Update(float dt)
 				if (startup_time.Read() > 1900 && times > 1 || times == 1) {
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
-						startGame = true;
+						LOG("Choose Character Scene Loading");
+						chooseChar = true;
+						// App->scene1->active = false;
 						App->fade->FadeToBlack();
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
@@ -208,9 +211,10 @@ bool j1SceneMenu::Update(float dt)
 
 	// Managing scene transitions
 	if (App->fade->IsFading() == 0) {
-		if (startGame) {
-			ChangeScene(SCENE1);
-			player_created = true;
+		if (chooseChar) {
+			ChangeScene(CHOOSE);
+			App->choose_character->active = true;
+			//player_created = false;
 		}
 		else if (openCredits)
 			ChangeScene(CREDITS);
@@ -356,7 +360,6 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 	if (!player_created)
 	{
 		this->active = false;
-		startGame = false;
 		loadGame = false;
 		openCredits = false;
 
@@ -367,15 +370,11 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 			App->credits->Start();
 		}
 		else {
-			if (objectiveScene == SCENE::SCENE1) {
-				App->scene1->active = true;
-				App->scene1->Start();
-				App->render->camera = { 250, -1080 };
+			if (objectiveScene == SCENE::CHOOSE) {
+				App->choose_character->active = true;
+				App->choose_character->Start();
+				//App->render->camera = { 250, -1080 };
 			}
-
-			App->entity->active = true;
-			App->entity->CreatePlayer();
-			App->entity->Start();
 		}
 	}
 }

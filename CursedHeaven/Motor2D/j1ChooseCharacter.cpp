@@ -60,6 +60,7 @@ bool j1ChooseCharacter::Start() {
 
 		SDL_Rect BG_idle = { 0,0,234,494 };
 		SDL_Rect BG_hover = { 468,0,234,494 };
+		SDL_Rect BG_click = { 936,0,234,494 };
 
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 12, 55, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
 

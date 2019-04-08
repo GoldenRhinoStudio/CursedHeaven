@@ -54,7 +54,7 @@ public:
 	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition(float dt);
 	bool CheckWalkability(iPoint pos) const;
-	void ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic);
+	void ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic, float speed);
 	void SetMovementAnimations(Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
 		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down);
 	void ChangeRoom(int x, int y);
@@ -80,13 +80,29 @@ public:
 	// Attack values
 	uint basicDamage = 0;
 
+	// Animations of the player
+	Animation idle_diagonal_up;
+	Animation idle_diagonal_down;
+	Animation idle_lateral;
+	Animation idle_down;
+	Animation idle_up;
+
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+
+	Animation godmode;
+	Animation death;
+
 	int attackBlittingX;
 	int attackBlittingY;
 	int rightAttackSpawnPos;
 	int leftAttackSpawnPos;
 
 	float godModeSpeed;
-	float horizontalSpeed;
+	float movementSpeed;
 
 	bool player_start = false;
 	bool dead = false;

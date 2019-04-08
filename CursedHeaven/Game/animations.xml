@@ -116,20 +116,95 @@
         <animation x="35" y="393" w="31" h="48"/>
         <animation x="66" y="393" w="33" h="48"/>
         <animation x="99" y="393" w="35" h="50"/>
-      </attackDown>		
-	   
-	  <death loop="false" speed="10.0f">
-        <animation x="1" y="128" w="30" h="28"/>
-        <animation x="34" y="128" w="30" h="28"/>
-        <animation x="69" y="128" w="30" h="28"/>
-        <animation x="119" y="128" w="30" h="28"/>
-        <animation x="169" y="128" w="30" h="28"/>
-        <animation x="219" y="128" w="30" h="28"/>
-        <animation x="0" y="0" w="0" h="0"/>
-	  </death>
+      </attackDown>			   
 	</knight>
 	
 	<mage>
+      <idleD_up loop="true" speed="7.0f">
+        <animation x="0" y="111" w="21" h="35"/>
+	  </idleD_up>
+	  
+      <idleD_down loop="true" speed="7.0f">
+        <animation x="0" y="111" w="21" h="35"/>
+	  </idleD_down>
+	  
+      <idleLateral loop="true" speed="7.0f">
+        <animation x="0" y="0" w="21" h="36"/>
+      </idleLateral>		
+	  
+      <idleUp loop="true" speed="7.0f">
+        <animation x="0" y="146" w="21" h="37"/>
+      </idleUp>
+	  
+      <idleDown loop="true" speed="7.0f">
+        <animation x="0" y="74" w="21" h="37"/>
+      </idleDown>		
+		
+      <diagonalUp loop="true" speed="7.0f">
+        <animation x="0" y="111" w="21" h="35"/>
+        <animation x="21" y="111" w="24" h="35"/>
+        <animation x="0" y="111" w="21" h="35"/>
+        <animation x="45" y="111" w="21" h="35"/>
+      </diagonalUp>
+	  
+      <diagonalDown loop="true" speed="7.0f">
+        <animation x="0" y="36" w="22" h="38"/>
+        <animation x="22" y="36" w="21" h="38"/>
+        <animation x="0" y="36" w="22" h="38"/>
+        <animation x="43" y="36" w="22" h="38"/>
+      </diagonalDown>		 
+
+      <lateral loop="true" speed="7.0f">
+        <animation x="0" y="0" w="21" h="36"/>
+        <animation x="21" y="0" w="21" h="36"/>
+        <animation x="42" y="0" w="22" h="36"/>
+      </lateral>			
+  	  	  
+      <up loop="true" speed="7.0f">
+        <animation x="0" y="146" w="21" h="37"/>
+        <animation x="21" y="146" w="21" h="37"/>
+        <animation x="42" y="146" w="21" h="37"/>
+      </up>
+	  
+      <down loop="true" speed="7.0f">
+        <animation x="21" y="74" w="21" h="37"/>
+        <animation x="42" y="74" w="21" h="37"/>
+      </down>		
+	   
+	  <godmode loop="true" speed="7.5f">	
+        <animation x="85" y="34" w="29" h="27"/>
+        <animation x="118" y="34" w="28" h="27"/>
+	  </godmode>
+      
+      <attackLateral loop="false" speed="15.0f">
+        <animation x="0" y="254" w="25" h="36"/>
+        <animation x="25" y="254" w="25" h="36"/>
+        <animation x="50" y="254" w="25" h="36"/>
+      </attackLateral>
+	  
+	  <attackD_up loop="false" speed="15.0f">
+        <animation x="0" y="219" w="27" h="35"/>
+        <animation x="27" y="219" w="27" h="35"/>
+        <animation x="54" y="219" w="27" h="35"/>
+	  </attackD_up>	  
+	  
+      <attackD_down loop="false" speed="15.0f">
+        <animation x="0" y="183" w="28" h="36"/>
+        <animation x="28" y="183" w="28" h="36"/>
+        <animation x="56" y="183" w="28" h="36"/>
+	  </attackD_down>		 
+	  
+      <attackUp loop="false" speed="15.0f">
+        <animation x="0" y="290" w="25" h="37"/>
+        <animation x="25" y="290" w="25" h="37"/>
+        <animation x="50" y="290" w="25" h="37"/>
+      </attackUp>
+	  
+      <attackDown loop="false" speed="15.0f">
+        <animation x="0" y="327" w="25" h="37"/>
+        <animation x="25" y="327" w="25" h="37"/>
+        <animation x="50" y="327" w="25" h="37"/>
+      </attackDown>	
 	</mage>
 </player>
   

@@ -22,6 +22,7 @@
 #include "j1Gui.h"
 #include "j1App.h"
 #include "j1Particles.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -41,12 +42,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	choose_character = new j1ChooseCharacter();
 	scene1 = new j1Scene1();
 	map = new j1Map();
-
 	entity = new j1EntityManager();
 	path = new j1PathFinding();
 	fade = new j1FadeToBlack();
 	font = new j1Fonts();
 	gui = new j1Gui();
+	dialog = new j1DialogSystem();
 	particles = new j1Particles();
 	collisions = new j1Collisions();
 
@@ -68,6 +69,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(gui);
 	AddModule(fade);
 	AddModule(particles);
+	AddModule(dialog);
 	
 	// render last to swap buffer
 	AddModule(render);
@@ -229,7 +231,7 @@ void j1App::FinishUpdate()
 	else
 		vsync = "off";
 
-	sprintf_s(title, 256, "Cursed Heaven v0.2 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s",
+	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s",
 		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync);
 	App->win->SetTitle(title);
 

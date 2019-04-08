@@ -26,10 +26,16 @@ j1BlackMage::j1BlackMage(int x, int y, ENTITY_TYPES type) : j1Player(x, y, ENTIT
 
 	up.LoadAnimation("up", "mage");
 	down.LoadAnimation("down", "mage");
-	lateral.LoadAnimation("lateral", "mage");
+	lateral.LoadAnimation("lateral", "mage");	
 	diagonal_up.LoadAnimation("diagonalUp", "mage");
 	diagonal_down.LoadAnimation("diagonalDown", "mage");
 	godmode.LoadAnimation("godmode", "mage");
+
+	attack_diagonal_up.LoadAnimation("attackD_up", "mage");
+	attack_diagonal_down.LoadAnimation("attackD_down", "mage");
+	attack_lateral.LoadAnimation("attackLateral", "mage");
+	attack_down.LoadAnimation("attackDown", "mage");
+	attack_up.LoadAnimation("attackUp", "mage");
 }
 
 j1BlackMage::~j1BlackMage() {}
@@ -88,7 +94,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->mage, dt, do_logic);
+			ManagePlayerMovement(App->entity->mage, dt, do_logic, movementSpeed);
 			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
@@ -98,17 +104,72 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		// ---------------------------------------------------------------------------------------------------------------------
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
-				
+				// Attack control
+				if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+				{
+					attacking = true;
+					iPoint mouse_pos;
+					App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+					Shot(mouse_pos.x, mouse_pos.y);
+
+					if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
+					else if (animation == &up || animation == &idle_up) animation = &attack_up;
+					else if (animation == &down || animation == &idle_down)	animation = &attack_down;
+					else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
+					else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
+				}
+			}		
+
+			// Ability control
+			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
+
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN))
-			{
-				iPoint mouse_pos;
-				App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-				Shot(mouse_pos.x, mouse_pos.y);
-			}			
+			if (active_Q) {
+
+				cooldown_Q.Start();
+				lastTime_Q = cooldown_Q.Read();
+				active_Q = false;
+			}
+
+			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				&& active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E) {
+
+				movementSpeed = movementSpeed * 2;
+				cooldown_Speed.Start();
+				lastTime_Speed = cooldown_Speed.Read();
+				active_E = true;
+			}
+
+			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + cooldownTime_Speed) {
+
+				movementSpeed = movementSpeed / 2;
+				cooldown_E.Start();
+				lastTime_E = cooldown_E.Read();
+				active_E = false;
+			}
 		}
-		
+
+		// Attack management
+		if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() 
+			|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() || dead == true) {
+
+			attackCollider->type = COLLIDER_NONE;
+
+			attack_lateral.Reset();
+			attack_up.Reset();
+			attack_down.Reset();
+			attack_diagonal_up.Reset();
+			attack_diagonal_down.Reset();
+
+			if (animation == &attack_lateral) animation = &idle_lateral;
+			else if (animation == &attack_up) animation = &idle_up;
+			else if (animation == &attack_down) animation = &idle_down;
+			else if (animation == &attack_diagonal_up) animation = &idle_diagonal_up;
+			else if (animation == &attack_diagonal_down) animation = &idle_diagonal_down;
+			attacking = false;
+		}
 		else if (attackCollider != nullptr) {
 			if (facingRight)
 				attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
@@ -282,12 +343,19 @@ void j1BlackMage::LoadPlayerProperties() {
 	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
 	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
-	// Copying attackcombat values
-	basicDamage = player.child("combat").attribute("basicDamage").as_uint();
+	// Copying combat values
+	pugi::xml_node combat = player.child("combat");
+	pugi::xml_node cd = player.child("cooldowns");
+
+	basicDamage = combat.attribute("basicDamage").as_uint();
+	fireDamage = combat.attribute("fireDamage").as_uint();
+	cooldownTime_Q = cd.attribute("Q").as_uint();
+	cooldownTime_E = cd.attribute("E").as_uint();
+	cooldownTime_Speed = cd.attribute("increasedSpeed").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
 
-	horizontalSpeed = speed.child("movement").attribute("horizontal").as_float();
+	movementSpeed = speed.child("movement").attribute("horizontal").as_float();
 	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
 }

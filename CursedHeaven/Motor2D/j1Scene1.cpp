@@ -23,6 +23,7 @@
 #include "j1Box.h"
 #include "j1Particles.h"
 #include "j1ChooseCharacter.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -145,6 +146,14 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
+
+	int x, y;
+	App->input->GetMousePosition(x, y);
+
+	if (x < App->win->width && y < App->win->height)
+		if (App->input->GetMouseButtonDown(KEY_DOWN))
+			if (startDialogue == true)
+				App->dialog->StartDialogEvent(App->dialog->dialogA);
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT

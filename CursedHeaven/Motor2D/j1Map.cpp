@@ -463,9 +463,9 @@ bool j1Map::PutColliders(const char * file_name)
 
 		for (obj = group.child("object"); obj && ret; obj = obj.next_sibling("object"))
 		{
-			if (strcmp(object_name, "map_collisions") == 0)
-				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WALL);
-			else if (strcmp(object_name, "death_collisions") == 0)
+			/*if (strcmp(object_name, "map_collisions") == 0)
+				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WALL);*/
+			if (strcmp(object_name, "death_collisions") == 0)
 				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_DEATH);
 			else if (strcmp(object_name, "win_collider") == 0)
 				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WIN);
@@ -594,9 +594,9 @@ void j1Map::EntityMovement(j1Entity* entity)
 	DIRECTION direction;
 	
 	if (App->entity->player_type == KNIGHT) direction = App->entity->knight->direction;
+	if (App->entity->player_type == MAGE) direction = App->entity->mage->direction;
 	/*if (App->entity->player_type == ROGUE) direction = App->entity->rogue->direction;
-	if (App->entity->player_type == TANK) direction = App->entity->tank->direction;
-	if (App->entity->player_type == MAGE) direction = App->entity->mage->direction;*/
+	if (App->entity->player_type == TANK) direction = App->entity->tank->direction;*/
 	
 	if (current_gid != 0) {
 		switch (direction)

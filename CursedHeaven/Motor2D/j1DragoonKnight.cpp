@@ -97,7 +97,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->knight, dt, do_logic);
+			ManagePlayerMovement(App->entity->knight, dt, do_logic, movementSpeed);
 			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
@@ -130,7 +130,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 				// Ability control
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-					&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + 5000) {
+					&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
 
 					lastPosition = position;
 
@@ -172,7 +172,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-				&& active_E == false && cooldown_E.Read() >= lastTime_E + 25000) {
+				&& active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E) {
 
 				basicDamage += rageDamage;
 				cooldown_Rage.Start();
@@ -180,11 +180,11 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				active_E = true;
 			}
 
-			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + 5000) {
+			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + cooldownTime_Rage) {
 
 				basicDamage -= rageDamage;
 				cooldown_E.Start();
-				lastTime_E = cooldown_Q.Read();
+				lastTime_E = cooldown_E.Read();
 				active_E = false;
 			}
 		}
@@ -398,14 +398,19 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
 	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
-	// Copying attackcombat values
-	basicDamage = player.child("combat").attribute("basicDamage").as_uint();
-	rageDamage = player.child("combat").attribute("rageDamage").as_uint();
-	dashSpeed= player.child("combat").attribute("dashSpeed").as_uint();
+	// Copying combat values
+	pugi::xml_node combat = player.child("combat");
+	pugi::xml_node cd = player.child("cooldowns");
+
+	basicDamage = combat.attribute("basicDamage").as_uint();
+	rageDamage = combat.attribute("rageDamage").as_uint();
+	dashSpeed = combat.attribute("dashSpeed").as_uint();
+	cooldownTime_Q = cd.attribute("Q").as_uint();
+	cooldownTime_E = cd.attribute("E").as_uint();
+	cooldownTime_Rage = cd.attribute("rage").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
-
-	horizontalSpeed = speed.child("movement").attribute("horizontal").as_float();
+	movementSpeed = speed.child("movement").attribute("horizontal").as_float();
 	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
 }

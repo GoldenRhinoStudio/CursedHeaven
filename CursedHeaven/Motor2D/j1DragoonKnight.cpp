@@ -97,7 +97,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->knight, dt, do_logic);
+			ManagePlayerMovement(App->entity->knight, dt, do_logic, movementSpeed);
 			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
@@ -184,7 +184,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 				basicDamage -= rageDamage;
 				cooldown_E.Start();
-				lastTime_E = cooldown_Q.Read();
+				lastTime_E = cooldown_E.Read();
 				active_E = false;
 			}
 		}
@@ -398,14 +398,14 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
 	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
-	// Copying attackcombat values
+	// Copying combat values
 	basicDamage = player.child("combat").attribute("basicDamage").as_uint();
 	rageDamage = player.child("combat").attribute("rageDamage").as_uint();
-	dashSpeed= player.child("combat").attribute("dashSpeed").as_uint();
+	dashSpeed = player.child("combat").attribute("dashSpeed").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
 
-	horizontalSpeed = speed.child("movement").attribute("horizontal").as_float();
+	movementSpeed = speed.child("movement").attribute("horizontal").as_float();
 	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
 }

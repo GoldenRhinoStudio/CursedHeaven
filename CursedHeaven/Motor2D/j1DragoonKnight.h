@@ -63,18 +63,17 @@ public:
 	Animation godmode;
 	Animation death;
 
-	// Attacks
+	// Abilities
 	j1Timer cooldown_Q;
 	uint lastTime_Q = 0;
+	fPoint lastPosition;
+	uint dashSpeed = 0;
 
 	j1Timer cooldown_E;
 	j1Timer cooldown_Rage;
 	uint lastTime_E = 0;
 	uint lastTime_Rage = 0;
 	uint rageDamage = 0;
-
-	fPoint lastPosition;
-	uint dashSpeed = 0;
 
 	// Sounds
 

@@ -112,25 +112,25 @@ bool j1ChooseCharacter::Update(float dt) {
 				if ((*item)->bfunction == BLACKMAGE_BUT) {
 					startGame = true;
 					App->fade->FadeToBlack();
-					App->entity->player_type == MAGE;
+					App->entity->player_type = MAGE;
 					LOG("Black Mage activated");
 				}
 				else if ((*item)->bfunction == ROGUE_BUT) {
 					// startGame = true;
 					// App->fade->FadeToBlack();
-					// App->entity->player_type == ROGUE;
+					// App->entity->player_type = ROGUE;
 					// LOG("Rogue activated");
 				}
 				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
 					startGame = true;
 					App->fade->FadeToBlack();
-					App->entity->player_type == KNIGHT;
+					App->entity->player_type = KNIGHT;
 					LOG("Dragoon Knight activated");
 				}
 				else if ((*item)->bfunction == TANK_BUT) {
 					// startGame = true;
 					// App->fade->FadeToBlack();
-					// App->entity->player_type == TANK;
+					// App->entity->player_type = TANK;
 					// LOG("Tank activated");
 				}
 				break;

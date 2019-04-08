@@ -62,7 +62,7 @@ void j1Player::UpdateCameraPosition(float dt)
 		App->render->camera.y -= 20;
 }
 
-void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic) {
+void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic, float speed) {
 
 	if (do_logic)
 		ChangeRoom(position.x, position.y);
@@ -153,13 +153,13 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 
 			// Direction controls	
 			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(right)) {
-				position.x += horizontalSpeed * dt;
+				position.x += speed * dt;
 				facingRight = true;
 				currentPlayer->direction = DIRECTION::RIGHT_;
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(left)) {
-				position.x -= horizontalSpeed * dt;
+				position.x -= speed * dt;
 				facingRight = false;
 				currentPlayer->direction = DIRECTION::LEFT_;
 			}
@@ -171,13 +171,13 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::UP_RIGHT_;
 					else currentPlayer->direction = DIRECTION::UP_LEFT_;
 
-					position.y -= (horizontalSpeed * dt) / 2;
+					position.y -= (speed * dt) / 2;
 				}
 				else
 					if (CheckWalkability(up) && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE)
 						&& (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)) {
 
-						position.y -= horizontalSpeed * dt;
+						position.y -= speed * dt;
 						currentPlayer->direction = DIRECTION::UP_;
 					}
 			}
@@ -189,11 +189,11 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::DOWN_RIGHT_;
 					else currentPlayer->direction = DIRECTION::DOWN_LEFT_;
 
-					position.y += (horizontalSpeed * dt) / 2;
+					position.y += (speed * dt) / 2;
 				}
 				else if (CheckWalkability(down)) {
 
-					position.y += horizontalSpeed * dt;
+					position.y += speed * dt;
 					currentPlayer->direction = DIRECTION::DOWN_;
 				}
 			}

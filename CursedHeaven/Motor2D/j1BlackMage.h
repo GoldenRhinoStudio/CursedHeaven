@@ -54,11 +54,15 @@ public:
 	Animation godmode;
 	Animation death;
 
-	// Attacks
+	// Abilities
 	j1Timer cooldown_Q;
 	uint lastTime_Q = 0;
+	uint fireDamage = 0;
+
 	j1Timer cooldown_E;
+	j1Timer cooldown_Speed;
 	uint lastTime_E = 0;
+	uint lastTime_Speed = 0;
 
 	// Sounds
 

@@ -594,9 +594,9 @@ void j1Map::EntityMovement(j1Entity* entity)
 	DIRECTION direction;
 	
 	if (App->entity->player_type == KNIGHT) direction = App->entity->knight->direction;
+	if (App->entity->player_type == MAGE) direction = App->entity->mage->direction;
 	/*if (App->entity->player_type == ROGUE) direction = App->entity->rogue->direction;
-	if (App->entity->player_type == TANK) direction = App->entity->tank->direction;
-	if (App->entity->player_type == MAGE) direction = App->entity->mage->direction;*/
+	if (App->entity->player_type == TANK) direction = App->entity->tank->direction;*/
 	
 	if (current_gid != 0) {
 		switch (direction)

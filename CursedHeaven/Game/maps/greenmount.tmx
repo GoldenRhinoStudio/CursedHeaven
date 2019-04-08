@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="1">
  <tileset firstgid="1" name="TilesetLevel1" tilewidth="32" tileheight="32" tilecount="10" columns="2">
-  <image source="../../Documents/GitHub/CursedHeaven/CursedHeaven/Game/maps/TilesetLevel1.png" width="64" height="160"/>
+  <image source="TilesetLevel1.png" width="64" height="160"/>
  </tileset>
  <tileset firstgid="11" name="meta2" tilewidth="32" tileheight="32" tilecount="1" columns="1">
-  <image source="../../Documents/GitHub/CursedHeaven/CursedHeaven/Game/maps/meta2.png" width="32" height="32"/>
+  <image source="meta2.png" width="32" height="32"/>
  </tileset>
  <layer id="1" name="Layer 0" width="100" height="100">
   <data encoding="csv">

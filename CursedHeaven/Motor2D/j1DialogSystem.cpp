@@ -122,7 +122,7 @@ void Dialogue::Draw() {
 	Character temp_Character = App->dialog->getCharacter(currentNode->GetCharacterID());
 
 	temp.x = temp.y = 0;
-	int scale = App->dialog->scale;
+	int scale = 4;
 
 	//WRITTING MACHINE LOOK
 	App->dialog->counter++;
@@ -141,7 +141,6 @@ void Dialogue::Draw() {
 
 	/*if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h)
 	currentNode->dialogStop = true;*/
-
 
 	//RENDERING GENERIC DIALOG CHART
 	SDL_RenderCopyEx(App->render->renderer, Dialog_Textures, &App->dialog->GeneraldialogChart, &currentNode->dialogChart, 0, NULL, SDL_FLIP_NONE);
@@ -327,7 +326,7 @@ bool j1DialogSystem::createCharacters(pugi::xml_document& Dialog) {
 
 bool j1DialogSystem::SetUpCharts(pugi::xml_document& Dialog) {
 
-	pugi::xml_node		Settings_Node;
+	pugi::xml_node Settings_Node;
 
 	bool ret = true;
 
@@ -468,5 +467,3 @@ bool j1DialogSystem::CleanUp() {
 
 	return true;
 };
-
-

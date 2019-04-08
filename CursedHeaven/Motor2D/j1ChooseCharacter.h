@@ -38,7 +38,7 @@ public:
 	bool CleanUp();
 
 	// Called to change scene
-	void ChangeSceneChoose();
+	void ChangeScene();
 
 public:
 

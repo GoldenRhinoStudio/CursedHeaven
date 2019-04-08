@@ -22,6 +22,7 @@
 #include "j1Button.h"
 #include "j1Box.h"
 #include "j1ChooseCharacter.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -148,7 +149,7 @@ bool j1ChooseCharacter::Update(float dt) {
 
 	if (App->fade->IsFading() == 0) {
 		if (startGame) {
-			ChangeSceneChoose();
+			ChangeScene();
 			LOG("Scene1");
 			App->menu->player_created = true;
 		}
@@ -177,7 +178,7 @@ bool j1ChooseCharacter::CleanUp() {
 	return true;
 }
 
-void j1ChooseCharacter::ChangeSceneChoose() {
+void j1ChooseCharacter::ChangeScene() {
 	
 	this->active = false;
 	startGame = false;
@@ -186,6 +187,8 @@ void j1ChooseCharacter::ChangeSceneChoose() {
 
 	App->scene1->active = true;
 	App->scene1->Start();
+	App->dialog->active = true;
+	App->dialog->Start();
 	
 	App->entity->active = true;
 	App->entity->CreatePlayer();

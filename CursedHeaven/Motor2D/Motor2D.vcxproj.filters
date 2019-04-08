@@ -97,6 +97,9 @@
     <ClCompile Include="j1ChooseCharacter.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1DialogSystem.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Point.h">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="j1ChooseCharacter.h">
       <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1DialogSystem.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -52,12 +52,15 @@ bool j1SceneMenu::Start()
 
 		// Loading textures
 		gui_tex = App->tex->Load("gui/atlas.png");
-		logo_tex = App->tex->Load("gui/logo.png");
-		player_tex = App->tex->Load("textures/character/character.png");
-		harpy_tex = App->tex->Load("textures/enemies/harpy/harpy.png");
+		//logo_tex = App->tex->Load("gui/logo.png");
+		//player_tex = App->tex->Load("textures/character/character.png");
+		//harpy_tex = App->tex->Load("textures/enemies/harpy/harpy.png");
 		
 		// Loading fonts
 		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
+		font2 = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 16);
+
+
 
 		// Creating UI		
 		settings_window = App->gui->CreateBox(&menuBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 537, 0, 663, 712 }, gui_tex);
@@ -73,30 +76,37 @@ bool j1SceneMenu::Start()
 		SDL_Rect idle = {0, 143, 190, 49};
 		SDL_Rect hovered = { 0, 45, 190, 49 };
 		SDL_Rect clicked = { 0, 94, 190, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 80, 110, idle, hovered, clicked, gui_tex, PLAY_GAME);
-		App->gui->CreateButton(&menuButtons, BUTTON, 80, 160, idle, hovered, clicked, gui_tex, OPEN_CREDITS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 220, 110 + 80, idle, hovered, clicked, gui_tex, PLAY_GAME);
+		App->gui->CreateButton(&menuButtons, BUTTON, 220, 170 + 80, idle, hovered, clicked, gui_tex, SETTINGS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 220, 200 + 80, idle, hovered, clicked, gui_tex, OPEN_CREDITS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 220, 230 + 80, idle, hovered, clicked, gui_tex, CLOSE_GAME);
 
 		SDL_Rect idle4 = { 0, 699, 190, 49 };
 
 		if (result == NULL)
-			App->gui->CreateButton(&menuButtons, BUTTON, 80, 135, idle4, idle4, idle4, gui_tex, NO_FUNCTION);
+			App->gui->CreateButton(&menuButtons, BUTTON, 220, 140 + 80, idle4, idle4, idle4, gui_tex, NO_FUNCTION);
 		else
-			App->gui->CreateButton(&menuButtons, BUTTON, 80, 135, idle, hovered, clicked, gui_tex, LOAD_GAME);
+			App->gui->CreateButton(&menuButtons, BUTTON, 220, 140 + 80, idle, hovered, clicked, gui_tex, LOAD_GAME);
 
 		SDL_Rect idle2 = { 28, 201, 49, 49 };
 		SDL_Rect hovered2 = { 77, 201, 49, 49 };
 		SDL_Rect clicked2 = { 126, 201, 49, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
+		//App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
 		App->gui->CreateButton(&menuButtons, BUTTON, 64, 135, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
 
 		SDL_Rect idle3 = { 463, 109, 49, 49 };
 		SDL_Rect hovered3 = { 463, 158, 49, 49 };
 		SDL_Rect clicked3 = { 463, 207, 49, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
+		//App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
 
-		App->gui->CreateLabel(&menuLabels, LABEL, 106, 115, font, "Start", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 98, 165, font, "Credits", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 90, 140, font, "Continue", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 245, 195, font, "Start", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 230, 225, font, "Continue", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 234, 255, font, "Settings", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 238, 285, font, "Credits", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 252, 315, font, "Exit", App->gui->beige);
+
+		App->gui->CreateLabel(&menuLabels, LABEL, 130, 100, font2, "Cursed Heaven", { 0,0,0,255 });
+
 		App->gui->CreateLabel(&menuLabels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&menuLabels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&menuLabels, LABEL, 30, 89, font, "Music", App->gui->brown, (j1UserInterfaceElement*)settings_window);

@@ -77,6 +77,7 @@ private:
 	SDL_Texture* harpy_tex = nullptr;
 
 	_TTF_Font* font = nullptr;
+	_TTF_Font* font2 = nullptr;
 
 	
 	uint times = 0;

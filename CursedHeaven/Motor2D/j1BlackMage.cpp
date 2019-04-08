@@ -26,10 +26,16 @@ j1BlackMage::j1BlackMage(int x, int y, ENTITY_TYPES type) : j1Player(x, y, ENTIT
 
 	up.LoadAnimation("up", "mage");
 	down.LoadAnimation("down", "mage");
-	lateral.LoadAnimation("lateral", "mage");
+	lateral.LoadAnimation("lateral", "mage");	
 	diagonal_up.LoadAnimation("diagonalUp", "mage");
 	diagonal_down.LoadAnimation("diagonalDown", "mage");
 	godmode.LoadAnimation("godmode", "mage");
+
+	attack_diagonal_up.LoadAnimation("attackD_up", "mage");
+	attack_diagonal_down.LoadAnimation("attackD_down", "mage");
+	attack_lateral.LoadAnimation("attackLateral", "mage");
+	attack_down.LoadAnimation("attackDown", "mage");
+	attack_up.LoadAnimation("attackUp", "mage");
 }
 
 j1BlackMage::~j1BlackMage() {}
@@ -98,11 +104,19 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		// ---------------------------------------------------------------------------------------------------------------------
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
+				// Attack control
 				if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 				{
+					attacking = true;
 					iPoint mouse_pos;
 					App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 					Shot(mouse_pos.x, mouse_pos.y);
+
+					if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
+					else if (animation == &up || animation == &idle_up) animation = &attack_up;
+					else if (animation == &down || animation == &idle_down)	animation = &attack_down;
+					else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
+					else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
 				}
 			}		
 
@@ -138,10 +152,22 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		}
 
 		// Attack management
-		if (dead == true) {
+		if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() 
+			|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() || dead == true) {
 
 			attackCollider->type = COLLIDER_NONE;
 
+			attack_lateral.Reset();
+			attack_up.Reset();
+			attack_down.Reset();
+			attack_diagonal_up.Reset();
+			attack_diagonal_down.Reset();
+
+			if (animation == &attack_lateral) animation = &idle_lateral;
+			else if (animation == &attack_up) animation = &idle_up;
+			else if (animation == &attack_down) animation = &idle_down;
+			else if (animation == &attack_diagonal_up) animation = &idle_diagonal_up;
+			else if (animation == &attack_diagonal_down) animation = &idle_diagonal_down;
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {

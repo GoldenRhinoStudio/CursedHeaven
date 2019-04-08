@@ -122,7 +122,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 			// Ability control
 			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + 10000) {
+				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
 
 			}
 
@@ -134,7 +134,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-				&& active_E == false && cooldown_E.Read() >= lastTime_E + 15000) {
+				&& active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E) {
 
 				movementSpeed = movementSpeed * 2;
 				cooldown_Speed.Start();
@@ -142,7 +142,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				active_E = true;
 			}
 
-			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + 5000) {
+			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + cooldownTime_Speed) {
 
 				movementSpeed = movementSpeed / 2;
 				cooldown_E.Start();
@@ -344,8 +344,14 @@ void j1BlackMage::LoadPlayerProperties() {
 	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
 	// Copying combat values
-	basicDamage = player.child("combat").attribute("basicDamage").as_uint();
-	fireDamage = player.child("combat").attribute("fireDamage").as_uint();
+	pugi::xml_node combat = player.child("combat");
+	pugi::xml_node cd = player.child("cooldowns");
+
+	basicDamage = combat.attribute("basicDamage").as_uint();
+	fireDamage = combat.attribute("fireDamage").as_uint();
+	cooldownTime_Q = cd.attribute("Q").as_uint();
+	cooldownTime_E = cd.attribute("E").as_uint();
+	cooldownTime_Speed = cd.attribute("increasedSpeed").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");

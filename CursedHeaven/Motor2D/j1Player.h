@@ -80,6 +80,22 @@ public:
 	// Attack values
 	uint basicDamage = 0;
 
+	// Animations of the player
+	Animation idle_diagonal_up;
+	Animation idle_diagonal_down;
+	Animation idle_lateral;
+	Animation idle_down;
+	Animation idle_up;
+
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+
+	Animation godmode;
+	Animation death;
+
 	int attackBlittingX;
 	int attackBlittingY;
 	int rightAttackSpawnPos;

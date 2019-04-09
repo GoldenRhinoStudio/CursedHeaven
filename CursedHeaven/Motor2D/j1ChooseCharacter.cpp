@@ -81,6 +81,8 @@ bool j1ChooseCharacter::Start() {
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 381, 55, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
 
 		App->menu->player_created = false;
+
+		startup_time.Start();
 	}
 
 	return true;
@@ -105,38 +107,42 @@ bool j1ChooseCharacter::Update(float dt) {
 				break;
 
 			case HOVERED:
+				if (startup_time.Read() > 2000)
 				(*item)->situation = (*item)->hovered;
 				break;
 
 			case RELEASED:
-				(*item)->situation = (*item)->idle;
-				if ((*item)->bfunction == BLACKMAGE_BUT) {
-					startGame = true;
-					App->fade->FadeToBlack();
-					App->entity->player_type = MAGE;
-					LOG("Black Mage activated");
-				}
-				else if ((*item)->bfunction == ROGUE_BUT) {
-					// startGame = true;
-					// App->fade->FadeToBlack();
-					// App->entity->player_type = ROGUE;
-					// LOG("Rogue activated");
-				}
-				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
-					startGame = true;
-					App->fade->FadeToBlack();
-					App->entity->player_type = KNIGHT;
-					LOG("Dragoon Knight activated");
-				}
-				else if ((*item)->bfunction == TANK_BUT) {
-					// startGame = true;
-					// App->fade->FadeToBlack();
-					// App->entity->player_type = TANK;
-					// LOG("Tank activated");
+				if (startup_time.Read() > 2000) {
+					(*item)->situation = (*item)->idle;
+					if ((*item)->bfunction == BLACKMAGE_BUT) {
+						startGame = true;
+						App->fade->FadeToBlack();
+						App->entity->player_type = MAGE;
+						LOG("Black Mage activated");
+					}
+					else if ((*item)->bfunction == ROGUE_BUT) {
+						// startGame = true;
+						// App->fade->FadeToBlack();
+						// App->entity->player_type = ROGUE;
+						// LOG("Rogue activated");
+					}
+					else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
+						startGame = true;
+						App->fade->FadeToBlack();
+						App->entity->player_type = KNIGHT;
+						LOG("Dragoon Knight activated");
+					}
+					else if ((*item)->bfunction == TANK_BUT) {
+						// startGame = true;
+						// App->fade->FadeToBlack();
+						// App->entity->player_type = TANK;
+						// LOG("Tank activated");
+					}
 				}
 				break;
 
 			case CLICKED:
+				if (startup_time.Read() > 2000)
 				(*item)->situation = (*item)->clicked;
 				break;
 			}

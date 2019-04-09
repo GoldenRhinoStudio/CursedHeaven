@@ -77,9 +77,6 @@ public:
 
 	j1Hud* hud = nullptr;
 
-	// Attack values
-	uint basicDamage = 0;
-
 	// Animations of the player
 	Animation idle_diagonal_up;
 	Animation idle_diagonal_down;

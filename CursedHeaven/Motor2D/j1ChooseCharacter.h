@@ -43,12 +43,8 @@ public:
 public:
 
 	std::list<j1Button*> chooseCharacterButtons;
-
-	bool chosenMage = false;
-	bool chosenKnight = false;
-	bool chosenTank = false;
-	bool chosenRogue = false;
-
+	
+	j1Timer	startup_time;
 	bool startGame = false;
 
 private:

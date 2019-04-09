@@ -266,5 +266,8 @@
     <Filter Include="Development\Modules\Entities\NPCs">
       <UniqueIdentifier>{28aebaae-d63c-4451-b068-a183c95cfcb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Development\Modules\Entities\Enemies">
+      <UniqueIdentifier>{2603ffbc-1d42-497d-b09d-080b9253a7ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

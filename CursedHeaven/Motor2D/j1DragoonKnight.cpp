@@ -405,6 +405,7 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	basicDamage = combat.attribute("basicDamage").as_uint();
 	rageDamage = combat.attribute("rageDamage").as_uint();
 	dashSpeed = combat.attribute("dashSpeed").as_uint();
+	lifePoints = combat.attribute("lifePoints").as_uint();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	cooldownTime_Rage = cd.attribute("rage").as_uint();

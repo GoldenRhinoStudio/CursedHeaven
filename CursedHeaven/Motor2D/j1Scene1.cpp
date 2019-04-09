@@ -64,7 +64,7 @@ bool j1Scene1::Start()
 	if (active)
 	{
 		// The map is loaded
-		if (App->map->Load("Openland_map.tmx"))
+		if (App->map->Load("greenmount.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -130,6 +130,7 @@ bool j1Scene1::Start()
 		PlaceEntities();
 
 		startup_time.Start();
+		windowTime.Start();
 	}
 
 	return true;
@@ -166,9 +167,11 @@ bool j1Scene1::Update(float dt)
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
 
 	if (App->scene1->startup_time.Read() > 1700) {
-		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN || closeSettings) {
+		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
+			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
 			App->gamePaused = !App->gamePaused;
+			lastWindowTime = windowTime.Read();
 
 			settings_window->position = { App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale(),
 				App->gui->settingsPosition.y - App->render->camera.y / (int)App->win->GetScale() };

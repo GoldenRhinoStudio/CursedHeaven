@@ -94,8 +94,8 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->mage, dt, do_logic, movementSpeed);
-			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
 

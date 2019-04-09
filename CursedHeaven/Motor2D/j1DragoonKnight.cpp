@@ -97,8 +97,8 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->knight, dt, do_logic, movementSpeed);
-			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
 
@@ -108,7 +108,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
 				// Attack control
-				if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
+				if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
 					attacking = true;
 					attackCollider->type = COLLIDER_ATTACK;
 

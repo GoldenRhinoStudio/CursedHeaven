@@ -78,7 +78,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 // Destructor
 j1App::~j1App()
 {
-	for (std::list<j1Module*>::iterator item = modules.end(); item != modules.begin(); --item)
+	std::list<j1Module*>::iterator item = modules.begin();
+	
+	for (; item != modules.end(); item = next(item))
 	{
 		RELEASE(*item);
 	}

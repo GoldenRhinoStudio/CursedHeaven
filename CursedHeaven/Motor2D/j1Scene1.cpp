@@ -10,6 +10,9 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
+#include "j1Tank.h"
+#include "j1Rogue.h"
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
@@ -340,8 +343,8 @@ bool j1Scene1::CleanUp()
 	App->gui->CleanUp();
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
-	/*if (App->entity->mage) App->entity->mage->CleanUp();
-	if (App->entity->rogue) App->entity->rogue->CleanUp();
+	if (App->entity->mage) App->entity->mage->CleanUp();
+	/*if (App->entity->rogue) App->entity->rogue->CleanUp();
 	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
@@ -371,6 +374,7 @@ void j1Scene1::ChangeSceneMenu()
 {
 	App->scene1->active = false;
 	App->menu->active = true;
+	App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();

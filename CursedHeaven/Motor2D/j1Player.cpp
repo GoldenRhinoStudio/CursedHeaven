@@ -20,8 +20,8 @@ j1Player::~j1Player() {}
 void j1Player::UpdateCameraPosition(float dt)
 {
 	if (!changing_room) {
-		App->render->camera.x = -position.x * App->win->GetScale() + (App->win->width / 2);
-		App->render->camera.y = -position.y * App->win->GetScale() + (App->win->height / 2);
+		App->render->camera.x = 0; // -position.x * App->win->GetScale() + (App->win->width / 2);
+		App->render->camera.y = 0; // -position.y * App->win->GetScale() + (App->win->height / 2);
 	}
 
 	if (changing_room) {

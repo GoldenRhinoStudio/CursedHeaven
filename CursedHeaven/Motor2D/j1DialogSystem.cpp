@@ -25,7 +25,7 @@ bool j1DialogSystem::Start() {
 
 	bool ret = true;
 
-	dialogFont = App->font->Load("fonts/Pixeled.ttf", 15);
+	dialogFont = App->font->Load("fonts/Pixeled.ttf", 6);
 
 	int law = 1; // (1 + rand() % 4);
 
@@ -148,8 +148,8 @@ void Dialogue::Draw() {
 	//RENDERING END DIALOG PART OF THE CHART
 	if (currentNode->getPosition_Spawn() == T_LEFT || currentNode->getPosition_Spawn() == D_LEFT) {
 
-		App->render->Blit(Dialog_Textures, currentNode->dialogChart.w / scale, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_NONE, 1.0f, scale);
-		App->render->Blit(Dialog_Textures, currentNode->dialogChart.x, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale), &temp_Character.characterRect, SDL_FLIP_NONE, 1.0f, scale);
+		App->render->Blit(Dialog_Textures, currentNode->dialogChart.w / scale, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_NONE, 1.0f, 1);
+		App->render->Blit(Dialog_Textures, currentNode->dialogChart.x, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale), &temp_Character.characterRect, SDL_FLIP_NONE, 1.0f, 1);
 	}
 	else if (currentNode->getPosition_Spawn() == T_RIGHT || currentNode->getPosition_Spawn() == D_RIGHT) {
 
@@ -180,13 +180,13 @@ void Dialogue::Draw() {
 
 		//RENDER OPTIONS CHART
 		SDL_RenderCopyEx(App->render->renderer, Dialog_Textures, &App->dialog->GeneraldialogChart, &currentNode->optionsChart, 0, NULL, SDL_FLIP_NONE);
-		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, scale);
+		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, 1);
 
 		itemOptions = next(itemOptions);
 		for (itemOptions; itemOptions != currentNode->dialogueOptions.end(); itemOptions++)
 			App->render->Blit((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x, (*itemOptions)->optionTextPosition.y, &(*itemOptions)->optionText_Rect);
 
-		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, scale);
+		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, 1);
 		currentNode->optionActive = true;
 	}
 

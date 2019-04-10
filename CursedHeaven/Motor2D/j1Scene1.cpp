@@ -163,7 +163,7 @@ bool j1Scene1::Update(float dt)
 	// USER INTERFACE MANAGEMENT
 	// ---------------------------------------------------------------------------------------------------------------------		
 
-	App->gui->UpdateButtonsState(&scene1Buttons);
+	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
 
 	if (App->scene1->startup_time.Read() > 1700) {

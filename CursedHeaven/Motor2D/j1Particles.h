@@ -28,9 +28,6 @@ struct Particle
 	Particle(const Particle& p);
 	virtual ~Particle();
 	bool Update(float dt);
-	enum TYPE_PARTICLE {
-		SHOOT = 0,
-	} Type = TYPE_PARTICLE::SHOOT;
 };
 
 class j1Particles : public j1Module
@@ -48,7 +45,10 @@ private:
 	SDL_Texture * part_tex = nullptr;
 public:
 	uint width, height;
+
+	// Black Mage particles
 	Particle shot_right;
+	Particle explosion;
 	fPoint particle_speed;
 
 };

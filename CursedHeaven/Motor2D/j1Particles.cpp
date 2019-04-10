@@ -16,14 +16,14 @@ j1Particles::j1Particles()
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
 
-	SDL_Rect r = { 232, 103, 16, 12 };
-	shot_right.anim.PushBack(r);
+	shot_right.anim.PushBack({ 232, 103, 16, 12 });
 	shot_right.anim.PushBack({ 250, 103, 16, 12 });
 	shot_right.anim.loop = true;
 	shot_right.life = 2500;
-	/*shot_right.speed.x = 100;
-	shot_right.speed.y = 100;*/
 	shot_right.speed = particle_speed;
+
+	explosion.anim.LoadAnimation("explosion", "mage");
+	explosion.life = 1000;
 }
 
 j1Particles::~j1Particles()
@@ -66,14 +66,8 @@ bool j1Particles::Update(float dt)
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			SDL_Rect r_anim = { 238, 109, 6, 6 };
-			App->render->Blit(part_tex, p->position.x, p->position.y, &r_anim, SDL_FLIP_NONE);
+			App->render->Blit(part_tex, p->position.x, p->position.y, &p->anim.GetCurrentFrame(dt), SDL_FLIP_NONE);
 
-			/*switch (p->Type) {
-			case p->SHOOT:
-				App->render->Blit(part_tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
-				break;
-			}*/
 			if (p->fx_played == false)
 			{
 				p->fx_played = true;

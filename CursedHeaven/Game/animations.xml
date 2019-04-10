@@ -204,7 +204,18 @@
         <animation x="0" y="327" w="25" h="37"/>
         <animation x="25" y="327" w="25" h="37"/>
         <animation x="50" y="327" w="25" h="37"/>
-      </attackDown>	
+      </attackDown>
+	  
+      <explosion loop="false" speed="15.0f">
+        <animation x="0" y="0" w="45" h="52"/>
+        <animation x="45" y="0" w="45" h="52"/>
+        <animation x="90" y="0" w="45" h="52"/>
+        <animation x="135" y="0" w="45" h="52"/>
+        <animation x="180" y="0" w="45" h="52"/>
+        <animation x="225" y="0" w="45" h="52"/>
+        <animation x="270" y="0" w="45" h="52"/>
+        <animation x="315" y="0" w="45" h="52"/>
+      </explosion>	
 	</mage>
 </player>
   

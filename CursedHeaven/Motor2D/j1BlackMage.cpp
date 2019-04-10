@@ -11,6 +11,7 @@
 #include "j1Hud.h"
 #include "j1Map.h"
 #include "j1Timer.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -124,6 +125,14 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
 
+				iPoint explosionPos;
+				/*if (animation == &lateral || animation == &idle_lateral) explosionPos = {};
+				else if (animation == &up || animation == &idle_up) explosionPos = {};
+				else if (animation == &down || animation == &idle_down)	explosionPos = {};
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) explosionPos = {};
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) explosionPos = {};*/
+
+				App->particles->AddParticle(App->particles->explosion, position.x, position.y, { 0.0f, 0.0f }, COLLIDER_SHOT);
 			}
 
 			if (active_Q) {

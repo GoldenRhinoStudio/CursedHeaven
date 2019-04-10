@@ -98,7 +98,7 @@ bool j1SceneCredits::Update(float dt)
 	// USER INTERFACE MANAGEMENT
 	// ---------------------------------------------------------------------------------------------------------------------	
 
-	App->gui->UpdateButtonsState(&creditsButtons);
+	App->gui->UpdateButtonsState(&creditsButtons, App->gui->buttonsScale);
 
 	// Button actions
 	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {

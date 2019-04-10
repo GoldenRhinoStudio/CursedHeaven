@@ -125,7 +125,7 @@ bool j1SceneMenu::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	// Updating the state of the UI
-	App->gui->UpdateButtonsState(&menuButtons); 
+	App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale); 
 	App->gui->UpdateSliders(&menuBoxes);
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 

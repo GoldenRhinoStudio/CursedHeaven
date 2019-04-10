@@ -2,7 +2,7 @@
 
 <!-- Settup Dialog for the game -->
 <DialogSettup>
-    <SettupOptions speed="0.5" scale ="3" YMargin="15" > <!--The Y margin is the space from the top of the chart-->
+    <SettupOptions speed="0.5" scale ="1" YMargin="15" > <!--The Y margin is the space from the top of the chart-->
       <DialogueChartTexture path="textures/Elements_To_Demo.png"/>
       <Characters> 
         <Character ID="0" x="0" y="61" w="59" h="81"/>

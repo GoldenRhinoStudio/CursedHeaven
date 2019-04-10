@@ -27,7 +27,7 @@ bool j1DialogSystem::Start() {
 
 	dialogFont = App->font->Load("fonts/Pixeled.ttf", 15);
 
-	int law = (1 + rand() % 4);
+	int law = 1; // (1 + rand() % 4);
 
 	if (law == 1) {
 		pugi::xml_document	DialogConfig_file;
@@ -122,7 +122,7 @@ void Dialogue::Draw() {
 	Character temp_Character = App->dialog->getCharacter(currentNode->GetCharacterID());
 
 	temp.x = temp.y = 0;
-	int scale = 4;
+	float scale = App->dialog->scale;
 
 	//WRITTING MACHINE LOOK
 	App->dialog->counter++;
@@ -332,7 +332,7 @@ bool j1DialogSystem::SetUpCharts(pugi::xml_document& Dialog) {
 
 	Settings_Node = Dialog.child("DialogSettup").child("SettupOptions");
 	DialogSpeed = Settings_Node.attribute("speed").as_float();
-	scale = Settings_Node.attribute("scale").as_int();
+	scale = Settings_Node.attribute("scale").as_float();
 	YMargin = Settings_Node.attribute("YMargin").as_int();
 	Dialog_Textures = App->tex->Load(Settings_Node.child("DialogueChartTexture").attribute("path").as_string());
 	Settings_Node = Settings_Node.child("DialogChart").child("MainPart");
@@ -367,7 +367,7 @@ Dialogue* j1DialogSystem::createDialog(pugi::xml_document& Dialog, int ID) {
 
 bool treeDialogNode::setUp_rects(int lineMargin) {
 
-	int scale = App->dialog->scale;
+	float scale = App->dialog->scale;
 
 	SDL_Rect Temp_Rect;
 	SDL_Texture* temp_tex;

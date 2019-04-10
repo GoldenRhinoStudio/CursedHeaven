@@ -5,7 +5,7 @@
 #include "p2Point.h"
 #include "SDL\include\SDL_rect.h"
 
-#define MAX_COLLIDERS 600
+#define MAX_COLLIDERS 200
 
 enum COLLIDER_TYPE
 {
@@ -20,15 +20,6 @@ enum COLLIDER_TYPE
 	COLLIDER_MAX,
 };
 
-enum COLLISION_DIRECTION
-{
-	NONE_COLLISION,
-	UP_COLLISION,
-	DOWN_COLLISION,
-	RIGHT_COLLISION,
-	LEFT_COLLISION
-};
-
 struct Collider
 {
 	SDL_Rect rect;
@@ -41,7 +32,6 @@ struct Collider
 
 	void SetPos(int x, int y) { rect.x = x; rect.y = y; }
 	bool CheckCollision(const SDL_Rect& r) const;
-	COLLISION_DIRECTION CheckDirection(const SDL_Rect& r) const;
 };
 
 class j1Collisions : public j1Module

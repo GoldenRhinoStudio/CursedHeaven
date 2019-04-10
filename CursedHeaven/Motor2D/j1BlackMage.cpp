@@ -132,7 +132,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				else if (animation == &diagonal_up || animation == &idle_diagonal_up) explosionPos = {};
 				else if (animation == &diagonal_down || animation == &idle_diagonal_down) explosionPos = {};*/
 
-				App->particles->AddParticle(App->particles->explosion, position.x, position.y, { 0.0f, 0.0f }, COLLIDER_SHOT);
+				App->particles->AddParticle(App->particles->explosion, position.x, position.y, COLLIDER_SHOT);
 			}
 
 			if (active_Q) {

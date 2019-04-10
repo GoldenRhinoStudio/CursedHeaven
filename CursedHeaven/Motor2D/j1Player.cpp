@@ -251,8 +251,9 @@ void j1Player::Shot(float x, float y) {
 
 	speed_particle.x = App->particles->particle_speed.x * cos(angle);
 	speed_particle.y = App->particles->particle_speed.y * sin(angle);
+	App->particles->shot_right.speed = speed_particle;
 
-	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, speed_particle, COLLIDER_SHOT);
+	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, COLLIDER_SHOT);
 }
 
 void j1Player::ChangeRoom(int x, int y) {

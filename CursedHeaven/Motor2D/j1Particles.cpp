@@ -16,8 +16,7 @@ j1Particles::j1Particles()
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
 
-	shot_right.anim.PushBack({ 232, 103, 16, 12 });
-	shot_right.anim.PushBack({ 250, 103, 16, 12 });
+	shot_right.anim.PushBack({ 238, 109, 6, 6 });
 	shot_right.anim.loop = true;
 	shot_right.life = 2500;
 	shot_right.speed = particle_speed;
@@ -57,8 +56,10 @@ bool j1Particles::Update(float dt)
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
 		Particle* p = active[i];
+
 		if (p == nullptr)
 			continue;
+
 		if (p->Update(dt) == false)
 		{
 			delete p;
@@ -66,18 +67,22 @@ bool j1Particles::Update(float dt)
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			App->render->Blit(part_tex, p->position.x, p->position.y, &p->anim.GetCurrentFrame(dt), SDL_FLIP_NONE);
-
+			//App->render->Blit(part_tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
+			//SDL_Rect r_anim = p->anim.GetCurrentFrame(dt);
+			SDL_Rect r_anim = { 238, 109, 6, 6 };
+			App->render->Blit(part_tex, p->position.x, p->position.y, &r_anim);
 			if (p->fx_played == false)
 			{
 				p->fx_played = true;
+				//Play your fx here
 			}
 		}
 	}
+
 	return true;
 }
 
-void j1Particles::AddParticle(const Particle& particle, int x, int y, fPoint speed, COLLIDER_TYPE collider_type, Uint32 delay)
+void j1Particles::AddParticle(const Particle& particle, int x, int y, COLLIDER_TYPE collider_type, Uint32 delay)
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
@@ -87,13 +92,8 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, fPoint spe
 			p->born = SDL_GetTicks() + delay;
 			p->position.x = x;
 			p->position.y = y;
-			p->speed = speed;
-			//p->Type = particle.Type;
-			float dt = App->GetDt();
-			if (collider_type != COLLIDER_NONE) {
-				p->collider = App->collisions->AddCollider({ (int)p->position.x, (int)p->position.y, 6, 6 }, collider_type, this);
-				//p->collider->type = COLLIDER_SHOT;
-			}
+			if (collider_type != COLLIDER_NONE)
+				p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame((float)App->GetDt()), collider_type, this);
 			active[i] = p;
 			break;
 		}
@@ -115,6 +115,7 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 	}
 }
 
+
 // -------------------------------------------------------------
 // -------------------------------------------------------------
 Particle::Particle()
@@ -130,9 +131,8 @@ Particle::Particle(const Particle& p) :
 
 Particle::~Particle()
 {
-	if (collider != nullptr) {
+	if (collider != nullptr)
 		collider->to_delete = true;
-	}
 }
 
 bool Particle::Update(float dt)
@@ -148,10 +148,8 @@ bool Particle::Update(float dt)
 	position.y += speed.y * dt;
 
 
-	if (collider != nullptr) {
+	if (collider != nullptr)
 		collider->SetPos(position.x, position.y);
-		if (collider->type == COLLIDER_SHOT)
-			collider->SetPos(position.x, position.y);
-	}
+
 	return ret;
 }

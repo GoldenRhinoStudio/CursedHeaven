@@ -186,6 +186,11 @@ void j1EntityManager::CreatePlayer()
 	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);
 	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
 	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);*/
+
+	if (knight != nullptr) currentPlayer = knight;
+	else if (mage != nullptr) currentPlayer = mage;
+	/*else if (rogue != nullptr)  currentPlayer = rogue;
+	else if (tank != nullptr)  currentPlayer = tank;*/
 }
 
 void j1EntityManager::CreateNPC()

@@ -139,8 +139,8 @@ void Dialogue::Draw() {
 
 	temp_tex = App->font->Print(App->dialog->temp_text_print.c_str(), temp.w, temp.h, 500, App->gui->beige, App->dialog->dialogFont);
 
-	/*if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h)
-	currentNode->dialogStop = true;*/
+	if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h)
+	currentNode->dialogStop = true;
 
 	//RENDERING GENERIC DIALOG CHART
 	SDL_RenderCopyEx(App->render->renderer, Dialog_Textures, &App->dialog->GeneraldialogChart, &currentNode->dialogChart, 0, NULL, SDL_FLIP_NONE);
@@ -206,7 +206,7 @@ void Dialogue::Input() {
 			if ((*itemOptions)->optionTextPosition.x && (x < (*itemOptions)->optionTextPosition.x < App->win->width)/*+ (*itemOptions)->optionText_Rect.w*/ &&
 				(*itemOptions)->optionTextPosition.y && (y < (*itemOptions)->optionTextPosition.y < App->win->height)/*+ (*itemOptions)->optionText_Rect.h*/)
 			{
-				//if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
+				if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
 
 				if (App->input->GetMouseButtonDown(KEY_DOWN)) {
 
@@ -222,7 +222,7 @@ void Dialogue::Input() {
 
 					break;
 				}
-				//}
+				}
 			}
 		}
 	}
@@ -231,11 +231,11 @@ void Dialogue::Input() {
 
 		App->scene1->startDialogue = false;
 
-		/*if (currentNode->dialogStop) {
+		if (currentNode->dialogStop) {
 		currentNode->TextScrollPositon -= App->dialog->SpawnDialog_Section.h;
 		currentNode->dialogStop = true;
 
-		}*/
+		}
 		if (currentNode->dialogEnded&&currentNode != nullptr&&currentNode->optionActive == false) {
 
 			if (checkOptions != nullptr&&checkOptions->startAgain == true)

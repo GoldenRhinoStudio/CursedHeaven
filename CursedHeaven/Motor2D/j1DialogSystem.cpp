@@ -25,7 +25,7 @@ bool j1DialogSystem::Start() {
 
 	bool ret = true;
 
-	dialogFont = App->font->Load("fonts/Pixeled.ttf", 6);
+	dialogFont = App->font->Load("fonts/Pixeled.ttf", 15 / App->win->GetScale());
 
 	int law = 1; // (1 + rand() % 4);
 
@@ -160,9 +160,9 @@ void Dialogue::Draw() {
 
 	//SETTING UP THE DIALOG ZONE TO SPAWN
 	if (currentNode->getPosition_Spawn() == T_RIGHT)
-		App->dialog->SpawnDialog_Section.x = currentNode->dialogChart.x;
+		App->dialog->SpawnDialog_Section.x = currentNode->dialogChart.x + 200;
 	else if (currentNode->getPosition_Spawn() == T_LEFT)
-		App->dialog->SpawnDialog_Section.x = temp_Character.characterRect.w * scale + 15;
+		App->dialog->SpawnDialog_Section.x = temp_Character.characterRect.w + 130;
 
 	App->dialog->SpawnDialog_Section.y = currentNode->dialogChart.y + App->dialog->YMargin;
 	App->dialog->SpawnDialog_Section.h = 43 * scale;
@@ -208,7 +208,7 @@ void Dialogue::Input() {
 			{
 				if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
 
-				if (App->input->GetMouseButtonDown(KEY_DOWN)) {
+					if (App->input->GetMouseButtonDown(KEY_DOWN)) {
 
 					if ((*itemOptions)->startAgain == true)
 						checkOptions = (*itemOptions);
@@ -221,7 +221,7 @@ void Dialogue::Input() {
 					currentNode->dialogActive = true;
 
 					break;
-				}
+					}
 				}
 			}
 		}
@@ -382,7 +382,7 @@ bool treeDialogNode::setUp_rects(int lineMargin) {
 	else
 		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, 0, App->gui->beige, App->dialog->dialogFont);
 
-	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w * scale;
+	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w + 100/* * scale*/;
 	dialogChart = App->dialog->GeneraldialogChart;
 
 	uint screen_Width;

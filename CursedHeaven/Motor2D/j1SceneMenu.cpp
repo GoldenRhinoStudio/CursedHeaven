@@ -51,7 +51,7 @@ bool j1SceneMenu::Start()
 		App->audio->PlayMusic("audio/music/menu_music.ogg", 1.0f);
 
 		// Loading textures
-		gui_tex = App->tex->Load("gui/atlas.png");
+		gui_tex = App->tex->Load("gui/atlas2.png");
 		//logo_tex = App->tex->Load("gui/logo.png");
 		//player_tex = App->tex->Load("textures/character/character.png");
 		//harpy_tex = App->tex->Load("textures/enemies/harpy/harpy.png");
@@ -73,9 +73,9 @@ bool j1SceneMenu::Start()
 		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
 		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
 
-		SDL_Rect idle = {0, 143, 190, 49};
-		SDL_Rect hovered = { 0, 45, 190, 49 };
-		SDL_Rect clicked = { 0, 94, 190, 49 };
+		SDL_Rect idle = { 650, 260, 191, 50 }; //{0, 143, 190, 49};
+		SDL_Rect hovered = {1070, 260, 191, 50 };//{ 0, 45, 190, 49 };
+		SDL_Rect clicked = { 860, 264, 191, 45 };//{ 0, 94, 190, 49 };
 		App->gui->CreateButton(&menuButtons, BUTTON, 220, 110 + 80, idle, hovered, clicked, gui_tex, PLAY_GAME);
 		App->gui->CreateButton(&menuButtons, BUTTON, 220, 170 + 80, idle, hovered, clicked, gui_tex, SETTINGS);
 		App->gui->CreateButton(&menuButtons, BUTTON, 220, 200 + 80, idle, hovered, clicked, gui_tex, OPEN_CREDITS);
@@ -115,6 +115,8 @@ bool j1SceneMenu::Start()
 		
 		startup_time.Start();
 		times++;
+
+		//  650 260  191 50
 	}
 
 	return true;

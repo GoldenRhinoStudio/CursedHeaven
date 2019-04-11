@@ -55,6 +55,10 @@ public:
 	Collider* collider = nullptr;
 	SDL_Texture* sprites = nullptr;
 
+	// Combat values
+	int basicDamage = 0;
+	int lifePoints = 0;
+
 };
 
 #endif // __ENTITY_H__

@@ -11,6 +11,7 @@
 #include "j1Hud.h"
 #include "j1Map.h"
 #include "j1Timer.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -93,9 +94,10 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->mage, dt, do_logic, movementSpeed);
-			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+		if (!active_Q) {
+			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+			if(!attacking)
+				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
 
@@ -124,6 +126,14 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
 
+				iPoint explosionPos;
+				/*if (animation == &lateral || animation == &idle_lateral) explosionPos = {};
+				else if (animation == &up || animation == &idle_up) explosionPos = {};
+				else if (animation == &down || animation == &idle_down)	explosionPos = {};
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) explosionPos = {};
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) explosionPos = {};*/
+
+				App->particles->AddParticle(App->particles->explosion, position.x, position.y, COLLIDER_SHOT);
 			}
 
 			if (active_Q) {
@@ -233,11 +243,16 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			Draw(r, true);
 	}
 	else {
-		if (facingRight) {
-			Draw(r, false, 0, attackBlittingY);
+		if (facingRight || animation == &attack_up || animation == &attack_down) {
+			if (animation == &attack_down) Draw(r, false, -4);
+			else if (animation == &attack_diagonal_down) Draw(r, false, 0, 2);
+			else Draw(r);
 		}
 		else {
-			Draw(r, true, attackBlittingX, attackBlittingY);
+			if (animation == &attack_lateral) Draw(r, true, -4);
+			else if (animation == &attack_diagonal_up) Draw(r, true, -6);
+			else if (animation == &attack_diagonal_down) Draw(r, true, -6, 2);
+			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}
 
@@ -347,8 +362,9 @@ void j1BlackMage::LoadPlayerProperties() {
 	pugi::xml_node combat = player.child("combat");
 	pugi::xml_node cd = player.child("cooldowns");
 
-	basicDamage = combat.attribute("basicDamage").as_uint();
-	fireDamage = combat.attribute("fireDamage").as_uint();
+	basicDamage = combat.attribute("basicDamage").as_int();
+	fireDamage = combat.attribute("fireDamage").as_int();
+	lifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	cooldownTime_Speed = cd.attribute("increasedSpeed").as_uint();

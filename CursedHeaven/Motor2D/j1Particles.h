@@ -28,9 +28,6 @@ struct Particle
 	Particle(const Particle& p);
 	virtual ~Particle();
 	bool Update(float dt);
-	enum TYPE_PARTICLE {
-		SHOOT = 0,
-	} Type = TYPE_PARTICLE::SHOOT;
 };
 
 class j1Particles : public j1Module
@@ -42,13 +39,16 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 	void OnCollision(Collider* c1, Collider* c2);
-	void AddParticle(const Particle& particle, int x, int y, fPoint speed, COLLIDER_TYPE collider_type = COLLIDER_NONE, Uint32 delay = 0);
+	void AddParticle(const Particle& particle, int x, int y, COLLIDER_TYPE collider_type = COLLIDER_NONE, Uint32 delay = 0);
 private:
 	Particle* active[MAX_ACTIVE_PARTICLES];
-	SDL_Texture * part_tex = nullptr;
+	SDL_Texture* part_tex = nullptr;
 public:
 	uint width, height;
+
+	// Black Mage particles
 	Particle shot_right;
+	Particle explosion;
 	fPoint particle_speed;
 
 };

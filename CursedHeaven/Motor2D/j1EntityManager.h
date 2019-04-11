@@ -34,6 +34,7 @@ enum ENTITY_TYPES
 	PLAYER,
 	COIN,
 	NPC,
+	SLIME,
 	UNKNOWN
 };
 
@@ -100,6 +101,8 @@ public:
 	j1BlackMage*		mage = nullptr;
 	j1Tank*				tank = nullptr;
 	j1Rogue*			rogue = nullptr;
+
+	j1Player*			currentPlayer = nullptr;
 
 	j1Judge*			judge = nullptr;
 

@@ -12,6 +12,7 @@
 #include "j1Rogue.h"
 #include "j1Tank.h"
 #include "j1Judge.h"
+#include "j1Slime.h"
 
 #include "j1Player.h"
 
@@ -159,6 +160,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
 		{
 			j1Entity* entity;
+			if (queue[i].type == SLIME)
+				entity = new j1Slime(info.position.x, info.position.y, info.type);
 
 			entities.push_back(entity);
 			entity->Start();
@@ -186,6 +189,11 @@ void j1EntityManager::CreatePlayer()
 	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);
 	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
 	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);*/
+
+	if (knight != nullptr) currentPlayer = knight;
+	else if (mage != nullptr) currentPlayer = mage;
+	/*else if (rogue != nullptr)  currentPlayer = rogue;
+	else if (tank != nullptr)  currentPlayer = tank;*/
 }
 
 void j1EntityManager::CreateNPC()

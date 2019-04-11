@@ -100,6 +100,9 @@
     <ClCompile Include="j1DialogSystem.cpp">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="j1Slime.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Point.h">
@@ -222,6 +225,9 @@
     <ClInclude Include="j1DialogSystem.h">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClInclude>
+    <ClInclude Include="j1Slime.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml" />
@@ -265,6 +271,9 @@
     </Filter>
     <Filter Include="Development\Modules\Entities\NPCs">
       <UniqueIdentifier>{28aebaae-d63c-4451-b068-a183c95cfcb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\Enemies">
+      <UniqueIdentifier>{2603ffbc-1d42-497d-b09d-080b9253a7ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

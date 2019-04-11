@@ -12,7 +12,7 @@
   </renderer>
 
   <window>
-    <resolution width="1024" height="768" scale="2"/>
+    <resolution width="1024" height="768" scale="3"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -49,6 +49,11 @@
   </player>  
   
   <entityManager updateMsCycle="0.1f"/>
+  
+  <slime speed="70.0f" life="200">
+	  <margin x="10" y="10"/>
+	  <colliderSize w="25" h="23"/>
+  </slime>
 
   <map>
 	<blitSpeed backgrounds="0.7f" fog="0.85f" map="1.0f"/>

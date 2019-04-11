@@ -178,7 +178,7 @@ const SDL_Texture* j1Gui::GetAtlas() const
 	return atlas;
 }
 
-void j1Gui::UpdateButtonsState(std::list<j1Button*>* buttons) {
+void j1Gui::UpdateButtonsState(std::list<j1Button*>* buttons, float scale) {
 	int x, y; App->input->GetMousePosition(x, y);
 	
 	for (std::list<j1Button*>::iterator item = buttons->begin(); item != buttons->end(); ++item)
@@ -186,9 +186,9 @@ void j1Gui::UpdateButtonsState(std::list<j1Button*>* buttons) {
 
 		if ((*item)->visible == false || (*item)->bfunction == NO_FUNCTION) continue;
 
-		if (x - (App->render->camera.x / (int)(App->win->GetScale())) <= (*item)->position.x + (*item)->situation.w * App->gui->buttonsScale
+		if (x - (App->render->camera.x / (int)(App->win->GetScale())) <= (*item)->position.x + (*item)->situation.w * scale
 			&& x - (App->render->camera.x / (int)(App->win->GetScale())) >= (*item)->position.x
-			&& y - (App->render->camera.y / (int)(App->win->GetScale())) <= (*item)->position.y + (*item)->situation.h * App->gui->buttonsScale
+			&& y - (App->render->camera.y / (int)(App->win->GetScale())) <= (*item)->position.y + (*item)->situation.h * scale
 			&& y - (App->render->camera.y / (int)(App->win->GetScale())) >= (*item)->position.y) {
 
 			if(App->credits->active == false && App->menu->settings_window != nullptr && App->menu->settings_window->visible

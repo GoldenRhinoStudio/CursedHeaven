@@ -97,8 +97,8 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		if (!attacking && !active_Q) {
-			ManagePlayerMovement(App->entity->knight, dt, do_logic, movementSpeed);
-			SetMovementAnimations(&idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
 
@@ -108,7 +108,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
 				// Attack control
-				if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
+				if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
 					attacking = true;
 					attackCollider->type = COLLIDER_ATTACK;
 
@@ -209,6 +209,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			else if (animation == &attack_down) animation = &idle_down;
 			else if (animation == &attack_diagonal_up_right || animation == &attack_diagonal_up_left) animation = &idle_diagonal_up;
 			else if (animation == &attack_diagonal_down_right || animation == &attack_diagonal_down_left) animation = &idle_diagonal_down;
+
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
@@ -402,9 +403,10 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	pugi::xml_node combat = player.child("combat");
 	pugi::xml_node cd = player.child("cooldowns");
 
-	basicDamage = combat.attribute("basicDamage").as_uint();
+	basicDamage = combat.attribute("basicDamage").as_int();
 	rageDamage = combat.attribute("rageDamage").as_uint();
-	dashSpeed = combat.attribute("dashSpeed").as_uint();
+	dashSpeed = combat.attribute("dashSpeed").as_int();
+	lifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	cooldownTime_Rage = cd.attribute("rage").as_uint();

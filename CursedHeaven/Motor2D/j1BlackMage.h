@@ -49,7 +49,7 @@ public:
 	j1Timer cooldown_Q;
 	uint cooldownTime_Q = 0;
 	uint lastTime_Q = 0;
-	uint fireDamage = 0;
+	int fireDamage = 0;
 
 	j1Timer cooldown_E;
 	uint cooldownTime_E = 0;

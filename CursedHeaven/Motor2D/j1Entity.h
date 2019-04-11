@@ -56,8 +56,8 @@ public:
 	SDL_Texture* sprites = nullptr;
 
 	// Combat values
-	uint basicDamage = 0;
-	uint lifePoints = 0;
+	int basicDamage = 0;
+	int lifePoints = 0;
 
 };
 

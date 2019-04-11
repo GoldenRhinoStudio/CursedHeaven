@@ -220,6 +220,63 @@
 </player>
   
   <enemies>    
+	<slime>
+      <idleD_up loop="true" speed="7.0f">
+        <animation x="0" y="37" w="30" h="36"/>
+	  </idleD_up>
+	  
+      <idleD_down loop="true" speed="7.0f">
+        <animation x="0" y="0" w="31" h="37"/>
+	  </idleD_down>
+	  
+      <idleLateral loop="true" speed="7.0f">
+        <animation x="1" y="73" w="30" h="36"/>
+      </idleLateral>		
+	  
+      <idleUp loop="true" speed="7.0f">
+        <animation x="1" y="109" w="32" h="34"/>
+      </idleUp>
+	  
+      <idleDown loop="true" speed="7.0f">
+        <animation x="0" y="143" w="32" h="34"/>
+      </idleDown>		
+		
+      <diagonalUp loop="true" speed="7.0f">
+        <animation x="0" y="37" w="30" h="36"/>
+        <animation x="30" y="37" w="29" h="36"/>
+        <animation x="59" y="37" w="32" h="36"/>
+        <animation x="91" y="37" w="31" h="36"/>
+      </diagonalUp>
+	  
+      <diagonalDown loop="true" speed="7.0f">
+        <animation x="0" y="0" w="31" h="37"/>
+        <animation x="31" y="0" w="32" h="37"/>
+        <animation x="63" y="0" w="31" h="37"/>
+        <animation x="94" y="0" w="30" h="37"/>
+      </diagonalDown>		 
+
+      <lateral loop="true" speed="7.0f">
+        <animation x="1" y="73" w="30" h="36"/>
+        <animation x="31" y="73" w="30" h="36"/>
+        <animation x="61" y="73" w="32" h="36"/>
+        <animation x="93" y="73" w="33" h="36"/>
+      </lateral>			
+  	  	  
+      <up loop="true" speed="7.0f">
+        <animation x="1" y="109" w="32" h="34"/>
+        <animation x="33" y="109" w="32" h="34"/>
+        <animation x="65" y="109" w="35" h="34"/>
+        <animation x="100" y="109" w="35" h="34"/>
+      </up>
+	  
+      <down loop="true" speed="7.0f">
+        <animation x="0" y="143" w="32" h="34"/>
+        <animation x="32" y="143" w="32" h="34"/>
+        <animation x="64" y="143" w="35" h="34"/>
+        <animation x="99" y="143" w="35" h="34"/>
+      </down>			   
+	</slime>
+	
     <coin>
       <idle loop ="true" speed="10.0f">
         <animation x="4" y="4" w="16" h="16"/>

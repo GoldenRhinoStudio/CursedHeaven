@@ -12,6 +12,7 @@
 #include "j1Rogue.h"
 #include "j1Tank.h"
 #include "j1Judge.h"
+#include "j1Slime.h"
 
 #include "j1Player.h"
 
@@ -159,6 +160,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
 		{
 			j1Entity* entity;
+			if (queue[i].type == SLIME)
+				entity = new j1Slime(info.position.x, info.position.y, info.type);
 
 			entities.push_back(entity);
 			entity->Start();

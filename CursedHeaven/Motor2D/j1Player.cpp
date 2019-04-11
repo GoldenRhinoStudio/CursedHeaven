@@ -346,7 +346,7 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 		//If the player collides with death colliders
 		if (col_2->type == COLLIDER_ENEMY)
 		{
-			if (App->scene1->active)
+			/*if (App->scene1->active)
 				App->scene1->settings_window->position = App->gui->settingsPosition;
 
 			App->fade->FadeToBlack(3.0f);
@@ -360,7 +360,7 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 				score_points = 0;
 			}
 			else if (App->scene1->active)
-				App->scene1->backToMenu = true;
+				App->scene1->backToMenu = true;*/
 		}
 	}
 };

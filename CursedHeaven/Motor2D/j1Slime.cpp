@@ -17,8 +17,17 @@ j1Slime::j1Slime(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES:
 {
 	animation = NULL;
 
-	idle.LoadAnimation("idle", "harpy", false);
-	move.LoadAnimation("move", "harpy", false);
+	idle_diagonal_up.LoadAnimation("idleD_up", "slime", false);
+	idle_diagonal_down.LoadAnimation("idleD_down", "slime", false);
+	idle_lateral.LoadAnimation("idleLateral", "slime", false);
+	idle_down.LoadAnimation("idleDown", "slime", false);
+	idle_up.LoadAnimation("idleUp", "slime", false);
+
+	diagonal_up.LoadAnimation("diagonalUp", "slime", false);
+	diagonal_down.LoadAnimation("diagonalDown", "slime", false);
+	lateral.LoadAnimation("lateral", "slime", false);
+	up.LoadAnimation("up", "slime", false);
+	down.LoadAnimation("down", "slime", false);
 
 	// Setting harpy position
 	initialPosition.x = position.x = x;
@@ -31,11 +40,11 @@ bool j1Slime::Start()
 {
 	// Textures are loaded
 	LOG("Loading harpy textures");
-	sprites = App->tex->Load("textures/enemies/harpy/harpy.png");
+	sprites = App->tex->Load("textures/enemies/Slime.png");
 
 	LoadProperties();
 
-	animation = &idle;
+	animation = &idle_down;
 
 	collider = App->collisions->AddCollider({ (int)position.x - margin.x, (int)position.y - margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
@@ -48,6 +57,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	if (dead == false) {
 		collider->SetPos(position.x, position.y);
+		if (!App->entity->currentPlayer->attacking) receivedDamage = false;
 
 		if (do_logic || path_created) {
 			if ((App->entity->currentPlayer->position.x - position.x) <= DETECTION_RANGE && (App->entity->currentPlayer->position.x - position.x) >= -DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
@@ -74,7 +84,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 		if (App->entity->currentPlayer->position == App->entity->currentPlayer->initialPosition)
 		{
-			animation = &idle;
+			animation = &idle_down;
 			position = initialPosition;
 		}
 
@@ -108,12 +118,25 @@ bool j1Slime::CleanUp()
 void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_SHOT) {
-		App->entity->currentPlayer->score_points += 100;
-		dead = true;
-		collider->to_delete = true;
-		/*int num = App->entity->entities.find(this);
-		RELEASE(App->entity->entities.At(num)->data);
-		App->entity->entities.remove(App->entity->entities.At(num));*/
+		
+		if (!receivedDamage) {
+			lifePoints -= App->entity->currentPlayer->basicDamage;
+			receivedDamage = true;
+		}
+
+		if (lifePoints <= 0) {
+			App->entity->currentPlayer->score_points += 100;
+			dead = true;
+			collider->to_delete = true;
+
+			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
+				if (item._Ptr->_Myval == this) {
+					RELEASE(item._Ptr->_Myval);
+					App->entity->entities.remove(item._Ptr->_Myval);
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -138,16 +161,17 @@ void j1Slime::LoadProperties()
 	config_file.load_file("config.xml");
 	pugi::xml_node config;
 	config = config_file.child("config");
-	pugi::xml_node harpy;
-	harpy = config.child("harpy");
+	pugi::xml_node slime;
+	slime = config.child("slime");
 
-	speed = harpy.attribute("speed").as_int();
+	speed = slime.attribute("speed").as_int();
+	lifePoints = slime.attribute("life").as_int();
 
 	// Copying the values of the collider
-	margin.x = harpy.child("margin").attribute("x").as_int();
-	margin.y = harpy.child("margin").attribute("y").as_int();
-	colliderSize.x = harpy.child("colliderSize").attribute("w").as_int();
-	colliderSize.y = harpy.child("colliderSize").attribute("h").as_int();
+	margin.x = slime.child("margin").attribute("x").as_int();
+	margin.y = slime.child("margin").attribute("y").as_int();
+	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
+	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
 }
 
 void j1Slime::Move(std::vector<iPoint>& path, float dt)
@@ -156,53 +180,53 @@ void j1Slime::Move(std::vector<iPoint>& path, float dt)
 
 	if (direction == Movement::DOWN_RIGHT)
 	{
-		animation = &move;
+		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x += speed * dt;
 	}
 
 	else if (direction == Movement::DOWN_LEFT)
 	{
-		animation = &move;
+		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x -= speed * dt;
 	}
 
 	else if (direction == Movement::UP_RIGHT)
 	{
-		animation = &move;
+		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x += speed * dt;
 	}
 
 	else if (direction == Movement::UP_LEFT)
 	{
-		animation = &move;
+		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x -= speed * dt;
 	}
 
 	else if (direction == Movement::DOWN)
 	{
-		animation = &move;
+		animation = &down;
 		position.y += speed * dt;
 	}
 
 	else if (direction == Movement::UP)
 	{
-		animation = &move;
+		animation = &up;
 		position.y -= speed * dt;
 	}
 
 	else if (direction == Movement::RIGHT)
 	{
-		animation = &move;
+		animation = &lateral;
 		position.x += speed * dt;
 	}
 
 	else if (direction == Movement::LEFT)
 	{
-		animation = &move;
+		animation = &lateral;
 		position.x -= speed * dt;
 	}
 }

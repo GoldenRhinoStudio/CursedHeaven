@@ -93,7 +93,7 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, COLLIDER_T
 			p->position.x = x;
 			p->position.y = y;
 			if (collider_type != COLLIDER_NONE)
-				p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame((float)App->GetDt()), collider_type, this);
+				//p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame((float)App->GetDt()), collider_type, this);
 			active[i] = p;
 			break;
 		}

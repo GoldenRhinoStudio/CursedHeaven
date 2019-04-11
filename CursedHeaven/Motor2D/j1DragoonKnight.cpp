@@ -209,6 +209,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			else if (animation == &attack_down) animation = &idle_down;
 			else if (animation == &attack_diagonal_up_right || animation == &attack_diagonal_up_left) animation = &idle_diagonal_up;
 			else if (animation == &attack_diagonal_down_right || animation == &attack_diagonal_down_left) animation = &idle_diagonal_down;
+
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
@@ -402,10 +403,10 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	pugi::xml_node combat = player.child("combat");
 	pugi::xml_node cd = player.child("cooldowns");
 
-	basicDamage = combat.attribute("basicDamage").as_uint();
+	basicDamage = combat.attribute("basicDamage").as_int();
 	rageDamage = combat.attribute("rageDamage").as_uint();
-	dashSpeed = combat.attribute("dashSpeed").as_uint();
-	lifePoints = combat.attribute("lifePoints").as_uint();
+	dashSpeed = combat.attribute("dashSpeed").as_int();
+	lifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	cooldownTime_Rage = cd.attribute("rage").as_uint();

@@ -75,6 +75,7 @@ private:
 	SDL_Texture* logo_tex = nullptr;
 	SDL_Texture* player_tex = nullptr;
 	SDL_Texture* harpy_tex = nullptr;
+	SDL_Texture* gui_tex2 = nullptr;
 
 	_TTF_Font* font = nullptr;
 	_TTF_Font* font2 = nullptr;

@@ -52,6 +52,7 @@ bool j1SceneMenu::Start()
 
 		// Loading textures
 		gui_tex = App->tex->Load("gui/atlas2.png");
+		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		//logo_tex = App->tex->Load("gui/logo.png");
 		//player_tex = App->tex->Load("textures/character/character.png");
 		//harpy_tex = App->tex->Load("textures/enemies/harpy/harpy.png");
@@ -81,12 +82,12 @@ bool j1SceneMenu::Start()
 		App->gui->CreateButton(&menuButtons, BUTTON, 220, 200 + 80, idle, hovered, clicked, gui_tex, OPEN_CREDITS);
 		App->gui->CreateButton(&menuButtons, BUTTON, 220, 230 + 80, idle, hovered, clicked, gui_tex, CLOSE_GAME);
 
-		SDL_Rect idle4 = { 0, 699, 190, 49 };
+		SDL_Rect idle4 = { 0, 188, 191, 49 };
 
 		if (result == NULL)
-			App->gui->CreateButton(&menuButtons, BUTTON, 220, 140 + 80, idle4, idle4, idle4, gui_tex, NO_FUNCTION);
+			App->gui->CreateButton(&menuButtons, BUTTON, 220, 140 + 80, idle4, idle4, idle4, gui_tex2, NO_FUNCTION);
 		else
-			App->gui->CreateButton(&menuButtons, BUTTON, 220, 140 + 80, idle, hovered, clicked, gui_tex, LOAD_GAME);
+			App->gui->CreateButton(&menuButtons, BUTTON, 220, 140 + 80, idle, hovered, clicked, gui_tex2, LOAD_GAME);
 
 		SDL_Rect idle2 = { 28, 201, 49, 49 };
 		SDL_Rect hovered2 = { 77, 201, 49, 49 };
@@ -99,13 +100,21 @@ bool j1SceneMenu::Start()
 		SDL_Rect clicked3 = { 463, 207, 49, 49 };
 		//App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
 
+
+		// Github
+		// { 650, 117 , 45, 49 }, { 699, 117 , 45, 49 }, { 748, 113 , 45, 53 }
+		SDL_Rect idle5 = { 650, 117 , 45, 49 };
+		SDL_Rect hovered5 = { 699, 117 , 45, 49 };
+		SDL_Rect clicked5 = { 748, 113 , 45, 53 };
+		App->gui->CreateButton(&menuButtons, BUTTON, 420, 200 + 80, idle5, hovered5, clicked5, gui_tex, OPEN_CREDITS);
+
 		App->gui->CreateLabel(&menuLabels, LABEL, 245, 195, font, "Start", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 230, 225, font, "Continue", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 234, 255, font, "Settings", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 238, 285, font, "Credits", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 252, 315, font, "Exit", App->gui->beige);
 
-		App->gui->CreateLabel(&menuLabels, LABEL, 130, 100, font2, "Cursed Heaven", { 0,0,0,255 });
+		//App->gui->CreateLabel(&menuLabels, LABEL, 130, 100, font2, "Cursed Heaven", { 0,0,0,255 });
 
 		App->gui->CreateLabel(&menuLabels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&menuLabels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);

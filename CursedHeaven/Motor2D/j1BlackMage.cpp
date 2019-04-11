@@ -94,9 +94,10 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		if (!attacking && !active_Q) {
+		if (!active_Q) {
 			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
-			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+			if(!attacking)
+				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
 
@@ -242,13 +243,32 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			Draw(r, true);
 	}
 	else {
-		if (facingRight) {
-			Draw(r, false, 0, attackBlittingY);
+		if (facingRight || animation == &attack_up || animation == &attack_down) {
+			if (animation == &attack_down) Draw(r, false, -4);
+			else Draw(r);
 		}
 		else {
-			Draw(r, true, attackBlittingX, attackBlittingY);
+			if (animation == &attack_lateral) Draw(r, true, -4);
+			else if (animation == &attack_diagonal_up) Draw(r, true, -6);
+			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}
+
+	/*else {
+		if (facingRight || animation == &attack_up || animation == &attack_down) {
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6);
+			else if (animation == &attack_up) Draw(r, false, 0, -2);
+			else if (animation == &attack_down) Draw(r, false, -4, -4);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6);
+			else Draw(r, false, 0, attackBlittingY);
+		}
+		else {
+			if (animation == &attack_lateral_left) Draw(r, false, -6, -6);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2);
+			else Draw(r, true, attackBlittingX, attackBlittingY);
+		}
+	}*/
 
 	hud->Update(dt);
 

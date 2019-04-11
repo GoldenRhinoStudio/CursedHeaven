@@ -184,7 +184,7 @@ void Dialogue::Draw() {
 
 		itemOptions = next(itemOptions);
 		for (itemOptions; itemOptions != currentNode->dialogueOptions.end(); itemOptions++)
-			App->render->Blit((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x, (*itemOptions)->optionTextPosition.y, &(*itemOptions)->optionText_Rect);
+			App->render->Blit((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x / scale, (*itemOptions)->optionTextPosition.y / scale - 7, &(*itemOptions)->optionText_Rect);
 
 		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, 1);
 		currentNode->optionActive = true;

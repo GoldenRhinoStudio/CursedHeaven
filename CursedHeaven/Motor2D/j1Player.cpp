@@ -218,8 +218,8 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 
 		if (animation == go_up) animation = idle_up;
 		else if (animation == go_down) animation = idle_down;
-		else if (animation == diagonal_up) animation = idle_diagonal_up;
 		else if (animation == diagonal_down) animation = idle_diagonal_down;
+		else if (animation == diagonal_up) animation = idle_diagonal_up;
 		else if (animation == lateral) animation = idle_lateral;
 
 		direction = DIRECTION::NONE_;

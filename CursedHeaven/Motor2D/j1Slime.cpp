@@ -44,7 +44,7 @@ bool j1Slime::Start()
 
 bool j1Slime::Update(float dt, bool do_logic)
 {
-	BROFILER_CATEGORY("HarpyUpdate", Profiler::Color::LightSeaGreen)
+	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (dead == false) {
 		collider->SetPos(position.x, position.y);

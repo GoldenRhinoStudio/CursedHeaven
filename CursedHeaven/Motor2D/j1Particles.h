@@ -42,7 +42,7 @@ public:
 	void AddParticle(const Particle& particle, int x, int y, COLLIDER_TYPE collider_type = COLLIDER_NONE, Uint32 delay = 0);
 private:
 	Particle* active[MAX_ACTIVE_PARTICLES];
-	SDL_Texture * part_tex = nullptr;
+	SDL_Texture* part_tex = nullptr;
 public:
 	uint width, height;
 

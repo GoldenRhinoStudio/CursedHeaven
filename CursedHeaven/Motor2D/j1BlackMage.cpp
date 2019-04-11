@@ -245,30 +245,16 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
 			if (animation == &attack_down) Draw(r, false, -4);
+			else if (animation == &attack_diagonal_down) Draw(r, false, 0, 2);
 			else Draw(r);
 		}
 		else {
 			if (animation == &attack_lateral) Draw(r, true, -4);
 			else if (animation == &attack_diagonal_up) Draw(r, true, -6);
+			else if (animation == &attack_diagonal_down) Draw(r, true, -6, 2);
 			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}
-
-	/*else {
-		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral_right) Draw(r, false, 0, -6);
-			else if (animation == &attack_up) Draw(r, false, 0, -2);
-			else if (animation == &attack_down) Draw(r, false, -4, -4);
-			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6);
-			else Draw(r, false, 0, attackBlittingY);
-		}
-		else {
-			if (animation == &attack_lateral_left) Draw(r, false, -6, -6);
-			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6);
-			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2);
-			else Draw(r, true, attackBlittingX, attackBlittingY);
-		}
-	}*/
 
 	hud->Update(dt);
 

@@ -125,7 +125,7 @@
 	  </idleD_up>
 	  
       <idleD_down loop="true" speed="7.0f">
-        <animation x="0" y="111" w="21" h="35"/>
+        <animation x="0" y="36" w="22" h="38"/>
 	  </idleD_down>
 	  
       <idleLateral loop="true" speed="7.0f">

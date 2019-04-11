@@ -97,6 +97,8 @@ bool j1ChooseCharacter::PreUpdate()
 
 bool j1ChooseCharacter::Update(float dt) {
 
+	BROFILER_CATEGORY("ChooseCharacterUpdate", Profiler::Color::LightSeaGreen)
+
 	App->gui->UpdateButtonsState(&chooseCharacterButtons, App->gui->buttonsScale);
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {

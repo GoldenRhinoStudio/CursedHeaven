@@ -139,7 +139,7 @@ void Dialogue::Draw() {
 
 	temp_tex = App->font->Print(App->dialog->temp_text_print.c_str(), temp.w, temp.h, 500, App->gui->beige, App->dialog->dialogFont);
 
-	if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h)
+	if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h / scale >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h / scale)
 	currentNode->dialogStop = true;
 
 	//RENDERING GENERIC DIALOG CHART
@@ -203,8 +203,8 @@ void Dialogue::Input() {
 	if (currentNode->dialogueOptions.size() > 1 && currentNode->dialogEnded == true) {
 		for (; itemOptions != currentNode->dialogueOptions.end(); itemOptions = next(itemOptions)) {
 
-			if ((*itemOptions)->optionTextPosition.x && (x < (*itemOptions)->optionTextPosition.x < App->win->width)/*+ (*itemOptions)->optionText_Rect.w*/ &&
-				(*itemOptions)->optionTextPosition.y && (y < (*itemOptions)->optionTextPosition.y < App->win->height)/*+ (*itemOptions)->optionText_Rect.h*/)
+			if ((*itemOptions)->optionTextPosition.x && (x < (*itemOptions)->optionTextPosition.x < App->win->width) + (*itemOptions)->optionText_Rect.w &&
+				(*itemOptions)->optionTextPosition.y && (y < (*itemOptions)->optionTextPosition.y < App->win->height)+ (*itemOptions)->optionText_Rect.h)
 			{
 				if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
 
@@ -382,7 +382,7 @@ bool treeDialogNode::setUp_rects(int lineMargin) {
 	else
 		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, 0, App->gui->beige, App->dialog->dialogFont);
 
-	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w*scale;
+	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w * scale;
 	dialogChart = App->dialog->GeneraldialogChart;
 
 	uint screen_Width;

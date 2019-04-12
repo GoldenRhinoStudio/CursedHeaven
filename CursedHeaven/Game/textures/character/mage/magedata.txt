@@ -46,3 +46,7 @@ Horizontal  25  25  25
 
 
 Idle  Loop1  Loop2
+
+Death anim 
+Verical  28
+Horizonta  25   34

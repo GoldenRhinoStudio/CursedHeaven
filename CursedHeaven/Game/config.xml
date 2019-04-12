@@ -32,7 +32,7 @@
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="20" leftColliderSpawnPos="-16"/>
 	  <combat basicDamage="200" fireDamage="100" lifePoints="100" resitance="50"/>
-	  <cooldowns Q="10000" E="15000" increasedSpeed="5000" explosion="570"/>
+	  <cooldowns Q="10000" E="15000" increasedSpeed="5000" explosion="600"/>
 	</blackMage>
 	
 	<dragoonKnight>

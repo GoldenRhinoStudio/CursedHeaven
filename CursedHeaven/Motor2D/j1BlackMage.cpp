@@ -8,6 +8,7 @@
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
 #include "j1Window.h"
+#include "j1Scene1.h"
 #include "j1Audio.h"
 #include "j1Hud.h"
 #include "j1Map.h"
@@ -38,6 +39,8 @@ j1BlackMage::j1BlackMage(int x, int y, ENTITY_TYPES type) : j1Player(x, y, ENTIT
 	attack_lateral.LoadAnimation("attackLateral", "mage");
 	attack_down.LoadAnimation("attackDown", "mage");
 	attack_up.LoadAnimation("attackUp", "mage");
+
+	death.LoadAnimation("death", "mage");
 }
 
 j1BlackMage::~j1BlackMage() {}
@@ -108,7 +111,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
 				// Attack control
-				if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+				if (App->input->GetMouseButtonDown(1) == KEY_DOWN && !App->gamePaused)
 				{
 					attacking = true;
 					iPoint mouse_pos;
@@ -123,9 +126,9 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				}
 			}		
 
-			// Ability control
+			// Fire explosion
 			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
+				&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 				iPoint explosionPos;
 				iPoint p = { (int)position.x, (int)position.y };
@@ -148,8 +151,9 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				cooldown_Explosion.Start();
 				lastTime_Explosion = cooldown_Explosion.Read();
 				App->particles->explosion.anim.Reset();
-				App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ATTACK);
+				App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ABILITY);
 				active_Q = true;
+				firstTimeQ = false;
 			}
 
 			if (active_Q && cooldown_Explosion.Read() >= lastTime_Explosion + duration_Explosion) {
@@ -159,13 +163,15 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				active_Q = false;
 			}
 
+			// Extra speed
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-				&& active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E) {
+				&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 				movementSpeed = movementSpeed * 2;
 				cooldown_Speed.Start();
 				lastTime_Speed = cooldown_Speed.Read();
 				active_E = true;
+				firstTimeE = false;
 			}
 
 			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + duration_Speed) {

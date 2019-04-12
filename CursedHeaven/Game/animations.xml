@@ -57,10 +57,10 @@
         <animation x="58" y="185" w="29" h="46"/>
       </down>		
 	   
-	  <godmode loop="true" speed="7.5f">	
-        <animation x="85" y="34" w="29" h="27"/>
-        <animation x="118" y="34" w="28" h="27"/>
-	  </godmode>
+	  <death loop="true" speed="4.0f">	
+        <animation x="0" y="489" w="30" h="48"/>
+        <animation x="30" y="489" w="39" h="48"/>
+      </death>
       
       <attackLateral_right loop="false" speed="15.0f">
         <animation x="0" y="340" w="33" h="53"/>
@@ -171,10 +171,10 @@
         <animation x="42" y="74" w="21" h="37"/>
       </down>		
 	   
-	  <godmode loop="true" speed="7.5f">	
-        <animation x="85" y="34" w="29" h="27"/>
-        <animation x="118" y="34" w="28" h="27"/>
-	  </godmode>
+	  <death loop="true" speed="4.0f">	
+        <animation x="0" y="364" w="25" h="28"/>
+        <animation x="25" y="364" w="34" h="28"/>
+      </death>
       
       <attackLateral loop="false" speed="15.0f">
         <animation x="0" y="254" w="25" h="36"/>

@@ -70,7 +70,8 @@ public:
 
 	bool path_created = false;
 	bool dead = false;
-	bool receivedDamage = false;
+	bool receivedBasicDamage = false;
+	bool receivedAbilityDamage = false;
 
 };
 #endif // __j1SLIME_H__

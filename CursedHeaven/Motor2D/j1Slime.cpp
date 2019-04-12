@@ -8,6 +8,7 @@
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
 #include "j1Player.h"
+#include "j1BlackMage.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
 
@@ -55,9 +56,10 @@ bool j1Slime::Update(float dt, bool do_logic)
 {
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
-	if (dead == false) {
+	if (!dead) {
 		collider->SetPos(position.x, position.y);
-		if (!App->entity->currentPlayer->attacking) receivedDamage = false;
+		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
+		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
 
 		if (do_logic || path_created) {
 			if ((App->entity->currentPlayer->position.x - position.x) <= DETECTION_RANGE && (App->entity->currentPlayer->position.x - position.x) >= -DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
@@ -119,9 +121,16 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
-		if (!receivedDamage) {
+		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
 			lifePoints -= App->entity->currentPlayer->basicDamage;
-			receivedDamage = true;
+			receivedBasicDamage = true;
+		}
+
+		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
+			if(App->entity->mage != nullptr)
+				lifePoints -= App->entity->mage->fireDamage;
+
+			receivedAbilityDamage = true;
 		}
 
 		if (lifePoints <= 0) {

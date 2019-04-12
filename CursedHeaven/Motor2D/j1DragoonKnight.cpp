@@ -39,6 +39,8 @@ j1DragoonKnight::j1DragoonKnight(int x, int y, ENTITY_TYPES type) : j1Player(x, 
 	attack_lateral_left.LoadAnimation("attackLateral_left", "knight");
 	attack_down.LoadAnimation("attackDown", "knight");
 	attack_up.LoadAnimation("attackUp", "knight");
+
+	death.LoadAnimation("death", "knight");
 }
 
 j1DragoonKnight::~j1DragoonKnight() {}
@@ -108,7 +110,9 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
 				// Attack control
-				if (App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN) {
+				if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)
+					&& !App->gamePaused) {
+
 					attacking = true;
 					attackCollider->type = COLLIDER_ATTACK;
 
@@ -130,11 +134,14 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 				// Ability control
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-					&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
+					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					lastPosition = position;
 
-					if (direction != NONE_) active_Q = true;
+					if (direction != NONE_) {
+						active_Q = true;
+						firstTimeQ = false;
+					}
 				}
 
 				if (active_Q) {
@@ -172,12 +179,13 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-				&& active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E) {
+				&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 				basicDamage += rageDamage;
 				cooldown_Rage.Start();
 				lastTime_Rage =	cooldown_Rage.Read();
 				active_E = true;
+				firstTimeE = false;
 			}
 
 			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + duration_Rage) {

@@ -109,9 +109,11 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 		// Always destroy particles that collide
 		if (active[i] != nullptr && active[i]->collider == c1)
 		{
-			delete active[i];
-			active[i] = nullptr;
-			break;
+			if (active[i]->anim.Finished()) {
+				delete active[i];
+				active[i] = nullptr;
+				break;
+			}
 		}
 	}
 }

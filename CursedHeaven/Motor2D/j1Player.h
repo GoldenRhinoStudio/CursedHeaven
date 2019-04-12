@@ -108,7 +108,9 @@ public:
 	bool GodMode = false;
 	bool attacking = false;
 	bool active_Q = false;
+	bool firstTimeQ = true;
 	bool active_E = false;
+	bool firstTimeE = true;
 };
 
 #endif // __j1PLAYER_H__

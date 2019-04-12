@@ -102,14 +102,6 @@ bool j1SceneMenu::Start()
 		SDL_Rect clicked3 = { 463, 207, 49, 49 };
 		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
 
-
-		// Github
-		// { 650, 117 , 45, 49 }, { 699, 117 , 45, 49 }, { 748, 113 , 45, 53 }
-		SDL_Rect idlegh = { 631, 145 , 36, 40 };
-		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
-		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 100, 80, idlegh, hoveredgh, clickedgh, gui_tex2, OPEN_CREDITS);
-
 		/*App->gui->CreateLabel(&menuLabels, LABEL, 240, 195, font, "Start", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 225, 225, font, "Continue", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 229, 255, font, "Settings", App->gui->beige);

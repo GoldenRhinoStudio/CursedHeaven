@@ -79,6 +79,12 @@ bool j1SceneCredits::Start()
 
 		App->gui->CreateLabel(&creditsLabels, LABEL, 90, 165, font, "Webpage", App->gui->beige);
 
+		// Github
+		// { 650, 117 , 45, 49 }, { 699, 117 , 45, 49 }, { 748, 113 , 45, 53 }
+		SDL_Rect idlegh = { 631, 145 , 36, 40 };
+		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
+		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
+		App->gui->CreateButton(&creditsButtons, BUTTON, 100, 80, idlegh, hoveredgh, clickedgh, gui_tex2, OPEN_CREDITS);
 		startup_time.Start();
 	}						 
 

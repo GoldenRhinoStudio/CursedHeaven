@@ -42,8 +42,11 @@ public:
 public:
 	std::list<j1Button*> creditsButtons;
 	std::list<j1Label*> creditsLabels;
+	std::list<j1Box*> creditsBoxes;
 
 	j1Timer	startup_time;
+
+	j1Box* credits_window = nullptr;
 
 private:
 

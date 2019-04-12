@@ -66,11 +66,13 @@ bool j1SceneCredits::Start()
 
 		App->gui->CreateButton(&creditsButtons, BUTTON, 79, 160, idle, hovered, clicked, gui_tex, LINK);
 
+		credits_window = App->gui->CreateBox(&creditsBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 621, 377, 785, 568 }, gui_tex2);
+
 		SDL_Rect idle2 = { 28, 201, 49, 49 };
 		SDL_Rect hovered2 = { 77, 201, 49, 49 };
 		SDL_Rect clicked2 = { 126, 201, 49, 49 };
 
-		App->gui->CreateButton(&creditsButtons, BUTTON, 229, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
+		//App->gui->CreateButton(&creditsButtons, BUTTON, 229, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
 
 		SDL_Rect idle6 = { 382, 508, 37, 36 };
 		SDL_Rect hovered6 = { 343, 508, 37, 36 };
@@ -84,7 +86,8 @@ bool j1SceneCredits::Start()
 		SDL_Rect idlegh = { 631, 145 , 36, 40 };
 		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
 		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
-		App->gui->CreateButton(&creditsButtons, BUTTON, 100, 80, idlegh, hoveredgh, clickedgh, gui_tex2, OPEN_CREDITS);
+		App->gui->CreateButton(&creditsButtons, BUTTON, 100, 80, idlegh, hoveredgh, clickedgh, gui_tex2, LINK);
+
 		startup_time.Start();
 	}						 
 
@@ -163,6 +166,16 @@ bool j1SceneCredits::Update(float dt)
 		(*item)->Draw();
 	}
 
+	// Blitting the boxes
+	for (std::list<j1Box*>::iterator item = creditsBoxes.begin(); item != creditsBoxes.end(); ++item) {
+		(*item)->Draw(App->gui->buttonsScale);
+	}
+
+	//if (settings_window != nullptr && settings_window->visible == true)
+	//{
+	//	settings_window->Draw(3.0f);
+	//}
+
 	App->render->Blit(license, 42, 37, NULL, SDL_FLIP_NONE, 1.0f, 0.25);
 
 	return true;
@@ -193,6 +206,11 @@ bool j1SceneCredits::CleanUp()
 
 	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end(); ++item) {
 		creditsLabels.remove(*item);
+	}
+
+	for (std::list<j1Box*>::iterator item = creditsBoxes.begin(); item != creditsBoxes.end(); ++item) {
+		(*item)->CleanUp();
+		creditsBoxes.remove(*item);
 	}
 
 	return true;

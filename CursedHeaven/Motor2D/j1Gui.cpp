@@ -33,6 +33,7 @@ bool j1Gui::Awake(pugi::xml_node& config)
 	atlas_file_name = config.child("atlas").attribute("file").as_string("");
 	buttonsScale = config.child("scale").attribute("buttonsScale").as_float();
 	settingsWindowScale = config.child("scale").attribute("boxScale").as_float();
+	creditsWindowScale = config.child("scale").attribute("creditsboxScale").as_float();
 	logoScale = config.child("scale").attribute("logoScale").as_float();
 
 	// Copying box spawn position

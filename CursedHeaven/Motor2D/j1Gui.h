@@ -88,6 +88,7 @@ public:
 public:
 	float buttonsScale;
 	float settingsWindowScale;
+	float creditsWindowScale;
 	float logoScale;
 	
 	// Positions

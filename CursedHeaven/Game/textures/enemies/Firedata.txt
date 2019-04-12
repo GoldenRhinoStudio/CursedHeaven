@@ -1,0 +1,4 @@
+Frames go   1 2 3 2 1
+
+Vertical  25
+Horizontal   14  15  17

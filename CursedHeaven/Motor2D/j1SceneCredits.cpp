@@ -54,6 +54,7 @@ bool j1SceneCredits::Start()
 
 		// Loading textures
 		gui_tex = App->tex->Load("gui/atlas.png");
+		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		license = App->tex->Load("gui/credits.png");
 
 		// Loading fonts
@@ -71,10 +72,10 @@ bool j1SceneCredits::Start()
 
 		App->gui->CreateButton(&creditsButtons, BUTTON, 229, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
 
-		SDL_Rect idle3 = { 312, 292, 49, 49 };
-		SDL_Rect hovered3 = { 361, 292, 49, 49 };
-		SDL_Rect clicked3 = { 310, 400, 49, 49 };
-		App->gui->CreateButton(&creditsButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, GO_TO_MENU);
+		SDL_Rect idle6 = { 382, 508, 37, 36 };
+		SDL_Rect hovered6 = { 343, 508, 37, 36 };
+		SDL_Rect clicked6 = { 421, 511, 37, 33 };
+		App->gui->CreateButton(&creditsButtons, BUTTON, 3, 3, idle6, hovered6, clicked6, gui_tex2, GO_TO_MENU);
 
 		App->gui->CreateLabel(&creditsLabels, LABEL, 90, 165, font, "Webpage", App->gui->beige);
 

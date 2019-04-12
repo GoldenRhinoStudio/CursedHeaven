@@ -59,54 +59,56 @@ bool j1SceneMenu::Start()
 		
 		// Loading fonts
 		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
-		font2 = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 16);
+		//font2 = App->font->Load("fonts/Pixeled.ttf", 16);
 
 
 
 		// Creating UI		
-		settings_window = App->gui->CreateBox(&menuBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 537, 0, 663, 712 }, gui_tex);
+		settings_window = App->gui->CreateBox(&menuBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 621, 377, 785, 568 }, gui_tex2);
 		settings_window->visible = false;
 
 		// We will use it to check if there is a save file
 		pugi::xml_document save_game;
 		pugi::xml_parse_result result = save_game.load_file("save_game.xml");
 
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
 
-		SDL_Rect idle = { 650, 260, 191, 50 }; //{0, 143, 190, 49};
-		SDL_Rect hovered = {1070, 260, 191, 50 };//{ 0, 45, 190, 49 };
-		SDL_Rect clicked = { 860, 264, 191, 45 };//{ 0, 94, 190, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 125, 40 + 60, idle, hovered, clicked, gui_tex, PLAY_GAME);
-		App->gui->CreateButton(&menuButtons, BUTTON, 125, 100 + 60, idle, hovered, clicked, gui_tex, SETTINGS);
-		App->gui->CreateButton(&menuButtons, BUTTON, 125, 130 + 60, idle, hovered, clicked, gui_tex, OPEN_CREDITS);
-		App->gui->CreateButton(&menuButtons, BUTTON, 125, 160 + 60, idle, hovered, clicked, gui_tex, CLOSE_GAME);
+		SDL_Rect idle = { 631, 12, 151, 38 }; //{0, 143, 190, 49};
+		SDL_Rect hovered = {963, 12, 151, 38 };//{ 0, 45, 190, 49 };
+		SDL_Rect clicked = { 797, 14, 151, 37 };//{ 0, 94, 190, 49 };
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 50 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, OPEN_CREDITS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 150 + 70, idle, hovered, clicked, gui_tex2, CLOSE_GAME);
 
-		SDL_Rect idle4 = { 0, 188, 191, 49 };
+		SDL_Rect idle4 = { 631, 50, 150, 37 };
 
 		if (result == NULL)
-			App->gui->CreateButton(&menuButtons, BUTTON, 125, 70 + 60, idle4, idle4, idle4, gui_tex2, NO_FUNCTION);
+			App->gui->CreateButton(&menuButtons, BUTTON, 130, 75 + 70, idle4, idle4, idle4, gui_tex2, NO_FUNCTION);
 		else
-			App->gui->CreateButton(&menuButtons, BUTTON, 125, 70 + 60, idle, hovered, clicked, gui_tex2, LOAD_GAME);
+			App->gui->CreateButton(&menuButtons, BUTTON, 130, 75 + 70, idle, hovered, clicked, gui_tex2, LOAD_GAME);
 
-		SDL_Rect idle2 = { 28, 201, 49, 49 };
-		SDL_Rect hovered2 = { 77, 201, 49, 49 };
-		SDL_Rect clicked2 = { 126, 201, 49, 49 };
+		SDL_Rect idle2 = { 382, 508, 37, 36 };
+		SDL_Rect hovered2 = { 343, 508, 37, 36 };
+		SDL_Rect clicked2 = { 421, 511, 37, 33 };
 		//App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
-		//App->gui->CreateButton(&menuButtons, BUTTON, 64, 135, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&menuButtons, BUTTON, 7, 7, idle2, hovered2, clicked2, gui_tex2, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+
+		// 342 506 49 47
 
 		SDL_Rect idle3 = { 463, 109, 49, 49 };
 		SDL_Rect hovered3 = { 463, 158, 49, 49 };
 		SDL_Rect clicked3 = { 463, 207, 49, 49 };
-		//App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
 
 
 		// Github
 		// { 650, 117 , 45, 49 }, { 699, 117 , 45, 49 }, { 748, 113 , 45, 53 }
-		/*SDL_Rect idle5 = { 650, 117 , 45, 49 };
-		SDL_Rect hovered5 = { 699, 117 , 45, 49 };
-		SDL_Rect clicked5 = { 748, 113 , 45, 53 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 420, 200 + 80, idle5, hovered5, clicked5, gui_tex, OPEN_CREDITS);*/
+		SDL_Rect idlegh = { 631, 145 , 36, 40 };
+		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
+		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
+		App->gui->CreateButton(&menuButtons, BUTTON, 100, 80, idlegh, hoveredgh, clickedgh, gui_tex2, OPEN_CREDITS);
 
 		/*App->gui->CreateLabel(&menuLabels, LABEL, 240, 195, font, "Start", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 225, 225, font, "Continue", App->gui->beige);
@@ -114,7 +116,7 @@ bool j1SceneMenu::Start()
 		App->gui->CreateLabel(&menuLabels, LABEL, 233, 285, font, "Credits", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 247, 315, font, "Exit", App->gui->beige);*/
 
-		//App->gui->CreateLabel(&menuLabels, LABEL, 130, 100, font2, "Cursed Heaven", { 0,0,0,255 });
+	/*	App->gui->CreateLabel(&menuLabels, LABEL, 130, 100, font, "Cursed Heaven", { 0,0,0,255 });*/
 
 		App->gui->CreateLabel(&menuLabels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&menuLabels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
@@ -125,7 +127,7 @@ bool j1SceneMenu::Start()
 		startup_time.Start();
 		times++;
 
-		//  650 260  191 50
+		//  6 7 612 442
 	}
 
 	return true;
@@ -250,22 +252,23 @@ bool j1SceneMenu::Update(float dt)
 	// Blitting background and animations
 	App->map->Draw();
 
-	SDL_Rect p = player.GetCurrentFrame(dt);
-	App->render->Blit(player_tex, 40, 105, &p, SDL_FLIP_NONE);
-	SDL_Rect h = harpy.GetCurrentFrame(dt);
-	App->render->Blit(harpy_tex, 205, 35, &h, SDL_FLIP_HORIZONTAL);
+	//SDL_Rect p = player.GetCurrentFrame(dt);
+	//App->render->Blit(player_tex, 40, 105, &p, SDL_FLIP_NONE);
+	//SDL_Rect h = harpy.GetCurrentFrame(dt);
+	//App->render->Blit(harpy_tex, 205, 35, &h, SDL_FLIP_HORIZONTAL);
 
 	// Blitting the buttons and labels of the menu
-	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) 
-	{
-		if ((*item)->parent != nullptr) continue;
-		(*item)->Draw(App->gui->buttonsScale);
-	}
-	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item)
-	{
-		if ((*item)->parent != nullptr) continue;
-		if ((*item)->visible) (*item)->Draw();
-	}
+
+		for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item)
+		{
+			if ((*item)->parent != nullptr) continue;
+			(*item)->Draw(App->gui->buttonsScale);
+		}
+		for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item)
+		{
+			if ((*item)->parent != nullptr) continue;
+			if ((*item)->visible) (*item)->Draw();
+		}
 
 	// Blitting the logo
 	SDL_Rect logo = { 166, 139, 711, 533 };
@@ -283,8 +286,11 @@ bool j1SceneMenu::Update(float dt)
 	}
 
 	// Blitting settings window
-	if (settings_window != nullptr && settings_window->visible == true)
+	if (settings_window != nullptr && settings_window->visible == true) 
+	{
 		settings_window->Draw(App->gui->settingsWindowScale);
+	}
+		
 
 	// Blitting the buttons, labels and boxes (sliders) of the window
 	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {

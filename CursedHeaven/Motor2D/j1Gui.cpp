@@ -96,7 +96,6 @@ bool j1Gui::PostUpdate()
 
 	//-------------------------
 
-
 	for (std::list<j1Button*>::iterator item = App->scene1->scene1Buttons.begin(); item != App->scene1->scene1Buttons.end(); ++item)
 	{
 		if ((*item)->parent == nullptr) continue;

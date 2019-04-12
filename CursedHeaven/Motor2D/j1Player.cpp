@@ -356,7 +356,7 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 
 bool j1Player::CheckWalkability(iPoint pos) const {
 
-	bool ret = false;
+	/*bool ret = false;
 
 	if ((pos.x >= 0 && pos.x < App->map->data.width)
 		&& (pos.y >= 0 && pos.y < App->map->data.height))
@@ -375,5 +375,6 @@ bool j1Player::CheckWalkability(iPoint pos) const {
 		}		
 	}
 
-	return ret;
+	return ret;*/
+	return true;
 }

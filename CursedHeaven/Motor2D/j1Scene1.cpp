@@ -151,6 +151,7 @@ bool j1Scene1::Update(float dt)
 
 	time_scene1 = startup_time.ReadSec();
 
+
 	int x, y;
 	App->input->GetMousePosition(x, y);
 
@@ -158,6 +159,7 @@ bool j1Scene1::Update(float dt)
 		if (App->input->GetMouseButtonDown(KEY_DOWN))
 			if (startDialogue == true)
 				App->dialog->StartDialogEvent(App->dialog->dialogA);
+			
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT

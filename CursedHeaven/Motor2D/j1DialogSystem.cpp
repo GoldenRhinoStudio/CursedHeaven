@@ -122,8 +122,7 @@ void Dialogue::Draw() {
 	Character temp_Character = App->dialog->getCharacter(currentNode->GetCharacterID());
 
 	temp.x = temp.y = 0;
-	int scale = 4;
-
+	float scale = 3;
 	//WRITTING MACHINE LOOK
 	App->dialog->counter++;
 	if (App->dialog->counter % 2 == 0 && currentNode->dialogStop == false) {
@@ -139,8 +138,8 @@ void Dialogue::Draw() {
 
 	temp_tex = App->font->Print(App->dialog->temp_text_print.c_str(), temp.w, temp.h, 500, App->gui->beige, App->dialog->dialogFont);
 
-	/*if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h)
-	currentNode->dialogStop = true;*/
+	if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h / scale >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h / scale)
+	currentNode->dialogStop = true;
 
 	//RENDERING GENERIC DIALOG CHART
 	SDL_RenderCopyEx(App->render->renderer, Dialog_Textures, &App->dialog->GeneraldialogChart, &currentNode->dialogChart, 0, NULL, SDL_FLIP_NONE);
@@ -148,21 +147,21 @@ void Dialogue::Draw() {
 	//RENDERING END DIALOG PART OF THE CHART
 	if (currentNode->getPosition_Spawn() == T_LEFT || currentNode->getPosition_Spawn() == D_LEFT) {
 
-		App->render->Blit(Dialog_Textures, currentNode->dialogChart.w / scale, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_NONE, 1.0f, scale);
-		App->render->Blit(Dialog_Textures, currentNode->dialogChart.x, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale), &temp_Character.characterRect, SDL_FLIP_NONE, 1.0f, scale);
+		App->render->Blit2(Dialog_Textures, currentNode->dialogChart.w / scale, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_NONE, 0, scale);
+		App->render->Blit2(Dialog_Textures, currentNode->dialogChart.x, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale), &temp_Character.characterRect, SDL_FLIP_NONE, 0, scale);
 	}
 	else if (currentNode->getPosition_Spawn() == T_RIGHT || currentNode->getPosition_Spawn() == D_RIGHT) {
 
-		App->render->Blit(Dialog_Textures, currentNode->dialogChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, scale);
-		App->render->Blit(Dialog_Textures, (currentNode->dialogChart.x + currentNode->dialogChart.w) / scale - temp_Character.characterRect.w, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale)
-			, &temp_Character.characterRect, SDL_FLIP_HORIZONTAL, 1.0f, scale);
+		App->render->Blit2(Dialog_Textures, currentNode->dialogChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
+		App->render->Blit2(Dialog_Textures, (currentNode->dialogChart.x + currentNode->dialogChart.w) / scale - temp_Character.characterRect.w, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale)
+			, &temp_Character.characterRect, SDL_FLIP_HORIZONTAL, 0, scale);
 	}
 
 	//SETTING UP THE DIALOG ZONE TO SPAWN
 	if (currentNode->getPosition_Spawn() == T_RIGHT)
-		App->dialog->SpawnDialog_Section.x = currentNode->dialogChart.x;
+		App->dialog->SpawnDialog_Section.x = currentNode->dialogChart.x + 200;
 	else if (currentNode->getPosition_Spawn() == T_LEFT)
-		App->dialog->SpawnDialog_Section.x = temp_Character.characterRect.w * scale + 15;
+		App->dialog->SpawnDialog_Section.x = temp_Character.characterRect.w + 130;
 
 	App->dialog->SpawnDialog_Section.y = currentNode->dialogChart.y + App->dialog->YMargin;
 	App->dialog->SpawnDialog_Section.h = 43 * scale;
@@ -170,9 +169,8 @@ void Dialogue::Draw() {
 
 	//RENDER TEXT
 	App->render->SetViewPort(App->dialog->SpawnDialog_Section);
-	App->render->Blit(temp_tex, 0, currentNode->TextScrollPositon, &temp);
+	App->render->Blit2(temp_tex, 0, currentNode->TextScrollPositon, &temp, SDL_FLIP_NONE, 0);
 	App->render->ResetViewPort();
-
 
 	//RENDER OPTIONS TEXT
 	std::list<DialogueOptions*>::iterator itemOptions = currentNode->dialogueOptions.begin();
@@ -180,13 +178,13 @@ void Dialogue::Draw() {
 
 		//RENDER OPTIONS CHART
 		SDL_RenderCopyEx(App->render->renderer, Dialog_Textures, &App->dialog->GeneraldialogChart, &currentNode->optionsChart, 0, NULL, SDL_FLIP_NONE);
-		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, scale);
+		App->render->Blit2(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
 
 		itemOptions = next(itemOptions);
 		for (itemOptions; itemOptions != currentNode->dialogueOptions.end(); itemOptions++)
-			App->render->Blit((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x, (*itemOptions)->optionTextPosition.y, &(*itemOptions)->optionText_Rect);
+			App->render->Blit2((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x, (*itemOptions)->optionTextPosition.y  - 7, &(*itemOptions)->optionText_Rect, SDL_FLIP_NONE, 0);
 
-		App->render->Blit(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 1.0f, scale);
+		App->render->Blit2(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
 		currentNode->optionActive = true;
 	}
 
@@ -203,12 +201,12 @@ void Dialogue::Input() {
 	if (currentNode->dialogueOptions.size() > 1 && currentNode->dialogEnded == true) {
 		for (; itemOptions != currentNode->dialogueOptions.end(); itemOptions = next(itemOptions)) {
 
-			if ((*itemOptions)->optionTextPosition.x && (x < (*itemOptions)->optionTextPosition.x < App->win->width)/*+ (*itemOptions)->optionText_Rect.w*/ &&
-				(*itemOptions)->optionTextPosition.y && (y < (*itemOptions)->optionTextPosition.y < App->win->height)/*+ (*itemOptions)->optionText_Rect.h*/)
+			if ((*itemOptions)->optionTextPosition.x && (x < (*itemOptions)->optionTextPosition.x < App->win->width) + (*itemOptions)->optionText_Rect.w &&
+				(*itemOptions)->optionTextPosition.y && (y < (*itemOptions)->optionTextPosition.y < App->win->height)+ (*itemOptions)->optionText_Rect.h)
 			{
-				//if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
+				if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
 
-				if (App->input->GetMouseButtonDown(KEY_DOWN)) {
+					if (App->input->GetMouseButtonDown(KEY_DOWN)) {
 
 					if ((*itemOptions)->startAgain == true)
 						checkOptions = (*itemOptions);
@@ -221,8 +219,8 @@ void Dialogue::Input() {
 					currentNode->dialogActive = true;
 
 					break;
+					}
 				}
-				//}
 			}
 		}
 	}
@@ -231,11 +229,11 @@ void Dialogue::Input() {
 
 		App->scene1->startDialogue = false;
 
-		/*if (currentNode->dialogStop) {
+		if (currentNode->dialogStop) {
 		currentNode->TextScrollPositon -= App->dialog->SpawnDialog_Section.h;
 		currentNode->dialogStop = true;
 
-		}*/
+		}
 		if (currentNode->dialogEnded&&currentNode != nullptr&&currentNode->optionActive == false) {
 
 			if (checkOptions != nullptr&&checkOptions->startAgain == true)
@@ -332,7 +330,7 @@ bool j1DialogSystem::SetUpCharts(pugi::xml_document& Dialog) {
 
 	Settings_Node = Dialog.child("DialogSettup").child("SettupOptions");
 	DialogSpeed = Settings_Node.attribute("speed").as_float();
-	scale = Settings_Node.attribute("scale").as_int();
+	scale = Settings_Node.attribute("scale").as_float();
 	YMargin = Settings_Node.attribute("YMargin").as_int();
 	Dialog_Textures = App->tex->Load(Settings_Node.child("DialogueChartTexture").attribute("path").as_string());
 	Settings_Node = Settings_Node.child("DialogChart").child("MainPart");
@@ -367,7 +365,7 @@ Dialogue* j1DialogSystem::createDialog(pugi::xml_document& Dialog, int ID) {
 
 bool treeDialogNode::setUp_rects(int lineMargin) {
 
-	int scale = App->dialog->scale;
+	float scale = App->dialog->scale;
 
 	SDL_Rect Temp_Rect;
 	SDL_Texture* temp_tex;
@@ -382,7 +380,7 @@ bool treeDialogNode::setUp_rects(int lineMargin) {
 	else
 		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, 0, App->gui->beige, App->dialog->dialogFont);
 
-	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w*scale;
+	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w * scale;
 	dialogChart = App->dialog->GeneraldialogChart;
 
 	uint screen_Width;

@@ -107,11 +107,10 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		// ---------------------------------------------------------------------------------------------------------------------
 		// COMBAT
 		// ---------------------------------------------------------------------------------------------------------------------
-		if (GodMode == false && dead == false && changing_room == false) {
+		if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
 			if (!attacking) {
 				// Attack control
-				if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)
-					&& !App->gamePaused) {
+				if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
 
 					attacking = true;
 					attackCollider->type = COLLIDER_ATTACK;

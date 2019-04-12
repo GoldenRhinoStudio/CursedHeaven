@@ -114,15 +114,67 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		// ---------------------------------------------------------------------------------------------------------------------
 		// COMBAT
 		// ---------------------------------------------------------------------------------------------------------------------
-		if (GodMode == false && dead == false && changing_room == false) {
+		if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
 			if (!attacking) {
 				// Attack control
-				if (App->input->GetMouseButtonDown(1) == KEY_DOWN && !App->gamePaused)
+				if (App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)
 				{
 					attacking = true;
-					iPoint mouse_pos;
-					App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-					Shot(mouse_pos.x, mouse_pos.y, dt);
+
+					if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
+						iPoint mouse_pos;
+						App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+						Shot(mouse_pos.x, mouse_pos.y, dt);
+					}
+
+					if (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN) {
+						fPoint speed_particle;
+						fPoint particle_speed = { 250,250 };
+
+						if (animation == &idle_lateral || animation == &lateral) {
+							if (facingRight) {
+								speed_particle.x = particle_speed.x * cos(0 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(0 * DEGTORAD);
+							}
+							else {
+								speed_particle.x = particle_speed.x * cos(180 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(180 * DEGTORAD);
+							}
+						}
+						if (animation == &idle_diagonal_up || animation == &diagonal_up){
+							if (facingRight) {
+								speed_particle.x = particle_speed.x * cos(-45 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(-45 * DEGTORAD);
+							}
+							else {
+								speed_particle.x = particle_speed.x * cos(-135 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(-135 * DEGTORAD);
+							}
+						}
+						if (animation == &idle_diagonal_down || animation == &diagonal_down) {
+							if (facingRight) {
+								speed_particle.x = particle_speed.x * cos(-315 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(-315 * DEGTORAD);
+							}
+							else {
+
+								speed_particle.x = particle_speed.x * cos(-225 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(-225 * DEGTORAD);
+							}
+						}
+						if (animation == &idle_up || animation == &up) {
+							speed_particle.x = particle_speed.x * cos(-90 * DEGTORAD);
+							speed_particle.y = particle_speed.y * sin(-90 * DEGTORAD);
+						}
+						if (animation == &idle_down || animation == &down) {
+							speed_particle.x = particle_speed.x * cos(-270 * DEGTORAD);
+							speed_particle.y = particle_speed.y * sin(-270 * DEGTORAD);
+						}
+
+						App->particles->shot_right.speed = speed_particle;
+
+						App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+					}
 
 					if (direction == NONE_) {
 						if (animation == &idle_lateral) animation = &i_attack_lateral;
@@ -435,11 +487,10 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 	double angle = -(atan2(edge.y, edge.x));
 
 	fPoint speed_particle;
+	fPoint p_speed = { 250,250 };
 
-	App->particles->particle_speed = { 250,250 };
-
-	speed_particle.x = App->particles->particle_speed.x * cos(angle);
-	speed_particle.y = App->particles->particle_speed.y * sin(angle);
+	speed_particle.x = p_speed.x * cos(angle);
+	speed_particle.y = p_speed.y * sin(angle);
 	App->particles->shot_right.speed = speed_particle;
 
 	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);

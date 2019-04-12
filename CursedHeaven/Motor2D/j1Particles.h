@@ -50,7 +50,6 @@ public:
 	// Black Mage particles
 	Particle shot_right;
 	Particle explosion;
-	fPoint particle_speed;
 
 };
 #endif // __j1PARTICLES_H__ 

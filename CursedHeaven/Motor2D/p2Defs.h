@@ -10,6 +10,8 @@
 #endif
 #define NULL  0
 
+#define DEGTORAD 0.0174532925
+
 // Deletes a buffer
 #define RELEASE( x ) \
     {                        \

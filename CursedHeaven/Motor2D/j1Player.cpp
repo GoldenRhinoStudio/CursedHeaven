@@ -7,11 +7,11 @@
 #include "j1Player.h"
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
+#include "j1BlackMage.h"
 #include "j1Box.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Window.h"
-#include "j1Particles.h"
 
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER) {}
 
@@ -209,12 +209,13 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 	else if (direction == DOWN_) animation = go_down;
 	else if (direction == UP_) animation = go_up;
 
-	if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
+	if ((App->entity->mage != nullptr && App->entity->mage->active_Q)
+		|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE)
 		&& (App->input->gamepadLAxisY < 6400 && App->input->gamepadLAxisY > -6400
-		&& App->input->gamepadLAxisX < 6400 && App->input->gamepadLAxisX > -6400)){
+		&& App->input->gamepadLAxisX < 6400 && App->input->gamepadLAxisX > -6400))){
 
 		if (animation == go_up) animation = idle_up;
 		else if (animation == go_down) animation = idle_down;
@@ -224,36 +225,6 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 
 		direction = DIRECTION::NONE_;
 	}
-}
-
-void j1Player::Shot(float x, float y) {
-
-	//to change where the particle is born (in this case: from the centre of the player aprox (+8,+8))
-	fPoint margin;
-	margin.x = 8;
-	margin.y = 8;
-
-	fPoint edge;
-	edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
-	edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
-
-	//float distance = sqrt(((edge.x) ^ 2) + ((edge.y) ^ 2));
-	//edge.NormalizeVector();
-
-	//if the map is very big and its not enough accurate, we should use long double for the var angle
-	double angle = -(atan2(edge.y, edge.x));
-
-	//float angle = 1 / cos(edge.x / distance);
-
-	fPoint speed_particle;
-
-	App->particles->particle_speed = { 200,200 };
-
-	speed_particle.x = App->particles->particle_speed.x * cos(angle);
-	speed_particle.y = App->particles->particle_speed.y * sin(angle);
-	App->particles->shot_right.speed = speed_particle;
-
-	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, COLLIDER_SHOT);
 }
 
 void j1Player::ChangeRoom(int x, int y) {

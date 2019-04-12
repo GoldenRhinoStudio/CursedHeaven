@@ -108,7 +108,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		if (GodMode == false && dead == false && changing_room == false) {
 			if (!attacking) {
 				// Attack control
-				if ((App->input->GetKey(SDL_SCANCODE_P) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
+				if (App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN) {
 					attacking = true;
 					attackCollider->type = COLLIDER_ATTACK;
 
@@ -180,7 +180,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				active_E = true;
 			}
 
-			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + cooldownTime_Rage) {
+			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + duration_Rage) {
 
 				basicDamage -= rageDamage;
 				cooldown_E.Start();
@@ -409,7 +409,7 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	lifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
-	cooldownTime_Rage = cd.attribute("rage").as_uint();
+	duration_Rage = cd.attribute("rage").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");

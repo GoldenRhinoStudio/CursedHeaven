@@ -57,9 +57,9 @@ public:
 
 	j1Timer cooldown_E;
 	uint cooldownTime_E = 0;
-	j1Timer cooldown_Rage;
-	uint cooldownTime_Rage = 0;
 	uint lastTime_E = 0;
+	j1Timer cooldown_Rage;
+	uint duration_Rage = 0;
 	uint lastTime_Rage = 0;
 	uint rageDamage = 0;
 

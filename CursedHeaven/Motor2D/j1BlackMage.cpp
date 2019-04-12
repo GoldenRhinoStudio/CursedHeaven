@@ -7,6 +7,7 @@
 #include "j1BlackMage.h"
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
+#include "j1Window.h"
 #include "j1Audio.h"
 #include "j1Hud.h"
 #include "j1Map.h"
@@ -96,10 +97,10 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	{
 		if (!active_Q) {
 			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
-			if(!attacking)
-				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
-				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 		}
+		if (!attacking)
+			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+				&diagonal_up, &diagonal_down, &lateral, &up, &down);
 
 		// ---------------------------------------------------------------------------------------------------------------------
 		// COMBAT
@@ -112,7 +113,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					attacking = true;
 					iPoint mouse_pos;
 					App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-					Shot(mouse_pos.x, mouse_pos.y);
+					Shot(mouse_pos.x, mouse_pos.y, dt);
 
 					if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
 					else if (animation == &up || animation == &idle_up) animation = &attack_up;
@@ -127,16 +128,31 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				&& active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) {
 
 				iPoint explosionPos;
-				/*if (animation == &lateral || animation == &idle_lateral) explosionPos = {};
-				else if (animation == &up || animation == &idle_up) explosionPos = {};
-				else if (animation == &down || animation == &idle_down)	explosionPos = {};
-				else if (animation == &diagonal_up || animation == &idle_diagonal_up) explosionPos = {};
-				else if (animation == &diagonal_down || animation == &idle_diagonal_down) explosionPos = {};*/
+				iPoint p = { (int)position.x, (int)position.y };
 
-				App->particles->AddParticle(App->particles->explosion, position.x, position.y, COLLIDER_SHOT);
+				if (animation == &lateral || animation == &idle_lateral) {
+					if (facingRight) explosionPos = { p.x + 20, p.y - 15 };
+					else explosionPos = { p.x - 45, p.y - 15 };
+				}
+				else if (animation == &up || animation == &idle_up) explosionPos = { p.x - 13, p.y - 30 };
+				else if (animation == &down || animation == &idle_down)	explosionPos = { p.x - 13, p.y + 4};
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+					if (facingRight) explosionPos = { p.x + 15, p.y - 26 };
+					else explosionPos = { p.x - 40, p.y - 26 };
+				}
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+					if (facingRight) explosionPos = { p.x + 15, p.y - 5 };
+					else explosionPos = { p.x - 40, p.y - 5 };
+				}
+
+				cooldown_Explosion.Start();
+				lastTime_Explosion = cooldown_Explosion.Read();
+				App->particles->explosion.anim.Reset();
+				App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ATTACK);
+				active_Q = true;
 			}
 
-			if (active_Q) {
+			if (active_Q && cooldown_Explosion.Read() >= lastTime_Explosion + duration_Explosion) {
 
 				cooldown_Q.Start();
 				lastTime_Q = cooldown_Q.Read();
@@ -152,7 +168,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				active_E = true;
 			}
 
-			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + cooldownTime_Speed) {
+			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + duration_Speed) {
 
 				movementSpeed = movementSpeed / 2;
 				cooldown_E.Start();
@@ -366,12 +382,38 @@ void j1BlackMage::LoadPlayerProperties() {
 	fireDamage = combat.attribute("fireDamage").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
+	duration_Explosion = cd.attribute("explosion").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
-	cooldownTime_Speed = cd.attribute("increasedSpeed").as_uint();
+	duration_Speed = cd.attribute("increasedSpeed").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
 
 	movementSpeed = speed.child("movement").attribute("horizontal").as_float();
 	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
+}
+
+void j1BlackMage::Shot(float x, float y, float dt) {
+
+	// To change where the particle is born
+	fPoint margin;
+	margin.x = 8;
+	margin.y = 8;
+
+	fPoint edge;
+	edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
+	edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
+	
+	// If the map is very big and its not enough accurate, we should use long double for the var angle
+	double angle = -(atan2(edge.y, edge.x));
+
+	fPoint speed_particle;
+
+	App->particles->particle_speed = { 200,200 };
+
+	speed_particle.x = App->particles->particle_speed.x * cos(angle);
+	speed_particle.y = App->particles->particle_speed.y * sin(angle);
+	App->particles->shot_right.speed = speed_particle;
+
+	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
 }

@@ -206,7 +206,11 @@
         <animation x="50" y="327" w="25" h="37"/>
       </attackDown>
 	  
-      <explosion loop="false" speed="15.0f">
+      <shot loop="true" speed="12.5f">
+        <animation x="0" y="52" w="6" h="6"/>
+      </shot>	
+	  
+      <explosion loop="true" speed="12.5f">
         <animation x="0" y="0" w="45" h="52"/>
         <animation x="45" y="0" w="45" h="52"/>
         <animation x="90" y="0" w="45" h="52"/>

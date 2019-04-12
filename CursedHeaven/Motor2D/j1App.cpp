@@ -64,11 +64,11 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(choose_character);
 	AddModule(scene1);
 	AddModule(entity);
+	AddModule(particles);
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);
 	AddModule(fade);
-	AddModule(particles);
 	AddModule(dialog);
 	
 	// render last to swap buffer

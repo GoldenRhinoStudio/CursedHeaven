@@ -117,7 +117,7 @@ bool j1Slime::CleanUp()
 
 void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
-	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_SHOT) {
+	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
 		if (!receivedDamage) {
 			lifePoints -= App->entity->currentPlayer->basicDamage;

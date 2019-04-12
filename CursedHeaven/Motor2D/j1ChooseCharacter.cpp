@@ -23,6 +23,7 @@
 #include "j1Box.h"
 #include "j1ChooseCharacter.h"
 #include "j1DialogSystem.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -195,6 +196,7 @@ void j1ChooseCharacter::ChangeScene() {
 
 	App->scene1->active = true;
 	App->scene1->Start();
+	App->particles->Start();
 	App->dialog->active = true;
 	App->dialog->Start();
 	

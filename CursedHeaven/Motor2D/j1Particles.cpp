@@ -15,14 +15,6 @@ j1Particles::j1Particles()
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
-
-	shot_right.anim.PushBack({ 238, 109, 6, 6 });
-	shot_right.anim.loop = true;
-	shot_right.life = 2500;
-	shot_right.speed = particle_speed;
-
-	explosion.anim.LoadAnimation("explosion", "mage");
-	explosion.life = 1000;
 }
 
 j1Particles::~j1Particles()
@@ -33,6 +25,15 @@ bool j1Particles::Start()
 {
 	LOG("Loading particles");
 	part_tex = App->tex->Load("textures/character/particles.png");
+
+	// Mage basic attack
+	shot_right.anim.LoadAnimation("shot", "mage");
+	shot_right.life = 2500;
+
+	// Mage Q
+	explosion.anim.LoadAnimation("explosion", "mage");
+	explosion.life = 570;
+
 	return true;
 }
 
@@ -67,10 +68,8 @@ bool j1Particles::Update(float dt)
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			//App->render->Blit(part_tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
-			//SDL_Rect r_anim = p->anim.GetCurrentFrame(dt);
-			SDL_Rect r_anim = { 238, 109, 6, 6 };
-			App->render->Blit(part_tex, p->position.x, p->position.y, &r_anim);
+			App->render->Blit(part_tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
+
 			if (p->fx_played == false)
 			{
 				p->fx_played = true;
@@ -82,7 +81,7 @@ bool j1Particles::Update(float dt)
 	return true;
 }
 
-void j1Particles::AddParticle(const Particle& particle, int x, int y, COLLIDER_TYPE collider_type, Uint32 delay)
+void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, COLLIDER_TYPE collider_type, Uint32 delay)
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
@@ -92,8 +91,10 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, COLLIDER_T
 			p->born = SDL_GetTicks() + delay;
 			p->position.x = x;
 			p->position.y = y;
-			if (collider_type != COLLIDER_NONE)
-				//p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame((float)App->GetDt()), collider_type, this);
+			if (collider_type != COLLIDER_NONE) {
+				p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
+			}
+			Collider* test = p->collider;
 			active[i] = p;
 			break;
 		}

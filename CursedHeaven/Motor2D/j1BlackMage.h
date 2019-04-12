@@ -36,6 +36,9 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+private:
+	void Shot(float x, float y, float dt);
+
 public:
 
 	// Animations of the mage
@@ -46,6 +49,9 @@ public:
 	Animation attack_lateral;
 
 	// Abilities
+	j1Timer cooldown_Explosion;
+	uint duration_Explosion = 0;
+	uint lastTime_Explosion = 0;
 	j1Timer cooldown_Q;
 	uint cooldownTime_Q = 0;
 	uint lastTime_Q = 0;
@@ -53,9 +59,9 @@ public:
 
 	j1Timer cooldown_E;
 	uint cooldownTime_E = 0;
-	j1Timer cooldown_Speed;
-	uint cooldownTime_Speed = 0;
 	uint lastTime_E = 0;
+	j1Timer cooldown_Speed;
+	uint duration_Speed = 0;
 	uint lastTime_Speed = 0;
 
 	// Sounds

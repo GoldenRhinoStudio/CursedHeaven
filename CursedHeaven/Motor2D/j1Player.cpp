@@ -223,6 +223,24 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 		else if (animation == diagonal_up) animation = idle_diagonal_up;
 		else if (animation == lateral) animation = idle_lateral;
 
+		// Direction controls	
+		if (App->input->gamepadRAxisX > 6400) {
+			animation = idle_lateral;
+			facingRight = true;
+		}
+		if (App->input->gamepadRAxisX < -6400) {
+			animation = idle_lateral;
+			facingRight = false;
+		}
+		if (App->input->gamepadRAxisY < -6400) {
+			if ((App->input->gamepadRAxisX < -6400)	|| (App->input->gamepadRAxisX > 6400)) animation = idle_diagonal_up;
+			else animation = idle_up;
+		}
+		if (App->input->gamepadRAxisY > 6400) {
+			if ((App->input->gamepadRAxisX < -6400) || (App->input->gamepadRAxisX > 6400)) animation = idle_diagonal_down;
+			else animation = idle_down;			
+		}
+
 		direction = DIRECTION::NONE_;
 	}
 }

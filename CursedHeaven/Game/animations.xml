@@ -1,6 +1,8 @@
 <animations>
-
+  <!-- Animations of the player -->
+  
   <player>    
+	<!-- Knight -->
 	<knight>	
       <idleD_up loop="true" speed="7.0f">
         <animation x="0" y="92" w="45" h="46"/>
@@ -119,6 +121,7 @@
       </attackDown>			   
 	</knight>
 	
+	<!-- Mage -->
 	<mage>
       <idleD_up loop="true" speed="7.0f">
         <animation x="0" y="111" w="21" h="35"/>
@@ -204,7 +207,27 @@
         <animation x="0" y="327" w="25" h="37"/>
         <animation x="25" y="327" w="25" h="37"/>
         <animation x="50" y="327" w="25" h="37"/>
-      </attackDown>
+      </attackDown>	  
+      
+      <i_attackLateral loop="false" speed="5.0f">
+        <animation x="0" y="254" w="25" h="36"/>
+      </i_attackLateral>
+	  
+	  <i_attackD_up loop="false" speed="5.0f">
+        <animation x="0" y="219" w="27" h="35"/>
+	  </i_attackD_up>	  
+	  
+      <i_attackD_down loop="false" speed="5.0f">
+        <animation x="0" y="183" w="28" h="36"/>
+	  </i_attackD_down>		 
+	  
+      <i_attackUp loop="false" speed="5.0f">
+        <animation x="0" y="290" w="25" h="37"/>
+      </i_attackUp>
+	  
+      <i_attackDown loop="false" speed="5.0f">
+        <animation x="0" y="327" w="25" h="37"/>
+      </i_attackDown>
 	  
       <shot loop="true" speed="12.5f">
         <animation x="0" y="52" w="6" h="6"/>
@@ -223,6 +246,7 @@
 	</mage>
 </player>
   
+  <!-- Animations of the enemies -->
   <enemies>    
 	<slime>
       <idleD_up loop="true" speed="7.0f">

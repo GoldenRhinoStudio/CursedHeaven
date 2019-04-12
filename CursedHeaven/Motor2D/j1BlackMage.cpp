@@ -34,6 +34,12 @@ j1BlackMage::j1BlackMage(int x, int y, ENTITY_TYPES type) : j1Player(x, y, ENTIT
 	diagonal_down.LoadAnimation("diagonalDown", "mage");
 	godmode.LoadAnimation("godmode", "mage");
 
+	i_attack_up.LoadAnimation("i_attackUp", "mage");
+	i_attack_down.LoadAnimation("i_attackDown", "mage");
+	i_attack_diagonal_up.LoadAnimation("i_attackD_up", "mage");
+	i_attack_diagonal_down.LoadAnimation("i_attackD_down", "mage");
+	i_attack_lateral.LoadAnimation("i_attackLateral", "mage");
+
 	attack_diagonal_up.LoadAnimation("attackD_up", "mage");
 	attack_diagonal_down.LoadAnimation("attackD_down", "mage");
 	attack_lateral.LoadAnimation("attackLateral", "mage");
@@ -118,11 +124,20 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 					Shot(mouse_pos.x, mouse_pos.y, dt);
 
-					if (animation == &lateral || animation == &idle_lateral) animation = &attack_lateral;
-					else if (animation == &up || animation == &idle_up) animation = &attack_up;
-					else if (animation == &down || animation == &idle_down)	animation = &attack_down;
-					else if (animation == &diagonal_up || animation == &idle_diagonal_up) animation = &attack_diagonal_up;
-					else if (animation == &diagonal_down || animation == &idle_diagonal_down) animation = &attack_diagonal_down;
+					if (direction == NONE_) {
+						if (animation == &idle_lateral) animation = &i_attack_lateral;
+						else if (animation == &idle_up) animation = &i_attack_up;
+						else if (animation == &idle_down) animation = &i_attack_down;
+						else if (animation == &idle_diagonal_up) animation = &i_attack_diagonal_up;
+						else if (animation == &idle_diagonal_down) animation = &i_attack_diagonal_down;
+					}
+					else {
+						if (animation == &lateral) animation = &attack_lateral;
+						else if (animation == &up) animation = &attack_up;
+						else if (animation == &down) animation = &attack_down;
+						else if (animation == &diagonal_up) animation = &attack_diagonal_up;
+						else if (animation == &diagonal_down) animation = &attack_diagonal_down;
+					}
 				}
 			}		
 
@@ -185,9 +200,15 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 		// Attack management
 		if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() 
-			|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() || dead == true) {
+			|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() 
+			|| i_attack_lateral.Finished() || i_attack_up.Finished() || i_attack_down.Finished()
+			|| i_attack_diagonal_up.Finished() || i_attack_diagonal_down.Finished() || dead == true) {
 
-			attackCollider->type = COLLIDER_NONE;
+			i_attack_lateral.Reset();
+			i_attack_up.Reset();
+			i_attack_down.Reset();
+			i_attack_diagonal_up.Reset();
+			i_attack_diagonal_down.Reset();
 
 			attack_lateral.Reset();
 			attack_up.Reset();
@@ -195,11 +216,11 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			attack_diagonal_up.Reset();
 			attack_diagonal_down.Reset();
 
-			if (animation == &attack_lateral) animation = &idle_lateral;
-			else if (animation == &attack_up) animation = &idle_up;
-			else if (animation == &attack_down) animation = &idle_down;
-			else if (animation == &attack_diagonal_up) animation = &idle_diagonal_up;
-			else if (animation == &attack_diagonal_down) animation = &idle_diagonal_down;
+			if (animation == &attack_lateral || animation == &i_attack_lateral) animation = &idle_lateral;
+			else if (animation == &attack_up || animation == &i_attack_up) animation = &idle_up;
+			else if (animation == &attack_down || animation == &i_attack_down) animation = &idle_down;
+			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) animation = &idle_diagonal_up;
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) animation = &idle_diagonal_down;
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
@@ -265,15 +286,15 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			Draw(r, true);
 	}
 	else {
-		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_down) Draw(r, false, -4);
-			else if (animation == &attack_diagonal_down) Draw(r, false, 0, 2);
+		if (facingRight || animation == &attack_up || animation == &attack_down || animation == &i_attack_up || animation == &i_attack_down) {
+			if (animation == &attack_down || animation == &i_attack_down) Draw(r, false, -4);
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, false, 0, 2);
 			else Draw(r);
 		}
 		else {
-			if (animation == &attack_lateral) Draw(r, true, -4);
-			else if (animation == &attack_diagonal_up) Draw(r, true, -6);
-			else if (animation == &attack_diagonal_down) Draw(r, true, -6, 2);
+			if (animation == &attack_lateral || animation == &i_attack_lateral) Draw(r, true, -4);
+			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) Draw(r, true, -6);
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, true, -6, 2);
 			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}
@@ -415,7 +436,7 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 
 	fPoint speed_particle;
 
-	App->particles->particle_speed = { 200,200 };
+	App->particles->particle_speed = { 250,250 };
 
 	speed_particle.x = App->particles->particle_speed.x * cos(angle);
 	speed_particle.y = App->particles->particle_speed.y * sin(angle);

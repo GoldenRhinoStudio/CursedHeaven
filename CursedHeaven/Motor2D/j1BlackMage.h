@@ -48,6 +48,12 @@ public:
 	Animation attack_diagonal_down;
 	Animation attack_lateral;
 
+	Animation i_attack_up;
+	Animation i_attack_down;
+	Animation i_attack_diagonal_up;
+	Animation i_attack_diagonal_down;
+	Animation i_attack_lateral;
+
 	// Abilities
 	j1Timer cooldown_Explosion;
 	uint duration_Explosion = 0;

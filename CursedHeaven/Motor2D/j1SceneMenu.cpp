@@ -16,6 +16,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1ChooseCharacter.h"
+#include "j1SceneSettings.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -78,7 +79,6 @@ bool j1SceneMenu::Start()
 		SDL_Rect hovered = {963, 12, 151, 38 };//{ 0, 45, 190, 49 };
 		SDL_Rect clicked = { 797, 14, 151, 37 };//{ 0, 94, 190, 49 };
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 50 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
-		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, OPEN_CREDITS);
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 150 + 70, idle, hovered, clicked, gui_tex2, CLOSE_GAME);
 
@@ -95,12 +95,14 @@ bool j1SceneMenu::Start()
 		//App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
 		App->gui->CreateButton(&menuButtons, BUTTON, 7, 7, idle2, hovered2, clicked2, gui_tex2, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
 
+
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
 		// 342 506 49 47
 
-		SDL_Rect idle3 = { 463, 109, 49, 49 };
+		/*SDL_Rect idle3 = { 463, 109, 49, 49 };
 		SDL_Rect hovered3 = { 463, 158, 49, 49 };
 		SDL_Rect clicked3 = { 463, 207, 49, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);*/
 
 		/*App->gui->CreateLabel(&menuLabels, LABEL, 240, 195, font, "Start", App->gui->beige);
 		App->gui->CreateLabel(&menuLabels, LABEL, 225, 225, font, "Continue", App->gui->beige);
@@ -177,8 +179,11 @@ bool j1SceneMenu::Update(float dt)
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;
 					}
-					else
-						if (((*item)->bfunction == SETTINGS && !settings_window->visible)
+					else if ((*item)->bfunction == SETTINGS) {
+						openSettings = true;
+						App->fade->FadeToBlack();
+					}
+						/*if (((*item)->bfunction == SETTINGS && !settings_window->visible)
 							|| ((*item)->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
 							settings_window->visible = !settings_window->visible;
 							settings_window->position = App->gui->settingsPosition;
@@ -206,8 +211,8 @@ bool j1SceneMenu::Update(float dt)
 									(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
 									(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
 								}
-							}
-						}
+							}*/
+						
 						else if ((*item)->bfunction == OPEN_CREDITS) {
 							openCredits = true;
 							App->fade->FadeToBlack();
@@ -233,6 +238,8 @@ bool j1SceneMenu::Update(float dt)
 		}
 		else if (openCredits)
 			ChangeScene(CREDITS);
+		else if (openSettings)
+			ChangeScene(SCENE_SETTINGS);
 		else if (loadGame)
 			App->LoadGame("save_game.xml");
 	}
@@ -388,6 +395,10 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 		if (objectiveScene == SCENE::CREDITS) {
 			App->credits->active = true;
 			App->credits->Start();
+		}
+		else if (objectiveScene == SCENE::SCENE_SETTINGS) {
+			App->settings->active = true;
+			App->settings->Start();
 		}
 		else {
 			if (objectiveScene == SCENE::CHOOSE) {

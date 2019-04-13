@@ -125,9 +125,6 @@ bool j1SceneCredits::Update(float dt)
 					backToMenu = true;
 					App->fade->FadeToBlack();
 				}
-				else if ((*item)->bfunction == CLOSE_GAME) {
-					continueGame = false;
-				}
 				else if ((*item)->bfunction == LINK && App->fade->IsFading() == 0) {
 					ShellExecuteA(NULL, "open", "https://github.com/GoldenRhinoStudio/CursedHeaven", NULL, NULL, SW_SHOWNORMAL);
 				}

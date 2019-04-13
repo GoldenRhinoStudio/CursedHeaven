@@ -12,6 +12,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1SceneSettings.h"
 
 #include "Brofiler/Brofiler.h"
 

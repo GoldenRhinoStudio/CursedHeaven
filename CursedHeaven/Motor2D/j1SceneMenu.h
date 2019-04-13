@@ -19,7 +19,8 @@ enum SCENE {
 	CHOOSE,
 	SCENE1,
 	SCENE2,
-	CREDITS
+	CREDITS,
+	SCENE_SETTINGS
 };
 
 class j1SceneMenu : public j1Module
@@ -68,6 +69,7 @@ public:
 	bool openCredits = false;
 	bool player_created = false;
 	bool chooseChar = false;
+	bool openSettings = false;
 
 private:
 

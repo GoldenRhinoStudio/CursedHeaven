@@ -54,15 +54,9 @@ bool j1SceneMenu::Start()
 		// Loading textures
 		gui_tex = App->tex->Load("gui/atlas2.png");
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
-		//logo_tex = App->tex->Load("gui/logo.png");
-		//player_tex = App->tex->Load("textures/character/character.png");
-		//harpy_tex = App->tex->Load("textures/enemies/harpy/harpy.png");
 		
 		// Loading fonts
 		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
-		//font2 = App->font->Load("fonts/Pixeled.ttf", 16);
-
-
 
 		// Creating UI		
 		settings_window = App->gui->CreateBox(&menuBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 621, 377, 785, 568 }, gui_tex2);
@@ -95,22 +89,7 @@ bool j1SceneMenu::Start()
 		//App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
 		App->gui->CreateButton(&menuButtons, BUTTON, 7, 7, idle2, hovered2, clicked2, gui_tex2, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
 
-
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
-		// 342 506 49 47
-
-		/*SDL_Rect idle3 = { 463, 109, 49, 49 };
-		SDL_Rect hovered3 = { 463, 158, 49, 49 };
-		SDL_Rect clicked3 = { 463, 207, 49, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);*/
-
-		/*App->gui->CreateLabel(&menuLabels, LABEL, 240, 195, font, "Start", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 225, 225, font, "Continue", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 229, 255, font, "Settings", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 233, 285, font, "Credits", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 247, 315, font, "Exit", App->gui->beige);*/
-
-	/*	App->gui->CreateLabel(&menuLabels, LABEL, 130, 100, font, "Cursed Heaven", { 0,0,0,255 });*/
 
 		App->gui->CreateLabel(&menuLabels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&menuLabels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
@@ -182,41 +161,11 @@ bool j1SceneMenu::Update(float dt)
 					else if ((*item)->bfunction == SETTINGS) {
 						openSettings = true;
 						App->fade->FadeToBlack();
+					}						
+					else if ((*item)->bfunction == OPEN_CREDITS) {
+						openCredits = true;
+						App->fade->FadeToBlack();
 					}
-						/*if (((*item)->bfunction == SETTINGS && !settings_window->visible)
-							|| ((*item)->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
-							settings_window->visible = !settings_window->visible;
-							settings_window->position = App->gui->settingsPosition;
-
-							for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
-								if ((*item)->parent == settings_window) {
-									(*item)->visible = !(*item)->visible;
-									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-								}
-							}
-							for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
-								if ((*item)->parent == settings_window) {
-									(*item)->visible = !(*item)->visible;
-									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-								}
-							}
-							for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
-								if ((*item)->parent == settings_window) {
-									(*item)->visible = !(*item)->visible;
-									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-
-									(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
-									(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
-								}
-							}*/
-						
-						else if ((*item)->bfunction == OPEN_CREDITS) {
-							openCredits = true;
-							App->fade->FadeToBlack();
-						}
 				}
 					break;
 
@@ -251,27 +200,22 @@ bool j1SceneMenu::Update(float dt)
 	// Blitting background and animations
 	App->map->Draw();
 
-	//SDL_Rect p = player.GetCurrentFrame(dt);
-	//App->render->Blit(player_tex, 40, 105, &p, SDL_FLIP_NONE);
-	//SDL_Rect h = harpy.GetCurrentFrame(dt);
-	//App->render->Blit(harpy_tex, 205, 35, &h, SDL_FLIP_HORIZONTAL);
+	// Blitting the logo
+	SDL_Rect logo = { 854, 92, 801, 166 };
+	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, 1.0f, App->gui->logoScale);
 
 	// Blitting the buttons and labels of the menu
 
-		for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item)
-		{
-			if ((*item)->parent != nullptr) continue;
-			(*item)->Draw(App->gui->buttonsScale);
-		}
-		for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item)
-		{
-			if ((*item)->parent != nullptr) continue;
-			if ((*item)->visible) (*item)->Draw();
-		}
-
-	// Blitting the logo
-	SDL_Rect logo = { 166, 139, 711, 533 };
-	App->render->Blit(logo_tex, 54, 0, &logo, SDL_FLIP_NONE, 1.0f, App->gui->logoScale);
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item)
+	{
+		if ((*item)->parent != nullptr) continue;
+		(*item)->Draw(App->gui->buttonsScale);
+	}
+	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item)
+	{
+		if ((*item)->parent != nullptr) continue;
+		if ((*item)->visible) (*item)->Draw();
+	}
 	
 	//Blitting the debug
 	if (App->gui->debug) {
@@ -387,6 +331,7 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 	{
 		this->active = false;
 		loadGame = false;
+		openSettings = false;
 		openCredits = false;
 		chooseChar = false;
 

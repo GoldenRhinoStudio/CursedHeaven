@@ -45,9 +45,9 @@ public:
 	void ChangeScene();
 
 public:
-	std::list<j1Label*> setsLabels;
-	std::list<j1Box*> setsBoxes;
-	std::list<j1Button*> setsButtons;
+	std::list<j1Label*> settingLabels;
+	std::list<j1Box*> settingBoxes;
+	std::list<j1Button*> settingButtons;
 
 	j1Timer	startup_time;
 
@@ -55,9 +55,6 @@ public:
 
 	bool continueGame = true;
 	bool backToMenu = false;
-
-	
-
 	uint times = 0;
 
 private:

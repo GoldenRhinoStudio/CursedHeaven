@@ -25,18 +25,18 @@ j1SceneSettings::~j1SceneSettings() {}
 
 bool j1SceneSettings::Awake(pugi::xml_node &)
 {
-	LOG("Loading Credits");
+	LOG("Loading Settings");
 	bool ret = true;
 
 	if (App->menu->active == true)
 		active = false;
 
 	if (active == false)
-		LOG("Scene1 not active.");
+		LOG("Settings not active.");
 
 	if (App->menu->active == false)
 	{
-		LOG("Unable to load the credits.");
+		LOG("Unable to load the settings.");
 		ret = false;
 	}
 
@@ -62,20 +62,20 @@ bool j1SceneSettings::Start()
 		font3 = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
 
 		// Creates the window
-		sets_window = App->gui->CreateBox(&setsBoxes, BOX, 60, 60, { 621, 377, 785, 568 }, gui_tex2);
+		sets_window = App->gui->CreateBox(&settingBoxes, BOX, 60, 60, { 621, 377, 785, 568 }, gui_tex2);
 		sets_window->visible = true;
 
 		// Sliders
-		App->gui->CreateBox(&setsBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&setsBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
+		App->gui->CreateBox(&settingBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
+		App->gui->CreateBox(&settingBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
 
 		// Go Back Button
 		SDL_Rect idle5 = { 382, 508, 37, 36 };
 		SDL_Rect hovered5 = { 343, 508, 37, 36 };
 		SDL_Rect clicked5 = { 421, 511, 37, 33 };
-		App->gui->CreateButton(&setsButtons, BUTTON, 20, 10, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
+		App->gui->CreateButton(&settingButtons, BUTTON, 20, 10, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
 
-		App->gui->CreateLabel(&setsLabels, LABEL, 100, 50, font3, "Settings", App->gui->brown);
+		//App->gui->CreateLabel(&setsLabels, LABEL, 100, 50, font3, "Settings", App->gui->brown);
 
 		startup_time.Start();
 	}
@@ -97,39 +97,33 @@ bool j1SceneSettings::Update(float dt)
 		// USER INTERFACE MANAGEMENT
 		// ---------------------------------------------------------------------------------------------------------------------	
 	
-	App->gui->UpdateSliders(&setsBoxes);
-	App->gui->UpdateButtonsState(&setsButtons);
+	App->gui->UpdateSliders(&settingBoxes);
+	App->gui->UpdateButtonsState(&settingButtons);
 	//App->gui->UpdateWindow(sets_window, &setsButtons, &setsLabels, &setsBoxes);
 
 	// Button actions
-	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item) {
-			switch ((*item)->state)
-			{
-			case IDLE:
-				(*item)->situation = (*item)->idle;
-				break;
+	for (std::list<j1Button*>::iterator item = settingButtons.begin(); item != settingButtons.end(); ++item) {
+		switch ((*item)->state)
+		{
+		case IDLE:
+			(*item)->situation = (*item)->idle;
+			break;
 
-			case HOVERED:
+		case HOVERED:
+			if (startup_time.Read() > 2000)
+			(*item)->situation = (*item)->hovered;
+			break;
 
-				if (startup_time.Read() > 2000 && times > 1 || times == 1)
-					(*item)->situation = (*item)->hovered;
-				break;
+		case RELEASED:
+			(*item)->situation = (*item)->idle;
+			backToMenu = true;
+			App->fade->FadeToBlack();
+			break;
 
-			case RELEASED:
-				if (startup_time.Read() > 2000 && times > 1 || times == 1) {
-					(*item)->situation = (*item)->idle;
-					if ((*item)->bfunction == GO_TO_MENU) {
-						backToMenu = true;
-						App->fade->FadeToBlack();
-					}
-				}
-				break;
-
-			case CLICKED:
-				if (startup_time.Read() > 2000 && times > 1 || times == 1)
-					(*item)->situation = (*item)->clicked;
-				break;
-			}
+		case CLICKED:
+			(*item)->situation = (*item)->clicked;
+			break;
+		}
 		
 	}
 
@@ -147,10 +141,10 @@ bool j1SceneSettings::Update(float dt)
 
 
 	// Blitting the buttons and labels of the menu
-	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = settingButtons.begin(); item != settingButtons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);
 	}
-	for (std::list<j1Label*>::iterator item = setsLabels.begin(); item != setsLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = settingLabels.begin(); item != settingLabels.end(); ++item) {
 		(*item)->Draw();
 	}
 
@@ -160,9 +154,8 @@ bool j1SceneSettings::Update(float dt)
 		sets_window->Draw(App->gui->settingsWindowScale);
 	}
 
-
 	// Blitting the buttons, labels and boxes (sliders) of the window
-	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = settingButtons.begin(); item != settingButtons.end(); ++item) {
 		if ((*item)->parent == nullptr) continue;
 
 		if ((*item)->parent->visible == false)
@@ -172,7 +165,7 @@ bool j1SceneSettings::Update(float dt)
 
 	}
 
-	for (std::list<j1Box*>::iterator item = setsBoxes.begin(); item != setsBoxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = settingBoxes.begin(); item != settingBoxes.end(); ++item) {
 		if ((*item)->parent == nullptr) continue;
 
 		if ((*item)->parent->visible == false)
@@ -181,7 +174,7 @@ bool j1SceneSettings::Update(float dt)
 			(*item)->Draw(App->gui->buttonsScale);
 	}
 
-	for (std::list<j1Label*>::iterator item = setsLabels.begin(); item != setsLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = settingLabels.begin(); item != settingLabels.end(); ++item) {
 		if ((*item)->parent == nullptr) continue;
 
 		if ((*item)->parent->visible == false)
@@ -211,23 +204,24 @@ bool j1SceneSettings::CleanUp()
 {
 	LOG("Freeing all textures");
 	App->tex->UnLoad(gui_tex2);
+	App->tex->UnLoad(gui_tex);
 
 	App->map->CleanUp();
 	App->tex->CleanUp();
 
-	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = settingButtons.begin(); item != settingButtons.end(); ++item) {
 		(*item)->CleanUp();
-		setsButtons.remove(*item);
+		settingButtons.remove(*item);
 	}
 
-	for (std::list<j1Label*>::iterator item = setsLabels.begin(); item != setsLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = settingLabels.begin(); item != settingLabels.end(); ++item) {
 		(*item)->CleanUp();
-		setsLabels.remove(*item);
+		settingLabels.remove(*item);
 	}
 
-	for (std::list<j1Box*>::iterator item = setsBoxes.begin(); item != setsBoxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = settingBoxes.begin(); item != settingBoxes.end(); ++item) {
 		(*item)->CleanUp();
-		setsBoxes.remove(*item);
+		settingBoxes.remove(*item);
 	}
 
 	delete sets_window;

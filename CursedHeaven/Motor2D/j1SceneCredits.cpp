@@ -32,7 +32,7 @@ bool j1SceneCredits::Awake(pugi::xml_node &)
 		active = false;
 
 	if (active == false)
-		LOG("Scene1 not active.");
+		LOG("Credits not active.");
 
 	if (App->menu->active == false)
 	{
@@ -161,11 +161,6 @@ bool j1SceneCredits::Update(float dt)
 	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end(); ++item) {
 		(*item)->Draw();
 	}
-
-	// Blitting the boxes
-	/*for (std::list<j1Box*>::iterator item = creditsBoxes.begin(); item != creditsBoxes.end(); ++item) {
-		(*item)->Draw(App->gui->creditsWindowScale);
-	}*/
 
 	if (credits_window != nullptr && credits_window->visible == true)
 	{

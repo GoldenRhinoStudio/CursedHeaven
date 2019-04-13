@@ -23,6 +23,7 @@
 #include "j1App.h"
 #include "j1Particles.h"
 #include "j1DialogSystem.h"
+#include "j1Entity.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -233,8 +234,13 @@ void j1App::FinishUpdate()
 	else
 		vsync = "off";
 
-	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s",
-		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync);
+	iPoint map_coords = { 0,0 };
+	if (App->entity->currentPlayer != nullptr) {
+		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->position.x, (int)App->entity->currentPlayer->position.y);
+	}
+
+	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
+		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync, map_coords.x, map_coords.y);
 	App->win->SetTitle(title);
 
 	// We use SDL_Delay to make sure you get your capped framerate

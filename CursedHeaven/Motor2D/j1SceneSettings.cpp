@@ -59,10 +59,10 @@ bool j1SceneSettings::Start()
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 
 		// Loading fonts
-		//font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
+		font3 = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
 
 		// Creates the window
-		sets_window = App->gui->CreateBox(&setsBoxes, BOX, 60, 60, { 621, 377, 785, 568 }, gui_tex2, (j1UserInterfaceElement*)sets_window);
+		sets_window = App->gui->CreateBox(&setsBoxes, BOX, 60, 60, { 621, 377, 785, 568 }, gui_tex2);
 		sets_window->visible = true;
 
 		// Sliders
@@ -70,10 +70,12 @@ bool j1SceneSettings::Start()
 		App->gui->CreateBox(&setsBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
 
 		// Go Back Button
-		SDL_Rect idle6 = { 382, 508, 37, 36 };
-		SDL_Rect hovered6 = { 343, 508, 37, 36 };
-		SDL_Rect clicked6 = { 421, 511, 37, 33 };
-		App->gui->CreateButton(&setsButtons, BUTTON, 20, 7, idle6, hovered6, clicked6, gui_tex2, GO_TO_MENU);
+		SDL_Rect idle5 = { 382, 508, 37, 36 };
+		SDL_Rect hovered5 = { 343, 508, 37, 36 };
+		SDL_Rect clicked5 = { 421, 511, 37, 33 };
+		App->gui->CreateButton(&setsButtons, BUTTON, 20, 10, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
+
+		App->gui->CreateLabel(&setsLabels, LABEL, 100, 50, font3, "Settings", App->gui->brown);
 
 		startup_time.Start();
 	}
@@ -94,13 +96,13 @@ bool j1SceneSettings::Update(float dt)
 		// ---------------------------------------------------------------------------------------------------------------------
 		// USER INTERFACE MANAGEMENT
 		// ---------------------------------------------------------------------------------------------------------------------	
-	App->gui->UpdateButtonsState(&setsButtons);
+	
 	App->gui->UpdateSliders(&setsBoxes);
+	App->gui->UpdateButtonsState(&setsButtons);
 	//App->gui->UpdateWindow(sets_window, &setsButtons, &setsLabels, &setsBoxes);
 
 	// Button actions
 	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item) {
-		if ((*item)->visible) {
 			switch ((*item)->state)
 			{
 			case IDLE:
@@ -128,7 +130,7 @@ bool j1SceneSettings::Update(float dt)
 					(*item)->situation = (*item)->clicked;
 				break;
 			}
-		}
+		
 	}
 
 	// Managing scene transitions
@@ -145,15 +147,11 @@ bool j1SceneSettings::Update(float dt)
 
 
 	// Blitting the buttons and labels of the menu
-	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item)
-	{
-		/*if ((*item)->parent != nullptr) continue;*/
+	for (std::list<j1Button*>::iterator item = setsButtons.begin(); item != setsButtons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);
 	}
-	for (std::list<j1Label*>::iterator item = setsLabels.begin(); item != setsLabels.end(); ++item)
-	{
-		if ((*item)->parent != nullptr) continue;
-		if ((*item)->visible) (*item)->Draw();
+	for (std::list<j1Label*>::iterator item = setsLabels.begin(); item != setsLabels.end(); ++item) {
+		(*item)->Draw();
 	}
 
 	// Blitting settings window
@@ -173,6 +171,16 @@ bool j1SceneSettings::Update(float dt)
 			(*item)->Draw(App->gui->buttonsScale);
 
 	}
+
+	for (std::list<j1Box*>::iterator item = setsBoxes.begin(); item != setsBoxes.end(); ++item) {
+		if ((*item)->parent == nullptr) continue;
+
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
+		else
+			(*item)->Draw(App->gui->buttonsScale);
+	}
+
 	for (std::list<j1Label*>::iterator item = setsLabels.begin(); item != setsLabels.end(); ++item) {
 		if ((*item)->parent == nullptr) continue;
 
@@ -184,14 +192,6 @@ bool j1SceneSettings::Update(float dt)
 			else
 				(*item)->Draw(App->gui->buttonsScale);
 		}
-	}
-	for (std::list<j1Box*>::iterator item = setsBoxes.begin(); item != setsBoxes.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else
-			(*item)->Draw(App->gui->buttonsScale);
 	}
 
 	return true;

@@ -2,10 +2,14 @@
 #define __j1SCENESETTINGS_H__
 
 #include "j1Module.h"
+#include "j1Render.h"
 #include "j1Timer.h"
 #include <list>
+#include "p2Point.h"
+#include "p2Animation.h"
 
 struct SDL_Texture;
+struct _TTF_Font;
 class j1Button;
 class j1Label;
 class j1Box;
@@ -41,9 +45,9 @@ public:
 	void ChangeScene();
 
 public:
-	std::list<j1Button*> setsButtons;
 	std::list<j1Label*> setsLabels;
 	std::list<j1Box*> setsBoxes;
+	std::list<j1Button*> setsButtons;
 
 	j1Timer	startup_time;
 
@@ -58,7 +62,7 @@ public:
 
 private:
 
-	//_TTF_Font* font = nullptr;
+	_TTF_Font* font3 = nullptr;
 	SDL_Texture* gui_tex = nullptr;
 	SDL_Texture* gui_tex2 = nullptr;
 

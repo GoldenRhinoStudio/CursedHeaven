@@ -344,19 +344,19 @@ void j1Player::ChangeRoom(int x, int y) {
 		position.x = App->map->MapToWorld(45, 42).x;
 		position.y = App->map->MapToWorld(45, 42).y;
 	}
-	// 37,36 to 37,33
-	if (App->map->WorldToMap((int)x, (int)y).x == 37 && App->map->WorldToMap((int)x, (int)y).y == 36)
+	// 35,36 to 35,33
+	if (App->map->WorldToMap((int)x, (int)y).x == 36 && App->map->WorldToMap((int)x, (int)y).y == 36)
 	{
 		changing_room = true;
-		position.x = App->map->MapToWorld(37, 33).x;
-		position.y = App->map->MapToWorld(37, 33).y;
+		position.x = App->map->MapToWorld(36, 33).x;
+		position.y = App->map->MapToWorld(36, 33).y;
 	}
-	// 37,34 to 37,37
-	if (App->map->WorldToMap((int)x, (int)y).x == 37 && App->map->WorldToMap((int)x, (int)y).y == 34)
+	// 35,34 to 35,37
+	if (App->map->WorldToMap((int)x, (int)y).x == 36 && App->map->WorldToMap((int)x, (int)y).y == 34)
 	{
 		changing_room = true;
-		position.x = App->map->MapToWorld(37, 37).x;
-		position.y = App->map->MapToWorld(37, 37).y;
+		position.x = App->map->MapToWorld(36, 37).x;
+		position.y = App->map->MapToWorld(36, 37).y;
 	}
 	// 69,13 to 69,17
 	if (App->map->WorldToMap((int)x, (int)y).x == 69 && App->map->WorldToMap((int)x, (int)y).y == 13)

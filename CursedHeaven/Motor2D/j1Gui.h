@@ -42,6 +42,7 @@ enum ButtonFunction {
 	CLOSE_SETTINGS,
 	OTHER_LEVEL,
 	LINK,
+	LINK2,
 	BLACKMAGE_BUT,
 	DRAGOONKNIGHT_BUT,
 	ROGUE_BUT,
@@ -88,10 +89,12 @@ public:
 public:
 	float buttonsScale;
 	float settingsWindowScale;
+	float creditsWindowScale;
 	float logoScale;
 	
 	// Positions
 	iPoint settingsPosition;
+	iPoint creditsPosition;
 	uint lastSlider1X;
 	uint lastSlider2X;
 	uint slider1Y;

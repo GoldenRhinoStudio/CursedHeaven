@@ -11,6 +11,7 @@
 #include "j1Audio.h"
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
+#include "j1SceneSettings.h"
 #include "j1ChooseCharacter.h"
 #include "j1Scene1.h"
 #include "j1Map.h"
@@ -40,6 +41,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	menu = new j1SceneMenu();
 	credits = new j1SceneCredits();
+	settings = new j1SceneSettings();
 	choose_character = new j1ChooseCharacter();
 	scene1 = new j1Scene1();
 	map = new j1Map();
@@ -62,6 +64,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(path);
 	AddModule(menu);
 	AddModule(credits);
+	AddModule(settings);
 	AddModule(choose_character);
 	AddModule(scene1);
 	AddModule(entity);

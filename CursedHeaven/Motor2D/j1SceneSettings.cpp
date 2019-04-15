@@ -59,7 +59,7 @@ bool j1SceneSettings::Start()
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 
 		// Loading fonts
-		font3 = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
+		font = App->font->Load("fonts/Pixeled.ttf", 10);
 
 		// Creates the window
 		sets_window = App->gui->CreateBox(&settingBoxes, BOX, 60, 55, { 621, 377, 785, 568 }, wind_tex);
@@ -75,11 +75,9 @@ bool j1SceneSettings::Start()
 		SDL_Rect clicked5 = { 421, 511, 37, 33 };
 		App->gui->CreateButton(&settingButtons, BUTTON, 7, 7, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
 
-		App->gui->CreateLabel(&settingLabels, LABEL, 132, 63, font3, "Settings", App->gui->brown, (j1UserInterfaceElement*)sets_window);
-
-		App->gui->CreateLabel(&settingLabels, LABEL, 95, 101, font3, "Sound", App->gui->brown, (j1UserInterfaceElement*)sets_window);
-
-		App->gui->CreateLabel(&settingLabels, LABEL, 96, 135, font3, "Music", App->gui->brown, (j1UserInterfaceElement*)sets_window);
+		App->gui->CreateLabel(&settingLabels, LABEL, 132, 54, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)sets_window);
+		App->gui->CreateLabel(&settingLabels, LABEL, 95, 94, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)sets_window);
+		App->gui->CreateLabel(&settingLabels, LABEL, 96, 129, font, "Music", App->gui->brown, (j1UserInterfaceElement*)sets_window);
 
 		startup_time.Start();
 	}

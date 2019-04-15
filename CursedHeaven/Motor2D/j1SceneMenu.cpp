@@ -55,7 +55,7 @@ bool j1SceneMenu::Start()
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		
 		// Loading fonts
-		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
+		font = App->font->Load("fonts/Pixeled.ttf", 5);
 
 		// We will use it to check if there is a save file
 		pugi::xml_document save_game;
@@ -80,11 +80,11 @@ bool j1SceneMenu::Start()
 
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
 
-		App->gui->CreateLabel(&menuLabels, LABEL, 143, 122, font, "Start", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 131, 147, font, "Continue", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 131, 172, font, "Settings", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 135, 197, font, "Credits", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 149, 222, font, "Exit", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 152, 120, font, "Start", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 147, 145, font, "Continue", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 147, 170, font, "Settings", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 149, 195, font, "Credits", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 156, 220, font, "Exit", App->gui->beige);
 
 		player_created = false;
 		
@@ -234,10 +234,7 @@ bool j1SceneMenu::PostUpdate()
 bool j1SceneMenu::CleanUp()
 {
 	LOG("Freeing all textures");
-	App->tex->UnLoad(logo_tex);
-	App->tex->UnLoad(harpy_tex);
-	App->tex->UnLoad(player_tex);
-	App->tex->UnLoad(gui_tex);
+	App->tex->UnLoad(gui_tex2);
 	
 	App->map->CleanUp();
 	App->tex->CleanUp();

@@ -73,13 +73,13 @@ bool j1SceneCredits::Start()
 		SDL_Rect idlegh = { 631, 145 , 36, 40 };
 		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
 		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
-		App->gui->CreateButton(&creditsButtons, BUTTON, 153, 186, idlegh, hoveredgh, clickedgh, gui_tex2, LINK, (j1UserInterfaceElement*)credits_window);
+		App->gui->CreateButton(&creditsButtons, BUTTON, 151, 188, idlegh, hoveredgh, clickedgh, gui_tex2, LINK, (j1UserInterfaceElement*)credits_window);
 
 		// Web
 		SDL_Rect idleweb = { 667, 145 , 36, 40 };
 		SDL_Rect hoveredweb = { 667, 221 , 36, 40 };
 		SDL_Rect clickedweb = { 667, 185 , 36, 37 };
-		App->gui->CreateButton(&creditsButtons, BUTTON, 173, 186, idleweb, hoveredweb, clickedweb, gui_tex2, LINK2, (j1UserInterfaceElement*)credits_window);
+		App->gui->CreateButton(&creditsButtons, BUTTON, 171, 188, idleweb, hoveredweb, clickedweb, gui_tex2, LINK2, (j1UserInterfaceElement*)credits_window);
 
 		startup_time.Start();
 	}						 
@@ -197,7 +197,7 @@ bool j1SceneCredits::PostUpdate()
 bool j1SceneCredits::CleanUp()
 {
 	LOG("Freeing all textures");
-	App->tex->UnLoad(gui_tex);
+	App->tex->UnLoad(gui_tex2);
 
 	App->map->CleanUp();
 	App->tex->CleanUp();

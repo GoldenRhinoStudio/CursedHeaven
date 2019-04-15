@@ -102,7 +102,7 @@ bool j1SceneSettings::Update(float dt)
 		// ---------------------------------------------------------------------------------------------------------------------	
 	
 	App->gui->UpdateSliders(&settingBoxes);
-	App->gui->UpdateButtonsState(&settingButtons);
+	App->gui->UpdateButtonsState(&settingButtons, App->gui->buttonsScale);
 	//App->gui->UpdateWindow(sets_window, &setsButtons, &setsLabels, &setsBoxes);
 
 	// Button actions

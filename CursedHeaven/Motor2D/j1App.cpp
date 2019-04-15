@@ -11,6 +11,8 @@
 #include "j1Audio.h"
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
+#include "j1SceneSettings.h"
+#include "j1ChooseCharacter.h"
 #include "j1Scene1.h"
 #include "j1Map.h"
 #include "j1FadeToBlack.h"
@@ -20,6 +22,9 @@
 #include "j1Fonts.h"
 #include "j1Gui.h"
 #include "j1App.h"
+#include "j1Particles.h"
+#include "j1DialogSystem.h"
+#include "j1Entity.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -36,14 +41,18 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	menu = new j1SceneMenu();
 	credits = new j1SceneCredits();
+	settings = new j1SceneSettings();
+	choose_character = new j1ChooseCharacter();
 	scene1 = new j1Scene1();
 	map = new j1Map();
-	collisions = new j1Collisions();
 	entity = new j1EntityManager();
 	path = new j1PathFinding();
 	fade = new j1FadeToBlack();
 	font = new j1Fonts();
 	gui = new j1Gui();
+	dialog = new j1DialogSystem();
+	particles = new j1Particles();
+	collisions = new j1Collisions();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -55,12 +64,16 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(path);
 	AddModule(menu);
 	AddModule(credits);
+	AddModule(settings);
+	AddModule(choose_character);
 	AddModule(scene1);
 	AddModule(entity);
+	AddModule(particles);
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);
 	AddModule(fade);
+	AddModule(dialog);
 	
 	// render last to swap buffer
 	AddModule(render);
@@ -69,7 +82,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 // Destructor
 j1App::~j1App()
 {
-	for (std::list<j1Module*>::iterator item = modules.end(); item != modules.begin(); --item)
+	std::list<j1Module*>::iterator item = modules.begin();
+	
+	for (; item != modules.end(); item = next(item))
 	{
 		RELEASE(*item);
 	}
@@ -222,14 +237,24 @@ void j1App::FinishUpdate()
 	else
 		vsync = "off";
 
-	sprintf_s(title, 256, "Cursed Heaven v0.1 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s",
-		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync);
+	iPoint map_coords = { 0,0 };
+	if (App->entity->currentPlayer != nullptr) {
+		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->position.x, (int)App->entity->currentPlayer->position.y);
+	}
+
+	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
+		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync, map_coords.x, map_coords.y);
 	App->win->SetTitle(title);
 
 	// We use SDL_Delay to make sure you get your capped framerate
 	if ((last_frame_ms < (1000 / framerate_cap)) && cappedFPS) {
 		SDL_Delay((1000 / framerate_cap) - last_frame_ms);
 	}
+}
+
+float j1App::GetDt()
+{
+	return dt;
 }
 
 // Call modules before each loop iteration

@@ -19,9 +19,6 @@
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Development\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="j1Player.cpp">
-      <Filter>Development\Modules\Entities\Player</Filter>
-    </ClCompile>
     <ClCompile Include="j1Window.cpp">
       <Filter>Development\Modules\Media</Filter>
     </ClCompile>
@@ -87,6 +84,33 @@
     </ClCompile>
     <ClCompile Include="Quadtree.cpp">
       <Filter>Development\Tools\Quadtrees</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Player.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Particles.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1DragoonKnight.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="j1BlackMage.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="j1ChooseCharacter.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1DialogSystem.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneSettings.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Slime.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Judge.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +216,30 @@
     <ClInclude Include="Quadtree.h">
       <Filter>Development\Tools\Quadtrees</Filter>
     </ClInclude>
+    <ClInclude Include="j1Particles.h">
+      <Filter>Development\Modules\Interactions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1DragoonKnight.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1BlackMage.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ChooseCharacter.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1DialogSystem.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneSettings.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Slime.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -232,6 +280,9 @@
     </Filter>
     <Filter Include="Development\Tools\Quadtrees">
       <UniqueIdentifier>{01c82455-fa91-4281-9b2c-a3b333f54257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\Enemies">
+      <UniqueIdentifier>{f2c7492a-a97f-4b48-add3-e384b87be8d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

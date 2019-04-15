@@ -42,12 +42,16 @@ public:
 public:
 	std::list<j1Button*> creditsButtons;
 	std::list<j1Label*> creditsLabels;
+	std::list<j1Box*> creditsBoxes;
 
 	j1Timer	startup_time;
+
+	j1Box* credits_window = nullptr;
 
 private:
 
 	SDL_Texture* gui_tex = nullptr;
+	SDL_Texture* gui_tex2 = nullptr;
 	SDL_Texture* license = nullptr;
 	_TTF_Font* font = nullptr;
 

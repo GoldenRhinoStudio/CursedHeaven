@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1EntityManager.h"
 #include "j1Map.h"
+#include "j1Player.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -92,6 +93,39 @@ bool j1Render::PreUpdate()
 bool j1Render::Update(float dt)
 {
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen)
+
+	j1Player* player = nullptr;
+
+	if (App->entity->knight != nullptr) player = (j1Player*)App->entity->knight;
+	else if (App->entity->mage != nullptr) player = (j1Player*)App->entity->mage;
+	/*else if (App->entity->rogue != nullptr) player = (j1Player*)App->entity->rogue;
+	else if (App->entity->tank != nullptr) (j1Player*)App->entity->tank;*/
+
+	if (player != nullptr) {
+		
+		if (!player->changing_room) {
+			camera.x = -player->position.x * (App->win->GetScale()) + App->win->width / 2;
+			camera.y = -player->position.y * (App->win->GetScale()) + App->win->height / 2;
+		}
+
+		if (player->changing_room == true) {
+			if (camera.x < -player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+				camera.x += 250 * dt;
+			}
+			else if (camera.x > -player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+				camera.x -= 250 * dt;
+			}
+			else player->changing_room = false;
+
+			if (camera.y < -player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				camera.y += 250 * dt;
+			}
+			else if (camera.y > -player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+				camera.y -= 250 * dt;
+			}
+			else player->changing_room = false;
+		}
+	}
 
 	return true;
 }
@@ -210,6 +244,49 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 
 	return ret;
 }
+
+// Blit to screen
+bool j1Render::Blit2(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float Scale, double angle, int pivot_x, int pivot_y) const
+{
+	bool ret = true;
+	uint scale = Scale;
+
+	SDL_Rect rect;
+	rect.x = (int)(camera.x * speed) + x * scale;
+	rect.y = (int)(camera.y * speed) + y * scale;
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
 
 bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
@@ -359,7 +436,7 @@ void j1Render::reOrder() {
 			//pos1.x -= 1;
 			//pos1.y -= 1;
 
-			LOG("%i - %i", pos1.x, pos1.y);
+			//LOG("%i - %i", pos1.x, pos1.y);
 
 
 			if (img1->height >= img2->height) {

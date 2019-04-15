@@ -60,9 +60,13 @@ public:
 	j1Timer	startup_time;
 	int time_scene1;
 	bool changingScene = false;
+	bool startDialogue = true;
+
+	j1Timer windowTime;
+	uint lastWindowTime = 0;
 
 private:
-	SDL_Texture * debug_tex = nullptr;
+	SDL_Texture* debug_tex = nullptr;
 	SDL_Texture* gui_tex = nullptr;
 
 	_TTF_Font* font = nullptr;

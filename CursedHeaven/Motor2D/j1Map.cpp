@@ -6,7 +6,10 @@
 #include "j1Textures.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
+#include "j1Tank.h"
+#include "j1Rogue.h"
 #include "j1Collisions.h"
 #include <math.h>
 
@@ -59,22 +62,6 @@ void j1Map::Draw()
 		(*layer)->tile_tree->DrawMap();
 		(*layer)->tile_tree->DrawQuadtree();
 	}
-
-
-
-	/*std::vector<TileData*>::iterator item = App->render->OrderToRender.begin();
-	while(item != App->render->OrderToRender.end()){
-		TileData* tile = *item;
-		if (tile->id != 0) {
-			TileSet* tileset = App->map->GetTilesetFromTileId(tile->id);
-			SDL_Rect rect = tileset->GetTileRect(tile->id);
-
-			App->render->Blit(tileset->texture, tile->position.x, tile->position.y, &rect);
-		}
-		item = item++;
-		App->render->OrderToRender.erase(App->render->OrderToRender.begin());
-	}*/
-
 
 
 }
@@ -502,11 +489,11 @@ bool j1Map::PutColliders(const char * file_name)
 
 		for (obj = group.child("object"); obj && ret; obj = obj.next_sibling("object"))
 		{
-			if (strcmp(object_name, "map_collisions") == 0)
+			/*if (strcmp(object_name, "map_collisions") == 0)
 				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WALL);
-			else if (strcmp(object_name, "death_collisions") == 0)
-				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_DEATH);
-			else if (strcmp(object_name, "win_collider") == 0)
+			if (strcmp(object_name, "death_collisions") == 0)
+				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_DEATH);*/
+			if (strcmp(object_name, "win_collider") == 0)
 				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WIN);
 		}
 	}
@@ -560,8 +547,7 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 	return ret;
 }
 
-void j1Map::EntityMovement(j1Entity* entity)
-{
+void j1Map::EntityMovement(j1Entity* entity) {
 	if (App->map->map_loaded) {
 		iPoint current_tile = WorldToMap(entity->collider->rect.x, entity->collider->rect.y);
 		iPoint next_tile = { 0,0 };
@@ -575,20 +561,19 @@ void j1Map::EntityMovement(j1Entity* entity)
 			if (height1_gid == 0)
 				height0_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
 		}
-
 		uint current_gid;
 
 		if (height2_gid != 0) {				//entity is on the third layer
 			current_gid = height2_gid;
-			current_height = 3;
+			entity->height = 2;
 		}
 		else if (height1_gid != 0) {		//entity is on the second layer
 			current_gid = height1_gid;
-			current_height = 2;
+			entity->height = 1;
 		}
-		else {                                //entity is on the first layer
+		else {				                //entity is on the first layer
 			current_gid = height0_gid;
-			current_height = 1;
+			entity->height = 0;
 		}
 
 		// tiles of the first layer | height == 0
@@ -630,7 +615,7 @@ void j1Map::EntityMovement(j1Entity* entity)
 		uint next_gid = 0;
 		bool height0_semiblock = false, height1_semiblock = false, height2_semiblock = false;
 		bool height0_next = false, height1_next = false, height2_next = false;
-		DIRECTION direction = App->entity->player->direction;
+		DIRECTION direction = entity->direction;
 
 		if (current_gid != 0) {
 			switch (direction)
@@ -933,4 +918,5 @@ void j1Map::EntityMovement(j1Entity* entity)
 		}
 	}
 }
+
 

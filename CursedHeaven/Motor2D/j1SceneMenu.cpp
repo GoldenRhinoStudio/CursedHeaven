@@ -15,15 +15,14 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1ChooseCharacter.h"
+#include "j1SceneSettings.h"
 
 #include "Brofiler/Brofiler.h"
 
 j1SceneMenu::j1SceneMenu()
 {
 	name.assign("menu");
-
-	player.LoadAnimations("idle");
-	harpy.LoadEnemyAnimations("idle", "harpy");
 }
 
 j1SceneMenu::~j1SceneMenu() {}
@@ -53,60 +52,45 @@ bool j1SceneMenu::Start()
 		App->audio->PlayMusic("audio/music/menu_music.ogg", 1.0f);
 
 		// Loading textures
-		gui_tex = App->tex->Load("gui/atlas.png");
-		logo_tex = App->tex->Load("gui/logo.png");
-		player_tex = App->tex->Load("textures/character/character.png");
-		harpy_tex = App->tex->Load("textures/enemies/harpy/harpy.png");
+		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		
 		// Loading fonts
 		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
-
-		// Creating UI		
-		settings_window = App->gui->CreateBox(&menuBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 537, 0, 663, 712 }, gui_tex);
-		settings_window->visible = false;
 
 		// We will use it to check if there is a save file
 		pugi::xml_document save_game;
 		pugi::xml_parse_result result = save_game.load_file("save_game.xml");
 
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		/*App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);*/
 
-		SDL_Rect idle = {0, 143, 190, 49};
-		SDL_Rect hovered = { 0, 45, 190, 49 };
-		SDL_Rect clicked = { 0, 94, 190, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 80, 110, idle, hovered, clicked, gui_tex, PLAY_GAME);
-		App->gui->CreateButton(&menuButtons, BUTTON, 80, 160, idle, hovered, clicked, gui_tex, OPEN_CREDITS);
+		SDL_Rect idle = { 631, 12, 151, 38 };
+		SDL_Rect hovered = {963, 12, 151, 38 };
+		SDL_Rect clicked = { 797, 14, 151, 37 };
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 50 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, OPEN_CREDITS);
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 150 + 70, idle, hovered, clicked, gui_tex2, CLOSE_GAME);
 
-		SDL_Rect idle4 = { 0, 699, 190, 49 };
+		SDL_Rect idle4 = { 631, 50, 150, 37 };
 
 		if (result == NULL)
-			App->gui->CreateButton(&menuButtons, BUTTON, 80, 135, idle4, idle4, idle4, gui_tex, NO_FUNCTION);
+			App->gui->CreateButton(&menuButtons, BUTTON, 130, 75 + 70, idle4, idle4, idle4, gui_tex2, NO_FUNCTION);
 		else
-			App->gui->CreateButton(&menuButtons, BUTTON, 80, 135, idle, hovered, clicked, gui_tex, LOAD_GAME);
+			App->gui->CreateButton(&menuButtons, BUTTON, 130, 75 + 70, idle, hovered, clicked, gui_tex2, LOAD_GAME);
 
-		SDL_Rect idle2 = { 28, 201, 49, 49 };
-		SDL_Rect hovered2 = { 77, 201, 49, 49 };
-		SDL_Rect clicked2 = { 126, 201, 49, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
-		App->gui->CreateButton(&menuButtons, BUTTON, 64, 135, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
 
-		SDL_Rect idle3 = { 463, 109, 49, 49 };
-		SDL_Rect hovered3 = { 463, 158, 49, 49 };
-		SDL_Rect clicked3 = { 463, 207, 49, 49 };
-		App->gui->CreateButton(&menuButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, SETTINGS);
-
-		App->gui->CreateLabel(&menuLabels, LABEL, 106, 115, font, "Start", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 98, 165, font, "Credits", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 90, 140, font, "Continue", App->gui->beige);
-		App->gui->CreateLabel(&menuLabels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&menuLabels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&menuLabels, LABEL, 30, 89, font, "Music", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&menuLabels, LABEL, 143, 122, font, "Start", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 131, 147, font, "Continue", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 131, 172, font, "Settings", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 135, 197, font, "Credits", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 149, 222, font, "Exit", App->gui->beige);
 
 		player_created = false;
 		
 		startup_time.Start();
 		times++;
+
 	}
 
 	return true;
@@ -127,7 +111,7 @@ bool j1SceneMenu::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	// Updating the state of the UI
-	App->gui->UpdateButtonsState(&menuButtons); 
+	App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale); 
 	App->gui->UpdateSliders(&menuBoxes);
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 
@@ -152,7 +136,9 @@ bool j1SceneMenu::Update(float dt)
 				if (startup_time.Read() > 1900 && times > 1 || times == 1) {
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
-						startGame = true;
+						LOG("Choose Character Scene Loading");
+						chooseChar = true;
+						// App->scene1->active = false;
 						App->fade->FadeToBlack();
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
@@ -162,41 +148,14 @@ bool j1SceneMenu::Update(float dt)
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;
 					}
-					else
-						if (((*item)->bfunction == SETTINGS && !settings_window->visible)
-							|| ((*item)->bfunction == CLOSE_SETTINGS && settings_window->visible)) {
-							settings_window->visible = !settings_window->visible;
-							settings_window->position = App->gui->settingsPosition;
-
-							for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
-								if ((*item)->parent == settings_window) {
-									(*item)->visible = !(*item)->visible;
-									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-								}
-							}
-							for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
-								if ((*item)->parent == settings_window) {
-									(*item)->visible = !(*item)->visible;
-									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-								}
-							}
-							for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
-								if ((*item)->parent == settings_window) {
-									(*item)->visible = !(*item)->visible;
-									(*item)->position.x = settings_window->position.x + (*item)->initialPosition.x;
-									(*item)->position.y = settings_window->position.y + (*item)->initialPosition.y;
-
-									(*item)->minimum = (*item)->originalMinimum + settings_window->position.x;
-									(*item)->maximum = (*item)->originalMaximum + settings_window->position.x;
-								}
-							}
-						}
-						else if ((*item)->bfunction == OPEN_CREDITS) {
-							openCredits = true;
-							App->fade->FadeToBlack();
-						}
+					else if ((*item)->bfunction == SETTINGS) {
+						openSettings = true;
+						App->fade->FadeToBlack();
+					}						
+					else if ((*item)->bfunction == OPEN_CREDITS) {
+						openCredits = true;
+						App->fade->FadeToBlack();
+					}
 				}
 					break;
 
@@ -211,12 +170,15 @@ bool j1SceneMenu::Update(float dt)
 
 	// Managing scene transitions
 	if (App->fade->IsFading() == 0) {
-		if (startGame) {
-			ChangeScene(SCENE1);
-			player_created = true;
+		if (chooseChar) {
+			ChangeScene(CHOOSE);
+			App->choose_character->active = true;
+			//player_created = false;
 		}
 		else if (openCredits)
 			ChangeScene(CREDITS);
+		else if (openSettings)
+			ChangeScene(SCENE_SETTINGS);
 		else if (loadGame)
 			App->LoadGame("save_game.xml");
 	}
@@ -228,13 +190,13 @@ bool j1SceneMenu::Update(float dt)
 	// Blitting background and animations
 	App->map->Draw();
 
-	SDL_Rect p = player.GetCurrentFrame(dt);
-	App->render->Blit(player_tex, 40, 105, &p, SDL_FLIP_NONE);
-	SDL_Rect h = harpy.GetCurrentFrame(dt);
-	App->render->Blit(harpy_tex, 205, 35, &h, SDL_FLIP_HORIZONTAL);
+	// Blitting the logo
+	SDL_Rect logo = { 854, 92, 801, 166 };
+	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, 1.0f, App->gui->logoScale);
 
 	// Blitting the buttons and labels of the menu
-	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) 
+
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item)
 	{
 		if ((*item)->parent != nullptr) continue;
 		(*item)->Draw(App->gui->buttonsScale);
@@ -244,10 +206,6 @@ bool j1SceneMenu::Update(float dt)
 		if ((*item)->parent != nullptr) continue;
 		if ((*item)->visible) (*item)->Draw();
 	}
-
-	// Blitting the logo
-	SDL_Rect logo = { 166, 139, 711, 533 };
-	App->render->Blit(logo_tex, 54, 0, &logo, SDL_FLIP_NONE, 1.0f, App->gui->logoScale);
 	
 	//Blitting the debug
 	if (App->gui->debug) {
@@ -258,41 +216,6 @@ bool j1SceneMenu::Update(float dt)
 		App->render->DrawQuad({ 320, 440, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
 		App->render->DrawQuad({ 320, 540, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
 		App->render->DrawQuad({ 320, 640, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
-	}
-
-	// Blitting settings window
-	if (settings_window != nullptr && settings_window->visible == true)
-		settings_window->Draw(App->gui->settingsWindowScale);
-
-	// Blitting the buttons, labels and boxes (sliders) of the window
-	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else
-			(*item)->Draw(App->gui->buttonsScale);
-		
-	}
-	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else {
-			if((*item)->text == "Settings")
-				(*item)->Draw();
-			else
-				(*item)->Draw(App->gui->buttonsScale);
-		}
-	}
-	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else
-			(*item)->Draw(App->gui->buttonsScale);
 	}
 
 	return true;
@@ -359,9 +282,10 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 	if (!player_created)
 	{
 		this->active = false;
-		startGame = false;
 		loadGame = false;
+		openSettings = false;
 		openCredits = false;
+		chooseChar = false;
 
 		CleanUp();
 
@@ -369,16 +293,16 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 			App->credits->active = true;
 			App->credits->Start();
 		}
+		else if (objectiveScene == SCENE::SCENE_SETTINGS) {
+			App->settings->active = true;
+			App->settings->Start();
+		}
 		else {
-			if (objectiveScene == SCENE::SCENE1) {
-				App->scene1->active = true;
-				App->scene1->Start();
-				App->render->camera = { 250, -1080 };
+			if (objectiveScene == SCENE::CHOOSE) {
+				App->choose_character->active = true;
+				App->choose_character->Start();
+				//App->render->camera = { 250, -1080 };
 			}
-
-			App->entity->active = true;
-			App->entity->CreatePlayer();
-			App->entity->Start();
 		}
 	}
 }

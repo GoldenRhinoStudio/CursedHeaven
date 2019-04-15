@@ -57,7 +57,9 @@ public:
 
 	float height = 0;
 	float order = 0;
-
+	// Combat values
+	int basicDamage = 0;
+	int lifePoints = 0;
 };
 
 #endif // __ENTITY_H__

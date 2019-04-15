@@ -9,7 +9,11 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
-#include "j1Player.h"
+#include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
+#include "j1Tank.h"
+#include "j1Rogue.h"
+#include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
 #include "j1FadeToBlack.h"
@@ -20,6 +24,9 @@
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
+#include "j1ChooseCharacter.h"
+#include "j1DialogSystem.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -57,7 +64,7 @@ bool j1Scene1::Start()
 	if (active)
 	{
 		// The map is loaded
-		if (App->map->Load("Test.tmx"))
+		if (App->map->Load("greenmount.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -68,6 +75,10 @@ bool j1Scene1::Start()
 
 			RELEASE_ARRAY(data);
 		}
+
+		//Judge
+		App->entity->CreateNPC();
+		App->entity->judge->Start();
 
 		// The audio is played	
 		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);
@@ -118,6 +129,7 @@ bool j1Scene1::Start()
 		PlaceEntities();
 
 		startup_time.Start();
+		windowTime.Start();
 	}
 
 	return true;
@@ -138,22 +150,32 @@ bool j1Scene1::Update(float dt)
 
 	time_scene1 = startup_time.ReadSec();
 
+
+	int x, y;
+	App->input->GetMousePosition(x, y);
+
+	if (x < App->win->width && y < App->win->height)
+		if (App->input->GetMouseButtonDown(KEY_DOWN))
+			if (startDialogue == true)
+				App->dialog->StartDialogEvent(App->dialog->dialogA);
+			
+
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
 	// ---------------------------------------------------------------------------------------------------------------------		
 
-	App->gui->UpdateButtonsState(&scene1Buttons);
+	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
 
 	if (App->scene1->startup_time.Read() > 1700) {
-		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings) {
+		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
+			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
 			App->gamePaused = !App->gamePaused;
+			lastWindowTime = windowTime.Read();
 
-			if (App->render->camera.x != 0 && App->render->camera.x > App->entity->player->cameraLimit)
-				settings_window->position = { (int)App->entity->player->position.x - App->gui->settingsPosition.x, App->gui->settingsPosition.y };
-			else
-				settings_window->position.x = App->gui->settingsPosition.x - App->render->camera.x / 4;
+			settings_window->position = { App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale(),
+				App->gui->settingsPosition.y - App->render->camera.y / (int)App->win->GetScale() };
 
 			for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 				if ((*item)->parent == settings_window) {
@@ -247,9 +269,7 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
-			App->entity->player->position = initialScene1Position;
 			App->render->camera.x = 0;
-			App->entity->player->facingRight = true;
 			resettingLevel = false;
 		}
 	}
@@ -313,6 +333,7 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities()
 {
+	App->entity->AddEnemy(200, 900, SLIME);
 }
 
 // Called before quitting
@@ -327,9 +348,12 @@ bool j1Scene1::CleanUp()
 	App->tex->CleanUp();
 	App->entity->DestroyEntities();
 	App->gui->CleanUp();
+	App->particles->CleanUp();
 
-	if (App->entity->player)
-		App->entity->player->CleanUp();
+	if (App->entity->knight) App->entity->knight->CleanUp();
+	if (App->entity->mage) App->entity->mage->CleanUp();
+	/*if (App->entity->rogue) App->entity->rogue->CleanUp();
+	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		(*item)->CleanUp();
@@ -354,11 +378,11 @@ bool j1Scene1::CleanUp()
 	return true;
 }
 
-
 void j1Scene1::ChangeSceneMenu()
 {
 	App->scene1->active = false;
 	App->menu->active = true;
+	App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();

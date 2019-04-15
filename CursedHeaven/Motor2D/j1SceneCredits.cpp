@@ -12,6 +12,7 @@
 #include "j1Box.h"
 #include "j1Fonts.h"
 #include "j1Input.h"
+#include "j1Window.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -31,7 +32,7 @@ bool j1SceneCredits::Awake(pugi::xml_node &)
 		active = false;
 
 	if (active == false)
-		LOG("Scene1 not active.");
+		LOG("Credits not active.");
 
 	if (App->menu->active == false)
 	{
@@ -53,30 +54,32 @@ bool j1SceneCredits::Start()
 		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
 
 		// Loading textures
-		gui_tex = App->tex->Load("gui/atlas.png");
-		license = App->tex->Load("gui/credits.png");
+		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
+		license = App->tex->Load("gui/creditsCURSEDHEAVEN.png");
 
 		// Loading fonts
 		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
 
-		SDL_Rect idle = { 260, 470, 190, 49 };
-		SDL_Rect hovered = { 260, 519, 190, 49 };
-		SDL_Rect clicked = { 260, 568, 190, 49 };
+		credits_window = App->gui->CreateBox(&creditsBoxes, BOX, 45, 36, { 621, 377, 785, 568 }, gui_tex2);
+		credits_window->visible = true;
 
-		App->gui->CreateButton(&creditsButtons, BUTTON, 79, 160, idle, hovered, clicked, gui_tex, LINK);
+		// Go Back 
+		SDL_Rect idle6 = { 382, 508, 37, 36 };
+		SDL_Rect hovered6 = { 343, 508, 37, 36 };
+		SDL_Rect clicked6 = { 421, 511, 37, 33 };
+		App->gui->CreateButton(&creditsButtons, BUTTON, 7, 7, idle6, hovered6, clicked6, gui_tex2, GO_TO_MENU);
 
-		SDL_Rect idle2 = { 28, 201, 49, 49 };
-		SDL_Rect hovered2 = { 77, 201, 49, 49 };
-		SDL_Rect clicked2 = { 126, 201, 49, 49 };
+		// Github
+		SDL_Rect idlegh = { 631, 145 , 36, 40 };
+		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
+		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
+		App->gui->CreateButton(&creditsButtons, BUTTON, 153, 186, idlegh, hoveredgh, clickedgh, gui_tex2, LINK, (j1UserInterfaceElement*)credits_window);
 
-		App->gui->CreateButton(&creditsButtons, BUTTON, 229, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
-
-		SDL_Rect idle3 = { 312, 292, 49, 49 };
-		SDL_Rect hovered3 = { 361, 292, 49, 49 };
-		SDL_Rect clicked3 = { 310, 400, 49, 49 };
-		App->gui->CreateButton(&creditsButtons, BUTTON, 3, 3, idle3, hovered3, clicked3, gui_tex, GO_TO_MENU);
-
-		App->gui->CreateLabel(&creditsLabels, LABEL, 90, 165, font, "Webpage", App->gui->beige);
+		// Web
+		SDL_Rect idleweb = { 667, 145 , 36, 40 };
+		SDL_Rect hoveredweb = { 667, 221 , 36, 40 };
+		SDL_Rect clickedweb = { 667, 185 , 36, 37 };
+		App->gui->CreateButton(&creditsButtons, BUTTON, 173, 186, idleweb, hoveredweb, clickedweb, gui_tex2, LINK2, (j1UserInterfaceElement*)credits_window);
 
 		startup_time.Start();
 	}						 
@@ -98,7 +101,7 @@ bool j1SceneCredits::Update(float dt)
 	// USER INTERFACE MANAGEMENT
 	// ---------------------------------------------------------------------------------------------------------------------	
 
-	App->gui->UpdateButtonsState(&creditsButtons);
+	App->gui->UpdateButtonsState(&creditsButtons, App->gui->buttonsScale);
 
 	// Button actions
 	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
@@ -116,15 +119,16 @@ bool j1SceneCredits::Update(float dt)
 		case RELEASED:
 			if (startup_time.Read() > 2000) {
 				(*item)->situation = (*item)->idle;
+				
 				if ((*item)->bfunction == GO_TO_MENU) {
 					backToMenu = true;
 					App->fade->FadeToBlack();
 				}
-				else if ((*item)->bfunction == CLOSE_GAME) {
-					continueGame = false;
-				}
 				else if ((*item)->bfunction == LINK && App->fade->IsFading() == 0) {
-					ShellExecuteA(NULL, "open", "https://goo.gl/SUk3ra", NULL, NULL, SW_SHOWNORMAL);
+					ShellExecuteA(NULL, "open", "https://github.com/GoldenRhinoStudio/CursedHeaven", NULL, NULL, SW_SHOWNORMAL);
+				}
+				else if ((*item)->bfunction == LINK2 && App->fade->IsFading() == 0) {
+					ShellExecuteA(NULL, "open", "https://goldenrhinostudio.com/", NULL, NULL, SW_SHOWNORMAL);
 				}
 			}
 			break;
@@ -146,6 +150,7 @@ bool j1SceneCredits::Update(float dt)
 
 	App->map->Draw();
 
+
 	// Blitting the buttons
 	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);
@@ -156,7 +161,25 @@ bool j1SceneCredits::Update(float dt)
 		(*item)->Draw();
 	}
 
-	App->render->Blit(license, 42, 37, NULL, SDL_FLIP_NONE, 1.0f, 0.25);
+	if (credits_window != nullptr && credits_window->visible == true)
+	{
+		credits_window->Draw(App->gui->creditsWindowScale);
+	}
+
+	// Blitting buttons of the window
+	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
+		if ((*item)->parent == nullptr) continue;
+
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
+		else
+			(*item)->Draw(App->gui->buttonsScale);
+
+	}
+
+	App->render->Blit(license, 50, 50, NULL, SDL_FLIP_NONE, 0, 0.24f);
+
+
 
 	return true;
 }
@@ -187,6 +210,14 @@ bool j1SceneCredits::CleanUp()
 	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end(); ++item) {
 		creditsLabels.remove(*item);
 	}
+
+	for (std::list<j1Box*>::iterator item = creditsBoxes.begin(); item != creditsBoxes.end(); ++item) {
+		(*item)->CleanUp();
+		creditsBoxes.remove(*item);
+	}
+
+	delete credits_window;
+	if (credits_window != nullptr) credits_window = nullptr;
 
 	return true;
 }

@@ -8,7 +8,7 @@
 #include "Brofiler/Brofiler.h"
 
 j1Label::j1Label(UIELEMENT_TYPES type, int x, int y, _TTF_Font* font, const char* text, SDL_Color color, j1UserInterfaceElement* parent) :
-	j1UserInterfaceElement(UIELEMENT_TYPES::LABEL, x, y, App->font->Print(text, color, font), parent), font(font), text(text), color(color) {}
+	j1UserInterfaceElement(UIELEMENT_TYPES::LABEL, x, y, App->font->Print(text, temp.w, temp.h, 0, color, font), parent), font(font), text(text), color(color) {}
 
 j1Label::~j1Label() {}
 

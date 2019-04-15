@@ -51,7 +51,6 @@ bool j1Input::Awake(pugi::xml_node& config)
 
 	if (controller == NULL) {
 		LOG(" Unable to open game controller! SDL Error: %s\n", SDL_GetError());
-		use_controller = false;
 	}
 
 	return ret;
@@ -81,17 +80,13 @@ bool j1Input::PreUpdate()
 	{
 		gamepadLAxisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
 		gamepadLAxisY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
-		gamepadAPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_A);
-		gamepadBPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B);
-		gamepadYPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_Y);
-		gamepadStartPressed = SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_START);
-		gamepadCon = true;
+		gamepadRAxisX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
+		gamepadRAxisY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
 	}
 	else
 	{
 		SDL_GameControllerClose(controller);
 		controller = nullptr;
-		gamepadCon = false;
 	}			
 
 	for(int i = 0; i < MAX_KEYS; ++i)

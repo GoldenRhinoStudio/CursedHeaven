@@ -41,7 +41,12 @@ enum ButtonFunction {
 	SETTINGS,
 	CLOSE_SETTINGS,
 	OTHER_LEVEL,
-	LINK
+	LINK,
+	LINK2,
+	BLACKMAGE_BUT,
+	DRAGOONKNIGHT_BUT,
+	ROGUE_BUT,
+	TANK_BUT
 };
 
 // ---------------------------------------------------
@@ -75,7 +80,7 @@ public:
 	j1Box* CreateBox(std::list<j1Box*>* boxes, UIELEMENT_TYPES type, int x, int y, SDL_Rect section, SDL_Texture* text = nullptr, j1UserInterfaceElement* parent = nullptr, uint minimum = 0, uint maximum = 0);
 
 	// UI uppdaters
-	void UpdateButtonsState(std::list<j1Button*>* buttons);
+	void UpdateButtonsState(std::list<j1Button*>* buttons, float scale);
 	void UpdateWindow(j1Box* window, std::list<j1Button*>* buttons = nullptr, std::list<j1Label*>* labels = nullptr, std::list<j1Box*>* boxes = nullptr);
 	void UpdateSliders(std::list<j1Box*>* sliders);
 	
@@ -84,10 +89,12 @@ public:
 public:
 	float buttonsScale;
 	float settingsWindowScale;
+	float creditsWindowScale;
 	float logoScale;
 	
 	// Positions
 	iPoint settingsPosition;
+	iPoint creditsPosition;
 	uint lastSlider1X;
 	uint lastSlider2X;
 	uint slider1Y;

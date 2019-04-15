@@ -76,9 +76,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="j1BlackMage.cpp" />
     <ClCompile Include="j1Button.cpp" />
+    <ClCompile Include="j1ChooseCharacter.cpp" />
     <ClCompile Include="j1Collisions.cpp" />
+    <ClCompile Include="j1DialogSystem.cpp" />
+    <ClCompile Include="j1DragoonKnight.cpp" />
     <ClCompile Include="j1Hud.cpp" />
+    <ClCompile Include="j1Judge.cpp" />
+    <ClCompile Include="j1Particles.cpp" />
+    <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1SceneCredits.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
@@ -93,10 +100,11 @@
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
-    <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1Scene1.cpp" />
     <ClCompile Include="j1SceneMenu.cpp" />
     <ClCompile Include="j1Box.cpp" />
+    <ClCompile Include="j1SceneSettings.cpp" />
+    <ClCompile Include="j1Slime.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
@@ -107,9 +115,15 @@
     <ClCompile Include="TileQuadtree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="j1BlackMage.h" />
     <ClInclude Include="j1Button.h" />
+    <ClInclude Include="j1ChooseCharacter.h" />
     <ClInclude Include="j1Collisions.h" />
+    <ClInclude Include="j1DialogSystem.h" />
+    <ClInclude Include="j1DragoonKnight.h" />
     <ClInclude Include="j1Hud.h" />
+    <ClInclude Include="j1Judge.h" />
+    <ClInclude Include="j1Particles.h" />
     <ClInclude Include="j1SceneCredits.h" />
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />
@@ -124,6 +138,8 @@
     <ClInclude Include="j1Scene1.h" />
     <ClInclude Include="j1SceneMenu.h" />
     <ClInclude Include="j1Box.h" />
+    <ClInclude Include="j1SceneSettings.h" />
+    <ClInclude Include="j1Slime.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1UserInterfaceElement.h" />
     <ClInclude Include="p2Animation.h" />

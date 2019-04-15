@@ -1,0 +1,52 @@
+Black mage data
+
+Lateral
+Vertical 36
+Horizontal   21  21  23
+
+Diagonal Down
+Vertical 38
+Horizontal   22  21  22
+
+Vertical Down
+Vertical 37
+Horizontal   21  21  21
+
+Diagonal Up
+Vertical 35
+Horizontal   21  24  21
+
+
+Vertical Up
+Verical 37
+Horizontal   21  21  21
+
+
+Attack Diagonal Down
+Vertical 39
+Horizontal  28  28  28
+
+
+Attack Diagonal  UP
+Vertical  35
+Horizontal   27  27  27
+
+Attack Lateral
+Vertical 36
+Horizontal   25  25  25
+
+Attack UP
+Vertical  37
+Horizontal  25  25  25
+
+Attack Down
+Vertical  37
+Horizontal  25  25  25
+
+
+
+Idle  Loop1  Loop2
+
+Death anim 
+Verical  28
+Horizonta  25   34

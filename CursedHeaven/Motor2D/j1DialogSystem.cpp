@@ -242,6 +242,7 @@ void Dialogue::Input() {
 			App->dialog->temp_text_print.clear();
 			currentNode->resetNode();
 			DeactiveDialog();
+			App->scene1->finishedDialogue = true;
 		}
 	}
 }

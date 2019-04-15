@@ -91,7 +91,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 		}
 
 		// Drawing the harpy
-		SDL_Rect r = animation->GetCurrentFrame(dt);
+		SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 		if (position.x - App->entity->currentPlayer->position.x >= 0)
 			Draw(r, true, -10, -10);

@@ -329,7 +329,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	// Blitting the player
-	SDL_Rect r = animation->GetCurrentFrame(dt);
+	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)

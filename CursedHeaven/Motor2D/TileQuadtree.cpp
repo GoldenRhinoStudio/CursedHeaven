@@ -105,15 +105,22 @@ void TileQuadtree::InsertTile(TileData* tile)
 
 bool TileQuadtree::CheckVisibility()
 {
-	uint scale = App->win->GetScale();
-	uint screen_w;
-	uint screen_h;
-	App->win->GetWindowSize(screen_w, screen_h);
+	int scale = App->win->GetScale();
+	int offset = 20 * scale;
+	uint screen_w1;
+	uint screen_h2;
+	App->win->GetWindowSize(screen_w1, screen_h2);
 
-	if (-App->render->camera.x> ((section.x + section.w )) ||
-		(-App->render->camera.x + int(screen_w / scale)) < section.x ||
-		-App->render->camera.y > (section.y + section.h) ||
-		(-App->render->camera.y + int(screen_h / scale)) < section.y)
+
+	int camera_x = -App->render->camera.x / scale;
+	int camera_y = -App->render->camera.y / scale;
+	int screen_w = screen_w1 / scale;
+	int screen_h = screen_h2 / scale;
+
+	if (camera_x > (section.x + section.w + offset) ||
+		(camera_x + int(screen_w)) < section.x - offset ||
+		camera_y > (section.y + section.h + offset) ||
+		(camera_y + int(screen_h)) < section.y - offset)
 		return false;
 
 	return true;

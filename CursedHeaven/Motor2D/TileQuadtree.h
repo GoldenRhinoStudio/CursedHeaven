@@ -2,6 +2,8 @@
 #define _TILEQUADTREE_H__
 
 #include "Quadtree.h"
+#include "j1App.h"
+#include "j1Window.h"
 
 class TileData;
 
@@ -36,6 +38,7 @@ protected:
 	uint	size;				//Amount of tiles this node can store
 	uint	tiles_contained;	//Amount of tiles this node currently stores
 
+	int scale = App->win->GetScale();
 
 };
 

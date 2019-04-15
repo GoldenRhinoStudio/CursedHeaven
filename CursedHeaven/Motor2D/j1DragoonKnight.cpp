@@ -280,7 +280,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	// Blitting the player
-	SDL_Rect r = animation->GetCurrentFrame(dt);
+	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
@@ -307,7 +307,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	hud->Update(dt);
 
 	// We update the camera to follow the player every frame
-	UpdateCameraPosition(dt);
+	//UpdateCameraPosition(dt);
 
 	return true;
 }

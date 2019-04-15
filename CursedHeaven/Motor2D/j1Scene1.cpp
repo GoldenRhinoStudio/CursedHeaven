@@ -76,10 +76,6 @@ bool j1Scene1::Start()
 			RELEASE_ARRAY(data);
 		}
 
-		//Judge
-		App->entity->CreateNPC();
-		App->entity->judge->Start();
-
 		// The audio is played	
 		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);
 

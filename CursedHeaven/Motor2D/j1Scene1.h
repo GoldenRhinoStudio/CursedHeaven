@@ -4,6 +4,7 @@
 #include "j1Module.h"
 #include "j1Button.h"
 #include "j1Timer.h"
+#include "j1Hud.h"
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
 
@@ -49,6 +50,7 @@ public:
 
 public:
 	j1Box* settings_window = nullptr;
+	j1Hud* hud = nullptr;
 	fPoint initialScene1Position;
 	bool player_created = false;
 	bool backToMenu = false;

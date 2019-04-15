@@ -97,7 +97,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	BROFILER_CATEGORY("DragoonKnightUpdate", Profiler::Color::LightSeaGreen)
 
 	if (player_start)
-	{
+	{		
 		if (!attacking && !active_Q) {
 			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
@@ -304,10 +304,9 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		}
 	}
 
-	hud->Update(dt);
-
 	// We update the camera to follow the player every frame
 	UpdateCameraPosition(dt);
+	hud->Update(dt);
 
 	return true;
 }

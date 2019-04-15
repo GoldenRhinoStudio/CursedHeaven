@@ -103,7 +103,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	BROFILER_CATEGORY("BlackMageUpdate", Profiler::Color::LightSeaGreen)
 
 	if (player_start)
-	{
+	{		
 		if (!active_Q) {
 			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 		}
@@ -351,10 +351,9 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		}
 	}
 
-	hud->Update(dt);
-
 	// We update the camera to follow the player every frame
 	UpdateCameraPosition(dt);
+	hud->Update(dt);
 
 	return true;
 }

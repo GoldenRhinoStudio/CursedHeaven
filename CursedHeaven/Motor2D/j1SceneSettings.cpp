@@ -55,14 +55,14 @@ bool j1SceneSettings::Start()
 		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
 
 		// Loading textures
-		gui_tex = App->tex->Load("gui/atlas.png");
+		wind_tex = App->tex->Load("gui/uipack_rpg_sheet_2.png");
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 
 		// Loading fonts
 		font3 = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
 
 		// Creates the window
-		sets_window = App->gui->CreateBox(&settingBoxes, BOX, 60, 60, { 621, 377, 785, 568 }, gui_tex2);
+		sets_window = App->gui->CreateBox(&settingBoxes, BOX, 60, 55, { 621, 377, 785, 568 }, wind_tex);
 		sets_window->visible = true;
 
 		// Sliders
@@ -73,9 +73,13 @@ bool j1SceneSettings::Start()
 		SDL_Rect idle5 = { 382, 508, 37, 36 };
 		SDL_Rect hovered5 = { 343, 508, 37, 36 };
 		SDL_Rect clicked5 = { 421, 511, 37, 33 };
-		App->gui->CreateButton(&settingButtons, BUTTON, 20, 10, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
+		App->gui->CreateButton(&settingButtons, BUTTON, 7, 7, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
 
-		//App->gui->CreateLabel(&setsLabels, LABEL, 100, 50, font3, "Settings", App->gui->brown);
+		App->gui->CreateLabel(&settingLabels, LABEL, 132, 63, font3, "Settings", App->gui->brown, (j1UserInterfaceElement*)sets_window);
+
+		App->gui->CreateLabel(&settingLabels, LABEL, 95, 101, font3, "Sound", App->gui->brown, (j1UserInterfaceElement*)sets_window);
+
+		App->gui->CreateLabel(&settingLabels, LABEL, 96, 135, font3, "Music", App->gui->brown, (j1UserInterfaceElement*)sets_window);
 
 		startup_time.Start();
 	}
@@ -183,7 +187,7 @@ bool j1SceneSettings::Update(float dt)
 			if ((*item)->text == "Settings")
 				(*item)->Draw();
 			else
-				(*item)->Draw(App->gui->buttonsScale);
+				(*item)->Draw(0.6f);
 		}
 	}
 
@@ -204,7 +208,7 @@ bool j1SceneSettings::CleanUp()
 {
 	LOG("Freeing all textures");
 	App->tex->UnLoad(gui_tex2);
-	App->tex->UnLoad(gui_tex);
+	App->tex->UnLoad(wind_tex);
 
 	App->map->CleanUp();
 	App->tex->CleanUp();

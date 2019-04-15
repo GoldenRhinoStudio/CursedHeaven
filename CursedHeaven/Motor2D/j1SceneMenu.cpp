@@ -52,26 +52,21 @@ bool j1SceneMenu::Start()
 		App->audio->PlayMusic("audio/music/menu_music.ogg", 1.0f);
 
 		// Loading textures
-		gui_tex = App->tex->Load("gui/atlas2.png");
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		
 		// Loading fonts
 		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
 
-		// Creating UI		
-		settings_window = App->gui->CreateBox(&menuBoxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, { 621, 377, 785, 568 }, gui_tex2);
-		settings_window->visible = false;
-
 		// We will use it to check if there is a save file
 		pugi::xml_document save_game;
 		pugi::xml_parse_result result = save_game.load_file("save_game.xml");
 
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		/*App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);*/
 
-		SDL_Rect idle = { 631, 12, 151, 38 }; //{0, 143, 190, 49};
-		SDL_Rect hovered = {963, 12, 151, 38 };//{ 0, 45, 190, 49 };
-		SDL_Rect clicked = { 797, 14, 151, 37 };//{ 0, 94, 190, 49 };
+		SDL_Rect idle = { 631, 12, 151, 38 };
+		SDL_Rect hovered = {963, 12, 151, 38 };
+		SDL_Rect clicked = { 797, 14, 151, 37 };
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 50 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, OPEN_CREDITS);
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 150 + 70, idle, hovered, clicked, gui_tex2, CLOSE_GAME);
@@ -83,24 +78,19 @@ bool j1SceneMenu::Start()
 		else
 			App->gui->CreateButton(&menuButtons, BUTTON, 130, 75 + 70, idle, hovered, clicked, gui_tex2, LOAD_GAME);
 
-		SDL_Rect idle2 = { 382, 508, 37, 36 };
-		SDL_Rect hovered2 = { 343, 508, 37, 36 };
-		SDL_Rect clicked2 = { 421, 511, 37, 33 };
-		//App->gui->CreateButton(&menuButtons, BUTTON, 228, 3, idle2, hovered2, clicked2, gui_tex, CLOSE_GAME);
-		App->gui->CreateButton(&menuButtons, BUTTON, 7, 7, idle2, hovered2, clicked2, gui_tex2, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
-
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, SETTINGS);
 
-		App->gui->CreateLabel(&menuLabels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&menuLabels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&menuLabels, LABEL, 30, 89, font, "Music", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&menuLabels, LABEL, 143, 122, font, "Start", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 131, 147, font, "Continue", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 131, 172, font, "Settings", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 135, 197, font, "Credits", App->gui->beige);
+		App->gui->CreateLabel(&menuLabels, LABEL, 149, 222, font, "Exit", App->gui->beige);
 
 		player_created = false;
 		
 		startup_time.Start();
 		times++;
 
-		//  6 7 612 442
 	}
 
 	return true;
@@ -226,44 +216,6 @@ bool j1SceneMenu::Update(float dt)
 		App->render->DrawQuad({ 320, 440, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
 		App->render->DrawQuad({ 320, 540, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
 		App->render->DrawQuad({ 320, 640, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
-	}
-
-	// Blitting settings window
-	if (settings_window != nullptr && settings_window->visible == true) 
-	{
-		settings_window->Draw(App->gui->settingsWindowScale);
-	}
-		
-
-	// Blitting the buttons, labels and boxes (sliders) of the window
-	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else
-			(*item)->Draw(App->gui->buttonsScale);
-		
-	}
-	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else {
-			if((*item)->text == "Settings")
-				(*item)->Draw();
-			else
-				(*item)->Draw(App->gui->buttonsScale);
-		}
-	}
-	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
-		if ((*item)->parent == nullptr) continue;
-
-		if ((*item)->parent->visible == false)
-			(*item)->visible = false;
-		else
-			(*item)->Draw(App->gui->buttonsScale);
 	}
 
 	return true;

@@ -41,10 +41,10 @@ bool j1Gui::Awake(pugi::xml_node& config)
 	settingsPosition.x = config.child("positions").attribute("settingsPositionX").as_int();
 	settingsPosition.y = config.child("positions").attribute("settingsPositionY").as_int();
 
-	slider1Y = 42;
-	slider2Y = 82;
-	lastSlider1X = 83;
-	lastSlider2X = 83;
+	slider1Y = 95;
+	slider2Y = 129;
+	lastSlider1X = 173;
+	lastSlider2X = 173;
 
 	minimum = config.child("sliderLimits").attribute("minimum").as_uint();
 	maximum = config.child("sliderLimits").attribute("maximum").as_uint();

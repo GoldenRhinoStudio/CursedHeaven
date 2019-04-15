@@ -54,7 +54,6 @@ bool j1SceneCredits::Start()
 		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
 
 		// Loading textures
-		gui_tex = App->tex->Load("gui/atlas.png");
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		license = App->tex->Load("gui/creditsCURSEDHEAVEN.png");
 
@@ -178,7 +177,7 @@ bool j1SceneCredits::Update(float dt)
 
 	}
 
-	App->render->Blit(license, 54, 50, NULL, SDL_FLIP_NONE, 0, 0.24f);
+	App->render->Blit(license, 50, 50, NULL, SDL_FLIP_NONE, 0, 0.24f);
 
 
 

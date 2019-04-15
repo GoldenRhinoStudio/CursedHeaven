@@ -70,6 +70,9 @@ bool j1EntityManager::Update(float dt)
 		do_logic = false;
 	}
 
+	App->render->reOrder();
+	App->render->OrderBlit(App->render->OrderToRender);
+
 	return true;
 }
 

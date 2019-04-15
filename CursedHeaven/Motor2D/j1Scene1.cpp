@@ -57,7 +57,7 @@ bool j1Scene1::Start()
 	if (active)
 	{
 		// The map is loaded
-		if (App->map->Load("Openland_map.tmx"))
+		if (App->map->Load("Test2.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;

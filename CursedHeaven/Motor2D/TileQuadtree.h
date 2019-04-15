@@ -3,15 +3,7 @@
 
 #include "Quadtree.h"
 
-
-struct TileData
-{
-	TileData() {}
-	TileData(uint id, iPoint position) :id(id), position(position) {};
-
-	uint id;
-	iPoint position;
-};
+class TileData;
 
 class TileQuadtree : public Quadtree
 {
@@ -23,7 +15,7 @@ public:
 
 	void Split();
 
-	void InsertTile(TileData tile);
+	void InsertTile(TileData * tile);
 
 	bool CheckVisibility();
 

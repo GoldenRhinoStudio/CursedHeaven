@@ -82,8 +82,12 @@
     <ClCompile Include="p2Log.cpp">
       <Filter>Programation 2</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree.cpp" />
-    <ClCompile Include="TileQuadtree.cpp" />
+    <ClCompile Include="TileQuadtree.cpp">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -182,8 +186,12 @@
     <ClInclude Include="p2Log.h">
       <Filter>Programation 2</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree.h" />
-    <ClInclude Include="TileQuadtree.h" />
+    <ClInclude Include="TileQuadtree.h">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -227,6 +235,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\config.xml" />
+    <Xml Include="..\Game\config.xml">
+      <Filter>Development\Tools</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

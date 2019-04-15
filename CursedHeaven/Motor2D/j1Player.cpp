@@ -35,6 +35,8 @@ j1Player::~j1Player() {}
 
 // Load assets
 bool j1Player::Start() {
+	App->render->camera.x = 0;
+	App->render->camera.y = 0;
 	
 	// Textures are loaded
 	LOG("Loading player textures");
@@ -496,7 +498,6 @@ void j1Player::UpdateCameraPosition()
 	if (App->entity->player->position.x < 0)
 		App->entity->player->position.x = 0;
 	*/
-
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == j1KeyState::KEY_REPEAT)
 		App->render->camera.x -= 10;
 

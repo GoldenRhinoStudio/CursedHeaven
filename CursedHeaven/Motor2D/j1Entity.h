@@ -55,6 +55,9 @@ public:
 	Collider* collider = nullptr;
 	SDL_Texture* sprites = nullptr;
 
+	float height = 0;
+	float order = 0;
+
 };
 
 #endif // __ENTITY_H__

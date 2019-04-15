@@ -3,6 +3,7 @@
 
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <vector>
 #include <string>
 #include "j1Module.h"
 #include "j1Entity.h"
@@ -110,6 +111,8 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
 
+	bool PostUpdate();
+
 	// Called each loop iteration
 	void Draw();
 
@@ -145,11 +148,13 @@ public:
 	bool draw_with_quadtrees;
 	//TEST
 	uint tiles_rendered;
+	std::vector<SDL_Rect*>	Rectvec;
 
 	int current_height = 0;
 
 private:
-
+	int order = 0;
+	int height = 0;
 	float bgBlitSpeed;
 	float fogBlitSpeed;
 	float mapBlitSpeed;

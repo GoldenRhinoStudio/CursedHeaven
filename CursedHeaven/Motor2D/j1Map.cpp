@@ -37,6 +37,10 @@ bool j1Map::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+bool j1Map::PostUpdate() {
+	return true;
+}
+
 void j1Map::Draw()
 {
 	BROFILER_CATEGORY("MapDraw", Profiler::Color::Red)
@@ -52,35 +56,29 @@ void j1Map::Draw()
 		if ((*layer)->properties.Get("MustDraw") != 0)
 			continue;
 
-		/*for (int y = 0; y < data.height; ++y)
-		{
-			for (int x = 0; x < data.width; ++x)
-			{
-				int tile_id = (*layer)->Get(x, y);
-				if (tile_id != 0)
-				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = MapToWorld(x, y);
-
-					if ((*layer)->name == "bg1" || (*layer)->name == "bg2" || (*layer)->name == "bg3")
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, bgBlitSpeed);
-
-					else if ((*layer)->name == "Fog")
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, fogBlitSpeed);
-
-					else
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, mapBlitSpeed);
-					tiles_rendered++;
-				}
-			}
-		}*/
 		(*layer)->tile_tree->DrawMap();
 		(*layer)->tile_tree->DrawQuadtree();
 	}
-	LOG("Tiles drawn: %d ", tiles_rendered);
+
+
+
+	/*std::vector<TileData*>::iterator item = App->render->OrderToRender.begin();
+	while(item != App->render->OrderToRender.end()){
+		TileData* tile = *item;
+		if (tile->id != 0) {
+			TileSet* tileset = App->map->GetTilesetFromTileId(tile->id);
+			SDL_Rect rect = tileset->GetTileRect(tile->id);
+
+			App->render->Blit(tileset->texture, tile->position.x, tile->position.y, &rect);
+		}
+		item = item++;
+		App->render->OrderToRender.erase(App->render->OrderToRender.begin());
+	}*/
+
+
+
 }
+
 
 int Properties::Get(const char* value, int default_value) const
 {
@@ -226,11 +224,14 @@ bool j1Map::Load(const char* file_name)
 
 	// Load layer info ----------------------------------------------
 	pugi::xml_node layer;
+	height = 0;
+	order = 0;
 	for(layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
 		MapLayer* lay = new MapLayer();
 
 		ret = LoadLayer(layer, lay);
+		height++;
 
 		if(ret == true)
 			data.layers.push_back(lay);
@@ -438,12 +439,15 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
 			//TEST
-			iPoint tile_map_coordinates(App->map->MapToWorld((i - int(i / layer->width)*layer->width), int(i / layer->width)));
-			TileData tiledd(tile.attribute("gid").as_int(0), tile_map_coordinates);
-			layer->tile_tree->InsertTile(tiledd);
-			//TEST
-
-			layer->data[i++] = tile.attribute("gid").as_int(0);
+			int id = tile.attribute("gid").as_int(0);
+			if (id != 0) {
+				//TEST
+				iPoint tile_map_coordinates(App->map->MapToWorld((i - int(i / layer->width)*layer->width), int(i / layer->width)));
+				TileData* tiledd = new TileData(id, tile_map_coordinates.x, tile_map_coordinates.y, order++, height);
+				layer->tile_tree->InsertTile(tiledd);
+				//TEST
+			}
+				layer->data[i++] = id;
 		}
 	}
 

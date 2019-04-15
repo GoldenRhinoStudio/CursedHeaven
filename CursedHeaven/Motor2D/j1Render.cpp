@@ -1,9 +1,9 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1EntityManager.h"
+#include "j1Map.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -70,6 +70,20 @@ bool j1Render::Start()
 bool j1Render::PreUpdate()
 {
 	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
+
+
+	while(!map_sprites.empty())
+	{
+		map_sprites.pop_back();
+	}
+	map_sprites.clear();
+
+	while (!entities_sprites.empty())
+	{
+		entities_sprites.pop_back();
+	}
+	entities_sprites.clear();
+
 
 	SDL_RenderClear(renderer); 
 	return true;
@@ -277,4 +291,156 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	}
 
 	return ret;
+}
+
+bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>& priority) const
+{
+	bool ret = true;
+	while (priority.empty() == false) {
+		TileData* Image = priority.top();
+
+		uint size = App->win->GetScale();
+		SDL_Rect r;
+		r.x = (int)(camera.x * Image->speed) + Image->x * size;
+		r.y = (int)(camera.y * Image->speed) + Image->y * size;
+		if (Image->section != NULL) {
+			r.w = Image->section->w;
+			r.h = Image->section->h;
+		}
+		else {
+			SDL_QueryTexture(Image->texture, NULL, NULL, &r.w, &r.h);
+		}
+		SDL_RendererFlip flag;
+		if (Image->scale < 0) {
+			flag = SDL_FLIP_HORIZONTAL;
+			r.w *= -Image->scale;
+			r.h *= -Image->scale;
+		}
+		else {
+			flag = SDL_FLIP_NONE;
+			r.w *= Image->scale;
+			r.h *= Image->scale;
+		}
+
+		SDL_Point* point = NULL;
+		SDL_Point img2;
+
+		if (Image->pivot_x != INT_MAX && Image->pivot_y != INT_MAX) {
+			img2.x = Image->pivot_x;
+			img2.y = Image->pivot_y;
+			point = &img2;
+		}
+		if (SDL_RenderCopyEx(renderer, Image->texture, Image->section, &r, Image->angle, point, flag) != 0) {
+			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			ret = false;
+		}
+		priority.pop();
+	}
+	for (int i = 0; i < App->map->Rectvec.size(); i++) {
+	RELEASE(App->map->Rectvec[i]);
+	}
+
+	App->map->Rectvec.clear();
+	return ret;
+}
+
+void j1Render::reOrder() {
+	bool behind = false;
+	for (std::vector<TileData*>::iterator item_map = map_sprites.begin(); item_map != map_sprites.end(); ++item_map)
+	{
+		TileData* img2 = *item_map;
+		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
+		{
+			TileData* img1 = *item;
+
+			iPoint pos1 = App->map->WorldToMap(img1->x, img1->y + 16);
+			iPoint pos2 = App->map->WorldToMap(img2->x, img2->y);
+
+			pos1.x -= 1;
+			pos1.y -= 1;
+
+
+			if (img1->height >= img2->height) {
+				if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
+					(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
+					(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
+					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 2)) //fix
+				{
+					if (img2->id % 2 != 0)
+						img1->order = img2->order + 1.0f;
+					else
+						img1->order = img2->order + 0.5f;
+				}
+			}
+			else if (img1->height == img2->height - 1.0f || img1->height == img2->height - 2) {//check
+
+				if (pos2.x == pos1.x - 1 && pos2.y == pos1.y) //left
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y)//right
+				{
+					img1->order = img2->order - 0.5f;
+				}
+				else if (pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1)//top-left
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x)//top
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x + 1)//top-right
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.y == pos1.y && pos2.x == pos1.x)//top-right
+				{
+					img1->order = img2->order - 0.5f;
+				}
+
+			}
+
+			else if (img1->height < img2->height && img2->height - img1->height > 2) {//FRONT DOWN  HIGH LEVELS
+				if (img2->height - img1->height < 4) {
+					if (pos2.x == pos1.x - 1 && (pos2.y == pos1.y - 2 || pos2.y == pos1.y - 1))//top
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if ((pos2.x == pos1.x - 2 || pos2.x == pos1.x - 1) && pos2.y == pos1.y)//left
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if ((pos2.x == pos1.x + 2 || pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
+					{
+						img1->order = img2->order - 0.5f;
+					}
+				}
+			}
+		}
+		OrderToRender.push(img2);
+	}
+	if (!entities_sprites.empty()) {
+		TileData* player = entities_sprites.front();
+
+		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
+		{
+			TileData* img1 = *item;
+
+			/*if (player != img1) {
+			if (img1->y + img1->rect.h < player->y + player->rect.h) {
+			img1->order = player->order - 0.1;
+			}
+			}*/
+			OrderToRender.push(img1);
+
+			iPoint pos1 = App->map->WorldToMap(img1->x, img1->y);
+		}
+	}
 }

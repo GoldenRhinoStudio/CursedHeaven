@@ -9,6 +9,7 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Textures.h"
+#include "j1Render.h"
 
 
 
@@ -29,8 +30,7 @@ TileQuadtree::TileQuadtree(uint max_levels, SDL_Rect section, uint size, uint le
 		tiles = new TileData[size];
 
 		for (int i = 0; i < size; ++i)
-			tiles[i] = TileData(0, { 0,0 });
-
+			tiles[i] = TileData();
 	}
 
 	tiles_contained = 0;
@@ -65,18 +65,18 @@ void TileQuadtree::Split()
 
 }
 
-void TileQuadtree::InsertTile(TileData tile)
+void TileQuadtree::InsertTile(TileData* tile)
 {
 	SDL_Rect tile_rect;
-	tile_rect.x = tile.position.x;
-	tile_rect.y = tile.position.y;
+	tile_rect.x = tile->x;
+	tile_rect.y = tile->y;
 	tile_rect.w = App->map->data.tile_width;
 	tile_rect.h = App->map->data.tile_height;
 
 	//If the node is in the lowest level, store the tile here
 	if (level == max_levels)
 	{
-		tiles[tiles_contained++] = tile;
+		tiles[tiles_contained++] = *tile;
 	}
 
 	//In case there are lower subnodes, it will be stored there
@@ -110,10 +110,10 @@ bool TileQuadtree::CheckVisibility()
 	uint screen_h;
 	App->win->GetWindowSize(screen_w, screen_h);
 
-	if (-App->render->camera.x> ((section.x + section.w)) ||
-		(-App->render->camera.x + int(screen_w)) < section.x ||
+	if (-App->render->camera.x> ((section.x + section.w )) ||
+		(-App->render->camera.x + int(screen_w / scale)) < section.x ||
 		-App->render->camera.y > (section.y + section.h) ||
-		(-App->render->camera.y + int(screen_h)) < section.y)
+		(-App->render->camera.y + int(screen_h / scale)) < section.y)
 		return false;
 
 	return true;
@@ -121,20 +121,19 @@ bool TileQuadtree::CheckVisibility()
 
 void TileQuadtree::DrawMap() 
 {
-	if (CheckVisibility()) //ERIC
+	if (CheckVisibility())
 	{
-		//BEFORE BLITING SET THE ORDER OF SPRITES
 		if (level == max_levels)
 		{
 			for (int i = 0; i < tiles_contained; ++i)
 			{
-				TileData tile = tiles[i];
-				TileSet* tileset = App->map->GetTilesetFromTileId(tile.id);
-				if (tile.id != 0) {
-					SDL_Rect rect = tileset->GetTileRect(tile.id);
-					App->render->Blit(tileset->texture, tile.position.x, tile.position.y, &rect);
-					App->map->tiles_rendered++;
-				}
+				TileData* img2 = &tiles[i];
+				TileSet* tileset = App->map->GetTilesetFromTileId(img2->id);
+				App->map->Rectvec.push_back(new SDL_Rect(tileset->GetTileRect(img2->id)));
+				img2->texture = tileset->texture;
+				img2->speed = 1.0f;
+				img2->section = App->map->Rectvec.back();
+				App->render->map_sprites.push_back(img2);
 			}
 		}
 
@@ -147,6 +146,7 @@ void TileQuadtree::DrawMap()
 		}
 	}
 }
+
 
 void TileQuadtree::DrawQuadtree()
 {

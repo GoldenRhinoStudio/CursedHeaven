@@ -40,18 +40,23 @@ public:
 	// Called to change scene
 	void ChangeScene();
 
+	// Information about the character you are hovering
+	void CharacterInformation();
+
 public:
 
 	std::list<j1Button*> chooseCharacterButtons;
+	std::list<j1Label*> chooseCharacterLabels;
+	std::list<j1Box*> chooseCharacterBoxes;
 	
 	j1Timer	startup_time;
 	bool startGame = false;
 
 private:
 
+	_TTF_Font* font = nullptr;
 	SDL_Texture* graphics = nullptr;
 	SDL_Texture* button_tex = nullptr;
-	SDL_Rect background;
 
 	SCENE currentScene = SCENE::CHOOSE;
 };

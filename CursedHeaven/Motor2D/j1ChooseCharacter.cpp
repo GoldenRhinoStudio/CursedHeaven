@@ -2,13 +2,13 @@
 #include "p2Log.h"
 
 #include "j1App.h"
+#include "j1Map.h"
 #include "j1Input.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Collisions.h"
 #include "j1Render.h"
 #include "j1Window.h"
-#include "j1Map.h"
 #include "j1DragoonKnight.h"
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
@@ -56,9 +56,14 @@ bool j1ChooseCharacter::Start() {
 
 	if (active) {
 
+		// The map is loaded
+		App->map->Load("menu.tmx");
+
 		// Loading textures
-		graphics = App->tex->Load("textures/choose_character/bg.png");
 		button_tex = App->tex->Load("textures/choose_character/CHARACTERS_LOCKED.png");
+
+		// Loading fonts
+		font = App->font->Load("fonts/Pixeled.ttf", 8);
 
 		SDL_Rect BG_idle = { 0,0,163,346 };
 		SDL_Rect BG_hover = { 327,0,164,346 };
@@ -111,6 +116,16 @@ bool j1ChooseCharacter::Update(float dt) {
 			case HOVERED:
 				if (startup_time.Read() > 2000)
 				(*item)->situation = (*item)->hovered;
+				if ((*item)->bfunction == BLACKMAGE_BUT) 
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "BlackMague", App->gui->beige);
+				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT)
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "dk", App->gui->beige);
+				else {
+					for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
+						(*item)->CleanUp();
+						chooseCharacterLabels.remove(*item);
+					}
+				}
 				break;
 
 			case RELEASED:
@@ -151,10 +166,6 @@ bool j1ChooseCharacter::Update(float dt) {
 		}
 	}
 
-	background = { 0,0,1024,768 };
-
-	App->render->Blit(graphics, 0, 0, &background);
-
 	if (App->fade->IsFading() == 0) {
 		if (startGame) {
 			ChangeScene();
@@ -163,8 +174,14 @@ bool j1ChooseCharacter::Update(float dt) {
 		}
 	}
 
+	App->map->Draw();
+
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);
+	}
+
+	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
+		(*item)->Draw();
 	}
 
 	return true;
@@ -174,13 +191,17 @@ bool j1ChooseCharacter::CleanUp() {
 	LOG("Freeing all textures");
 
 	App->tex->UnLoad(button_tex);
-	App->tex->UnLoad(graphics);
 
 	App->tex->CleanUp();
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
 		(*item)->CleanUp();
 		chooseCharacterButtons.remove(*item);
+	}
+
+	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
+		(*item)->CleanUp();
+		chooseCharacterLabels.remove(*item);
 	}
 
 	return true;
@@ -201,6 +222,12 @@ void j1ChooseCharacter::ChangeScene() {
 	
 	App->entity->active = true;
 	App->entity->CreatePlayer();
-	App->entity->CreateNPC();
+	//App->entity->CreateNPC();
 	App->entity->Start();
+}
+
+void j1ChooseCharacter::CharacterInformation()
+{
+	
+	
 }

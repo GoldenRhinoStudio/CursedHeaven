@@ -52,7 +52,6 @@ private:
 
 	SDL_Texture* gui_tex2 = nullptr;
 	SDL_Texture* license = nullptr;
-	_TTF_Font* font = nullptr;
 
 	bool continueGame = true;
 	bool backToMenu = false;

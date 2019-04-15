@@ -57,9 +57,6 @@ bool j1SceneCredits::Start()
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		license = App->tex->Load("gui/creditsCURSEDHEAVEN.png");
 
-		// Loading fonts
-		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
-
 		credits_window = App->gui->CreateBox(&creditsBoxes, BOX, 45, 36, { 621, 377, 785, 568 }, gui_tex2);
 		credits_window->visible = true;
 

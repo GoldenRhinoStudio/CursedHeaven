@@ -100,7 +100,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 		// GodMode controls
 		if (GodMode) {
 
-			animation = &godmode;
+			animation = &idle;
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
@@ -348,7 +348,18 @@ bool j1Player::Update(float dt, bool do_logic) {
 		}
 	}
 
-	App->map->EntityMovement(App->entity->player);
+	//App->map->EntityMovement(App->entity->player);
+
+	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+		height = 0.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		height = 1.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+		height = 2.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		height = 3.0f;
+
+
 
 	// Update collider position to player position
 	if (collider != nullptr)
@@ -370,7 +381,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 		extra_life = false;
 
 	// Blitting the player
-	SDL_Rect r = animation->GetCurrentFrame(dt);
+	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (!attacking) {
 		if (facingRight)
@@ -389,6 +400,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 
 	// We update the camera to followe the player every frame
 	UpdateCameraPosition();
+
 
 	return true;
 }

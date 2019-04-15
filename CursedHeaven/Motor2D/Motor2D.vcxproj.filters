@@ -238,5 +238,8 @@
     <Xml Include="..\Game\config.xml">
       <Filter>Development\Tools</Filter>
     </Xml>
+    <Xml Include="..\Game\animations.xml">
+      <Filter>Development\Tools</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

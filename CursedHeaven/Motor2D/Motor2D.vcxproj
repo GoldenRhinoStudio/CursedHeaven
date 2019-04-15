@@ -143,6 +143,7 @@
     <ClInclude Include="TileQuadtree.h" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\Game\animations.xml" />
     <Xml Include="..\Game\config.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

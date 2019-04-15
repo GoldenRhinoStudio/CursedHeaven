@@ -20,7 +20,7 @@ public:
 	TileData(uint id, int x, int y, float order, float height) :
 		id(id), x(x), y(y), order(order), height(height), scale(App->win->GetScale()), pivot_x(INT_MAX), pivot_y(INT_MAX),
 		angle(0), speed(1), texture(nullptr), section(nullptr), rect({ 0,0,0,0 }), flip(false) {}
-	TileData(uint id, int x, int y, float order, float height, SDL_Texture* texture, const SDL_Rect* section, bool flip) :
+	TileData(uint id, int x, int y, float order, float height, SDL_Texture* texture, SDL_Rect* section, bool flip) :
 		id(id), x(x), y(y), order(order), height(height), scale(App->win->GetScale()), pivot_x(INT_MAX), pivot_y(INT_MAX),
 		angle(0), speed(1), texture(texture), section(section), rect({ 0,0,0,0 }), flip(flip) {}
 
@@ -36,7 +36,7 @@ public:
 	int					y;
 	int					pivot_x;
 	int					pivot_y;
-	const SDL_Rect*		section;
+	SDL_Rect*			section;
 	SDL_Rect			rect;
 	float				speed;
 	double				angle;

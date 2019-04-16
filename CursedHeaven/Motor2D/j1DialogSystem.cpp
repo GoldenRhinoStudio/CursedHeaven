@@ -206,7 +206,7 @@ void Dialogue::Input() {
 			{
 				if ((*itemOptions)->Minimum_Influence_Level < App->dialog->Influence_Level_Test) {
 
-					if (App->input->GetMouseButtonDown(KEY_DOWN)) {
+					if (App->input->GetMouseButtonDown(KEY_DOWN) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) {
 
 					if ((*itemOptions)->startAgain == true)
 						checkOptions = (*itemOptions);
@@ -225,7 +225,7 @@ void Dialogue::Input() {
 		}
 	}
 
-	if (App->input->GetMouseButtonDown(KEY_DOWN)) {
+	if (App->input->GetMouseButtonDown(KEY_DOWN) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) {
 
 		App->scene1->startDialogue = false;
 

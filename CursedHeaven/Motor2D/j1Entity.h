@@ -47,6 +47,10 @@ public:
 	ENTITY_TYPES type;
 	DIRECTION direction;
 
+	bool movement = false;
+
+	uint current_height = 0;
+
 	fPoint position;
 	fPoint initialPosition;
 	float speed;

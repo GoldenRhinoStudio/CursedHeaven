@@ -139,6 +139,7 @@ public:
 	MapData data;
 
 private:
+	uint next_gid = 0, next_height = 0;
 
 	float bgBlitSpeed;
 	float fogBlitSpeed;

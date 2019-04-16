@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="16" infinite="0" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="1">
  <tileset firstgid="1" name="TilesetLevel1" tilewidth="32" tileheight="32" tilecount="10" columns="2">
   <image source="TilesetLevel1.png" width="64" height="160"/>
  </tileset>
  <tileset firstgid="11" name="meta2" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="meta2.png" width="32" height="32"/>
  </tileset>
- <layer name="Layer0" width="100" height="100">
+ <layer id="1" name="Layer0" width="100" height="100">
   <data>
    <tile/>
    <tile/>
@@ -3921,70 +3921,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="4"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="9"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="1"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile gid="1"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="3"/>
-   <tile gid="1"/>
-   <tile gid="5"/>
-   <tile gid="5"/>
-   <tile gid="5"/>
-   <tile gid="1"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile gid="7"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -4009,6 +3945,38 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="1"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="3"/>
+   <tile gid="1"/>
+   <tile gid="5"/>
+   <tile gid="5"/>
+   <tile gid="5"/>
+   <tile gid="1"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
+   <tile gid="7"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4021,7 +3989,39 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="4"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="9"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="3"/>
@@ -10010,7 +10010,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Layer1" width="100" height="100">
+ <layer id="2" name="Layer1" width="100" height="100">
   <data>
    <tile/>
    <tile/>
@@ -11834,9 +11834,9 @@
    <tile gid="1"/>
    <tile gid="8"/>
    <tile/>
-   <tile gid="6"/>
-   <tile gid="6"/>
-   <tile gid="6"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
+   <tile gid="8"/>
    <tile gid="8"/>
    <tile gid="8"/>
    <tile gid="8"/>
@@ -11935,7 +11935,7 @@
    <tile gid="8"/>
    <tile/>
    <tile gid="8"/>
-   <tile gid="6"/>
+   <tile gid="8"/>
    <tile gid="8"/>
    <tile gid="7"/>
    <tile gid="7"/>
@@ -14025,7 +14025,7 @@
    <tile/>
    <tile/>
    <tile gid="1"/>
-   <tile gid="4"/>
+   <tile gid="3"/>
    <tile gid="3"/>
    <tile gid="3"/>
    <tile gid="4"/>
@@ -20014,7 +20014,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Layer2" width="100" height="100">
+ <layer id="3" name="Layer2" width="100" height="100">
   <data>
    <tile/>
    <tile/>
@@ -30018,7 +30018,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Meta0" width="100" height="100" visible="0" locked="1" opacity="0.55">
+ <layer id="4" name="Meta0" width="100" height="100" visible="0" locked="1" opacity="0.55">
   <data>
    <tile/>
    <tile/>
@@ -40022,7 +40022,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Meta1" width="100" height="100" visible="0" locked="1">
+ <layer id="5" name="Meta1" width="100" height="100" visible="0" locked="1">
   <data>
    <tile/>
    <tile/>
@@ -50026,7 +50026,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Meta2" width="100" height="100" visible="0" locked="1">
+ <layer id="6" name="Meta2" width="100" height="100" visible="0" locked="1">
   <data>
    <tile/>
    <tile/>

@@ -31,11 +31,6 @@ public:
 	bool black_mage = false;
 	bool dragoon_knight = false;
 
-	int coin_value;
-	char coins;
-	int coins_x, coins_y;
-	_TTF_Font* font = nullptr;
-
 private:
 
 	std::list<j1Label*> labels_list;

@@ -20,11 +20,6 @@ j1Hud::~j1Hud() {}
 bool j1Hud::Start()
 {
 	hud_text = App->tex->Load("gui/hud.png");
-	coin_value = 20;
-	coins = (char)coin_value;
-	coins_x = 20;
-	coins_y = 10;
-	font = App->font->Load("fonts/Pixeled.ttf");
 	
 	return true;
 }
@@ -55,25 +50,49 @@ bool j1Hud::Update(float dt)
 		}
 	}
 
+	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
 	SDL_Rect bm_profile = { 42,0,43,42 };
+
+	// Coins
 	SDL_Rect coins_r = { 0,42,35,13 };
+	
+	// DK Q
+	SDL_Rect dk_available_q = {0,61,41,41};
+	SDL_Rect dk_notavailable_q = {0,102,41,41};
+
+	// BM Q
+	SDL_Rect bm_available_q = { 41,61,41,41 };
+	SDL_Rect bm_notavailable_q = { 41,102,41,41 };
 
 	if (App->entity->player_type == MAGE)
 		black_mage = true;
 	else if (App->entity->player_type == KNIGHT)
 		dragoon_knight = true;
 
-	if (black_mage) App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-	else if (dragoon_knight) App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	if (black_mage) {
+		// Icon profile
+		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
-	coin_value = App->entity->currentPlayer->score_points;
-	coins = (char)coin_value;
+		// Abilities
+		App->render->Blit(hud_text, 15, 300, &bm_available_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		if (!App->entity->currentPlayer->available_Q) {
+			App->render->Blit(hud_text, 15, 300, &bm_notavailable_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		}
+	}
+	else if (dragoon_knight) {
+		// Icon profile
+		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+
+		// Abilities
+		App->render->Blit(hud_text, 15, 300, &dk_available_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		if (!App->entity->currentPlayer->available_Q) {
+			App->render->Blit(hud_text, 15, 300, &dk_notavailable_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		}
+
+	}
 
 	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-//	App->font->Print(coins, coins_x, coins_y);
-	App->gui->CreateLabel(&labels_list, LABEL, 20, 137, font, &coins);
-
 
 	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);

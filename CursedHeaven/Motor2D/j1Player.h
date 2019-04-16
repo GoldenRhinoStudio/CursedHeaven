@@ -107,8 +107,10 @@ public:
 
 	bool GodMode = false;
 	bool attacking = false;
+	bool available_Q = false;
 	bool active_Q = false;
 	bool firstTimeQ = true;
+	bool available_E = false;
 	bool active_E = false;
 	bool firstTimeE = true;
 };

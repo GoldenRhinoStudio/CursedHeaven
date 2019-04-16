@@ -131,6 +131,9 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					}
 				}
 
+				if (cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) available_Q = true;
+				else available_Q = false;
+
 				// Ability control
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {

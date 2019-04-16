@@ -46,7 +46,8 @@ enum ButtonFunction {
 	BLACKMAGE_BUT,
 	DRAGOONKNIGHT_BUT,
 	ROGUE_BUT,
-	TANK_BUT
+	TANK_BUT,
+	NONE_BUT
 };
 
 // ---------------------------------------------------

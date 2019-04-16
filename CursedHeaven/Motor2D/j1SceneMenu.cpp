@@ -172,7 +172,7 @@ bool j1SceneMenu::Update(float dt)
 	if (App->fade->IsFading() == 0) {
 		if (chooseChar) {
 			ChangeScene(CHOOSE);
-			App->choose_character->active = true;
+			//App->choose_character->active = true;
 			//player_created = false;
 		}
 		else if (openCredits)
@@ -294,12 +294,10 @@ void j1SceneMenu::ChangeScene(SCENE objectiveScene)
 			App->settings->active = true;
 			App->settings->Start();
 		}
-		else {
-			if (objectiveScene == SCENE::CHOOSE) {
+		else if (objectiveScene == SCENE::CHOOSE) {
 				App->choose_character->active = true;
 				App->choose_character->Start();
 				//App->render->camera = { 250, -1080 };
-			}
 		}
 	}
 }

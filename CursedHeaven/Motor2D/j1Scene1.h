@@ -61,6 +61,7 @@ public:
 	int time_scene1;
 	bool changingScene = false;
 	bool startDialogue = true;
+	bool finishedDialogue = false;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;

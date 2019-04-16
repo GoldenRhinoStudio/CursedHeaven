@@ -118,7 +118,6 @@ bool j1ChooseCharacter::Update(float dt) {
 				break;
 
 			case HOVERED:
-				if (startup_time.Read() > 2000)
 				(*item)->situation = (*item)->hovered;
 				if ((*item)->bfunction == BLACKMAGE_BUT) {
 					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 130, 155, font2, "Black Mage", App->gui->brown);

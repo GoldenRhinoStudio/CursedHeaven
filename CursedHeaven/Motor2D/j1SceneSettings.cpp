@@ -117,12 +117,15 @@ bool j1SceneSettings::Update(float dt)
 			break;
 
 		case RELEASED:
-			(*item)->situation = (*item)->idle;
-			backToMenu = true;
-			App->fade->FadeToBlack();
+			if (startup_time.Read() > 2000) {
+				(*item)->situation = (*item)->idle;
+				backToMenu = true;
+				App->fade->FadeToBlack();
+			}
 			break;
 
 		case CLICKED:
+			if (startup_time.Read() > 2000)
 			(*item)->situation = (*item)->clicked;
 			break;
 		}

@@ -55,38 +55,39 @@ bool j1ChooseCharacter::Awake(pugi::xml_node& config) {
 bool j1ChooseCharacter::Start() {
 
 	if (active) {
-
 		// The map is loaded
 		App->map->Load("menu.tmx");
 
 		// Loading textures
 		button_tex = App->tex->Load("gui/CHARACTERS_LOCKED.png");
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
+		info_tex = App->tex->Load("gui/uipack_rpg_sheet_2.png");
 
 		// Loading fonts
-		font = App->font->Load("fonts/Pixeled.ttf", 10);
+		font = App->font->Load("fonts/Pixeled.ttf", 5);
+		font2 = App->font->Load("fonts/Pixeled.ttf", 10);
 
 		SDL_Rect invisible = { 0,0, SCREEN_WIDTH, SCREEN_HEIGHT };
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, invisible, invisible, invisible, NULL, NONE_BUT);
+		
+		SDL_Rect name_box = { 9, 12, 1053, 352 };
+		info_window = App->gui->CreateBox(&chooseCharacterBoxes, BOX, 22, 150, name_box, info_tex);
 
-		SDL_Rect name_box = { 1422, 379, 315, 123 };
-		App->gui->CreateBox(&chooseCharacterBoxes, BOX, 60, 55, name_box, gui_tex2);
+		SDL_Rect BG_idle = { 0,0,163,310 };
+		SDL_Rect BG_hover = { 327,0,164,310 };
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2 + 12, 40 - 20, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
 
-		SDL_Rect BG_idle = { 0,0,163,346 };
-		SDL_Rect BG_hover = { 327,0,164,346 };
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
+		SDL_Rect DK_idle = { 0,346,163,310 };
+		SDL_Rect DK_hover = { 327,346,164,310 };
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 87 + 12, 40 - 20, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
 
-		SDL_Rect DK_idle = { 0,346,163,346 };
-		SDL_Rect DK_hover = { 327,346,164,346 };
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 87, 40, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
+		SDL_Rect RG_idle = { 164,0,164,310 };
+		SDL_Rect RG_hover = { 489,0,164,310 };
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 172 + 12, 40 - 20, RG_idle, RG_idle, RG_idle, button_tex, ROGUE_BUT);
 
-		SDL_Rect RG_idle = { 164,0,164,346 };
-		SDL_Rect RG_hover = { 489,0,164,346 };
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 172, 40, RG_idle, RG_idle, RG_idle, button_tex, ROGUE_BUT);
-
-		SDL_Rect TK_idle = { 164,346,163,346 };
-		SDL_Rect TK_hover = { 489,346,163,346 };
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 257, 40, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
+		SDL_Rect TK_idle = { 164,346,163,310 };
+		SDL_Rect TK_hover = { 489,346,163,310 };
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 257 + 12, 40 - 20, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
 
 		App->menu->player_created = false;
 
@@ -107,7 +108,7 @@ bool j1ChooseCharacter::Update(float dt) {
 
 	BROFILER_CATEGORY("ChooseCharacterUpdate", Profiler::Color::LightSeaGreen)
 
-	App->gui->UpdateButtonsState(&chooseCharacterButtons, App->gui->buttonsScale);
+	App->gui->UpdateButtonsState(&chooseCharacterButtons, 0.35f);
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
 		if ((*item)->visible) {
@@ -119,10 +120,22 @@ bool j1ChooseCharacter::Update(float dt) {
 			case HOVERED:
 				if (startup_time.Read() > 2000)
 				(*item)->situation = (*item)->hovered;
-				if ((*item)->bfunction == BLACKMAGE_BUT)
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "BlackMage", App->gui->beige);
-				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT)
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "dk", App->gui->beige);
+				if ((*item)->bfunction == BLACKMAGE_BUT) {
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 130, 155, font2, "Black Mage", App->gui->brown);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 80, 195, font, "A fast wizard that uses his powerful ranged", App->gui->beige);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 96, 210, font, "attacks and deals high area damage", App->gui->beige);
+				}
+				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 110, 155, font2, "Dragoon Knight", App->gui->brown);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 70, 195, font, "An agile warrior that moves fast acroos the map", App->gui->beige);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 89, 210, font, "and deals great damage with his sword", App->gui->beige);
+				}
+				else if ((*item)->bfunction == ROGUE_BUT) {
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, font2, "LOCKED", App->gui->brown);
+				}
+				else if ((*item)->bfunction == TANK_BUT) {
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, font2, "LOCKED", App->gui->brown);
+				}
 				else if ((*item)->bfunction == NONE_BUT) {
 					for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
 						(*item)->CleanUp();
@@ -188,7 +201,14 @@ bool j1ChooseCharacter::Update(float dt) {
 	}
 
 	for (std::list<j1Box*>::iterator item = chooseCharacterBoxes.begin(); item != chooseCharacterBoxes.end(); ++item) {
-		(*item)->Draw(0.7f);
+		(*item)->Draw(App->gui->settingsWindowScale);
+	}
+
+	// Blitting labels of the menu
+	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item)
+	{
+		if ((*item)->parent != nullptr) continue;
+		if ((*item)->visible) (*item)->Draw();
 	}
 
 	return true;
@@ -211,6 +231,11 @@ bool j1ChooseCharacter::CleanUp() {
 		chooseCharacterLabels.remove(*item);
 	}
 
+	for (std::list<j1Box*>::iterator item = chooseCharacterBoxes.begin(); item != chooseCharacterBoxes.end(); ++item) {
+		(*item)->CleanUp();
+		chooseCharacterBoxes.remove(*item);
+	}
+
 	return true;
 }
 
@@ -218,6 +243,7 @@ void j1ChooseCharacter::ChangeScene() {
 	
 	this->active = false;
 	startGame = false;
+	backToMenu = false;
 
 	CleanUp();
 
@@ -229,12 +255,6 @@ void j1ChooseCharacter::ChangeScene() {
 	
 	App->entity->active = true;
 	App->entity->CreatePlayer();
-	//App->entity->CreateNPC();
 	App->entity->Start();
 }
 
-void j1ChooseCharacter::CharacterInformation()
-{
-	
-	
-}

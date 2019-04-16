@@ -60,29 +60,32 @@ bool j1ChooseCharacter::Start() {
 		App->map->Load("menu.tmx");
 
 		// Loading textures
-		button_tex = App->tex->Load("textures/choose_character/CHARACTERS_LOCKED.png");
+		button_tex = App->tex->Load("gui/CHARACTERS_LOCKED.png");
+		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 
 		// Loading fonts
-		font = App->font->Load("fonts/Pixeled.ttf", 8);
+		font = App->font->Load("fonts/Pixeled.ttf", 10);
+
+		SDL_Rect invisible = { 0,0, SCREEN_WIDTH, SCREEN_HEIGHT };
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, invisible, invisible, invisible, NULL, NONE_BUT);
+
+		SDL_Rect name_box = { 1422, 379, 315, 123 };
+		App->gui->CreateBox(&chooseCharacterBoxes, BOX, 60, 55, name_box, gui_tex2);
 
 		SDL_Rect BG_idle = { 0,0,163,346 };
 		SDL_Rect BG_hover = { 327,0,164,346 };
-
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
 
 		SDL_Rect DK_idle = { 0,346,163,346 };
 		SDL_Rect DK_hover = { 327,346,164,346 };
-
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 87, 40, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
 
 		SDL_Rect RG_idle = { 164,0,164,346 };
 		SDL_Rect RG_hover = { 489,0,164,346 };
-
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 172, 40, RG_idle, RG_idle, RG_idle, button_tex, ROGUE_BUT);
 
 		SDL_Rect TK_idle = { 164,346,163,346 };
 		SDL_Rect TK_hover = { 489,346,163,346 };
-
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 257, 40, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
 
 		App->menu->player_created = false;
@@ -116,11 +119,11 @@ bool j1ChooseCharacter::Update(float dt) {
 			case HOVERED:
 				if (startup_time.Read() > 2000)
 				(*item)->situation = (*item)->hovered;
-				if ((*item)->bfunction == BLACKMAGE_BUT) 
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "BlackMague", App->gui->beige);
+				if ((*item)->bfunction == BLACKMAGE_BUT)
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "BlackMage", App->gui->beige);
 				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT)
 					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 156, 220, font, "dk", App->gui->beige);
-				else {
+				else if ((*item)->bfunction == NONE_BUT) {
 					for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
 						(*item)->CleanUp();
 						chooseCharacterLabels.remove(*item);
@@ -177,11 +180,15 @@ bool j1ChooseCharacter::Update(float dt) {
 	App->map->Draw();
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
-		(*item)->Draw(App->gui->buttonsScale);
+		(*item)->Draw(0.35f);
 	}
 
 	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
 		(*item)->Draw();
+	}
+
+	for (std::list<j1Box*>::iterator item = chooseCharacterBoxes.begin(); item != chooseCharacterBoxes.end(); ++item) {
+		(*item)->Draw(0.7f);
 	}
 
 	return true;
@@ -191,7 +198,7 @@ bool j1ChooseCharacter::CleanUp() {
 	LOG("Freeing all textures");
 
 	App->tex->UnLoad(button_tex);
-
+	App->map->CleanUp();
 	App->tex->CleanUp();
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {

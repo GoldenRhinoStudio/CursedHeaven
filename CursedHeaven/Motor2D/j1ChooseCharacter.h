@@ -57,6 +57,7 @@ private:
 	_TTF_Font* font = nullptr;
 	SDL_Texture* graphics = nullptr;
 	SDL_Texture* button_tex = nullptr;
+	SDL_Texture* gui_tex2 = nullptr;
 
 	SCENE currentScene = SCENE::CHOOSE;
 };

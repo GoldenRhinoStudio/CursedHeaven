@@ -147,13 +147,13 @@ void Dialogue::Draw() {
 	//RENDERING END DIALOG PART OF THE CHART
 	if (currentNode->getPosition_Spawn() == T_LEFT || currentNode->getPosition_Spawn() == D_LEFT) {
 
-		App->render->Blit2(Dialog_Textures, currentNode->dialogChart.w / scale, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_NONE, 0, scale);
-		App->render->Blit2(Dialog_Textures, currentNode->dialogChart.x, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale), &temp_Character.characterRect, SDL_FLIP_NONE, 0, scale);
+		App->render->BlitDialog(Dialog_Textures, currentNode->dialogChart.w / scale, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_NONE, 0, scale);
+		App->render->BlitDialog(Dialog_Textures, currentNode->dialogChart.x, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale), &temp_Character.characterRect, SDL_FLIP_NONE, 0, scale);
 	}
 	else if (currentNode->getPosition_Spawn() == T_RIGHT || currentNode->getPosition_Spawn() == D_RIGHT) {
 
-		App->render->Blit2(Dialog_Textures, currentNode->dialogChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
-		App->render->Blit2(Dialog_Textures, (currentNode->dialogChart.x + currentNode->dialogChart.w) / scale - temp_Character.characterRect.w, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale)
+		App->render->BlitDialog(Dialog_Textures, currentNode->dialogChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->dialogChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
+		App->render->BlitDialog(Dialog_Textures, (currentNode->dialogChart.x + currentNode->dialogChart.w) / scale - temp_Character.characterRect.w, currentNode->dialogChart.y / scale - (temp_Character.characterRect.h - currentNode->dialogChart.h / scale)
 			, &temp_Character.characterRect, SDL_FLIP_HORIZONTAL, 0, scale);
 	}
 
@@ -169,7 +169,7 @@ void Dialogue::Draw() {
 
 	//RENDER TEXT
 	App->render->SetViewPort(App->dialog->SpawnDialog_Section);
-	App->render->Blit2(temp_tex, 0, currentNode->TextScrollPositon, &temp, SDL_FLIP_NONE, 0);
+	App->render->BlitDialog(temp_tex, 0, currentNode->TextScrollPositon, &temp, SDL_FLIP_NONE, 0);
 	App->render->ResetViewPort();
 
 	//RENDER OPTIONS TEXT
@@ -178,13 +178,13 @@ void Dialogue::Draw() {
 
 		//RENDER OPTIONS CHART
 		SDL_RenderCopyEx(App->render->renderer, Dialog_Textures, &App->dialog->GeneraldialogChart, &currentNode->optionsChart, 0, NULL, SDL_FLIP_NONE);
-		App->render->Blit2(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
+		App->render->BlitDialog(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
 
 		itemOptions = next(itemOptions);
 		for (itemOptions; itemOptions != currentNode->dialogueOptions.end(); itemOptions++)
-			App->render->Blit2((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x, (*itemOptions)->optionTextPosition.y  - 7, &(*itemOptions)->optionText_Rect, SDL_FLIP_NONE, 0);
+			App->render->BlitDialog((*itemOptions)->optionText_tex, (*itemOptions)->optionTextPosition.x, (*itemOptions)->optionTextPosition.y  - 7, &(*itemOptions)->optionText_Rect, SDL_FLIP_NONE, 0);
 
-		App->render->Blit2(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
+		App->render->BlitDialog(Dialog_Textures, currentNode->optionsChart.x / scale - App->dialog->GeneraldialogChartEnd.w + 1, currentNode->optionsChart.y / scale, &App->dialog->GeneraldialogChartEnd, SDL_FLIP_HORIZONTAL, 0, scale);
 		currentNode->optionActive = true;
 	}
 

@@ -12,6 +12,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1SceneSettings.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -33,16 +34,17 @@ bool j1Gui::Awake(pugi::xml_node& config)
 	atlas_file_name = config.child("atlas").attribute("file").as_string("");
 	buttonsScale = config.child("scale").attribute("buttonsScale").as_float();
 	settingsWindowScale = config.child("scale").attribute("boxScale").as_float();
+	creditsWindowScale = config.child("scale").attribute("creditsboxScale").as_float();
 	logoScale = config.child("scale").attribute("logoScale").as_float();
 
 	// Copying box spawn position
 	settingsPosition.x = config.child("positions").attribute("settingsPositionX").as_int();
 	settingsPosition.y = config.child("positions").attribute("settingsPositionY").as_int();
 
-	slider1Y = 42;
-	slider2Y = 82;
-	lastSlider1X = 83;
-	lastSlider2X = 83;
+	slider1Y = 95;
+	slider2Y = 129;
+	lastSlider1X = 173;
+	lastSlider2X = 173;
 
 	minimum = config.child("sliderLimits").attribute("minimum").as_uint();
 	maximum = config.child("sliderLimits").attribute("maximum").as_uint();
@@ -95,7 +97,6 @@ bool j1Gui::PostUpdate()
 		App->scene1->settings_window->Draw(App->gui->settingsWindowScale);
 
 	//-------------------------
-
 
 	for (std::list<j1Button*>::iterator item = App->scene1->scene1Buttons.begin(); item != App->scene1->scene1Buttons.end(); ++item)
 	{

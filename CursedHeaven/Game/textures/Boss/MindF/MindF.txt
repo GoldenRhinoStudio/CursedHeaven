@@ -1,0 +1,21 @@
+1 - 2- 3-2-1
+
+Lateral
+Verical 37
+Horizontal 22  22  22
+
+Diagonal down
+Vertical 37  
+Horizontal 21  21  21
+
+Down
+Vertical 36
+Horizontal 23  23  23
+
+Diagonal up
+Vertical 37  
+Horizontal 24  24  24
+
+Up
+Vertical 37
+Horizontal 23  23  23

@@ -61,9 +61,9 @@
   </map>  
   
   <gui>
-	<scale buttonsScale="0.5f" boxScale="0.23f" logoScale="0.2f"/>
-	<positions settingsPositionX="54" settingsPositionY="10"/>
-	<sliderLimits maximum="108" minimum="58"/>
+	<scale buttonsScale="0.47f" boxScale="0.28f" creditsboxScale="0.32f" logoScale="0.35f"/>
+	<positions settingsPositionX="80" settingsPositionY="60"/>
+	<sliderLimits maximum="225" minimum="155"/>
 	<colors a="255">
 		<beige r="245" g="245" b="220"/>
 		<brown r="73" g="31" b="10"/>

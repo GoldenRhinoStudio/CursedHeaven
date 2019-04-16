@@ -103,6 +103,9 @@
     <ClCompile Include="j1Slime.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="j1SceneSettings.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p2Point.h">
@@ -222,11 +225,15 @@
     <ClInclude Include="j1ChooseCharacter.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
+
     <ClInclude Include="j1DialogSystem.h">
       <Filter>Development\Modules\GraphicUserInterface</Filter>
     </ClInclude>
     <ClInclude Include="j1Slime.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneSettings.h">
+      <Filter>Development\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,22 +1,27 @@
-#ifndef __j1SCENECREDITS_H__
-#define __j1SCENECREDITS_H__
+#ifndef __j1SCENESETTINGS_H__
+#define __j1SCENESETTINGS_H__
 
 #include "j1Module.h"
+#include "j1Render.h"
 #include "j1Timer.h"
 #include <list>
+#include "p2Point.h"
+#include "p2Animation.h"
 
 struct SDL_Texture;
+struct _TTF_Font;
 class j1Button;
 class j1Label;
+class j1Box;
 
-class j1SceneCredits : public j1Module
+class j1SceneSettings : public j1Module
 {
 public:
 
-	j1SceneCredits();
+	j1SceneSettings();
 
 	// Destructor
-	virtual ~j1SceneCredits();
+	virtual ~j1SceneSettings();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
@@ -40,22 +45,25 @@ public:
 	void ChangeScene();
 
 public:
-	std::list<j1Button*> creditsButtons;
-	std::list<j1Label*> creditsLabels;
-	std::list<j1Box*> creditsBoxes;
+	std::list<j1Label*> settingLabels;
+	std::list<j1Box*> settingBoxes;
+	std::list<j1Button*> settingButtons;
 
 	j1Timer	startup_time;
 
-	j1Box* credits_window = nullptr;
-
-private:
-
-	SDL_Texture* gui_tex2 = nullptr;
-	SDL_Texture* license = nullptr;
-	_TTF_Font* font = nullptr;
+	j1Box* sets_window = nullptr;
 
 	bool continueGame = true;
 	bool backToMenu = false;
+	uint times = 0;
+
+private:
+
+	_TTF_Font* font = nullptr;
+	SDL_Texture* wind_tex = nullptr;
+	SDL_Texture* gui_tex2 = nullptr;
+
+	
 };
 
-#endif // __j1SCENECREDITS_H__
+#endif // __j1SCENESETTINGS	_H__

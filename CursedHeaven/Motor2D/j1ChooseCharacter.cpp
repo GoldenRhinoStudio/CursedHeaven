@@ -60,26 +60,25 @@ bool j1ChooseCharacter::Start() {
 		graphics = App->tex->Load("textures/choose_character/bg.png");
 		button_tex = App->tex->Load("textures/choose_character/CHARACTERS_LOCKED.png");
 
-		SDL_Rect BG_idle = { 0,0,234,494 };
-		SDL_Rect BG_hover = { 468,0,234,494 };
-		SDL_Rect BG_click = { 936,0,234,494 };
+		SDL_Rect BG_idle = { 0,0,163,346 };
+		SDL_Rect BG_hover = { 327,0,164,346 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 12, 55, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, BG_idle, BG_hover, BG_hover, button_tex, BLACKMAGE_BUT);
 
-		SDL_Rect DK_idle = { 0,494,234,494 };
-		SDL_Rect DK_hover = { 468,494,234,494 };
+		SDL_Rect DK_idle = { 0,346,163,346 };
+		SDL_Rect DK_hover = { 327,346,164,346 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 135, 55, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 87, 40, DK_idle, DK_hover, DK_hover, button_tex, DRAGOONKNIGHT_BUT);
 
-		SDL_Rect RG_idle = { 234,0,234,494 };
-		SDL_Rect RG_hover = { 702,0,234,494 };
+		SDL_Rect RG_idle = { 164,0,164,346 };
+		SDL_Rect RG_hover = { 489,0,164,346 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 258, 55, RG_idle, RG_idle, RG_idle, button_tex, ROGUE_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 172, 40, RG_idle, RG_idle, RG_idle, button_tex, ROGUE_BUT);
 
-		SDL_Rect TK_idle = { 234,494,234,494 };
-		SDL_Rect TK_hover = { 702,494,234,494 };
+		SDL_Rect TK_idle = { 164,346,163,346 };
+		SDL_Rect TK_hover = { 489,346,163,346 };
 
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 381, 55, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 257, 40, TK_idle, TK_idle, TK_idle, button_tex, TANK_BUT);
 
 		App->menu->player_created = false;
 

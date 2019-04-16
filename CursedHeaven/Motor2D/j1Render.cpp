@@ -232,7 +232,7 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 }
 
 // Blit to screen
-bool j1Render::Blit2(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float Scale, double angle, int pivot_x, int pivot_y) const
+bool j1Render::BlitDialog(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float Scale, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
 	uint scale = Scale;

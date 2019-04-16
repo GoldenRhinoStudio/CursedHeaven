@@ -19,7 +19,8 @@ enum SCENE {
 	CHOOSE,
 	SCENE1,
 	SCENE2,
-	CREDITS
+	CREDITS,
+	SCENE_SETTINGS
 };
 
 class j1SceneMenu : public j1Module
@@ -68,21 +69,15 @@ public:
 	bool openCredits = false;
 	bool player_created = false;
 	bool chooseChar = false;
+	bool openSettings = false;
 
 private:
 
-	SDL_Texture* gui_tex = nullptr;
-	SDL_Texture* logo_tex = nullptr;
-	SDL_Texture* player_tex = nullptr;
-	SDL_Texture* harpy_tex = nullptr;
+	SDL_Texture* gui_tex2 = nullptr;
 
 	_TTF_Font* font = nullptr;
 
-	
 	uint times = 0;
-
-	Animation player;
-	Animation harpy;
 
 	SCENE currentScene = SCENE::MENU;
 };

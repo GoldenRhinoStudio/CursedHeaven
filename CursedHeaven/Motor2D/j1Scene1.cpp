@@ -66,7 +66,7 @@ bool j1Scene1::Start()
 	{	
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("Test2.tmx"))
+		if (App->map->Load("greenmount.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -328,7 +328,7 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities()
 {
-	//App->entity->AddEnemy(150, 850, SLIME); //Add Slime
+	App->entity->AddEnemy(150, 850, SLIME); //Add Slime
 }
 
 // Called before quitting

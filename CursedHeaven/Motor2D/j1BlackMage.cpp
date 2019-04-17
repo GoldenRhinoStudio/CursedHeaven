@@ -328,7 +328,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	//App->map->EntityMovement(App->entity->mage);
+	App->map->EntityMovement(App->entity->mage);
 
 	LOG("%i", (int)height);
 

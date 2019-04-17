@@ -140,7 +140,7 @@ void TileQuadtree::DrawMap()
 				img2->texture = tileset->texture;
 				img2->speed = 1.0f;
 				img2->section = App->map->Rectvec.back();
-				App->render->map_sprites.push_back(img2);
+				App->render->map_sprites_priority.push(img2);
 			}
 		}
 

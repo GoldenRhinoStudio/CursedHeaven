@@ -62,6 +62,10 @@ void j1Map::Draw()
 		(*layer)->tile_tree->DrawMap();
 		(*layer)->tile_tree->DrawQuadtree();
 	}
+	while (!App->render->map_sprites_priority.empty()) {
+		App->render->map_sprites.push_back(App->render->map_sprites_priority.top());
+		App->render->map_sprites_priority.pop();
+	}
 
 
 }
@@ -408,7 +412,7 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		quadT_position.x = -layer_size.x + ((layer->width + 1)*App->map->data.tile_width / 2);
 		break;
 	}
-	layer->tile_tree = new TileQuadtree(4, { quadT_position.x, 0, layer_size.x,layer_size.y }, layer->width*layer->height * 3);
+	layer->tile_tree = new TileQuadtree(6, { quadT_position.x, 0, layer_size.x,layer_size.y }, layer->width*layer->height * 3);
 	//TEST
 
 	if (layer_data == NULL)
@@ -430,7 +434,8 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			if (id != 0) {
 				//TEST
 				iPoint tile_map_coordinates(App->map->MapToWorld((i - int(i / layer->width)*layer->width), int(i / layer->width)));
-				TileData* tiledd = new TileData(id, tile_map_coordinates.x, tile_map_coordinates.y, order++, height);
+				float tile_height = (id % 2 == 0) ? 0.0f : 1.0f;
+				TileData* tiledd = new TileData(id, tile_map_coordinates.x, tile_map_coordinates.y, order++, height + (tile_height + height));
 				layer->tile_tree->InsertTile(tiledd);
 				//TEST
 			}
@@ -565,15 +570,15 @@ void j1Map::EntityMovement(j1Entity* entity) {
 
 		if (height2_gid != 0) {				//entity is on the third layer
 			current_gid = height2_gid;
-			entity->height = 2;
+			//entity->height = 2;
 		}
 		else if (height1_gid != 0) {		//entity is on the second layer
 			current_gid = height1_gid;
-			entity->height = 1;
+			//entity->height = 1;
 		}
 		else {				                //entity is on the first layer
 			current_gid = height0_gid;
-			entity->height = 0;
+			//entity->height = 0;
 		}
 
 		// tiles of the first layer | height == 0

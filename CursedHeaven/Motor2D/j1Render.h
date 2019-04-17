@@ -31,9 +31,9 @@ public:
 
 public:
 	SDL_Texture * texture;
-	int				scale;
 	int					x;
 	int					y;
+	int				scale;
 	int					pivot_x;
 	int					pivot_y;
 	SDL_Rect*			section;
@@ -44,6 +44,7 @@ public:
 	float				order;
 	float				height;
 	bool				flip;
+	bool				behind = false;
 };
 
 struct Comparer
@@ -51,6 +52,14 @@ struct Comparer
 	bool operator()(const TileData* img1, const TileData* img2)const
 	{
 		return img1->Ordering() > img2->Ordering();
+	}
+};
+
+struct TileComparer
+{
+	bool operator()(const TileData* img1, const TileData* img2)const
+	{
+		return img1->y > img2->y || (img1->y == img2->y && img1->x > img2->x);
 	}
 };
 
@@ -111,6 +120,7 @@ public:
 	SDL_Rect		viewport;
 	SDL_Color		background;
 
+	priority_queue <TileData*, vector<TileData*>, Comparer> map_sprites_priority;
 	vector<TileData*> map_sprites;
 	vector<TileData*> entities_sprites;
 

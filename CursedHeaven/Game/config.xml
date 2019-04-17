@@ -12,7 +12,7 @@
   </renderer>
 
   <window>
-    <resolution width="1024" height="768" scale="3"/>
+    <resolution width="1024" height="768" scale="2"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="true"/>
@@ -26,7 +26,7 @@
   <player>
 	<blackMage>
 	  <size width="18" height="8"/>
-	  <margin x="2" y="20" colisionMargin="3"/>
+	  <margin x="2" y="30" colisionMargin="3"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>

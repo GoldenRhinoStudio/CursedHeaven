@@ -542,7 +542,7 @@ void j1Render::reOrder() {
 			//}*/
 			TileData* img1 = *item;
 
-			pos1 = App->map->WorldToMap(img1->x, img1->y + 50);
+			pos1 = App->map->WorldToMap(img1->x, img1->y + 30);
 
 
 			if (img1->height > 1){

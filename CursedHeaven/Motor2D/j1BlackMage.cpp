@@ -196,6 +196,12 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					}
 				}		
 
+				if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
+				else available_Q = false;
+
+				if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
+				else available_E = false;
+
 				// Fire explosion
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
@@ -355,7 +361,8 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		}
 	}
 
-	hud->Update(dt);
+	if (App->scene1->finishedDialogue)
+		hud->Update(dt);
 
 	// We update the camera to follow the player every frame
 	UpdateCameraPosition(dt);

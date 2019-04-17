@@ -842,12 +842,9 @@ void j1Map::EntityMovement(j1Entity* entity) {
 				next_tile = { current_tile.x, current_tile.y + 1 };
 				break;
 			}
-		}
-
 
 		if (((next_gid % 2) - (current_gid % 2)) == 1 || ((next_gid % 2) - (current_gid % 2)) == -1
 			|| ((next_gid % 2) == 0 && (current_gid % 2) == 0) && next_gid != 0 && direction != NONE_ && current_gid != next_gid) {
-
 			if ((current_gid == height0_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
 				(current_gid == height0_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
 				(current_gid == height1_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next) ||
@@ -880,7 +877,6 @@ void j1Map::EntityMovement(j1Entity* entity) {
 					entity->position.x -= 1;
 				}
 			}
-
 			else if ((current_gid == height2_gid && height2_semiblock && current_gid % 2 == 1 && height2_next) ||
 				(current_gid == height2_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next) ||
 				(current_gid == height1_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||

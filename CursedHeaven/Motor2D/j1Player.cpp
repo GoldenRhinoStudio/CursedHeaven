@@ -153,13 +153,15 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 
 			// Direction controls	
 			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(right)) {
-				position.x += speed * dt;
+				if (movement)
+					position.x += speed * dt;
 				facingRight = true;
 				direction = DIRECTION::RIGHT_;
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(left)) {
-				position.x -= speed * dt;
+				if (movement)
+					position.x -= speed * dt;
 				facingRight = false;
 				direction = DIRECTION::LEFT_;
 			}
@@ -170,13 +172,13 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 
 					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::UP_RIGHT_;
 					else direction = DIRECTION::UP_LEFT_;
-
-					position.y -= (speed * dt) / 2;
+					if (movement)
+						position.y -= (speed * dt) / 2;
 				}
 				else
 					if (CheckWalkability(up)) {
-
-						position.y -= speed * dt;
+						if (movement)
+							position.y -= speed * dt;
 						direction = DIRECTION::UP_;
 					}
 			}
@@ -187,12 +189,12 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 
 					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::DOWN_RIGHT_;
 					else direction = DIRECTION::DOWN_LEFT_;
-
-					position.y += (speed * dt) / 2;
+					if (movement)
+						position.y += (speed * dt) / 2;
 				}
 				else if (CheckWalkability(down)) {
-
-					position.y += speed * dt;
+					if (movement)
+						position.y += speed * dt;
 					direction = DIRECTION::DOWN_;
 				}
 			}

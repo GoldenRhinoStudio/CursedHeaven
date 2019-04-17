@@ -104,198 +104,202 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		if (!active_Q) {
-			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
-		}
-		if (!attacking)
-			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
-				&diagonal_up, &diagonal_down, &lateral, &up, &down);
+		// Controls when is finished the dialog
+		if (App->scene1->finishedDialogue == true) {
 
-		// ---------------------------------------------------------------------------------------------------------------------
-		// COMBAT
-		// ---------------------------------------------------------------------------------------------------------------------
-		if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
-			if (!attacking) {
-				// Attack control
-				if (App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)
+			if (!active_Q) {
+				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+			}
+			if (!attacking)
+				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+					&diagonal_up, &diagonal_down, &lateral, &up, &down);
+
+			// ---------------------------------------------------------------------------------------------------------------------
+			// COMBAT
+			// ---------------------------------------------------------------------------------------------------------------------
+			if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
+				if (!attacking) {
+					// Attack control
+					if (App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)
+					{
+						attacking = true;
+
+						if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
+							iPoint mouse_pos;
+							App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+							Shot(mouse_pos.x, mouse_pos.y, dt);
+						}
+
+						if (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN) {
+							fPoint speed_particle;
+							fPoint particle_speed = { 250,250 };
+
+							if (animation == &idle_lateral || animation == &lateral) {
+								if (facingRight) {
+									speed_particle.x = particle_speed.x * cos(0 * DEGTORAD);
+									speed_particle.y = particle_speed.y * sin(0 * DEGTORAD);
+								}
+								else {
+									speed_particle.x = particle_speed.x * cos(180 * DEGTORAD);
+									speed_particle.y = particle_speed.y * sin(180 * DEGTORAD);
+								}
+							}
+							if (animation == &idle_diagonal_up || animation == &diagonal_up){
+								if (facingRight) {
+									speed_particle.x = particle_speed.x * cos(-45 * DEGTORAD);
+									speed_particle.y = particle_speed.y * sin(-45 * DEGTORAD);
+								}
+								else {
+									speed_particle.x = particle_speed.x * cos(-135 * DEGTORAD);
+									speed_particle.y = particle_speed.y * sin(-135 * DEGTORAD);
+								}
+							}
+							if (animation == &idle_diagonal_down || animation == &diagonal_down) {
+								if (facingRight) {
+									speed_particle.x = particle_speed.x * cos(-315 * DEGTORAD);
+									speed_particle.y = particle_speed.y * sin(-315 * DEGTORAD);
+								}
+								else {
+
+									speed_particle.x = particle_speed.x * cos(-225 * DEGTORAD);
+									speed_particle.y = particle_speed.y * sin(-225 * DEGTORAD);
+								}
+							}
+							if (animation == &idle_up || animation == &up) {
+								speed_particle.x = particle_speed.x * cos(-90 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(-90 * DEGTORAD);
+							}
+							if (animation == &idle_down || animation == &down) {
+								speed_particle.x = particle_speed.x * cos(-270 * DEGTORAD);
+								speed_particle.y = particle_speed.y * sin(-270 * DEGTORAD);
+							}
+
+							App->particles->shot_right.speed = speed_particle;
+
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+						}
+
+						if (direction == NONE_) {
+							if (animation == &idle_lateral) animation = &i_attack_lateral;
+							else if (animation == &idle_up) animation = &i_attack_up;
+							else if (animation == &idle_down) animation = &i_attack_down;
+							else if (animation == &idle_diagonal_up) animation = &i_attack_diagonal_up;
+							else if (animation == &idle_diagonal_down) animation = &i_attack_diagonal_down;
+						}
+						else {
+							if (animation == &lateral) animation = &attack_lateral;
+							else if (animation == &up) animation = &attack_up;
+							else if (animation == &down) animation = &attack_down;
+							else if (animation == &diagonal_up) animation = &attack_diagonal_up;
+							else if (animation == &diagonal_down) animation = &attack_diagonal_down;
+						}
+					}
+				}		
+
+				// Fire explosion
+				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
+
+					iPoint explosionPos;
+					iPoint p = { (int)position.x, (int)position.y };
+
+					if (animation == &lateral || animation == &idle_lateral) {
+						if (facingRight) explosionPos = { p.x + 20, p.y - 15 };
+						else explosionPos = { p.x - 45, p.y - 15 };
+					}
+					else if (animation == &up || animation == &idle_up) explosionPos = { p.x - 13, p.y - 30 };
+					else if (animation == &down || animation == &idle_down)	explosionPos = { p.x - 13, p.y + 4};
+					else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+						if (facingRight) explosionPos = { p.x + 15, p.y - 26 };
+						else explosionPos = { p.x - 40, p.y - 26 };
+					}
+					else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+						if (facingRight) explosionPos = { p.x + 15, p.y - 5 };
+						else explosionPos = { p.x - 40, p.y - 5 };
+					}
+
+					cooldown_Explosion.Start();
+					lastTime_Explosion = cooldown_Explosion.Read();
+					App->particles->explosion.anim.Reset();
+					App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ABILITY);
+					active_Q = true;
+					firstTimeQ = false;
+				}
+
+				if (active_Q && cooldown_Explosion.Read() >= lastTime_Explosion + duration_Explosion) {
+
+					cooldown_Q.Start();
+					lastTime_Q = cooldown_Q.Read();
+					active_Q = false;
+				}
+
+				// Extra speed
+				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
+
+					movementSpeed = movementSpeed * 2;
+					cooldown_Speed.Start();
+					lastTime_Speed = cooldown_Speed.Read();
+					active_E = true;
+					firstTimeE = false;
+				}
+
+				if (active_E && cooldown_Speed.Read() >= lastTime_Speed + duration_Speed) {
+
+					movementSpeed = movementSpeed / 2;
+					cooldown_E.Start();
+					lastTime_E = cooldown_E.Read();
+					active_E = false;
+				}
+			}
+
+			// Attack management
+			if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() 
+				|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() 
+				|| i_attack_lateral.Finished() || i_attack_up.Finished() || i_attack_down.Finished()
+				|| i_attack_diagonal_up.Finished() || i_attack_diagonal_down.Finished() || dead == true) {
+
+				i_attack_lateral.Reset();
+				i_attack_up.Reset();
+				i_attack_down.Reset();
+				i_attack_diagonal_up.Reset();
+				i_attack_diagonal_down.Reset();
+
+				attack_lateral.Reset();
+				attack_up.Reset();
+				attack_down.Reset();
+				attack_diagonal_up.Reset();
+				attack_diagonal_down.Reset();
+
+				if (animation == &attack_lateral || animation == &i_attack_lateral) animation = &idle_lateral;
+				else if (animation == &attack_up || animation == &i_attack_up) animation = &idle_up;
+				else if (animation == &attack_down || animation == &i_attack_down) animation = &idle_down;
+				else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) animation = &idle_diagonal_up;
+				else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) animation = &idle_diagonal_down;
+				attacking = false;
+			}
+			else if (attackCollider != nullptr) {
+				if (facingRight)
+					attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
+				else
+					attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+			}
+
+			// God mode
+			if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
+			{
+				GodMode = !GodMode;
+
+				if (GodMode == true)
 				{
-					attacking = true;
+					collider->type = COLLIDER_NONE;
+					animation = &godmode;
 
-					if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
-						iPoint mouse_pos;
-						App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-						Shot(mouse_pos.x, mouse_pos.y, dt);
-					}
-
-					if (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN) {
-						fPoint speed_particle;
-						fPoint particle_speed = { 250,250 };
-
-						if (animation == &idle_lateral || animation == &lateral) {
-							if (facingRight) {
-								speed_particle.x = particle_speed.x * cos(0 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(0 * DEGTORAD);
-							}
-							else {
-								speed_particle.x = particle_speed.x * cos(180 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(180 * DEGTORAD);
-							}
-						}
-						if (animation == &idle_diagonal_up || animation == &diagonal_up){
-							if (facingRight) {
-								speed_particle.x = particle_speed.x * cos(-45 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(-45 * DEGTORAD);
-							}
-							else {
-								speed_particle.x = particle_speed.x * cos(-135 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(-135 * DEGTORAD);
-							}
-						}
-						if (animation == &idle_diagonal_down || animation == &diagonal_down) {
-							if (facingRight) {
-								speed_particle.x = particle_speed.x * cos(-315 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(-315 * DEGTORAD);
-							}
-							else {
-
-								speed_particle.x = particle_speed.x * cos(-225 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(-225 * DEGTORAD);
-							}
-						}
-						if (animation == &idle_up || animation == &up) {
-							speed_particle.x = particle_speed.x * cos(-90 * DEGTORAD);
-							speed_particle.y = particle_speed.y * sin(-90 * DEGTORAD);
-						}
-						if (animation == &idle_down || animation == &down) {
-							speed_particle.x = particle_speed.x * cos(-270 * DEGTORAD);
-							speed_particle.y = particle_speed.y * sin(-270 * DEGTORAD);
-						}
-
-						App->particles->shot_right.speed = speed_particle;
-
-						App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
-					}
-
-					if (direction == NONE_) {
-						if (animation == &idle_lateral) animation = &i_attack_lateral;
-						else if (animation == &idle_up) animation = &i_attack_up;
-						else if (animation == &idle_down) animation = &i_attack_down;
-						else if (animation == &idle_diagonal_up) animation = &i_attack_diagonal_up;
-						else if (animation == &idle_diagonal_down) animation = &i_attack_diagonal_down;
-					}
-					else {
-						if (animation == &lateral) animation = &attack_lateral;
-						else if (animation == &up) animation = &attack_up;
-						else if (animation == &down) animation = &attack_down;
-						else if (animation == &diagonal_up) animation = &attack_diagonal_up;
-						else if (animation == &diagonal_down) animation = &attack_diagonal_down;
-					}
 				}
-			}		
-
-			// Fire explosion
-			if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-				&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
-
-				iPoint explosionPos;
-				iPoint p = { (int)position.x, (int)position.y };
-
-				if (animation == &lateral || animation == &idle_lateral) {
-					if (facingRight) explosionPos = { p.x + 20, p.y - 15 };
-					else explosionPos = { p.x - 45, p.y - 15 };
+				else if (GodMode == false)
+				{
+					collider->type = COLLIDER_PLAYER;
 				}
-				else if (animation == &up || animation == &idle_up) explosionPos = { p.x - 13, p.y - 30 };
-				else if (animation == &down || animation == &idle_down)	explosionPos = { p.x - 13, p.y + 4};
-				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
-					if (facingRight) explosionPos = { p.x + 15, p.y - 26 };
-					else explosionPos = { p.x - 40, p.y - 26 };
-				}
-				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
-					if (facingRight) explosionPos = { p.x + 15, p.y - 5 };
-					else explosionPos = { p.x - 40, p.y - 5 };
-				}
-
-				cooldown_Explosion.Start();
-				lastTime_Explosion = cooldown_Explosion.Read();
-				App->particles->explosion.anim.Reset();
-				App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ABILITY);
-				active_Q = true;
-				firstTimeQ = false;
-			}
-
-			if (active_Q && cooldown_Explosion.Read() >= lastTime_Explosion + duration_Explosion) {
-
-				cooldown_Q.Start();
-				lastTime_Q = cooldown_Q.Read();
-				active_Q = false;
-			}
-
-			// Extra speed
-			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-				&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
-
-				movementSpeed = movementSpeed * 2;
-				cooldown_Speed.Start();
-				lastTime_Speed = cooldown_Speed.Read();
-				active_E = true;
-				firstTimeE = false;
-			}
-
-			if (active_E && cooldown_Speed.Read() >= lastTime_Speed + duration_Speed) {
-
-				movementSpeed = movementSpeed / 2;
-				cooldown_E.Start();
-				lastTime_E = cooldown_E.Read();
-				active_E = false;
-			}
-		}
-
-		// Attack management
-		if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() 
-			|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() 
-			|| i_attack_lateral.Finished() || i_attack_up.Finished() || i_attack_down.Finished()
-			|| i_attack_diagonal_up.Finished() || i_attack_diagonal_down.Finished() || dead == true) {
-
-			i_attack_lateral.Reset();
-			i_attack_up.Reset();
-			i_attack_down.Reset();
-			i_attack_diagonal_up.Reset();
-			i_attack_diagonal_down.Reset();
-
-			attack_lateral.Reset();
-			attack_up.Reset();
-			attack_down.Reset();
-			attack_diagonal_up.Reset();
-			attack_diagonal_down.Reset();
-
-			if (animation == &attack_lateral || animation == &i_attack_lateral) animation = &idle_lateral;
-			else if (animation == &attack_up || animation == &i_attack_up) animation = &idle_up;
-			else if (animation == &attack_down || animation == &i_attack_down) animation = &idle_down;
-			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) animation = &idle_diagonal_up;
-			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) animation = &idle_diagonal_down;
-			attacking = false;
-		}
-		else if (attackCollider != nullptr) {
-			if (facingRight)
-				attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-			else
-				attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
-		}
-
-		// God mode
-		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
-		{
-			GodMode = !GodMode;
-
-			if (GodMode == true)
-			{
-				collider->type = COLLIDER_NONE;
-				animation = &godmode;
-
-			}
-			else if (GodMode == false)
-			{
-				collider->type = COLLIDER_PLAYER;
 			}
 		}
 	}

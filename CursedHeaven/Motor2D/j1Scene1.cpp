@@ -76,10 +76,6 @@ bool j1Scene1::Start()
 			RELEASE_ARRAY(data);
 		}
 
-		//Judge
-		App->entity->CreateNPC();
-		App->entity->judge->Start();
-
 		// The audio is played	
 		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);
 
@@ -151,12 +147,12 @@ bool j1Scene1::Update(float dt)
 	time_scene1 = startup_time.ReadSec();
 
 
-	int x, y;
+	/*int x, y;
 	App->input->GetMousePosition(x, y);
 
 	if (x < App->win->width && y < App->win->height)
-		if (App->input->GetMouseButtonDown(KEY_DOWN))
-			if (startDialogue == true)
+		if (App->input->GetMouseButtonDown(KEY_DOWN))*/
+			if (startDialogue)
 				App->dialog->StartDialogEvent(App->dialog->dialogA);
 			
 

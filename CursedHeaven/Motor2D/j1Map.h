@@ -149,6 +149,8 @@ public:
 	//TEST
 	uint tiles_rendered;
 	std::vector<SDL_Rect*>	Rectvec;
+private:
+	uint next_gid = 0, next_height = 0;
 
 	int current_height = 0;
 

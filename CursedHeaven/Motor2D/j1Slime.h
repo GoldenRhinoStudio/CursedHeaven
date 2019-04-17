@@ -28,6 +28,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt, bool do_logic);
 
+	bool DrawOrder(float dt);
+
 	// Called before quitting
 	bool CleanUp();
 

@@ -328,7 +328,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	App->map->EntityMovement(App->entity->mage);
+	//App->map->EntityMovement(App->entity->mage);
 
 	LOG("%i", (int)height);
 
@@ -349,6 +349,14 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		height = 2.0f;
 	else if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 		height = 3.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+		height = 4.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+		height = 5.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
+		height = 6.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
+		height = 7.0f;
 
 
 	// We update the camera to follow the player every frame

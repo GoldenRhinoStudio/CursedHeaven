@@ -27,6 +27,8 @@ public:
 	bool Update(float dt, bool do_logic);
 	bool PostUpdate();
 
+	bool DrawOrder(float dt);
+
 	void LoadPlayerProperties();
 
 	// Load / Save

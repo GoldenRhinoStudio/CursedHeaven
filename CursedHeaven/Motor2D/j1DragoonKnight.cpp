@@ -289,6 +289,29 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
 
+
+	if (App->scene1->finishedDialogue)
+		hud->Update(dt);
+
+	// We update the camera to follow the player every frame
+	//UpdateCameraPosition(dt);
+
+	return true;
+}
+
+// Call modules after each loop iteration
+bool j1DragoonKnight::PostUpdate() {
+
+	BROFILER_CATEGORY("DragoonKnightPostUpdate", Profiler::Color::Yellow)
+
+		if (App->scene1->finishedDialogue)
+			hud->Update(0);
+
+		return true;
+}
+
+bool j1DragoonKnight::DrawOrder(float dt) {
+
 	// Blitting the player
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
@@ -313,22 +336,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}
-
-	if (App->scene1->finishedDialogue)
-		hud->Update(dt);
-
-	// We update the camera to follow the player every frame
-	//UpdateCameraPosition(dt);
-
 	return true;
-}
-
-// Call modules after each loop iteration
-bool j1DragoonKnight::PostUpdate() {
-
-	BROFILER_CATEGORY("DragoonKnightPostUpdate", Profiler::Color::Yellow)
-
-		return true;
 }
 
 // Load game state

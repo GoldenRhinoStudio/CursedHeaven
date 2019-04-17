@@ -90,15 +90,20 @@ bool j1Slime::Update(float dt, bool do_logic)
 			position = initialPosition;
 		}
 
-		// Drawing the harpy
-		SDL_Rect* r = &animation->GetCurrentFrame(dt);
-
-		if (position.x - App->entity->currentPlayer->position.x >= 0)
-			Draw(r, true, -10, -10);
-		else
-			Draw(r, false, -10, -10);
 	}
 
+	return true;
+}
+
+bool j1Slime::DrawOrder(float dt) {
+
+	// Drawing the harpy
+	SDL_Rect* r = &animation->GetCurrentFrame(dt);
+
+	if (position.x - App->entity->currentPlayer->position.x >= 0)
+		Draw(r, true, -10, -10);
+	else
+		Draw(r, false, -10, -10);
 	return true;
 }
 

@@ -330,6 +330,8 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	// Checking for the heights
 	App->map->EntityMovement(App->entity->mage);
 
+	LOG("%i", (int)height);
+
 	// Update collider position to player position
 	if (collider != nullptr)
 		collider->SetPos(position.x + margin.x, position.y + margin.y);
@@ -338,6 +340,24 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
 
+
+	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+		height = 0.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		height = 1.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+		height = 2.0f;
+	else if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		height = 3.0f;
+
+
+	// We update the camera to follow the player every frame
+	UpdateCameraPosition(dt);
+
+	return true;
+}
+
+bool j1BlackMage::DrawOrder(float dt) {
 	// Blitting the player
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
@@ -360,24 +380,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			else Draw(r, true, attackBlittingX, attackBlittingY);
 		}
 	}
-
-	if (App->scene1->finishedDialogue)
-		hud->Update(dt);
-
-
-	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-		height = 0.0f;
-	else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-		height = 1.0f;
-	else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-		height = 2.0f;
-	else if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-		height = 3.0f;
-
-
-	// We update the camera to follow the player every frame
-	UpdateCameraPosition(dt);
-
 	return true;
 }
 
@@ -385,6 +387,9 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 bool j1BlackMage::PostUpdate() {
 
 	BROFILER_CATEGORY("BlackMagePostUpdate", Profiler::Color::Yellow)
+
+		if (App->scene1->finishedDialogue)
+			hud->Update(0);
 
 	return true;
 }

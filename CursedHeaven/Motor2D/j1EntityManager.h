@@ -74,6 +74,7 @@ public:
 	// Called every frame
 	bool PreUpdate();
 	bool Update(float dt);
+	bool DrawEntityOrder(float dt);
 	bool PostUpdate();
 
 	bool CleanUp();

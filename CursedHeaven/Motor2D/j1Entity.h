@@ -35,6 +35,9 @@ public:
 	virtual bool CleanUp() {
 		return true;
 	};
+	virtual bool DrawOrder(float dt) {
+		return true;
+	}
 
 public:
 

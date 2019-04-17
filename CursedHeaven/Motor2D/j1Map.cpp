@@ -18,7 +18,7 @@
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
 	name.assign("map");
-	draw_with_quadtrees = true;
+	draw_with_quadtrees = false;
 }
 
 // Destructor
@@ -30,6 +30,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Map Parser");
 	bool ret = true;
+	draw_with_quadtrees = false;
 
 	folder.assign(config.child("folder").child_value());
 
@@ -59,12 +60,36 @@ void j1Map::Draw()
 		if ((*layer)->properties.Get("MustDraw") != 0)
 			continue;
 
-		(*layer)->tile_tree->DrawMap();
-		(*layer)->tile_tree->DrawQuadtree();
+		if (draw_with_quadtrees) {
+			(*layer)->tile_tree->DrawMap();
+			(*layer)->tile_tree->DrawQuadtree();
+		}
+		else {
+			for (int y = 0; y < data.height; ++y)
+			{
+				for (int x = 0; x < data.width; ++x)
+				{
+					int tile_id = (*layer)->Get(x, y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = MapToWorld(x, y);
+
+						if ((*layer)->name != "Meta0" && (*layer)->name != "Meta1" && (*layer)->name != "Meta2")
+							App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					}
+				}
+			}
+		}
 	}
-	while (!App->render->map_sprites_priority.empty()) {
-		App->render->map_sprites.push_back(App->render->map_sprites_priority.top());
-		App->render->map_sprites_priority.pop();
+
+	if (draw_with_quadtrees) {
+		while (!App->render->map_sprites_priority.empty()) {
+			App->render->map_sprites.push_back(App->render->map_sprites_priority.top());
+			App->render->map_sprites_priority.pop();
+		}
 	}
 
 
@@ -396,23 +421,25 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	LoadProperties(node, layer->properties);
 	pugi::xml_node layer_data = node.child("data");
 
-	//TEST
-	iPoint layer_size;
-	iPoint quadT_position(0, 0);
-	switch (data.type)
-	{
-	case MAPTYPE_ORTHOGONAL:
-		layer_size.x = layer->width*App->map->data.tile_width;
-		layer_size.y = layer->height*App->map->data.tile_height;
-		quadT_position.x = 0;
-		break;
-	case MAPTYPE_ISOMETRIC:
-		layer_size.x = (layer->width + layer->height)*(App->map->data.tile_width *0.5f);
-		layer_size.y = (layer->width + layer->height + 1) * (data.tile_height *0.5f);
-		quadT_position.x = -layer_size.x + ((layer->width + 1)*App->map->data.tile_width / 2);
-		break;
+	if (draw_with_quadtrees) {
+		//TEST
+		iPoint layer_size;
+		iPoint quadT_position(0, 0);
+		switch (data.type)
+		{
+		case MAPTYPE_ORTHOGONAL:
+			layer_size.x = layer->width*App->map->data.tile_width;
+			layer_size.y = layer->height*App->map->data.tile_height;
+			quadT_position.x = 0;
+			break;
+		case MAPTYPE_ISOMETRIC:
+			layer_size.x = (layer->width + layer->height)*(App->map->data.tile_width *0.5f);
+			layer_size.y = (layer->width + layer->height + 1) * (data.tile_height *0.5f);
+			quadT_position.x = -layer_size.x + ((layer->width + 1)*App->map->data.tile_width / 2);
+			break;
+		}
+		layer->tile_tree = new TileQuadtree(6, { quadT_position.x, 0, layer_size.x,layer_size.y }, layer->width*layer->height * 3);
 	}
-	layer->tile_tree = new TileQuadtree(6, { quadT_position.x, 0, layer_size.x,layer_size.y }, layer->width*layer->height * 3);
 	//TEST
 
 	if (layer_data == NULL)
@@ -423,23 +450,33 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+
 		layer->data = new uint[layer->width*layer->height];
 		memset(layer->data, 0, layer->width*layer->height);
 
-		int i = 0;
-		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
-		{
-			//TEST
-			int id = tile.attribute("gid").as_int(0);
-			if (id != 0) {
-				//TEST
-				iPoint tile_map_coordinates(App->map->MapToWorld((i - int(i / layer->width)*layer->width), int(i / layer->width)));
-				float tile_height = (id % 2 == 0) ? 0.0f : 1.0f;
-				TileData* tiledd = new TileData(id, tile_map_coordinates.x, tile_map_coordinates.y, order++, height + (tile_height + height));
-				layer->tile_tree->InsertTile(tiledd);
-				//TEST
+		if (!draw_with_quadtrees) {
+			int i = 0;
+			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+			{
+				layer->data[i++] = tile.attribute("gid").as_int(0);
 			}
+		}
+		else {
+			int i = 0;
+			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+			{
+				//TEST
+				int id = tile.attribute("gid").as_int(0);
+				if (id != 0) {
+					//TEST
+					iPoint tile_map_coordinates(App->map->MapToWorld((i - int(i / layer->width)*layer->width), int(i / layer->width)));
+					float tile_height = (id % 2 == 0) ? 0.0f : 1.0f;
+					TileData* tiledd = new TileData(id, tile_map_coordinates.x, tile_map_coordinates.y, order++, height + (tile_height + height));
+					layer->tile_tree->InsertTile(tiledd);
+					//TEST
+				}
 				layer->data[i++] = id;
+			}
 		}
 	}
 
@@ -568,18 +605,19 @@ void j1Map::EntityMovement(j1Entity* entity)
 	}
 
 	uint current_gid;
-
+	uint tile_id = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+	int sum = (tile_id % 2 != 0) ? 1 : 0;
 	if (height2_gid != 0) {				//entity is on the third layer
 		current_gid = height2_gid;
-		entity->current_height = 2;
+		entity->height = 4 + sum;
 	}
 	else if (height1_gid != 0) {		//entity is on the second layer
 		current_gid = height1_gid;
-		entity->current_height = 1;
+		entity->height = 2 + sum;
 	}
 	else {				                //entity is on the first layer
 		current_gid = height0_gid;
-		entity->current_height = 0;
+		entity->height = 0 + sum;
 	}
 
 	// tiles of the first layer | height == 0

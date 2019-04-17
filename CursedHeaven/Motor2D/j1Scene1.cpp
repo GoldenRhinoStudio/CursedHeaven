@@ -63,7 +63,8 @@ bool j1Scene1::Start()
 {
 
 	if (active)
-	{		
+	{	
+		App->map->draw_with_quadtrees = true;
 		// The map is loaded
 		if (App->map->Load("greenmount.tmx"))
 		{
@@ -280,10 +281,13 @@ bool j1Scene1::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
-		App->map->draw_with_quadtrees = !App->map->draw_with_quadtrees;
+
+
 
 	App->map->Draw();
+	App->entity->DrawEntityOrder(dt);
+	App->render->reOrder();
+	App->render->OrderBlit(App->render->OrderToRender);
 
 	// Blitting patfhinding if debug is activated
 	if (App->collisions->debug) {

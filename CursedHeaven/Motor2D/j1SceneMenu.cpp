@@ -188,7 +188,7 @@ bool j1SceneMenu::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	// Blitting background and animations
-	//App->map->Draw();
+	App->map->Draw();
 
 	// Blitting the logo
 	SDL_Rect logo = { 854, 92, 801, 166 };

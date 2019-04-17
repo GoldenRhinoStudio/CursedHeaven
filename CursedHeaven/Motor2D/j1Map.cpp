@@ -843,77 +843,78 @@ void j1Map::EntityMovement(j1Entity* entity) {
 				break;
 			}
 
-		if (((next_gid % 2) - (current_gid % 2)) == 1 || ((next_gid % 2) - (current_gid % 2)) == -1
-			|| ((next_gid % 2) == 0 && (current_gid % 2) == 0) && next_gid != 0 && direction != NONE_ && current_gid != next_gid) {
-			if ((current_gid == height0_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
-				(current_gid == height0_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
-				(current_gid == height1_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next) ||
-				(current_gid == height1_gid && height2_semiblock && current_gid % 2 == 1 && height2_next) ||
-				(current_gid == height2_gid && !height2_semiblock && current_gid % 2 == 0 && height2_next)) {
-				if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_
-					&& (((down_left_gid_1 != next_gid && height1_next) || (down_left_gid_2 != next_gid && height2_next)) ||
-					((left_gid_1 != next_gid && height1_next) || (left_gid_2 != next_gid && height2_next))))
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 0) && direction == UP_LEFT_))
-					entity->position.y -= 1;
-				else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_
-					&& (((down_right_gid_1 != next_gid && height1_next) || (down_right_gid_2 != next_gid && height2_next)) ||
-					((down_gid_1 != next_gid && height1_next) || (down_gid_2 != next_gid && height2_next))))
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == 1) && direction == UP_RIGHT_))
-					entity->position.y -= 1;
-				else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_)
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					&& (((down_right_gid_1 == next_gid && height1_next) || (down_right_gid_2 == next_gid && height2_next)) ||
-					((right_gid_1 == next_gid && height1_next) || (right_gid_2 == next_gid && height2_next)))
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 0) && direction == DOWN_RIGHT_)) {
-					entity->position.y += 1;
-					entity->position.x += 1;
+			if (((next_gid % 2) - (current_gid % 2)) == 1 || ((next_gid % 2) - (current_gid % 2)) == -1
+				|| ((next_gid % 2) == 0 && (current_gid % 2) == 0) && next_gid != 0 && direction != NONE_ && current_gid != next_gid) {
+				if ((current_gid == height0_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
+					(current_gid == height0_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
+					(current_gid == height1_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next) ||
+					(current_gid == height1_gid && height2_semiblock && current_gid % 2 == 1 && height2_next) ||
+					(current_gid == height2_gid && !height2_semiblock && current_gid % 2 == 0 && height2_next)) {
+					if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_
+						&& (((down_left_gid_1 != next_gid && height1_next) || (down_left_gid_2 != next_gid && height2_next)) ||
+						((left_gid_1 != next_gid && height1_next) || (left_gid_2 != next_gid && height2_next))))
+						|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
+						|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 0) && direction == UP_LEFT_))
+						entity->position.y -= 1;
+					else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_
+						&& (((down_right_gid_1 != next_gid && height1_next) || (down_right_gid_2 != next_gid && height2_next)) ||
+						((down_gid_1 != next_gid && height1_next) || (down_gid_2 != next_gid && height2_next))))
+						|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
+						|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == 1) && direction == UP_RIGHT_))
+						entity->position.y -= 1;
+					else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_)
+						|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
+						&& (((down_right_gid_1 == next_gid && height1_next) || (down_right_gid_2 == next_gid && height2_next)) ||
+						((right_gid_1 == next_gid && height1_next) || (right_gid_2 == next_gid && height2_next)))
+						|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 0) && direction == DOWN_RIGHT_)) {
+						entity->position.y += 1;
+						entity->position.x += 1;
+					}
+					else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_)
+						|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
+						|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == -1) && direction == DOWN_LEFT_)) {
+						entity->position.y += 1;
+						entity->position.x -= 1;
+					}
 				}
-				else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_)
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == -1) && direction == DOWN_LEFT_)) {
-					entity->position.y += 1;
-					entity->position.x -= 1;
-				}
-			}
-			else if ((current_gid == height2_gid && height2_semiblock && current_gid % 2 == 1 && height2_next) ||
-				(current_gid == height2_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next) ||
-				(current_gid == height1_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
-				(current_gid == height1_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
-				(current_gid == height0_gid && height0_semiblock && current_gid % 2 == 1 && height0_next)) {
-				if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_
-					&& (((up_right_gid_2 != next_gid && height2_next && up_right_gid_2 != 0) || (up_right_gid_2 != next_gid && height1_next && up_right_gid_2 != 0)) ||
-					((up_right_gid_1 != next_gid && height1_next && up_right_gid_1 != 0) || (up_right_gid_1 != next_gid && height0_next && up_right_gid_1 != 0) ||
-						(up_right_gid != next_gid && height0_next && up_right_gid != 0)) || ((up_gid_2 != next_gid && height2_next && up_gid_2 != 0) ||
-						(up_gid_2 != next_gid && height1_next && up_gid_2 != 0)) || ((up_gid_1 != next_gid && height1_next && up_gid_1 != 0) ||
-							(up_gid_1 != next_gid && height0_next && up_gid_1 != 0) || (up_gid != next_gid && height0_next && up_gid != 0))))
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 0) && direction == DOWN_RIGHT_))
-					entity->position.y += 1;
-				else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_
-					&& (((up_left_gid_2 != next_gid && height2_next && up_left_gid_2 != 0) || (up_left_gid_2 != next_gid && height1_next && up_left_gid_2 != 0)) ||
-					((up_left_gid_1 != next_gid && height1_next && up_left_gid_1 != 0) || (up_left_gid_1 != next_gid && height0_next && up_left_gid_1 != 0) ||
-						(up_left_gid != next_gid && height0_next && up_left_gid != 0)) || ((up_gid_2 != next_gid && height2_next && up_gid_2 != 0) ||
-						(up_gid_2 != next_gid && height1_next && up_gid_2 != 0)) || ((up_gid_1 != next_gid && height1_next && up_gid_1 != 0) ||
-							(up_gid_1 != next_gid && height0_next && up_gid_1 != 0) || (up_gid != next_gid && height0_next && up_gid != 0))))
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == -1) && direction == DOWN_LEFT_))
-					entity->position.y += 1;
-				else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_
-						&& (((up_right_gid_2 == next_gid && height2_next) || (up_right_gid_2 == next_gid && height1_next)) ||
-						((up_right_gid_1 == next_gid && height1_next) || (up_right_gid_1 == next_gid && height0_next) ||
-							(up_right_gid == next_gid && height0_next)) || ((right_gid_2 == next_gid && height2_next) ||
-							(right_gid_2 == next_gid && height1_next)) || ((right_gid_1 == next_gid && height1_next) ||
-								(right_gid_1 == next_gid && height0_next) || (right_gid == next_gid && height0_next))))
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == 1) && direction == UP_RIGHT_)) {
-					entity->position.x += 1;
-				}
-				else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 0) && direction == UP_LEFT_)) {
-					entity->position.x -= 1;
+				else if ((current_gid == height2_gid && height2_semiblock && current_gid % 2 == 1 && height2_next) ||
+					(current_gid == height2_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next) ||
+					(current_gid == height1_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
+					(current_gid == height1_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
+					(current_gid == height0_gid && height0_semiblock && current_gid % 2 == 1 && height0_next)) {
+					if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_
+						&& (((up_right_gid_2 != next_gid && height2_next && up_right_gid_2 != 0) || (up_right_gid_2 != next_gid && height1_next && up_right_gid_2 != 0)) ||
+						((up_right_gid_1 != next_gid && height1_next && up_right_gid_1 != 0) || (up_right_gid_1 != next_gid && height0_next && up_right_gid_1 != 0) ||
+							(up_right_gid != next_gid && height0_next && up_right_gid != 0)) || ((up_gid_2 != next_gid && height2_next && up_gid_2 != 0) ||
+							(up_gid_2 != next_gid && height1_next && up_gid_2 != 0)) || ((up_gid_1 != next_gid && height1_next && up_gid_1 != 0) ||
+								(up_gid_1 != next_gid && height0_next && up_gid_1 != 0) || (up_gid != next_gid && height0_next && up_gid != 0))))
+						|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
+						|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 0) && direction == DOWN_RIGHT_))
+						entity->position.y += 1;
+					else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_
+						&& (((up_left_gid_2 != next_gid && height2_next && up_left_gid_2 != 0) || (up_left_gid_2 != next_gid && height1_next && up_left_gid_2 != 0)) ||
+						((up_left_gid_1 != next_gid && height1_next && up_left_gid_1 != 0) || (up_left_gid_1 != next_gid && height0_next && up_left_gid_1 != 0) ||
+							(up_left_gid != next_gid && height0_next && up_left_gid != 0)) || ((up_gid_2 != next_gid && height2_next && up_gid_2 != 0) ||
+							(up_gid_2 != next_gid && height1_next && up_gid_2 != 0)) || ((up_gid_1 != next_gid && height1_next && up_gid_1 != 0) ||
+								(up_gid_1 != next_gid && height0_next && up_gid_1 != 0) || (up_gid != next_gid && height0_next && up_gid != 0))))
+						|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
+						|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == -1) && direction == DOWN_LEFT_))
+						entity->position.y += 1;
+					else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_)
+						|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_
+							&& (((up_right_gid_2 == next_gid && height2_next) || (up_right_gid_2 == next_gid && height1_next)) ||
+							((up_right_gid_1 == next_gid && height1_next) || (up_right_gid_1 == next_gid && height0_next) ||
+								(up_right_gid == next_gid && height0_next)) || ((right_gid_2 == next_gid && height2_next) ||
+								(right_gid_2 == next_gid && height1_next)) || ((right_gid_1 == next_gid && height1_next) ||
+									(right_gid_1 == next_gid && height0_next) || (right_gid == next_gid && height0_next))))
+						|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == 1) && direction == UP_RIGHT_)) {
+						entity->position.x += 1;
+					}
+					else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_)
+						|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
+						|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 0) && direction == UP_LEFT_)) {
+						entity->position.x -= 1;
+					}
 				}
 			}
 		}

@@ -131,7 +131,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					}
 				}
 
-				if (cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) available_Q = true;
+				if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
 				else available_Q = false;
 
 				// Ability control
@@ -179,6 +179,9 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					}
 				}
 			}
+
+			if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
+			else available_E = false;
 
 			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 				&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {

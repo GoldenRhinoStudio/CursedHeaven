@@ -60,10 +60,16 @@ bool j1Hud::Update(float dt)
 	// DK Q
 	SDL_Rect dk_available_q = {0,61,41,41};
 	SDL_Rect dk_notavailable_q = {0,102,41,41};
+	// DK E
+	SDL_Rect dk_available_e = { 0,143,41,41 };
+	SDL_Rect dk_notavailable_e = {0,184,41,41};
 
 	// BM Q
 	SDL_Rect bm_available_q = { 41,61,41,41 };
 	SDL_Rect bm_notavailable_q = { 41,102,41,41 };
+	// BM E
+	SDL_Rect bm_available_e = { 41,143,41,41 };
+	SDL_Rect bm_notavailable_e = { 41,184,41,41 };
 
 	if (App->entity->player_type == MAGE)
 		black_mage = true;
@@ -75,19 +81,32 @@ bool j1Hud::Update(float dt)
 		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 		// Abilities
+		// Q
 		App->render->Blit(hud_text, 15, 300, &bm_available_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
 		if (!App->entity->currentPlayer->available_Q) {
 			App->render->Blit(hud_text, 15, 300, &bm_notavailable_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
 		}
+		// E
+		App->render->Blit(hud_text, 15, 400, &bm_available_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		if (!App->entity->currentPlayer->available_E) {
+			App->render->Blit(hud_text, 15, 400, &bm_notavailable_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		}
+
 	}
 	else if (dragoon_knight) {
 		// Icon profile
 		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 		// Abilities
+		// Q
 		App->render->Blit(hud_text, 15, 300, &dk_available_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
 		if (!App->entity->currentPlayer->available_Q) {
 			App->render->Blit(hud_text, 15, 300, &dk_notavailable_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		}
+		// E
+		App->render->Blit(hud_text, 15, 400, &dk_available_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		if (!App->entity->currentPlayer->available_E) {
+			App->render->Blit(hud_text, 15, 400, &dk_notavailable_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
 		}
 
 	}

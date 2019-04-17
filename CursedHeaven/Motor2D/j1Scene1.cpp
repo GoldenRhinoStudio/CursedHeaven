@@ -61,11 +61,9 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene1::Start()
 {
-	hud = new j1Hud();
 
 	if (active)
 	{		
-		hud->Start();
 		// The map is loaded
 		if (App->map->Load("greenmount.tmx"))
 		{

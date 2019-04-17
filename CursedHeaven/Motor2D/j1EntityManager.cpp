@@ -81,6 +81,19 @@ bool j1EntityManager::Update(float dt)
 	return true;
 }
 
+bool j1EntityManager::DrawEntityOrder(float dt)
+{
+	BROFILER_CATEGORY("EntityManagerUpdate", Profiler::Color::LightSeaGreen)
+
+	
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+		(*item)->DrawOrder(dt);
+	}
+
+	return true;
+}
+
 bool j1EntityManager::PostUpdate()
 {
 	BROFILER_CATEGORY("EntityManagerPostUpdate", Profiler::Color::Yellow)

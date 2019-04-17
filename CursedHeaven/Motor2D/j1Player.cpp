@@ -18,7 +18,7 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 j1Player::~j1Player() {}
 
 void j1Player::UpdateCameraPosition(float dt)
-{
+{/*
 	if (!changing_room) {
 		App->render->camera.x = -position.x * App->win->GetScale() + (App->win->width / 2);
 		App->render->camera.y = -position.y * App->win->GetScale() + (App->win->height / 2);
@@ -51,15 +51,15 @@ void j1Player::UpdateCameraPosition(float dt)
 
 		else changing_room = false;
 	}
-
+	*/
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == j1KeyState::KEY_REPEAT)
-		App->render->camera.x -= 20;
+		App->render->camera.x -= 30;
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == j1KeyState::KEY_REPEAT)
-		App->render->camera.x += 20;
+		App->render->camera.x += 30;
 	if (App->input->GetKey(SDL_SCANCODE_UP) == j1KeyState::KEY_REPEAT)
-		App->render->camera.y += 20;
+		App->render->camera.y += 30;
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == j1KeyState::KEY_REPEAT)
-		App->render->camera.y -= 20;
+		App->render->camera.y -= 30;
 }
 
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {

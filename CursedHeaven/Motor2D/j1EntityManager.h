@@ -74,6 +74,7 @@ public:
 	// Called every frame
 	bool PreUpdate();
 	bool Update(float dt);
+	bool DrawEntityOrder(float dt);
 	bool PostUpdate();
 
 	bool CleanUp();
@@ -105,7 +106,6 @@ public:
 	j1Player*			currentPlayer = nullptr;
 
 	j1Judge*			judge = nullptr;
-
 
 	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;

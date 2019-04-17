@@ -52,8 +52,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 		LOG("Scene1 not active.");
 
 	// Copying the position of the player
-	initialScene1Position.x = 250;
-	initialScene1Position.y = 1080;
+	initialScene1Position.x = 0;
+	initialScene1Position.y = 0;
 
 	return ret;
 }
@@ -63,7 +63,8 @@ bool j1Scene1::Start()
 {
 
 	if (active)
-	{		
+	{	
+		App->map->draw_with_quadtrees = true;
 		// The map is loaded
 		if (App->map->Load("greenmount.tmx"))
 		{
@@ -281,7 +282,12 @@ bool j1Scene1::Update(float dt)
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
 
+
+
 	App->map->Draw();
+	App->entity->DrawEntityOrder(dt);
+	App->render->reOrder();
+	App->render->OrderBlit(App->render->OrderToRender);
 
 	// Blitting patfhinding if debug is activated
 	if (App->collisions->debug) {
@@ -322,7 +328,7 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities()
 {
-	App->entity->AddEnemy(200, 900, SLIME);
+	App->entity->AddEnemy(150, 850, SLIME);
 }
 
 // Called before quitting

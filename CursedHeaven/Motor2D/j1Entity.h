@@ -35,13 +35,16 @@ public:
 	virtual bool CleanUp() {
 		return true;
 	};
+	virtual bool DrawOrder(float dt) {
+		return true;
+	}
 
 public:
 
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
-	virtual void Draw(SDL_Rect r, bool flip = false, int x = 0, int y = 0);
+	virtual void Draw(SDL_Rect* r, bool flip = false, int x = 0, int y = 0);
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 
 	ENTITY_TYPES type;
@@ -59,10 +62,11 @@ public:
 	Collider* collider = nullptr;
 	SDL_Texture* sprites = nullptr;
 
+	float height = 0;
+	float order = 0;
 	// Combat values
 	int basicDamage = 0;
 	int lifePoints = 0;
-
 };
 
 #endif // __ENTITY_H__

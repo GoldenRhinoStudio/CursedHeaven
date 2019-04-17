@@ -61,8 +61,9 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene1::Start()
 {
+
 	if (active)
-	{
+	{		
 		// The map is loaded
 		if (App->map->Load("greenmount.tmx"))
 		{
@@ -146,14 +147,8 @@ bool j1Scene1::Update(float dt)
 
 	time_scene1 = startup_time.ReadSec();
 
-
-	/*int x, y;
-	App->input->GetMousePosition(x, y);
-
-	if (x < App->win->width && y < App->win->height)
-		if (App->input->GetMouseButtonDown(KEY_DOWN))*/
-			if (startDialogue)
-				App->dialog->StartDialogEvent(App->dialog->dialogA);
+	if (startDialogue)
+		App->dialog->StartDialogEvent(App->dialog->dialogA);
 			
 
 	// ---------------------------------------------------------------------------------------------------------------------

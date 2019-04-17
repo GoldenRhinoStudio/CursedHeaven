@@ -27,30 +27,16 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 public:
-	SDL_Texture* sprites = nullptr;
-	SDL_Texture* lives_tex = nullptr;
-	j1Timer	startup_time;
-	
-	std::string time_text;
-	std::string min_text;
-	std::string min_text_left = "0";
-	std::string score;
-	std::string score_points;
+	SDL_Texture* hud_text = nullptr;
+	bool black_mage = false;
+	bool dragoon_knight = false;
 
-	j1Label* seconds;
-	j1Label* minutes;
-	j1Label* coins_label = nullptr;
-	j1Label* score_label = nullptr;
-
-	_TTF_Font* text = nullptr;
-	
-	int time;
-	int min = 00;
-
-	Animation* animation = nullptr;
-	Animation idle;
+private:
 
 	std::list<j1Label*> labels_list;
+	std::list<j1Button*> hud_buttons;
+
+	int pivot = 2147483647;
 };
 
 #endif // __j1LHUD_H__

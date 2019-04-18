@@ -1010,3 +1010,44 @@ void j1Map::EntityMovement(j1Entity* entity)
 	}
 }
 
+void j1Map::Tile_WorldMap(iPoint& pos, int height){	
+	int re2 = 0;
+	if (height < 2) {
+		re2 = 0;
+	}
+	else if (height < 4 && height >= 2)
+		re2 = 1;
+	else if (height < 6 && height >= 4) {
+		re2 = 2;
+	}
+	else if (height < 8 && height >= 6) {
+		re2 = 3;
+	}
+	pos.x += re2;
+	pos.y += re2;
+}
+
+void j1Map::Entity_WorldMap(iPoint& pos, int height) {
+
+	iPoint re1 = { 0,0 };
+	if (height < 2) {
+		re1.x = 1;
+		re1.y = (((int)height + 1) % 2 == 0) ? 1 : 0;
+	}
+	else if (height < 4 && height >= 2) {
+		re1.x = (((int)height + 1) % 2 == 0) ? 2 : 1;
+		re1.y = (((int)height + 1) % 2 == 0) ? 2 : 1;
+	}
+	else if (height < 6 && height >= 4) {
+		re1.x = (((int)height + 1) % 2 == 0) ? 3 : 2;
+		re1.y = (((int)height + 1) % 2 == 0) ? 3 : 2;
+	}
+	else if (height < 8 && height >= 6) {
+		re1.x = (((int)height + 1) % 2 == 0) ? 4 : 3;
+		re1.y = (((int)height + 1) % 2 == 0) ? 4 : 3;
+	}
+
+	pos.x += height - re1.x;
+	pos.y += height - re1.y;
+}
+

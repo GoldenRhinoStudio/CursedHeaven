@@ -16,13 +16,13 @@ class TileData
 public:
 	TileData() :
 		id(0), x(0), y(0), order(0), height(0), scale(App->win->GetScale()), pivot_x(INT_MAX), pivot_y(INT_MAX),
-		angle(0), speed(1), texture(nullptr), section(nullptr), rect({ 0,0,0,0 }), flip(false) {}
+		angle(0), speed(1), texture(nullptr), section(nullptr), rect({ 0,0,0,0 }), flip(false), col(nullptr) {}
 	TileData(uint id, int x, int y, float order, float height) :
 		id(id), x(x), y(y), order(order), height(height), scale(App->win->GetScale()), pivot_x(INT_MAX), pivot_y(INT_MAX),
-		angle(0), speed(1), texture(nullptr), section(nullptr), rect({ 0,0,0,0 }), flip(false) {}
-	TileData(uint id, int x, int y, float order, float height, SDL_Texture* texture, SDL_Rect* section, bool flip) :
+		angle(0), speed(1), texture(nullptr), section(nullptr), rect({ 0,0,0,0 }), flip(false), col(nullptr) {}
+	TileData(uint id, int x, int y, float order, float height, SDL_Texture* texture, SDL_Rect* section, bool flip, Collider* col) :
 		id(id), x(x), y(y), order(order), height(height), scale(App->win->GetScale()), pivot_x(INT_MAX), pivot_y(INT_MAX),
-		angle(0), speed(1), texture(texture), section(section), rect({ 0,0,0,0 }), flip(flip) {}
+		angle(0), speed(1), texture(texture), section(section), rect({ 0,0,0,0 }), flip(flip),col(col) {}
 
 	float Ordering()const
 	{
@@ -37,6 +37,7 @@ public:
 	int					pivot_x;
 	int					pivot_y;
 	SDL_Rect*			section;
+	Collider*			col;
 	SDL_Rect			rect;
 	float				speed;
 	double				angle;

@@ -147,7 +147,6 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
-
 	if (startDialogue)
 		App->dialog->StartDialogEvent(App->dialog->dialogA);
 			

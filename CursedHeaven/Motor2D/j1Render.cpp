@@ -5,6 +5,7 @@
 #include "j1EntityManager.h"
 #include "j1Map.h"
 #include "j1Player.h"
+#include "j1Collisions.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -426,93 +427,71 @@ void j1Render::reOrder() {
 	int aux_height = 0;
 	int sum_height = 0;
 	iPoint pos1 = { 0,0 };
-	iPoint pos2 = { 0,0 };
+	iPoint pos2 = { 0,0 }; 
 	for (std::vector<TileData*>::iterator item_map = map_sprites.begin(); item_map != map_sprites.end(); ++item_map)
 	{
 		TileData* img2 = *item_map;
 		pos2 = App->map->WorldToMap(img2->x, img2->y);
-
-			int re2 = 0;
-			if (img2->height < 2) {
-				re2 = 1;
-			}
-			else if (img2->height < 4 && img2->height >= 2)
-				re2 = 2;
-			else if (img2->height < 6 && img2->height >= 4) {
-				re2 = 3;
-			}
-			else if (img2->height < 8 && img2->height >= 6) {
-				re2 = 4;
-			}
-			pos2.x += img2->height - re2;
-			pos2.y += img2->height - re2;
-		
+		App->map->Tile_WorldMap(pos2, img2->height);	
 
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
 			
 			TileData* img1 = *item;
+			pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y);
+			App->map->Tile_WorldMap(pos1, img1->height);
 
-			pos1 = App->map->WorldToMap(img1->x, img1->y + img1->section->h);
 
-			int re1 = 0;
-				if (img1->height < 2) {
-					re1 = 1;
-				}else if (img1->height < 4 && img1->height >= 2)
-					re1 = 2;
-				else if (img1->height < 6 && img1->height >= 4) {
-					re1 = 3;
-				}
-				else if (img1->height < 8 && img1->height >= 6) {
-					re1 = 4;
-				}
+				if (img1->height < img2->height && !img1->behind) {//check
 
-				pos1.x += img1->height - re1 ;
-				pos1.y += img1->height - re1;
-
-				if (img1->height + 1 <= img2->height) {//check
-
-					if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && (pos2.y == pos1.y - 1))//top-left
+					if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
 					{
 						img1->order = img2->order + 0.5f;
+						LOG("TL");
 					}
-					else if ((pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2) && pos2.x == pos1.x)//top
+					else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
 					{
 						img1->order = img2->order + 0.5f;
+						LOG("T");
 					}
-					else if ((pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2) && (pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2))//top-right
+					else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
 					{
 						img1->order = img2->order + 0.5f;
+						LOG("TR");
 					}
-					else if (pos2.x == pos1.x - 1 && pos2.y == pos1.y) //left
+					else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
 					{
 						img1->order = img2->order + 0.5f;
+						LOG("L");
 					}
 					else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
 					{
-						img1->order = img2->order + 0.5f;
-					}
-					else if ((pos2.x == pos1.x && pos2.y == pos1.y)) {
-						img1->order = img2->order + 0.5f;
+						img1->order = img2->order - 0.5f;
+						img1->behind = true;
+						LOG("C");
 					}
 					else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
 					{
 						img1->order = img2->order - 0.5f;
 						img1->behind = true;
+						LOG("R");
 					}
-					else if (pos2.y == pos1.y + 1 && (pos2.x == pos1.x - 1 || pos2.x == pos1.x + 2))//bottom-left
+					else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
 					{
 						img1->order = img2->order + 0.5f;
+						LOG("BL");
 					}
-					else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x)//bottom
+					else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
 					{
 						img1->order = img2->order - 0.5f;
 						img1->behind = true;
+						LOG("B");
 					}
-					else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x + 1)//bottom-right
+					else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
 					{
 						img1->order = img2->order - 0.5f;
 						img1->behind = true;
+						LOG("BR");
 					}
 
 				}
@@ -545,14 +524,12 @@ void j1Render::reOrder() {
 		{
 			TileData* img1 = *item;
 
-			/*if (player != img1) {
-			if (img1->y + img1->rect.h < player->y + player->rect.h) {
-			img1->order = player->order - 0.1;
+			if (player != img1) {
+				if (img1->col->rect.y + img1->col->rect.h < player->col->rect.y) {
+					img1->order = player->order - 0.1;
+				}
 			}
-			}*/
 			OrderToRender.push(img1);
-
-			LOG("%i - %i", pos1.x, pos1.y);
 		}
 	}
 }

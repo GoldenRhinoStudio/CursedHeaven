@@ -6,8 +6,8 @@
  <tileset firstgid="11" name="meta2" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="meta2.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="12" name="Background" tilewidth="800" tileheight="400" tilecount="1" columns="0">
-   <image width="800" height="400" source="Background.png"/>
+ <tileset firstgid="12" name="Background" tilewidth="800" tileheight="400" tilecount="1" columns="1">
+  <image source="Background.png" width="800" height="400"/>
  </tileset>
  <objectgroup id="1" name="Backgorund" offsetx="296" offsety="-44">
   <object id="1" gid="12" x="751.606" y="-10.3939" width="800" height="400"/>
@@ -5758,7 +5758,7 @@
    <tile gid="3"/>
    <tile gid="5"/>
    <tile gid="3"/>
-   <tile gid="3"/>
+   <tile/>
    <tile/>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -5858,7 +5858,7 @@
    <tile gid="3"/>
    <tile gid="5"/>
    <tile gid="5"/>
-   <tile gid="3"/>
+   <tile/>
    <tile/>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -20053,7 +20053,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="4" name="Layer2" width="100" height="100">
+ <layer id="4" name="Layer2" width="100" height="100" visible="0">
   <properties>
    <property name="height" type="int" value="2"/>
   </properties>

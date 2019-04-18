@@ -129,6 +129,10 @@ public:
 
 	void EntityMovement(j1Entity* entity);
 
+	void Tile_WorldMap(iPoint & pos, int height);
+
+	void Entity_WorldMap(iPoint & pos, int height);
+
 private:
 
 	bool LoadMap();

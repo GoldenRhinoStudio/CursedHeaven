@@ -92,6 +92,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	}
 
+	App->map->EntityMovement(this);
+
 	return true;
 }
 

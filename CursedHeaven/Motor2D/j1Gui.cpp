@@ -94,7 +94,7 @@ bool j1Gui::PostUpdate()
 
 	// Blitting settings windows
 	if (App->scene1->settings_window != nullptr && App->scene1->settings_window->visible == true)
-		App->scene1->settings_window->Draw(App->gui->settingsWindowScale);
+		App->scene1->settings_window->Draw(0.4f);
 
 	//-------------------------
 

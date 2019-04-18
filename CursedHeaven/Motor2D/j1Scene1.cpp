@@ -83,46 +83,35 @@ bool j1Scene1::Start()
 
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
-		gui_tex = App->tex->Load("gui/atlas.png");
+		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
 
 		// Loading fonts
-		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
+		font = App->font->Load("fonts/Pixeled.ttf", 10);
 
 		// Creating UI
-		SDL_Rect section = { 537, 0, 663, 712 };
+		SDL_Rect section = { 9,460,315,402 };
 		settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
 		settings_window->visible = false;
 
-		SDL_Rect idle = { 0, 391, 84, 49 };
-		SDL_Rect hovered = { 0, 293, 84, 49 };
-		SDL_Rect clicked = { 0, 342, 84, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 31, 105, idle, hovered, clicked, gui_tex, SAVE_GAME, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 78, 105, idle, hovered, clicked, gui_tex, CLOSE_GAME, (j1UserInterfaceElement*)settings_window);
+		SDL_Rect idle = { 631, 12, 151, 38 };
+		SDL_Rect hovered = { 963, 12, 151, 38 };
+		SDL_Rect clicked = { 797, 14, 151, 37 };
 
-		App->gui->CreateBox(&scene1Boxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&scene1Boxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		SDL_Rect slider_r = { 860,334,180,5 };
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 65, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 100, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
 
-		SDL_Rect idle2 = { 28, 201, 49, 49 };
-		SDL_Rect hovered2 = { 77, 201, 49, 49 };
-		SDL_Rect clicked2 = { 126, 201, 49, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 63, 135, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateBox(&scene1Boxes, BOX, 50, 55, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
+		App->gui->CreateBox(&scene1Boxes, BOX, 50, 90, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 
-		SDL_Rect idle4 = { 417, 292, 49, 49 };
-		SDL_Rect hovered4 = { 417, 345, 49, 49 };
-		SDL_Rect clicked4 = { 417, 400, 49, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 37, 135, idle4, hovered4, clicked4, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 20, idle, hovered, clicked, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
 
-		SDL_Rect idle5 = { 270, 633, 49, 49 };
-		SDL_Rect hovered5 = { 319, 633, 49, 49 };
-		SDL_Rect clicked5 = { 368, 633, 49, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 89, 135, idle5, hovered5, clicked5, gui_tex, OTHER_LEVEL, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
-		App->gui->CreateLabel(&scene1Labels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 30, 89, font, "Music", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 38, 143, font, "Menu", App->gui->grey, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 33, 110, font, "Save", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 81, 110, font, "Quit", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, font, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, font, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		PlaceEntities();
 

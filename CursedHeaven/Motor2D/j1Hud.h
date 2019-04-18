@@ -31,12 +31,15 @@ public:
 	bool black_mage = false;
 	bool dragoon_knight = false;
 
+	float life_points_max, life_points;
+
 private:
 
 	std::list<j1Label*> labels_list;
 	std::list<j1Button*> hud_buttons;
 
 	int pivot = 2147483647;
+	float multiplier;
 };
 
 #endif // __j1LHUD_H__

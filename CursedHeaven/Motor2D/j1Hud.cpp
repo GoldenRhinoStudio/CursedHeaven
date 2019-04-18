@@ -20,6 +20,9 @@ j1Hud::~j1Hud() {}
 bool j1Hud::Start()
 {
 	hud_text = App->tex->Load("gui/hud.png");
+	life_points = 82;
+	life_points_max = App->entity->currentPlayer->lifePoints;
+	multiplier = 82 / life_points_max;
 	
 	return true;
 }
@@ -27,6 +30,8 @@ bool j1Hud::Start()
 bool j1Hud::Update(float dt)
 {
 	App->gui->UpdateButtonsState(&hud_buttons, App->gui->buttonsScale);
+
+	life_points = App->entity->currentPlayer->lifePoints * multiplier;
 
 	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 		if ((*item)->visible) {
@@ -71,6 +76,10 @@ bool j1Hud::Update(float dt)
 	SDL_Rect bm_available_e = { 41,143,41,41 };
 	SDL_Rect bm_notavailable_e = { 41,184,41,41 };
 
+	// Lifebar
+	SDL_Rect lifebar = { 0,225,82,8 };
+	SDL_Rect lifebar_r = { 0,233,life_points,6 };
+
 	if (App->entity->player_type == MAGE)
 		black_mage = true;
 	else if (App->entity->player_type == KNIGHT)
@@ -112,6 +121,8 @@ bool j1Hud::Update(float dt)
 	}
 
 	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);

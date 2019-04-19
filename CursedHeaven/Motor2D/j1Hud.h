@@ -27,13 +27,16 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 public:
-	SDL_Texture* hud_text = nullptr;
 	bool black_mage = false;
 	bool dragoon_knight = false;
 
 	float life_points_max, life_points;
 
 private:
+	SDL_Texture* hud_text = nullptr;
+	SDL_Texture* profile_text = nullptr;
+
+	_TTF_Font* font = nullptr;
 
 	std::list<j1Label*> labels_list;
 	std::list<j1Button*> hud_buttons;

@@ -62,6 +62,7 @@ public:
 	bool changingScene = false;
 	bool startDialogue = true;
 	bool finishedDialogue = false;
+	bool profile_active = false;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;

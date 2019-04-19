@@ -20,9 +20,12 @@ j1Hud::~j1Hud() {}
 bool j1Hud::Start()
 {
 	hud_text = App->tex->Load("gui/hud.png");
+	profile_text = App->tex->Load("gui/player_profile.png");
 	life_points = 82;
 	life_points_max = App->entity->currentPlayer->lifePoints;
 	multiplier = 82 / life_points_max;
+
+	font = App->font->Load("fonts/Pixeled.ttf", 15);
 	
 	return true;
 }
@@ -58,6 +61,13 @@ bool j1Hud::Update(float dt)
 	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
 	SDL_Rect bm_profile = { 42,0,43,42 };
+
+	// Tab clicked
+	SDL_Rect blackMage = { 0,568,190,366 };
+	SDL_Rect dragoonKnight = { 190,568,273,361 };
+	SDL_Rect window_profile_1 = { 0,0,785,568 };
+	SDL_Rect window_profile_2 = { 785,0,785,568 };
+	SDL_Rect ability = { 561,587,28,28 };
 
 	// Coins
 	SDL_Rect coins_r = { 0,42,35,13 };
@@ -131,12 +141,26 @@ bool j1Hud::Update(float dt)
 		(*item)->Draw(1.0f, 0, 0, false);
 	}
 
+	if (App->scene1->profile_active) {
+		
+		if (black_mage) {
+			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
+			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
+		}
+		else if (dragoon_knight) {
+			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
+			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
+		}
+
+	}
+
 	return true;
 }
 
 bool j1Hud::CleanUp()
 {
 	App->tex->UnLoad(hud_text);
+	App->tex->UnLoad(profile_text);
 
 	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 		(*item)->CleanUp();

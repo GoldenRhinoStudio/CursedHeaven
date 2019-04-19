@@ -56,6 +56,7 @@ bool j1ChooseCharacter::Start() {
 
 	if (active) {
 		// The map is loaded
+		App->map->draw_with_quadtrees = false;
 		App->map->Load("menu.tmx");
 
 		// Loading textures

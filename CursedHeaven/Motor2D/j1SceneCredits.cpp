@@ -48,6 +48,7 @@ bool j1SceneCredits::Start()
 	if (active)
 	{
 		// The map is loaded
+		App->map->draw_with_quadtrees = false;
 		App->map->Load("menu.tmx");
 
 		// The audio is played

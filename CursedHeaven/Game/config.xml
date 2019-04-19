@@ -62,7 +62,7 @@
   
   <gui>
 	<scale buttonsScale="0.47f" boxScale="0.28f" creditsboxScale="0.32f" logoScale="0.35f"/>
-	<positions settingsPositionX="80" settingsPositionY="60"/>
+	<positions settingsPositionX="120" settingsPositionY="50"/>
 	<sliderLimits maximum="225" minimum="155"/>
 	<colors a="255">
 		<beige r="245" g="245" b="220"/>

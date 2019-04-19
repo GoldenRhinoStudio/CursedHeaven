@@ -73,13 +73,18 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 				if (App->path->IsWalkable(destination) && App->path->IsWalkable(origin) && App->entity->currentPlayer->dead == false)
 				{
-					path = App->path->CreatePath(origin, destination);
-					Move(*path, dt);
-					path_created = true;
+					if (do_logic) {
+						App->path->CreatePath(origin, destination);
+						path_created = true;
+					}
+					if (path_created) {
+						path = App->path->GetLastPath();
+						Move(path, dt);
+					}
 				}
 			}
 			else if (path_created) {
-				path->clear();
+				//delete path;
 				path_created = false;
 			}
 		}
@@ -94,6 +99,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	App->map->EntityMovement(this);
 
+
+	
 	return true;
 }
 
@@ -117,7 +124,7 @@ bool j1Slime::CleanUp()
 		collider->to_delete = true;
 
 	if (path_created) {
-		path->clear();
+		delete path;
 		path_created = false;
 	}
 
@@ -190,15 +197,27 @@ void j1Slime::LoadProperties()
 	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
 }
 
-void j1Slime::Move(std::vector<iPoint>& path, float dt)
+void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
 	direction = App->path->CheckDirection(path);
+	fPoint next_tile;
+	next_tile = position;
+	if (path->size() > 1) {
+		next_tile.x = (float)path->at(1).x;
+		next_tile.y = (float)path->at(1).y;
+	}
 
 	if (direction == Movement::DOWN_RIGHT)
 	{
 		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x += speed * dt;
+		if (position.x > next_tile.x) {
+			position.x = next_tile.x;
+		}
+		if (position.y > next_tile.y) {
+			position.y = next_tile.y;
+		}
 	}
 
 	else if (direction == Movement::DOWN_LEFT)
@@ -206,6 +225,12 @@ void j1Slime::Move(std::vector<iPoint>& path, float dt)
 		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x -= speed * dt;
+		if (position.x < next_tile.x) {
+			position.x = next_tile.x;
+		}
+		if (position.y > next_tile.y) {
+			position.y = next_tile.y;
+		}
 	}
 
 	else if (direction == Movement::UP_RIGHT)
@@ -213,6 +238,12 @@ void j1Slime::Move(std::vector<iPoint>& path, float dt)
 		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x += speed * dt;
+		if (position.x > next_tile.x) {
+			position.x = next_tile.x;
+		}
+		if (position.y < next_tile.y) {
+			position.y = next_tile.y;
+		}
 	}
 
 	else if (direction == Movement::UP_LEFT)
@@ -220,29 +251,47 @@ void j1Slime::Move(std::vector<iPoint>& path, float dt)
 		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x -= speed * dt;
+		if (position.x < next_tile.x) {
+			position.x = next_tile.x;
+		}
+		if (position.y < next_tile.y) {
+			position.y = next_tile.y;
+		}
 	}
 
 	else if (direction == Movement::DOWN)
 	{
 		animation = &down;
 		position.y += speed * dt;
+		if (position.y > next_tile.y) {
+			position.y = next_tile.y;
+		}
 	}
 
 	else if (direction == Movement::UP)
 	{
 		animation = &up;
 		position.y -= speed * dt;
+		if (position.y < next_tile.y) {
+			position.y = next_tile.y;
+		}
 	}
 
 	else if (direction == Movement::RIGHT)
 	{
 		animation = &lateral;
 		position.x += speed * dt;
+		if (position.x > next_tile.x) {
+			position.x = next_tile.x;
+		}
 	}
 
 	else if (direction == Movement::LEFT)
 	{
 		animation = &lateral;
 		position.x -= speed * dt;
+		if (position.x < next_tile.x) {
+			position.x = next_tile.x;
+		}
 	}
 }

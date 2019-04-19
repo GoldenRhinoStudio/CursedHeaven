@@ -37,6 +37,7 @@
 #define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
 #define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
 #define TO_BOOL( a )  ( (a != 0) ? true : false )
+#define CLAMP(x, upper, lower) (MIN(upper, MAX(x, lower)))
 
 typedef unsigned int uint;
 typedef unsigned __int32 uint32;

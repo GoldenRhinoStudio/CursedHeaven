@@ -126,7 +126,6 @@ bool j1Scene1::Start()
 bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
-
 	return true;
 }
 
@@ -269,25 +268,13 @@ bool j1Scene1::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-
-
-
+	
 	App->map->Draw();
 	App->entity->DrawEntityOrder(dt);
 	App->render->reOrder();
 	App->render->OrderBlit(App->render->OrderToRender);
 
-	// Blitting patfhinding if debug is activated
-	if (App->collisions->debug) {
 
-		const std::vector<iPoint>* path = App->path->GetLastPath();
-
-		for (uint i = 0; i < path->size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld((*path).at(i).x, (*path).at(i).y);
-			App->render->Blit(debug_tex, pos.x, pos.y);
-		}
-	}
 
 	return true;
 }
@@ -316,7 +303,7 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities()
 {
-	App->entity->AddEnemy(150, 850, SLIME); //Add Slime
+	App->entity->AddEnemy(-100, 1050, SLIME); //Add Slime
 }
 
 // Called before quitting

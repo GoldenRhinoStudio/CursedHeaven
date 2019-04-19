@@ -50,7 +50,7 @@
   
   <entityManager updateMsCycle="0.1f"/>
   
-  <slime speed="70.0f" life="200">
+  <slime speed="20.0f" life="200">
 	  <margin x="10" y="10"/>
 	  <colliderSize w="25" h="23"/>
   </slime>

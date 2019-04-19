@@ -41,7 +41,7 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void LoadProperties();
-	void Move(std::vector<iPoint>& path, float dt);
+	void Move(const std::vector<iPoint>* path, float dt);
 
 private:
 	Animation idle_diagonal_up;
@@ -68,7 +68,7 @@ public:
 
 	Movement direction;
 
-	std::vector<iPoint>* path;
+	const std::vector<iPoint>* path;
 
 	bool path_created = false;
 	bool dead = false;

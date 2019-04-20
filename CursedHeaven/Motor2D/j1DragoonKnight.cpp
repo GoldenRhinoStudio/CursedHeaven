@@ -104,7 +104,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			if (!attacking && !active_Q) {
 				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
-					&diagonal_up, &diagonal_down, &lateral, &up, &down);
+					&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);
 			}
 
 			// ---------------------------------------------------------------------------------------------------------------------
@@ -255,23 +255,21 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	}
 	if (dead) {
 
+		animation = &death;
+		death.loop = false;
+		App->fade->FadeToBlack();
+
 		// Restarting the level in case the player dies
 		if (App->fade->IsFading() == 0)
 		{
 			facingRight = true;
+			position = { 200,750 };
+			lifePoints = 200;
 
 			App->entity->DestroyEntities();
 
 			// Resetting the animation
 			death.Reset();
-			attack_lateral_right.Reset();
-			attack_lateral_left.Reset();
-			attack_up.Reset();
-			attack_down.Reset();
-			attack_diagonal_up_right.Reset();
-			attack_diagonal_up_left.Reset();
-			attack_diagonal_down_right.Reset();
-			attack_diagonal_down_left.Reset();
 			animation = &idle_diagonal_up;
 
 			dead = false;

@@ -67,7 +67,9 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 	/*if (do_logic)
 		ChangeRoom(position.x, position.y);*/
 
-	if (!changing_room && !App->gamePaused) {
+	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
+
+		if (lifePoints <= 0) dead = true;
 
 		// GodMode controls
 		if (GodMode) {
@@ -203,7 +205,9 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 }
 
 void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
-	Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down) {
+	Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down, Animation* death) {
+
+	if (dead) animation = death;
 
 	if (direction == UP_LEFT_ || direction == UP_RIGHT_) animation = diagonal_up;
 	else if (direction == DOWN_LEFT_ || direction == DOWN_RIGHT_) animation = diagonal_down;

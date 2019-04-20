@@ -309,7 +309,8 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities()
 {
-	//App->entity->AddEnemy(-100, 1050, SLIME); //Add Slime
+	App->entity->AddEnemy(-100, 1050, SLIME); //Add Slime
+	App->entity->AddEnemy(-120, 1050, SLIME); //Add Slime
 }
 
 // Called before quitting

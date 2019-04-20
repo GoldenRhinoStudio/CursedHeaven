@@ -255,7 +255,7 @@ int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::SlateGray)
 
 		int ret = -1;
-	if (IsWalkable(origin) == IsWalkable(destination)) {
+	if (IsWalkable(origin) && IsWalkable(destination)) {
 		PathList open;
 		PathList close;
 
@@ -310,6 +310,9 @@ int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 				}
 			}
 		}
+	}
+	else {
+		LOG("NOT");
 	}
 
 	return ret;

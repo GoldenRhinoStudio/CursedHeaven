@@ -389,10 +389,10 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 			SDL_QueryTexture(Image->texture, NULL, NULL, &r.w, &r.h);
 		}
 		SDL_RendererFlip flag;
-		if (Image->scale < 0) {
+		if (Image->flip == true) {
 			flag = SDL_FLIP_HORIZONTAL;
-			r.w *= -Image->scale;
-			r.h *= -Image->scale;
+			r.w *= Image->scale;
+			r.h *= Image->scale;
 		}
 		else {
 			flag = SDL_FLIP_NONE;

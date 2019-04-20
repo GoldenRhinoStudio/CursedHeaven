@@ -610,14 +610,17 @@ void j1Map::EntityMovement(j1Entity* entity)
 	if (height2_gid != 0) {				//entity is on the third layer
 		current_gid = height2_gid;
 		entity->height = 4 + sum;
+		entity->current_height = 2;
 	}
 	else if (height1_gid != 0) {		//entity is on the second layer
 		current_gid = height1_gid;
 		entity->height = 2 + sum;
+		entity->current_height = 1;
 	}
 	else {				                //entity is on the first layer
 		current_gid = height0_gid;
 		entity->height = 0 + sum;
+		entity->current_height = 0;
 	}
 
 	// tiles of the first layer | height == 0
@@ -1050,4 +1053,3 @@ void j1Map::Entity_WorldMap(iPoint& pos, int height) {
 	pos.x += height - re1.x;
 	pos.y += height - re1.y;
 }
-

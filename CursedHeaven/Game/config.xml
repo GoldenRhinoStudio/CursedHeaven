@@ -25,7 +25,7 @@
   
   <player>
 	<blackMage>
-	  <size width="9" height="15"/>
+	  <size width="9" height="9"/>
 	  <margin x="6" y="30" colisionMargin="3"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>

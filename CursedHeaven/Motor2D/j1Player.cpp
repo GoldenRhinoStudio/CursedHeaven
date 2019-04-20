@@ -64,8 +64,8 @@ void j1Player::UpdateCameraPosition(float dt)
 
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
 
-	if (do_logic)
-		ChangeRoom(position.x, position.y);
+	/*if (do_logic)
+		ChangeRoom(position.x, position.y);*/
 
 	if (!changing_room && !App->gamePaused) {
 

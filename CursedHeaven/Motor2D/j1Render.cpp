@@ -380,10 +380,10 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 		uint size = App->win->GetScale();
 		SDL_Rect r;
 		r.x = (int)(camera.x * Image->speed) + Image->x * size;
-		if (Image->id != 12)
+		if (Image->id != 13)
 			r.y = (int)(camera.y * Image->speed) + Image->y * size;
 		else
-			r.y = (int)(camera.y * Image->speed) + (Image->y + 16) * size;
+			r.y = (int)(camera.y * Image->speed) + (Image->y) * size;
 
 		if (Image->section != NULL) {
 			r.w = Image->section->w;
@@ -393,13 +393,17 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 			SDL_QueryTexture(Image->texture, NULL, NULL, &r.w, &r.h);
 		}
 		SDL_RendererFlip flag;
-		if (Image->scale < 0) {
+
+		if (Image->flip)
 			flag = SDL_FLIP_HORIZONTAL;
+		else
+			flag = SDL_FLIP_NONE;
+
+		if (Image->scale < 0) {
 			r.w *= -Image->scale;
 			r.h *= -Image->scale;
 		}
 		else {
-			flag = SDL_FLIP_NONE;
 			r.w *= Image->scale;
 			r.h *= Image->scale;
 		}

@@ -105,7 +105,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		// Controls when is finished the dialog
-		if (App->scene1->finishedDialogue == true) {
+		if (App->scene1->finishedDialogue == false) {
 
 			if (!active_Q) {
 				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);

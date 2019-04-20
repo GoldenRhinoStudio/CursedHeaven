@@ -62,7 +62,7 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 
 Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path) const
 {
-	if (path->size() >= 2)
+	if (path->size() > 1)
 	{
 		iPoint tile = path->at(0);
 		iPoint next_tile = path->at(1);
@@ -70,14 +70,14 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path) const
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
 
-		if (x_difference == 1 && y_difference == 1) return DOWN_RIGHT;
-		else if (x_difference == 1 && y_difference == -1) return UP_RIGHT;
-		else if (x_difference == -1 && y_difference == 1) return DOWN_LEFT;
-		else if (x_difference == -1 && y_difference == -1) return UP_LEFT;
-		else if (x_difference == 1) return RIGHT;			
-		else if (x_difference == -1) return LEFT;
-		else if (y_difference == 1)	return DOWN;			
-		else if (y_difference == -1) return UP;
+		if (x_difference > 1 && y_difference > 1) return DOWN_RIGHT;
+		else if (x_difference >= 1 && y_difference <= -1) return UP_RIGHT;
+		else if (x_difference <= -1 && y_difference >= 1) return DOWN_LEFT;
+		else if (x_difference <= -1 && y_difference <= -1) return UP_LEFT;
+		else if (x_difference >= 1) return RIGHT;			
+		else if (x_difference <= -1) return LEFT;
+		else if (y_difference >= 1)	return DOWN;			
+		else if (y_difference <= -1) return UP;
 	}
 
 	else return NONE;
@@ -228,15 +228,21 @@ int PathNode::Score() const
 // ----------------------------------------------------------------------------------
 int PathNode::CalculateF(const iPoint& destination)
 {
-	/*g = parent->g + 1;
+	g = parent->g + 1;
 
 	int x_distance = abs(pos.x - destination.x);
 	int y_distance = abs(pos.y - destination.y);
 
-	h = (x_distance + y_distance) * min(x_distance, y_distance);*/
+	h = (x_distance + y_distance) * min(x_distance, y_distance);
 
-	g = parent->g + 1;
-	h = pos.DistanceTo(destination);
+	//g = parent->g + 1;
+
+	/*double D = 1;
+	double D2 = 2;
+	int dx = abs(pos.x - destination.x);
+	int dy = abs(pos.y - destination.y);
+
+	h = D * (dx + dy) + (D2 - 2 * D) * min(dx, dy);*/
 
 	return g + h;
 }
@@ -249,60 +255,59 @@ int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::SlateGray)
 
 		int ret = -1;
+	if (IsWalkable(origin) == IsWalkable(destination)) {
+		PathList open;
+		PathList close;
 
-	PathList open;
-	PathList close;
+		last_path.clear();
 
-	open.list.push_back(PathNode(0, 0, origin, NULL));
+		open.list.push_back(PathNode(0, 0, origin, NULL));
 
-	while (open.list.size() > 0) {
+		while (open.list.size() > 0) {
 
-		std::list<PathNode>::iterator aux = open.GetNodeLowestScore();
-		close.list.push_back(*aux);
+			std::list<PathNode>::iterator aux = open.GetNodeLowestScore();
+			close.list.push_back(*aux);
 
-		std::list<PathNode>::iterator lower = prev(close.list.end());
-		open.list.erase(aux);
+			std::list<PathNode>::iterator lower = prev(close.list.end());
+			open.list.erase(aux);
 
-		if ((*lower).pos == destination) {
+			if ((*lower).pos == destination) {
 
-			last_path.clear();
-			const PathNode* new_node = &(*lower);
+				last_path.clear();
+				const PathNode* new_node = &(*lower);
 
-			while (new_node) {
+				while (new_node) {
 
-				last_path.push_back(new_node->pos);
-				new_node = new_node->parent;
+					last_path.push_back(new_node->pos);
+					new_node = new_node->parent;
+				}
+
+				std::reverse(last_path.begin(), last_path.end());
+				ret = last_path.size();
+				break;
 			}
 
-			std::reverse(last_path.begin(), last_path.end());
-			ret = last_path.size();
-			break;
-		}
+			PathList AdjacentNodes = (*lower).PruneNeighbours(destination, this);
 
+			std::list<PathNode>::iterator it = AdjacentNodes.list.begin();
+			for (; it != AdjacentNodes.list.end(); it = next(it)) {
 
-		//TODO 1: Only difference with A* in the core behaviour: Instead of filling
-		//the Adjacent nodes list with the immediate neighbours, we call the function
-		//that must prune them
-		PathList AdjacentNodes = (*lower).PruneNeighbours(destination, this);
+				if (close.Find((*it).pos) != close.list.end())
+					continue;
 
-		std::list<PathNode>::iterator it = AdjacentNodes.list.begin();
-		for (; it != AdjacentNodes.list.end(); it = next(it)) {
+				std::list<PathNode>::iterator adj_node = open.Find((*it).pos);
 
-			if (close.Find((*it).pos) != close.list.end())
-				continue;
+				if (adj_node == open.list.end()) {
 
-			std::list<PathNode>::iterator adj_node = open.Find((*it).pos);
+					(*it).CalculateF(destination);
+					open.list.push_back(*it);
+				}
+				else if ((*adj_node).g > (*it).g + 1) {
 
-			if (adj_node == open.list.end()) {
+					(*adj_node).parent = (*it).parent;
+					(*adj_node).CalculateF(destination);
 
-				(*it).CalculateF(destination);
-				open.list.push_back(*it);
-			}
-			else if ((*adj_node).g > (*it).g + 1) {
-
-				(*adj_node).parent = (*it).parent;
-				(*adj_node).CalculateF(destination);
-
+				}
 			}
 		}
 	}

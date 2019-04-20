@@ -10,6 +10,7 @@
 #include <vector>
 
 #define DETECTION_RANGE 100
+#define ATTACK_RANGE 50
 
 struct SDL_Texture;
 //struct Collider;

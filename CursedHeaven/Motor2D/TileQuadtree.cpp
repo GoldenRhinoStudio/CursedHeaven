@@ -106,7 +106,7 @@ void TileQuadtree::InsertTile(TileData* tile)
 bool TileQuadtree::CheckVisibility()
 {
 	int scale = App->win->GetScale();
-	int offset = 20 * scale;
+	int offset = 5 * scale;
 	uint screen_w1;
 	uint screen_h2;
 	App->win->GetWindowSize(screen_w1, screen_h2);

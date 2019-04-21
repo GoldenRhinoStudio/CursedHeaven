@@ -107,8 +107,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 		}
 
 	}
-	height = 1;
-	//App->map->EntityMovement(this);
+
+	App->map->EntityMovement(this);
 
 
 	

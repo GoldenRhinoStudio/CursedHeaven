@@ -112,7 +112,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			}
 			if (!attacking)
 				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
-					&diagonal_up, &diagonal_down, &lateral, &up, &down);
+					&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);
 
 			// ---------------------------------------------------------------------------------------------------------------------
 			// COMBAT
@@ -312,9 +312,15 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (dead) {
 
+		animation = &death;
+		death.loop = false;
+		App->fade->FadeToBlack();
+
 		// Restarting the level in case the player dies
 		if (App->fade->IsFading() == 0)
 		{
+			position = { 200,750 };
+			lifePoints = 100;
 			facingRight = true;
 
 			App->entity->DestroyEntities();
@@ -529,4 +535,5 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 	App->particles->shot_right.speed = speed_particle;
 
 	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+	lifePoints -= 10;
 }

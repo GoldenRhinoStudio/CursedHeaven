@@ -21,8 +21,6 @@ j1PathFinding::~j1PathFinding()
 bool j1PathFinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
-
-	last_path->clear();
 	RELEASE_ARRAY(map);
 	return true;
 }

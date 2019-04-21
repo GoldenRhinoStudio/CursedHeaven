@@ -262,6 +262,11 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu(); 
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN) {
+		if (profile_active) profile_active = false;
+		else profile_active = true;
+	}
+
 	if (backToMenu && App->fade->IsFading() == 0)
 		ChangeSceneMenu();
 

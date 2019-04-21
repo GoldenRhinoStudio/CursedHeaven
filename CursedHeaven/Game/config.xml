@@ -52,7 +52,7 @@
   
   <slime speed="50.0f" life="200">
 	  <margin x="10" y="10"/>
-	  <colliderSize w="25" h="23"/>
+	  <colliderSize w="35" h="35"/>
   </slime>
 
   <map>

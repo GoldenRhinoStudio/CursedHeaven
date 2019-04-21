@@ -57,8 +57,8 @@ void j1Map::Draw()
 	for (std::list<MapLayer*>::iterator layer = data.layers.begin(); layer != data.layers.end(); ++layer)
 	{
 
-		/*if ((*layer)->properties.Get("Nodraw") != 0) //No blit
-			continue;*/
+		if ((*layer)->properties.Get("Nodraw") != 0) //No blit
+			continue;
 
 		if (draw_with_quadtrees) {
 			(*layer)->tile_tree->DrawMap();

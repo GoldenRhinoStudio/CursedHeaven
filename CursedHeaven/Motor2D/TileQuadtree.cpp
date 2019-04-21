@@ -10,6 +10,7 @@
 #include "j1Window.h"
 #include "j1Textures.h"
 #include "j1Render.h"
+#include "Brofiler/Brofiler.h"
 
 
 
@@ -106,7 +107,7 @@ void TileQuadtree::InsertTile(TileData* tile)
 bool TileQuadtree::CheckVisibility()
 {
 	int scale = App->win->GetScale();
-	int offset = 20 * scale;
+	int offset = 5 * scale;
 	uint screen_w1;
 	uint screen_h2;
 	App->win->GetWindowSize(screen_w1, screen_h2);
@@ -128,6 +129,7 @@ bool TileQuadtree::CheckVisibility()
 
 void TileQuadtree::DrawMap() 
 {
+	BROFILER_CATEGORY("TreePushback", Profiler::Color::Orange)
 	if (CheckVisibility())
 	{
 		if (level == max_levels)

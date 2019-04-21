@@ -244,7 +244,7 @@ void j1App::FinishUpdate()
 
 	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
 		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync, map_coords.x, map_coords.y);
-	//App->win->SetTitle(title);
+	App->win->SetTitle(title);
 
 	// We use SDL_Delay to make sure you get your capped framerate
 	if ((last_frame_ms < (1000 / framerate_cap)) && cappedFPS) {

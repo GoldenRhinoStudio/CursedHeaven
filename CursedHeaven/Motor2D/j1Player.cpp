@@ -215,6 +215,11 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 	else if (direction == DOWN_) animation = go_down;
 	else if (direction == UP_) animation = go_up;
 
+	if (direction == UP_LEFT_ || direction == LEFT_ || direction == DOWN_LEFT_)
+		animation->flip = true;
+	else 
+		animation->flip = false;
+
 	if ((App->entity->mage != nullptr && App->entity->mage->active_Q)
 		|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE

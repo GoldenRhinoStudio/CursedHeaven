@@ -9,7 +9,8 @@
 
 #include <vector>
 
-#define DETECTION_RANGE 100
+#define DETECTION_RANGE 10
+#define ATTACK_RANGE 4
 
 struct SDL_Texture;
 //struct Collider;
@@ -33,6 +34,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool PostUpdate();
+
 	// Called to check collisions
 	void OnCollision(Collider* col_1, Collider* col_2);
 
@@ -41,7 +44,7 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void LoadProperties();
-	void Move(std::vector<iPoint>& path, float dt);
+	void Move(const std::vector<iPoint>* path, float dt);
 
 private:
 	Animation idle_diagonal_up;
@@ -70,7 +73,7 @@ public:
 
 	std::vector<iPoint>* path;
 
-	bool path_created = false;
+	bool target_found = false;
 	bool dead = false;
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;

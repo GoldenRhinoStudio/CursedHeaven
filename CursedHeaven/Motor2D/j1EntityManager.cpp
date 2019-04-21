@@ -65,15 +65,28 @@ bool j1EntityManager::Update(float dt)
 	BROFILER_CATEGORY("EntityManagerUpdate", Profiler::Color::LightSeaGreen)
 
 	accumulatedTime += dt;
-	if (accumulatedTime >= updateMsCycle)
+	if (accumulatedTime >= updateMsCycle && !do_logic) {
 		do_logic = true;
-
-	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
-	{
-		(*item)->Update(dt, do_logic);
+		entity_logic = 0;
 	}
 
-	if (do_logic) {
+	int i = 0;
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+		if (do_logic){
+			if (entity_logic == i) {
+				(*item)->Update(dt, true);
+			}
+			else
+				(*item)->Update(dt, false);
+			i++;
+		}else
+			(*item)->Update(dt, do_logic);
+	}
+
+	entity_logic++;
+
+	if (do_logic && entity_logic >= entities.size()) {
 		accumulatedTime = 0.0f;
 		do_logic = false;
 	}

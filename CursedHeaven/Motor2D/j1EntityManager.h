@@ -111,7 +111,7 @@ public:
 	NPC_TYPES npc_type = JUDGE;
 
 private:
-
+	int entity_logic = 0;
 	EntityInfo			queue[MAX_ENTITIES];
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;

@@ -57,12 +57,12 @@ void j1Map::Draw()
 	for (std::list<MapLayer*>::iterator layer = data.layers.begin(); layer != data.layers.end(); ++layer)
 	{
 
-		if ((*layer)->properties.Get("MustDraw") != 0)
-			continue;
+		/*if ((*layer)->properties.Get("Nodraw") != 0) //No blit
+			continue;*/
 
 		if (draw_with_quadtrees) {
 			(*layer)->tile_tree->DrawMap();
-			(*layer)->tile_tree->DrawQuadtree();
+			//(*layer)->tile_tree->DrawQuadtree();
 		}
 		else {
 			for (int y = 0; y < data.height; ++y)
@@ -568,12 +568,8 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 				if (tileset != NULL)
 				{
-					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
-					/*TileType* ts = tileset->GetTileType(tile_id);
-					if(ts != NULL)
-					{
-						map[i] = ts->properties.Get("walkable", 1);
-					}*/
+					//map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+					map[i] = (tile_id) > 0 ? 0 : 1;
 				}
 			}
 		}
@@ -591,6 +587,7 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 void j1Map::EntityMovement(j1Entity* entity)
 {
+	BROFILER_CATEGORY("EntityMovement", Profiler::Color::Blue)
 	iPoint current_tile = WorldToMap(entity->collider->rect.x, entity->collider->rect.y);
 	iPoint next_tile = { 0,0 };
 

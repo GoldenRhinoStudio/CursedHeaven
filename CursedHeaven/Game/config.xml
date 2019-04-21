@@ -48,7 +48,7 @@
 	
   </player>  
   
-  <entityManager updateMsCycle="0.1f"/>
+  <entityManager updateMsCycle="0.5f"/>
   
   <slime speed="50.0f" life="200">
 	  <margin x="10" y="10"/>

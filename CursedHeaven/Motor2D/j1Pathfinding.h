@@ -52,7 +52,7 @@ public:
 	int CreatePath(iPoint& origin, iPoint& destination);
 
 	// To request all tiles involved in the last generated path
-	const std::vector<iPoint>* GetLastPath() const;
+	std::vector<iPoint>* GetLastPath() const;
 
 	// Utility: return true if pos is inside the map boundaries
 	bool CheckBoundaries(const iPoint& pos) const;
@@ -80,7 +80,7 @@ private:
 	// all map walkability values [0..255]
 	uchar* map = nullptr;
 	// we store the created path here
-	std::vector<iPoint> last_path;
+	std::vector<iPoint>* last_path;
 };
 
 /// forward declaration

@@ -10,6 +10,7 @@
 #include "j1Window.h"
 #include "j1Textures.h"
 #include "j1Render.h"
+#include "Brofiler/Brofiler.h"
 
 
 
@@ -128,6 +129,7 @@ bool TileQuadtree::CheckVisibility()
 
 void TileQuadtree::DrawMap() 
 {
+	BROFILER_CATEGORY("TreePushback", Profiler::Color::Orange)
 	if (CheckVisibility())
 	{
 		if (level == max_levels)

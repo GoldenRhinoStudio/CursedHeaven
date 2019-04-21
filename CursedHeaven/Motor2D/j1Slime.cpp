@@ -42,6 +42,7 @@ bool j1Slime::Start()
 	// Textures are loaded
 	LOG("Loading harpy textures");
 	sprites = App->tex->Load("textures/enemies/Slime.png");
+	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();
 
@@ -59,36 +60,44 @@ bool j1Slime::Update(float dt, bool do_logic)
 	if (!dead) {
 		collider->SetPos(position.x, position.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
-		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
+		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
+		
+		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
+		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y) };
 
-		if ((App->entity->currentPlayer->position.x - position.x) <= DETECTION_RANGE && (App->entity->currentPlayer->position.x - position.x) >= -DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
+		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
+
+		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
-			iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y / 2) };
-			iPoint destination;
-			if (position.x < App->entity->currentPlayer->position.x)
-				destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y / 2) };
-			else
-				destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y / 2) };
-
+			
 			if (App->entity->currentPlayer->dead == false)
 			{
 				if (do_logic) {
+					if(path != nullptr)
+						path->clear();
+
 					if (App->path->CreatePath(origin, destination) > 0) {
 						path = App->path->GetLastPath();
-						path_created = true;
+						target_found = true;
+					}
+					else {
+						target_found = false;
 					}
 				}
-				if (path_created && path->size() > 1) {
-					Move(path, dt);
+				if (target_found && path != nullptr) {
+					if (distance <= ATTACK_RANGE) {
+						//atack slime
+					}
+					else {
+						Move(path, dt);
+					}
 				}
 			}
-			if ((App->entity->currentPlayer->position.x - position.x) <= ATTACK_RANGE){
-				LOG("ATAC");
-			}
 		}
-		else if (path_created) {
-			//delete path;
-			path_created = false;
+		else {
+			if (path != nullptr)
+				path->clear();
+			target_found = false;
 		}
 
 		if (App->entity->currentPlayer->position == App->entity->currentPlayer->initialPosition)
@@ -98,8 +107,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 		}
 
 	}
-
-	App->map->EntityMovement(this);
+	height = 1;
+	//App->map->EntityMovement(this);
 
 
 	
@@ -125,10 +134,16 @@ bool j1Slime::CleanUp()
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	if (path_created) {
-		path_created = false;
+	if (path != nullptr) {
+		path->clear();
+		RELEASE(path);
+		target_found = false;
 	}
 
+	return true;
+}
+
+bool j1Slime::PostUpdate() {
 	return true;
 }
 
@@ -208,7 +223,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		position.y += speed * dt;
 		position.x += speed * dt;
 		animation->flip = false;
-		LOG("DR");
 	}
 
 	else if (direction == Movement::DOWN_LEFT)
@@ -217,7 +231,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		position.y += speed * dt;
 		position.x -= speed * dt;
 		animation->flip = true;
-		LOG("DL");
 	}
 
 	else if (direction == Movement::UP_RIGHT)
@@ -226,7 +239,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		position.y -= speed * dt;
 		position.x += speed * dt;
 		animation->flip = false;
-		LOG("UR");
 	}
 
 	else if (direction == Movement::UP_LEFT)
@@ -235,7 +247,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		position.y -= speed * dt;
 		position.x -= speed * dt;
 		animation->flip = true;
-		LOG("UL");
 	}
 
 	else if (direction == Movement::DOWN)
@@ -243,7 +254,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		animation = &down;
 		position.y += speed * dt;
 		animation->flip = false;
-		LOG("D");
 	}
 
 	else if (direction == Movement::UP)
@@ -251,7 +261,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		animation = &up;
 		position.y -= speed * dt;
 		animation->flip = false;
-		LOG("U");
 	}
 
 	else if (direction == Movement::RIGHT)
@@ -259,7 +268,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		animation = &lateral;
 		animation->flip = false;
 		position.x += speed * dt;
-		LOG("R");
 	}
 
 	else if (direction == Movement::LEFT)
@@ -267,6 +275,5 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		animation = &lateral;
 		animation->flip = true;
 		position.x -= speed * dt;
-		LOG("L");
 	}
 }

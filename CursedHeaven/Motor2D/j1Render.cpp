@@ -373,6 +373,7 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 
 bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>& priority) const
 {
+	BROFILER_CATEGORY("OrderBlit", Profiler::Color::Gold)
 	bool ret = true;
 	while (priority.empty() == false) {
 		TileData* Image = priority.top();
@@ -380,10 +381,7 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 		uint size = App->win->GetScale();
 		SDL_Rect r;
 		r.x = (int)(camera.x * Image->speed) + Image->x * size;
-		if (Image->id != 13)
-			r.y = (int)(camera.y * Image->speed) + Image->y * size;
-		else
-			r.y = (int)(camera.y * Image->speed) + (Image->y) * size;
+		r.y = (int)(camera.y * Image->speed) + Image->y * size;
 
 		if (Image->section != NULL) {
 			r.w = Image->section->w;
@@ -431,6 +429,8 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 }
 
 void j1Render::reOrder() {
+
+	BROFILER_CATEGORY("Order", Profiler::Color::Green)
 	bool behind = false;
 	int aux_height = 0;
 	int sum_height = 0;

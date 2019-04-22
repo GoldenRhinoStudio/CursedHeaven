@@ -24,6 +24,10 @@
 j1SceneLose ::j1SceneLose()
 {
 	name.assign("lose");
+
+	animation = NULL;
+
+	walk_skeleton.PushBack({})
 }
 
 j1SceneLose::~j1SceneLose()
@@ -60,6 +64,7 @@ bool j1SceneLose::Start()
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
+		skeleton_tex = App->tex->Load("textures/SkeletonWalk.png");
 
 		// Loading font
 		font = App->font->Load("fonts/Pixeled.ttf", 5);
@@ -75,12 +80,10 @@ bool j1SceneLose::Start()
 		App->gui->CreateLabel(&deathLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
 		App->gui->CreateLabel(&deathLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
-		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, font3, "You failed...", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, font3, "YOU FAILED...", { 153,0,0,255 });
+		App->gui->CreateLabel(&deathLabels, LABEL, 65, 70, font2, "HEAVEN WILL BECOME HELL", App->gui->beige);
 		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
 		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
-		
-		// Text : You failed... 
-		//		  Now the angelica bla bla bla...
 
 		startup_time.Start();
 	}

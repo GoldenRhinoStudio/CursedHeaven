@@ -53,10 +53,13 @@ public:
 	bool startGame = false;
 
 	uint times = 0;
+	Animation* animation = nullptr;
+	Animation walk_skeleton;
 
 private:
 
 	SDL_Texture* gui_tex2 = nullptr;
+	SDL_Texture* skeleton_tex = nullptr;
 	_TTF_Font* font = nullptr;
 	_TTF_Font* font2 = nullptr;
 	_TTF_Font* font3 = nullptr;

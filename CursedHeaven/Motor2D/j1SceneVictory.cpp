@@ -75,12 +75,8 @@ bool j1SceneVictory::Start()
 		App->gui->CreateLabel(&victoryLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
 		App->gui->CreateLabel(&victoryLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
-		App->gui->CreateLabel(&victoryLabels, LABEL, 95, 30, font3, "You failed...", App->gui->beige);
-		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
-		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
-
-		// Text : You failed... 
-		//		  Now the angelica bla bla bla...
+		App->gui->CreateLabel(&victoryLabels, LABEL, 120, 30, font3, "YOU WIN!", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 70, 90, font2, "HEAVEN IS SAFE NOW", App->gui->beige);
 
 		startup_time.Start();
 	}

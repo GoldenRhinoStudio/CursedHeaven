@@ -130,7 +130,20 @@ bool j1Hud::Update(float dt)
 
 	}
 
+	// Current points of the player (char*)
+	current_points = (char*)App->scene1->current_points.c_str();
+
+	SDL_Texture* score;
+	SDL_Rect temp;
+	temp.x = temp.y = 0;
+	temp.w = temp.h = 10;
+
 	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+
+	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, font);
+
+	App->render->BlitDialog(score, 65, 130, &temp, SDL_FLIP_NONE, 0);
+
 	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 

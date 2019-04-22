@@ -31,6 +31,7 @@ public:
 	bool dragoon_knight = false;
 
 	float life_points_max, life_points;
+	char* current_points;
 
 private:
 	SDL_Texture* hud_text = nullptr;

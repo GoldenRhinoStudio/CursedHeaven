@@ -120,9 +120,9 @@ bool j1MindFlyer::DrawOrder(float dt) {
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (position.x - App->entity->currentPlayer->position.x >= 0)
-		Draw(r, animation->flip, -10, -10);
+		Draw(r, animation->flip, -10, -10, 1.2f);
 	else
-		Draw(r, animation->flip, -10, -10);
+		Draw(r, animation->flip, -10, -10, 1.2f);
 	return true;
 }
 

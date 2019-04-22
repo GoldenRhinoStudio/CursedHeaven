@@ -315,23 +315,23 @@ bool j1DragoonKnight::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			Draw(r);
+			Draw(r, false, 0, 0, 0.8f);
 		else
-			Draw(r, true);
+			Draw(r, true, 0, 0, 0.8f);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral_right) Draw(r, false, 0, -6);
-			else if (animation == &attack_up) Draw(r, false, 0, -2);
-			else if (animation == &attack_down) Draw(r, false, -4, -4);
-			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6);
-			else Draw(r, false, 0, attackBlittingY);
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, 0.8f);
+			else if (animation == &attack_up) Draw(r, false, 0, -2, 0.8f);
+			else if (animation == &attack_down) Draw(r, false, -4, -4, 0.8f);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, 0.8f);
+			else Draw(r, false, 0, attackBlittingY, 0.8f);
 		}
 		else {
-			if (animation == &attack_lateral_left) Draw(r, false, -6, -6);
-			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6);
-			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2);
-			else Draw(r, true, attackBlittingX, attackBlittingY);
+			if (animation == &attack_lateral_left) Draw(r, false, -6, -6, 0.8f);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6, 0.8f);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2, 0.8f);
+			else Draw(r, true, attackBlittingX, attackBlittingY, 0.8f);
 		}
 	}
 	return true;

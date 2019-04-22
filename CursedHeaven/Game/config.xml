@@ -53,7 +53,12 @@
   <slime speed="50.0f" life="200">
 	  <margin x="10" y="10"/>
 	  <colliderSize w="35" h="35"/>
-  </slime>
+  </slime>  
+  
+  <mindflyer speed="100.0f" life="2000">
+	  <margin x="10" y="10"/>
+	  <colliderSize w="35" h="35"/>
+  </mindflyer>
 
   <map>
 	<blitSpeed backgrounds="0.7f" fog="0.85f" map="1.0f"/>

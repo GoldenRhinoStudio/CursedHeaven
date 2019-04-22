@@ -112,6 +112,9 @@
     <ClCompile Include="j1Judge.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="j1MindFlyer.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -238,6 +241,9 @@
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1MindFlyer.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>

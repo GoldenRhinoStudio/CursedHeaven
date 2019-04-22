@@ -1,4 +1,4 @@
-#include "j1Slime.h"
+#include "j1MindFlyer.h"
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
@@ -14,34 +14,35 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1Slime::j1Slime(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
 {
 	animation = NULL;
 
-	idle_diagonal_up.LoadAnimation("idleD_up", "slime", false);
-	idle_diagonal_down.LoadAnimation("idleD_down", "slime", false);
-	idle_lateral.LoadAnimation("idleLateral", "slime", false);
-	idle_down.LoadAnimation("idleDown", "slime", false);
-	idle_up.LoadAnimation("idleUp", "slime", false);
+	idle_diagonal_up.LoadAnimation("idleD_up", "mindflyer", false);
+	idle_diagonal_down.LoadAnimation("idleD_down", "mindflyer", false);
+	idle_lateral.LoadAnimation("idleLateral", "mindflyer", false);
+	idle_down.LoadAnimation("idleDown", "mindflyer", false);
+	idle_up.LoadAnimation("idleUp", "mindflyer", false);
 
-	diagonal_up.LoadAnimation("diagonalUp", "slime", false);
-	diagonal_down.LoadAnimation("diagonalDown", "slime", false);
-	lateral.LoadAnimation("lateral", "slime", false);
-	up.LoadAnimation("up", "slime", false);
-	down.LoadAnimation("down", "slime", false);
+	diagonal_up.LoadAnimation("diagonalUp", "mindflyer", false);
+	diagonal_down.LoadAnimation("diagonalDown", "mindflyer", false);
+	lateral.LoadAnimation("lateral", "mindflyer", false);
+	up.LoadAnimation("up", "mindflyer", false);
+	down.LoadAnimation("down", "mindflyer", false);
 
 	// Setting harpy position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
 
-j1Slime::~j1Slime() {}
+j1MindFlyer::~j1MindFlyer() {}
 
-bool j1Slime::Start()
+bool j1MindFlyer::Start()
 {
 	// Textures are loaded
-	LOG("Loading slime texture");
-	sprites = App->tex->Load("textures/enemies/Slime.png");
+	LOG("Loading mindflyer texture");
+	sprites = App->tex->Load("textures/enemies/bosses/mindflyer.png");
+	sprites;
 	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();
@@ -53,15 +54,15 @@ bool j1Slime::Start()
 	return true;
 }
 
-bool j1Slime::Update(float dt, bool do_logic)
+bool j1MindFlyer::Update(float dt, bool do_logic)
 {
-	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
+	BROFILER_CATEGORY("MindFlyerUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
 		collider->SetPos(position.x, position.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
-		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
-		
+		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
+
 		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
 		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y) };
 
@@ -69,11 +70,11 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
-			
+
 			if (App->entity->currentPlayer->dead == false)
 			{
 				if (do_logic) {
-					if(path != nullptr)
+					if (path != nullptr)
 						path->clear();
 
 					if (App->path->CreatePath(origin, destination) > 0) {
@@ -110,12 +111,10 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	App->map->EntityMovement(this);
 
-
-	
 	return true;
 }
 
-bool j1Slime::DrawOrder(float dt) {
+bool j1MindFlyer::DrawOrder(float dt) {
 
 	// Drawing the harpy
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
@@ -127,9 +126,9 @@ bool j1Slime::DrawOrder(float dt) {
 	return true;
 }
 
-bool j1Slime::CleanUp()
+bool j1MindFlyer::CleanUp()
 {
-	LOG("Unloading slime");
+	LOG("Unloading mindflyer");
 	App->tex->UnLoad(sprites);
 	if (collider != nullptr)
 		collider->to_delete = true;
@@ -143,21 +142,21 @@ bool j1Slime::CleanUp()
 	return true;
 }
 
-bool j1Slime::PostUpdate() {
+bool j1MindFlyer::PostUpdate() {
 	return true;
 }
 
-void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
+void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
-		
+
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			receivedBasicDamage = true;
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
-			if(App->entity->mage != nullptr)
+			if (App->entity->mage != nullptr)
 				lifePoints -= App->entity->mage->fireDamage;
 
 			receivedAbilityDamage = true;
@@ -179,12 +178,12 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 	}
 }
 
-bool j1Slime::Load(pugi::xml_node & data)
+bool j1MindFlyer::Load(pugi::xml_node & data)
 {
 	return true;
 }
 
-bool j1Slime::Save(pugi::xml_node& data) const
+bool j1MindFlyer::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
 
@@ -194,26 +193,26 @@ bool j1Slime::Save(pugi::xml_node& data) const
 	return true;
 }
 
-void j1Slime::LoadProperties()
+void j1MindFlyer::LoadProperties()
 {
 	pugi::xml_document config_file;
 	config_file.load_file("config.xml");
 	pugi::xml_node config;
 	config = config_file.child("config");
-	pugi::xml_node slime;
-	slime = config.child("slime");
+	pugi::xml_node mindflyer;
+	mindflyer = config.child("mindflyer");
 
-	speed = slime.attribute("speed").as_int();
-	lifePoints = slime.attribute("life").as_int();
+	speed = mindflyer.attribute("speed").as_int();
+	lifePoints = mindflyer.attribute("life").as_int();
 
 	// Copying the values of the collider
-	margin.x = slime.child("margin").attribute("x").as_int();
-	margin.y = slime.child("margin").attribute("y").as_int();
-	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
-	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
+	margin.x = mindflyer.child("margin").attribute("x").as_int();
+	margin.y = mindflyer.child("margin").attribute("y").as_int();
+	colliderSize.x = mindflyer.child("colliderSize").attribute("w").as_int();
+	colliderSize.y = mindflyer.child("colliderSize").attribute("h").as_int();
 }
 
-void j1Slime::Move(const std::vector<iPoint>* path, float dt)
+void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 {
 	direction = App->path->CheckDirection(path);
 

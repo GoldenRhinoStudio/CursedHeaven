@@ -316,6 +316,8 @@ void j1Scene1::PlaceEntities()
 	App->entity->AddEnemy(-180, 1050, SLIME); //Add Slime
 	App->entity->AddEnemy(-190, 1050, SLIME); //Add Slime
 	App->entity->AddEnemy(-200, 1050, SLIME); //Add Slime
+
+	App->entity->AddEnemy(200, 750, MINDFLYER); //Add Boss
 }
 
 // Called before quitting

@@ -58,6 +58,8 @@ private:
 
 	SDL_Texture* gui_tex2 = nullptr;
 	_TTF_Font* font = nullptr;
+	_TTF_Font* font2 = nullptr;
+	_TTF_Font* font3 = nullptr;
 
 };
 

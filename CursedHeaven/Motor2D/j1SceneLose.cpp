@@ -62,6 +62,8 @@ bool j1SceneLose::Start()
 
 		// Loading font
 		font = App->font->Load("fonts/Pixeled.ttf", 5);
+		font2 = App->font->Load("fonts/Pixeled.ttf", 10);
+		font3 = App->font->Load("fonts/Pixeled.ttf", 15);
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
@@ -70,8 +72,12 @@ bool j1SceneLose::Start()
 		App->gui->CreateButton(&deathButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, GO_TO_MENU);
 
 		App->gui->CreateLabel(&deathLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
-		App->gui->CreateLabel(&deathLabels, LABEL, 142, 195, font, "Go to Menu", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
+		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, font3, "You failed...", App->gui->beige);
+		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
+		
 		// Text : You failed... 
 		//		  Now the angelica bla bla bla...
 

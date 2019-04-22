@@ -15,6 +15,8 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1DialogSystem.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -67,8 +69,8 @@ bool j1SceneLose::Start()
 		App->gui->CreateButton(&deathButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
 		App->gui->CreateButton(&deathButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, GO_TO_MENU);
 
-		App->gui->CreateLabel(&deathLabels, LABEL, 147, 170, font, "Play Again", App->gui->beige);
-		App->gui->CreateLabel(&deathLabels, LABEL, 149, 195, font, "Go to Menu", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 142, 195, font, "Go to Menu", App->gui->beige);
 
 		// Text : You failed... 
 		//		  Now the angelica bla bla bla...
@@ -102,12 +104,14 @@ bool j1SceneLose::Update(float dt)
 			case RELEASED:
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
-						startGame = true;
 						App->fade->FadeToBlack();
+						startGame = true;
+						
 					}
 					else if ((*item)->bfunction == GO_TO_MENU) {
-						backToMenu = true;
 						App->fade->FadeToBlack();
+						backToMenu = true;
+						
 					}
 				break;
 
@@ -188,5 +192,12 @@ void j1SceneLose::ChangeScene(SCENE objectiveScene)
 	else if (objectiveScene == SCENE::SCENE1) {
 		App->scene1->active = true;
 		App->scene1->Start();
+		App->particles->Start();
+		App->dialog->active = true;
+		App->dialog->Start();
+
+		App->entity->active = true;
+		App->entity->CreatePlayer();
+		App->entity->Start();
 	}
 }

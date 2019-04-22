@@ -96,12 +96,10 @@ bool j1SceneLose::Update(float dt)
 				break;
 
 			case HOVERED:
-				if (startup_time.Read() > 1900 && times > 1 || times == 1)
 					(*item)->situation = (*item)->hovered;
 				break;
 
 			case RELEASED:
-				if (startup_time.Read() > 1900 && times > 1 || times == 1) {
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
 						startGame = true;
@@ -111,11 +109,9 @@ bool j1SceneLose::Update(float dt)
 						backToMenu = true;
 						App->fade->FadeToBlack();
 					}
-				}
 				break;
 
 			case CLICKED:
-				if (startup_time.Read() > 1900 && times > 1 || times == 1)
 					(*item)->situation = (*item)->clicked;
 				break;
 			}

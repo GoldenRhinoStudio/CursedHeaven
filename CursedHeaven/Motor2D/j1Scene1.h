@@ -41,6 +41,8 @@ public:
 	// Called to change scene
 	void ChangeSceneMenu();
 
+	void ChangeSceneDeath();
+
 	// Load and Save
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
@@ -52,6 +54,7 @@ public:
 	fPoint initialScene1Position;
 	bool player_created = false;
 	bool backToMenu = false;
+	bool toLoseScene = false;
 
 	std::list<j1Button*> scene1Buttons;
 	std::list<j1Label*> scene1Labels;

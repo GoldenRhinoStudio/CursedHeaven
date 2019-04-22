@@ -268,6 +268,15 @@ bool j1Scene1::Update(float dt)
 		else profile_active = true;
 	}
 
+	if (App->entity->currentPlayer->dead == true) {
+		toLoseScene = true;
+
+		App->fade->FadeToBlack();
+
+		if (App->fade->IsFading() == 0)
+			ChangeSceneDeath();
+	}
+
 	if (backToMenu && App->fade->IsFading() == 0)
 		ChangeSceneMenu();
 
@@ -374,4 +383,18 @@ void j1Scene1::ChangeSceneMenu()
 	App->menu->Start();
 	App->render->camera = { 0,0 };
 	backToMenu = false;
+}
+
+void j1Scene1::ChangeSceneDeath() {
+	App->scene1->active = false;
+	App->lose->active = true;
+	App->dialog->CleanUp();
+
+	CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
+	App->entity->active = false;
+	App->lose->Start();
+	App->render->camera = { 0,0 };
+	toLoseScene = false;
 }

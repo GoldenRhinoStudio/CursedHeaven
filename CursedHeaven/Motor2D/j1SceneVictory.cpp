@@ -1,5 +1,5 @@
-#include "j1SceneLose.h"
 #include "j1SceneVictory.h"
+#include "j1SceneLose.h"
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
@@ -21,15 +21,15 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1SceneLose ::j1SceneLose()
+j1SceneVictory::j1SceneVictory()
 {
-	name.assign("lose");
+	name.assign("victory");
 }
 
-j1SceneLose::~j1SceneLose()
+j1SceneVictory::~j1SceneVictory()
 {}
 
-bool j1SceneLose::Awake(pugi::xml_node &)
+bool j1SceneVictory::Awake(pugi::xml_node &)
 {
 	LOG("Loading Credits");
 	bool ret = true;
@@ -49,7 +49,7 @@ bool j1SceneLose::Awake(pugi::xml_node &)
 	return ret;
 }
 
-bool j1SceneLose::Start()
+bool j1SceneVictory::Start()
 {
 	if (active)
 	{
@@ -69,16 +69,16 @@ bool j1SceneLose::Start()
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
 		SDL_Rect clicked = { 797, 12, 151, 38 };
-		App->gui->CreateButton(&deathButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
-		App->gui->CreateButton(&deathButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, GO_TO_MENU);
+		App->gui->CreateButton(&victoryButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
+		App->gui->CreateButton(&victoryButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, GO_TO_MENU);
 
-		App->gui->CreateLabel(&deathLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
-		App->gui->CreateLabel(&deathLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
-		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, font3, "You failed...", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 95, 30, font3, "You failed...", App->gui->beige);
 		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
 		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
-		
+
 		// Text : You failed... 
 		//		  Now the angelica bla bla bla...
 
@@ -87,16 +87,16 @@ bool j1SceneLose::Start()
 	return true;
 }
 
-bool j1SceneLose::PreUpdate()
+bool j1SceneVictory::PreUpdate()
 {
 	return true;
 }
 
-bool j1SceneLose::Update(float dt)
+bool j1SceneVictory::Update(float dt)
 {
-	App->gui->UpdateButtonsState(&deathButtons, App->gui->buttonsScale);
+	App->gui->UpdateButtonsState(&victoryButtons, App->gui->buttonsScale);
 	// Button actions
-	for (std::list<j1Button*>::iterator item = deathButtons.begin(); item != deathButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = victoryButtons.begin(); item != victoryButtons.end(); ++item) {
 		if ((*item)->visible) {
 			switch ((*item)->state)
 			{
@@ -105,25 +105,25 @@ bool j1SceneLose::Update(float dt)
 				break;
 
 			case HOVERED:
-					(*item)->situation = (*item)->hovered;
+				(*item)->situation = (*item)->hovered;
 				break;
 
 			case RELEASED:
-					(*item)->situation = (*item)->idle;
-					if ((*item)->bfunction == PLAY_GAME) {
-						App->fade->FadeToBlack();
-						startGame = true;
-						
-					}
-					else if ((*item)->bfunction == GO_TO_MENU) {
-						App->fade->FadeToBlack();
-						backToMenu = true;
-						
-					}
+				(*item)->situation = (*item)->idle;
+				if ((*item)->bfunction == PLAY_GAME) {
+					App->fade->FadeToBlack();
+					startGame = true;
+
+				}
+				else if ((*item)->bfunction == GO_TO_MENU) {
+					App->fade->FadeToBlack();
+					backToMenu = true;
+
+				}
 				break;
 
 			case CLICKED:
-					(*item)->situation = (*item)->clicked;
+				(*item)->situation = (*item)->clicked;
 				break;
 			}
 		}
@@ -143,12 +143,12 @@ bool j1SceneLose::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	// Blitting the buttons and labels of the menu
-	for (std::list<j1Button*>::iterator item = deathButtons.begin(); item != deathButtons.end(); ++item)
+	for (std::list<j1Button*>::iterator item = victoryButtons.begin(); item != victoryButtons.end(); ++item)
 	{
 		if ((*item)->parent != nullptr) continue;
 		(*item)->Draw(App->gui->buttonsScale);
 	}
-	for (std::list<j1Label*>::iterator item = deathLabels.begin(); item != deathLabels.end(); ++item)
+	for (std::list<j1Label*>::iterator item = victoryLabels.begin(); item != victoryLabels.end(); ++item)
 	{
 		if ((*item)->parent != nullptr) continue;
 		if ((*item)->visible) (*item)->Draw();
@@ -157,7 +157,7 @@ bool j1SceneLose::Update(float dt)
 	return true;
 }
 
-bool j1SceneLose::PostUpdate()
+bool j1SceneVictory::PostUpdate()
 {
 	BROFILER_CATEGORY("CreditsPostUpdate", Profiler::Color::Yellow)
 
@@ -167,25 +167,25 @@ bool j1SceneLose::PostUpdate()
 	return continueGame;
 }
 
-bool j1SceneLose::CleanUp()
+bool j1SceneVictory::CleanUp()
 {
 	LOG("Freeing all textures");
 	App->tex->UnLoad(gui_tex2);
 
-	for (std::list<j1Button*>::iterator item = deathButtons.begin(); item != deathButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = victoryButtons.begin(); item != victoryButtons.end(); ++item) {
 		(*item)->CleanUp();
-		deathButtons.remove(*item);
+		victoryButtons.remove(*item);
 	}
 
-	for (std::list<j1Label*>::iterator item = deathLabels.begin(); item != deathLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = victoryLabels.begin(); item != victoryLabels.end(); ++item) {
 		(*item)->CleanUp();
-		deathLabels.remove(*item);
+		victoryLabels.remove(*item);
 	}
 
 	return true;
 }
 
-void j1SceneLose::ChangeScene(SCENE objectiveScene)
+void j1SceneVictory::ChangeScene(SCENE objectiveScene)
 {
 	this->active = false;
 	backToMenu = false;

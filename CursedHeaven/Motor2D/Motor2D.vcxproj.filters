@@ -112,6 +112,9 @@
     <ClCompile Include="j1Judge.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="j1SceneLose.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -239,6 +242,9 @@
     </ClInclude>
     <ClInclude Include="j1Judge.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneLose.h">
+      <Filter>Development\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

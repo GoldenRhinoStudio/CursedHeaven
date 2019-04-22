@@ -27,6 +27,7 @@
 #include "j1ChooseCharacter.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
+#include "j1SceneLose.h"
 
 #include "Brofiler/Brofiler.h"
 

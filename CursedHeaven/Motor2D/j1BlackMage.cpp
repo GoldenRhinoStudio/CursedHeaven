@@ -535,5 +535,5 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 	App->particles->shot_right.speed = speed_particle;
 
 	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
-	lifePoints -= 10;
+	//lifePoints -= 10;
 }

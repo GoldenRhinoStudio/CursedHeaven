@@ -11,6 +11,7 @@
 #include "j1BlackMage.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -86,8 +87,34 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE) {
-						//atack slime
+					if (distance <= ATTACK_RANGE_MF) {
+						if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
+							int x = App->entity->currentPlayer->position.x;
+							int y = App->entity->currentPlayer->position.y;
+
+							// To change where the particle is born
+							fPoint margin;
+							margin.x = 8;
+							margin.y = 8;
+
+							fPoint edge;
+							edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
+							edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
+
+							// If the map is very big and its not enough accurate, we should use long double for the var angle
+							double angle = -(atan2(edge.y, edge.x));
+
+							fPoint speed_particle;
+							fPoint p_speed = { 300, 300 };
+
+							speed_particle.x = p_speed.x * cos(angle);
+							speed_particle.y = p_speed.y * sin(angle);
+							App->particles->shot_right.speed = speed_particle;
+
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+
+							lastTime_Shot = shotTimer.Read();
+						}
 					}
 					else {
 						Move(path, dt);
@@ -202,14 +229,16 @@ void j1MindFlyer::LoadProperties()
 	pugi::xml_node mindflyer;
 	mindflyer = config.child("mindflyer");
 
-	speed = mindflyer.attribute("speed").as_int();
-	lifePoints = mindflyer.attribute("life").as_int();
-
 	// Copying the values of the collider
 	margin.x = mindflyer.child("margin").attribute("x").as_int();
 	margin.y = mindflyer.child("margin").attribute("y").as_int();
 	colliderSize.x = mindflyer.child("colliderSize").attribute("w").as_int();
 	colliderSize.y = mindflyer.child("colliderSize").attribute("h").as_int();
+
+	// Copying combat values
+	speed = mindflyer.attribute("speed").as_int();
+	lifePoints = mindflyer.attribute("life").as_int();
+	cooldown_Shot = mindflyer.attribute("shotTime").as_uint();
 }
 
 void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)

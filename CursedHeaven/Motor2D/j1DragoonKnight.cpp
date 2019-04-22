@@ -230,10 +230,21 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			attacking = false;
 		}
 		else if (attackCollider != nullptr) {
-			if (facingRight)
-				attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-			else
-				attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+
+			if (animation == &lateral || animation == &idle_lateral) {
+				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
+				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+			}
+			else if (animation == &up || animation == &idle_up) attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - attackCollider->rect.h);
+			else if (animation == &down || animation == &idle_down)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y + attackCollider->rect.h);
+			else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h);
+				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h);
+			}
+			else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y + attackCollider->rect.h);
+				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y + attackCollider->rect.h);
+			}
 		}
 
 		// God mode
@@ -286,7 +297,6 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-
 
 	if (App->scene1->finishedDialogue)
 		hud->Update(dt);

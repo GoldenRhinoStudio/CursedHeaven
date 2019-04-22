@@ -488,15 +488,6 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_1->type == COLLIDER_PLAYER || col_1->type == COLLIDER_NONE)
 	{
-		//If the player collides with win colliders
-		if (col_2->type == COLLIDER_WIN)
-		{
-			App->fade->FadeToBlack();
-
-			if (App->scene1->active)
-				App->scene1->changingScene = true;
-		}
-		else
 		//If the player collides with death colliders
 		if (col_2->type == COLLIDER_ENEMY)
 		{

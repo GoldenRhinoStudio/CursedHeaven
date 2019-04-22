@@ -22,7 +22,7 @@ j1Collisions::j1Collisions() : j1Module()
 
 	matrix[COLLIDER_NONE][COLLIDER_NONE] = false;
 	matrix[COLLIDER_NONE][COLLIDER_PLAYER] = false;
-	matrix[COLLIDER_NONE][COLLIDER_WIN] = true;
+	matrix[COLLIDER_NONE][COLLIDER_ENEMY_SHOT] = false;
 	matrix[COLLIDER_NONE][COLLIDER_ENEMY] = false;
 	matrix[COLLIDER_NONE][COLLIDER_ATTACK] = false;
 	matrix[COLLIDER_NONE][COLLIDER_COIN] = false;
@@ -30,23 +30,23 @@ j1Collisions::j1Collisions() : j1Module()
 
 	matrix[COLLIDER_PLAYER][COLLIDER_NONE] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
-	matrix[COLLIDER_PLAYER][COLLIDER_WIN] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_ENEMY_SHOT] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_ENEMY] = true;
-	matrix[COLLIDER_PLAYER][COLLIDER_ATTACK] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_ATTACK] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_COIN] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_ABILITY] = false;
 
-	matrix[COLLIDER_WIN][COLLIDER_NONE] = true;
-	matrix[COLLIDER_WIN][COLLIDER_PLAYER] = true;
-	matrix[COLLIDER_WIN][COLLIDER_WIN] = false;
-	matrix[COLLIDER_WIN][COLLIDER_ENEMY] = false;
-	matrix[COLLIDER_WIN][COLLIDER_ATTACK] = false;
-	matrix[COLLIDER_WIN][COLLIDER_COIN] = false;
-	matrix[COLLIDER_WIN][COLLIDER_ABILITY] = false;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_NONE] = false;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_ENEMY_SHOT] = false;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_ENEMY] = false;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_ATTACK] = true;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_COIN] = false;
+	matrix[COLLIDER_ENEMY_SHOT][COLLIDER_ABILITY] = false;
 
 	matrix[COLLIDER_ENEMY][COLLIDER_NONE] = false;
 	matrix[COLLIDER_ENEMY][COLLIDER_PLAYER] = true;
-	matrix[COLLIDER_ENEMY][COLLIDER_WIN] = false;
+	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY_SHOT] = false;
 	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = false;
 	matrix[COLLIDER_ENEMY][COLLIDER_ATTACK] = true;
 	matrix[COLLIDER_ENEMY][COLLIDER_COIN] = false;
@@ -54,7 +54,7 @@ j1Collisions::j1Collisions() : j1Module()
 
 	matrix[COLLIDER_ATTACK][COLLIDER_ATTACK] = false;
 	matrix[COLLIDER_ATTACK][COLLIDER_NONE] = false;
-	matrix[COLLIDER_ATTACK][COLLIDER_WIN] = false;
+	matrix[COLLIDER_ATTACK][COLLIDER_ENEMY_SHOT] = true;
 	matrix[COLLIDER_ATTACK][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_ATTACK][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_ATTACK][COLLIDER_COIN] = false;
@@ -62,7 +62,7 @@ j1Collisions::j1Collisions() : j1Module()
 
 	matrix[COLLIDER_COIN][COLLIDER_ATTACK] = false;
 	matrix[COLLIDER_COIN][COLLIDER_NONE] = false;
-	matrix[COLLIDER_COIN][COLLIDER_WIN] = false;
+	matrix[COLLIDER_COIN][COLLIDER_ENEMY_SHOT] = false;
 	matrix[COLLIDER_COIN][COLLIDER_ENEMY] = false;
 	matrix[COLLIDER_COIN][COLLIDER_PLAYER] = true;
 	matrix[COLLIDER_COIN][COLLIDER_COIN] = false;
@@ -70,7 +70,7 @@ j1Collisions::j1Collisions() : j1Module()
 
 	matrix[COLLIDER_ABILITY][COLLIDER_ATTACK] = false;
 	matrix[COLLIDER_ABILITY][COLLIDER_NONE] = false;
-	matrix[COLLIDER_ABILITY][COLLIDER_WIN] = false;
+	matrix[COLLIDER_ABILITY][COLLIDER_ENEMY_SHOT] = false;
 	matrix[COLLIDER_ABILITY][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_ABILITY][COLLIDER_ENEMY] = true;
 	matrix[COLLIDER_ABILITY][COLLIDER_COIN] = false;
@@ -168,22 +168,22 @@ void j1Collisions::DrawColliders()
 
 		switch (colliders[i]->type)
 		{
-		case COLLIDER_NONE:		//White
+		case COLLIDER_NONE:			//White
 			App->render->DrawQuad(colliders[i]->rect, 255, 255, 255, alpha);
 			break;
-		case COLLIDER_WIN:		//Green															
+		case COLLIDER_PLAYER:		//Green															
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha);
 			break;
-		case COLLIDER_PLAYER:	//Dark green
+		case COLLIDER_ENEMY_SHOT:	//Dark green
 			App->render->DrawQuad(colliders[i]->rect, 0, 71, 49, alpha);
 			break;
-		case COLLIDER_ENEMY:	//Red
+		case COLLIDER_ENEMY:		//Red
 			App->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha);
 			break;
-		case COLLIDER_ATTACK:	//Cyan
+		case COLLIDER_ATTACK:		//Cyan
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 255, alpha);
 			break;
-		case COLLIDER_COIN:		//Yellow
+		case COLLIDER_COIN:			//Yellow
 			App->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
 			break;
 		case COLLIDER_ABILITY:		//Orange

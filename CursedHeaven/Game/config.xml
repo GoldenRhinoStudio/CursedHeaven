@@ -37,7 +37,7 @@
 	
 	<dragoonKnight>
 	  <size width="18" height="8"/>
-	  <margin x="3" y="25" colisionMargin="3"/>
+	  <margin x="3" y="28" colisionMargin="3"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
@@ -55,7 +55,7 @@
 	  <colliderSize w="35" h="35"/>
   </slime>  
   
-  <mindflyer speed="100.0f" life="2000">
+  <mindflyer speed="100.0f" life="2000" shotTime="2000">
 	  <margin x="10" y="10"/>
 	  <colliderSize w="35" h="35"/>
   </mindflyer>

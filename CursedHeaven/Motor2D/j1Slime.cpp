@@ -85,7 +85,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE) {
+					if (distance <= ATTACK_RANGE_SLIME) {
 						//atack slime
 					}
 					else {

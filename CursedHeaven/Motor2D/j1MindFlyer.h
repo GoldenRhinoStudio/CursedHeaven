@@ -6,11 +6,12 @@
 #include "p2Animation.h"
 #include "j1Pathfinding.h"
 #include "j1Entity.h"
+#include "j1Timer.h"
 
 #include <vector>
 
 #define DETECTION_RANGE 10
-#define ATTACK_RANGE 4
+#define ATTACK_RANGE_MF 4
 
 struct SDL_Texture;
 //struct Collider;
@@ -46,21 +47,6 @@ public:
 	void LoadProperties();
 	void Move(const std::vector<iPoint>* path, float dt);
 
-private:
-	Animation idle_diagonal_up;
-	Animation idle_diagonal_down;
-	Animation idle_lateral;
-	Animation idle_down;
-	Animation idle_up;
-
-	Animation diagonal_up;
-	Animation diagonal_down;
-	Animation lateral;
-	Animation up;
-	Animation down;
-
-	Animation death;
-
 public:
 	fPoint initialPosition;
 
@@ -78,5 +64,24 @@ public:
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
 
+
+private:
+	Animation idle_diagonal_up;
+	Animation idle_diagonal_down;
+	Animation idle_lateral;
+	Animation idle_down;
+	Animation idle_up;
+
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+
+	Animation death;
+
+	j1Timer shotTimer;
+	uint lastTime_Shot = 0;
+	uint cooldown_Shot = 0;
 };
 #endif // __j1MINDFLYER_H__

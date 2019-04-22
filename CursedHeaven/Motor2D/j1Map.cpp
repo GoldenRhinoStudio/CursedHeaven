@@ -534,9 +534,9 @@ bool j1Map::PutColliders(const char * file_name)
 			/*if (strcmp(object_name, "map_collisions") == 0)
 				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WALL);
 			if (strcmp(object_name, "death_collisions") == 0)
-				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_DEATH);*/
+				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_DEATH);
 			if (strcmp(object_name, "win_collider") == 0)
-				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WIN);
+				App->collisions->AddCollider({ obj.attribute("x").as_int(), obj.attribute("y").as_int(), obj.attribute("width").as_int(), obj.attribute("height").as_int() }, COLLIDER_WIN)*/;
 		}
 	}
 

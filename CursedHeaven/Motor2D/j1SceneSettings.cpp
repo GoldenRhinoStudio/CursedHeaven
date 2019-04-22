@@ -73,7 +73,7 @@ bool j1SceneSettings::Start()
 		// Go Back Button
 		SDL_Rect idle5 = { 382, 508, 37, 36 };
 		SDL_Rect hovered5 = { 343, 508, 37, 36 };
-		SDL_Rect clicked5 = { 421, 511, 37, 33 };
+		SDL_Rect clicked5 = { 421, 508, 37, 36 };
 		App->gui->CreateButton(&settingButtons, BUTTON, 7, 7, idle5, hovered5, clicked5, gui_tex2, GO_TO_MENU);
 
 		App->gui->CreateLabel(&settingLabels, LABEL, 132, 54, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)sets_window);

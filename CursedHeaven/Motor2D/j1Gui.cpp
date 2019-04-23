@@ -346,7 +346,7 @@ void j1Gui::UpdateSliders(std::list<j1Box*>* sliders) {
 				(*item)->position.x = (*item)->maximum;
 
 			// After that we change the volume
-			if ((*item)->position.y < (*item)->parent->position.y + 50) {
+			if ((*item)->position.y < (*item)->parent->position.y + 60) {
 				if((*item)->position.x > lastPos)
 					App->audio->FxVolume(App->audio->GetFxVolume() + ((*item)->position.x - lastPos) * 2);
 				else

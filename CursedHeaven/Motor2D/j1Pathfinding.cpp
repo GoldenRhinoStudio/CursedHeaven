@@ -59,12 +59,12 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
-Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path) const
+Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * node) const
 {
-	if (path->size() > 1)
+	if (path->size() > 1 && *node < path->size() - 1)
 	{
-		iPoint tile = path->at(0);
-		iPoint next_tile = path->at(1);
+		iPoint tile = path->at(*node);
+		iPoint next_tile = path->at(*node + 1);
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
@@ -80,6 +80,23 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path) const
 	}
 
 	else return NONE;
+}
+
+bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, fPoint* position) {
+
+	if (path->size() > 1 && *cnode < path->size() - 1)
+	{
+		int* node = cnode;
+		iPoint prevDest = path->at(*node);
+		iPoint currentDest = path->at(*node + 1);
+
+		bool reachedX = (prevDest.x <= currentDest.x && position->x >= currentDest.x)
+			|| (prevDest.x >= currentDest.x && position->x <= currentDest.x);
+		bool reachedY = (prevDest.y <= currentDest.y && position->y >= currentDest.y)
+			|| (prevDest.y >= currentDest.y && position->y <= currentDest.y);
+		return (reachedX & reachedY);
+	}
+	return false;
 }
 
 Movement j1PathFinding::CheckDirectionGround(const std::vector<iPoint>* path) const
@@ -312,7 +329,6 @@ int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 			}
 		}
 	}
-	LOG("Path Steps: %i", last_path->size());
 
 	return ret;
 }

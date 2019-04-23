@@ -306,17 +306,16 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 void j1Scene1::PlaceEntities()
 {
 	App->entity->AddEnemy(-100, 1000, SLIME); //Add Slime
-	App->entity->AddEnemy(-120, 1050, SLIME); //Add Slime
-	App->entity->AddEnemy(-130, 1100, SLIME); //Add Slime
-	App->entity->AddEnemy(-140, 1150, SLIME); //Add Slime
-	App->entity->AddEnemy(-150, 1200, SLIME); //Add Slime
-	App->entity->AddEnemy(-160, 1050, SLIME); //Add Slime
-	App->entity->AddEnemy(-170, 1050, SLIME); //Add Slime
-	App->entity->AddEnemy(-180, 1050, SLIME); //Add Slime
-	App->entity->AddEnemy(-190, 1050, SLIME); //Add Slime
-	App->entity->AddEnemy(-200, 1050, SLIME); //Add Slime
-
 	App->entity->AddEnemy(250, 850, MINDFLYER); //Add Boss
+	//App->entity->AddEnemy(-120, 1050, SLIME); //Add Slime
+	//App->entity->AddEnemy(-130, 1100, SLIME); //Add Slime
+	//App->entity->AddEnemy(-140, 1150, SLIME); //Add Slime
+	//App->entity->AddEnemy(-150, 1200, SLIME); //Add Slime
+	//App->entity->AddEnemy(-160, 1050, SLIME); //Add Slime
+	//App->entity->AddEnemy(-170, 1050, SLIME); //Add Slime
+	//App->entity->AddEnemy(-180, 1050, SLIME); //Add Slime
+	//App->entity->AddEnemy(-190, 1050, SLIME); //Add Slime
+	//App->entity->AddEnemy(-200, 1050, SLIME); //Add Slime
 }
 
 // Called before quitting

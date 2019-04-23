@@ -113,7 +113,7 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
-		PlaceEntities();
+		PlaceEntities(6);
 
 		startup_time.Start();
 		windowTime.Start();
@@ -303,19 +303,49 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 	return true;
 }
 
-void j1Scene1::PlaceEntities()
+void j1Scene1::PlaceEntities(int room)
 {
-	App->entity->AddEnemy(-100, 1000, SLIME); //Add Slime
-	App->entity->AddEnemy(250, 850, MINDFLYER); //Add Boss
-	//App->entity->AddEnemy(-120, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-130, 1100, SLIME); //Add Slime
-	//App->entity->AddEnemy(-140, 1150, SLIME); //Add Slime
-	//App->entity->AddEnemy(-150, 1200, SLIME); //Add Slime
-	//App->entity->AddEnemy(-160, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-170, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-180, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-190, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-200, 1050, SLIME); //Add Slime
+	if (room = 1) {
+
+	}
+	else if (room = 2) {
+
+	}
+	else if (room = 3) {
+
+	}
+	else if (room = 4) {
+
+	}
+	else if (room = 5) {
+
+	}
+	else if (room = 6) {
+
+	}
+	else if (room = 7) {
+
+	}
+	else if (room = 8) {
+
+	}
+	else if (room = 9) {
+
+	}
+	else if (room = 10) {
+
+	}
+	else if (room = 11) {
+
+	}
+	else if (room = 12) {
+
+	}
+	else if (room = 13) {
+
+	}
+	App->entity->AddEnemy(-100, 1000, SLIME);
+	App->entity->AddEnemy(250, 850, MINDFLYER);
 }
 
 // Called before quitting

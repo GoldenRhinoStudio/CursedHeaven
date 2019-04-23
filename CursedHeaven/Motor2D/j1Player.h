@@ -68,7 +68,8 @@ public:
 	// Size of the player collider, where x = w and y = h
 	iPoint playerSize;
 	iPoint margin;
-
+	
+	int room = 6;
 	uint points = 0;
 	uint score_points = 0;
 	uint playerLife = 0;
@@ -120,6 +121,8 @@ public:
 	j1Timer invulCounter;
 	uint lastTime_invul = 0;
 	uint invulTime = 0;
+
+
 };
 
 #endif // __j1PLAYER_H__

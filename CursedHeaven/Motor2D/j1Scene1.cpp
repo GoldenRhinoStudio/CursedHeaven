@@ -128,6 +128,7 @@ bool j1Scene1::Start()
 bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
+	current_points.erase();
 	return true;
 }
 
@@ -146,6 +147,8 @@ bool j1Scene1::Update(float dt)
 
 	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
+	score_player = App->entity->currentPlayer->score_points;
+	current_points = std::to_string(score_player);
 
 	if (App->scene1->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
@@ -309,7 +312,6 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
-	
 	return continueGame;
 }
 

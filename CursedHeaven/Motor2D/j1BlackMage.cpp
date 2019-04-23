@@ -532,5 +532,4 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 
 	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
 	App->audio->PlayFx(App->audio->attack_bm);
-
 }

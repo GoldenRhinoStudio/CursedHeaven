@@ -73,6 +73,8 @@ public:
 	uint lastWindowTime = 0;
 	j1Timer statsTime;
 	uint lastStatsTime = 0;
+	std::string current_points;
+	int score_player = 0;
 
 private:
 	SDL_Texture* debug_tex = nullptr;

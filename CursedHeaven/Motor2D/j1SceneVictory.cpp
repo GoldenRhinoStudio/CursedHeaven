@@ -75,8 +75,8 @@ bool j1SceneVictory::Start()
 		App->gui->CreateLabel(&victoryLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
 		App->gui->CreateLabel(&victoryLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
-		App->gui->CreateLabel(&victoryLabels, LABEL, 120, 30, font3, "YOU WIN!", App->gui->beige);
-		App->gui->CreateLabel(&victoryLabels, LABEL, 70, 90, font2, "HEAVEN IS SAFE NOW", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 116, 30, font3, "YOU WIN!", {255,255,102,255});
+		App->gui->CreateLabel(&victoryLabels, LABEL, 86, 80, font2, "HEAVEN IS SAFE NOW", App->gui->beige);
 
 		startup_time.Start();
 	}

@@ -102,6 +102,7 @@ public:
 
 	bool player_start = false;
 	bool dead = false;
+	bool victory = false;
 	bool loadedAudios = false;
 	bool changing_room = false;
 

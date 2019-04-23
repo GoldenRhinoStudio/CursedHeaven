@@ -28,6 +28,7 @@
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
 #include "j1SceneLose.h"
+#include "j1SceneVictory.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -277,6 +278,15 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneDeath();
 	}
 
+	if (App->entity->currentPlayer->victory == true) {
+		toVictoryScene = true;
+
+		App->fade->FadeToBlack();
+
+		if (App->fade->IsFading() == 0)
+			ChangeSceneVictory();
+	}
+
 	if (backToMenu && App->fade->IsFading() == 0)
 		ChangeSceneMenu();
 
@@ -397,4 +407,18 @@ void j1Scene1::ChangeSceneDeath() {
 	App->lose->Start();
 	App->render->camera = { 0,0 };
 	toLoseScene = false;
+}
+
+void j1Scene1::ChangeSceneVictory() {
+	App->scene1->active = false;
+	App->victory->active = true;
+	App->dialog->CleanUp();
+
+	CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
+	App->entity->active = false;
+	App->victory->Start();
+	App->render->camera = { 0,0 };
+	toVictoryScene = false;
 }

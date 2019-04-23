@@ -53,8 +53,6 @@ public:
 	bool startGame = false;
 
 	uint times = 0;
-	Animation* animation = nullptr;
-	Animation walk_skeleton;
 
 private:
 

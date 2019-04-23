@@ -24,10 +24,6 @@
 j1SceneLose ::j1SceneLose()
 {
 	name.assign("lose");
-
-	animation = NULL;
-
-	walk_skeleton.PushBack({})
 }
 
 j1SceneLose::~j1SceneLose()
@@ -81,7 +77,7 @@ bool j1SceneLose::Start()
 		App->gui->CreateLabel(&deathLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
 		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, font3, "YOU FAILED...", { 153,0,0,255 });
-		App->gui->CreateLabel(&deathLabels, LABEL, 65, 70, font2, "HEAVEN WILL BECOME HELL", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 65, 80, font2, "HEAVEN WILL BECOME HELL", App->gui->beige);
 		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
 		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
 

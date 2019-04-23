@@ -79,6 +79,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 					if (App->path->CreatePath(origin, destination) > 0) {
 						path = App->path->GetLastPath();
 						target_found = true;
+						node = 0;
 					}
 					else {
 						target_found = false;
@@ -144,6 +145,7 @@ bool j1Slime::CleanUp()
 }
 
 bool j1Slime::PostUpdate() {
+
 	return true;
 }
 
@@ -215,7 +217,12 @@ void j1Slime::LoadProperties()
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
-	direction = App->path->CheckDirection(path);
+	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
+	if (App->path->check_nextTile(path, &node, &pos))
+		node++;
+
+	LOG("Node: %i", node);
+	direction = App->path->CheckDirection(path, &node);
 
 	if (direction == Movement::DOWN_RIGHT)
 	{

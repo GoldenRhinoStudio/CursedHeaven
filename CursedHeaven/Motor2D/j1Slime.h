@@ -72,6 +72,7 @@ public:
 	Movement direction;
 
 	std::vector<iPoint>* path;
+	int node = 0;
 
 	bool target_found = false;
 	bool dead = false;

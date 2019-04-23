@@ -63,8 +63,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
 		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
-		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y) };
-
+		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
+		//fix destination
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
@@ -86,13 +86,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE_SLIME) {
-						//atack slime
-					}
-					else {
-						Move(path, dt);
-					}
-				}
+					Move(path, dt);
+				}//fix attack
 			}
 		}
 		else {
@@ -219,10 +214,10 @@ void j1Slime::LoadProperties()
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
+	/*fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
 	if (App->path->check_nextTile(path, &node, &pos))
 		node++;
-
+*/
 	LOG("Node: %i", node);
 	direction = App->path->CheckDirection(path, &node);
 

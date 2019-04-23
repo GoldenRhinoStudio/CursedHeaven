@@ -74,8 +74,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 			if (App->entity->currentPlayer->dead == false)
 			{
 				if (do_logic) {
-					if(path != nullptr)
-						path->clear();
+					/*if(path != nullptr)
+						path->clear();*/
 
 					if (App->path->CreatePath(origin, destination) > 0) {
 						path = App->path->GetLastPath();
@@ -95,8 +95,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 			}
 		}
 		else {
-			if (path != nullptr)
-				path->clear();
+		/*	if (path != nullptr)
+				path->clear();*/
 			target_found = false;
 		}
 
@@ -134,11 +134,11 @@ bool j1Slime::CleanUp()
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	if (path != nullptr) {
+	/*if (path != nullptr) {
 		path->clear();
 		RELEASE(path);
 		target_found = false;
-	}
+	}*/
 
 	return true;
 }

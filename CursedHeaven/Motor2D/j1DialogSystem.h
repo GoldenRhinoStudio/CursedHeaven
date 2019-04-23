@@ -11,6 +11,8 @@
 #include "SDL/include/SDL.h"
 
 class treeDialogNode;
+class DialogueOptions;
+class Dialogue;
 struct _TTF_Font;
 
 enum dialogSpawn {
@@ -115,18 +117,18 @@ public:
 	bool optionActive = false;
 
 	int lettercounter = 0;
-	int TextScrollPositon;
+	int TextScrollPositon = 0;
 
 	std::string text;
 	std::list <DialogueOptions*> dialogueOptions;
 
 private:
 
-	int Rect_Modifier;
-	int nodeID;
-	int characterID;
-	int OptionCharacterID;
-	dialogSpawn Position_Spawn;
+	int Rect_Modifier = 0;
+	int nodeID = 0;
+	int characterID = 0;
+	int OptionCharacterID = 0;
+	dialogSpawn Position_Spawn = T_LEFT;
 
 };
 
@@ -134,11 +136,19 @@ private:
 class Dialogue {
 public:
 
-	Dialogue(int DialogID) :DialogID(DialogID) {};
+	Dialogue(int DialogID) :DialogID(DialogID) {
+		//int DialogID = 0;
+		treeDialogNode * currentNode = nullptr;
+		std::list <treeDialogNode*> dialogueNodes;
+		bool DialogueActive = false;
+		DialogueOptions* checkOptions = nullptr;
+		SDL_Rect temp = { 0,0,10,10 };
+		SDL_Texture* temp_tex = nullptr;
+	};
 
 	void Input();
 
-	void Draw();
+	void Draw(SDL_Texture* temp_tex, SDL_Rect temp);
 
 	void CleanUp();
 
@@ -156,15 +166,19 @@ public:
 
 public:
 
-	int DialogID;
+	int DialogID = 0;
 
 	treeDialogNode * currentNode = nullptr;
 	std::list <treeDialogNode*> dialogueNodes;
 
 private:
 
+	const char* text = nullptr;
+
 	bool DialogueActive = false;
 	DialogueOptions* checkOptions = nullptr;
+	SDL_Rect temp;/* = { 0,0,NULL,NULL }*/
+	SDL_Texture* temp_tex = nullptr;
 };
 
 class j1DialogSystem :public j1Module
@@ -215,6 +229,11 @@ public:
 	float DialogSpeed;
 	int scale;
 
+	int law = 0;
+
+	SDL_Rect temp = { 0,0,NULL,NULL };
+	SDL_Texture* temp_tex = nullptr;
+
 	SDL_Rect GeneraldialogChart;
 	SDL_Rect GeneraldialogChartEnd;
 	SDL_Rect SpawnDialog_Section;
@@ -223,6 +242,7 @@ public:
 	_TTF_Font* dialogFont = nullptr;
 
 private:
+
 
 	Dialogue * currentDialog = nullptr;
 

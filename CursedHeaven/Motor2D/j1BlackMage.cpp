@@ -14,6 +14,7 @@
 #include "j1Map.h"
 #include "j1Timer.h"
 #include "j1Particles.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -215,6 +216,13 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
+					if (App->dialog->law == 1) {
+						if (App->entity->player_type == MAGE)
+							App->entity->currentPlayer->lifePoints -= 35;
+						else if (App->entity->player_type == KNIGHT)
+							App->entity->currentPlayer->lifePoints -= 70;
+					}
+
 					iPoint explosionPos;
 					iPoint p = { (int)position.x, (int)position.y };
 
@@ -251,6 +259,13 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				// Extra speed
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
+
+					if (App->dialog->law == 2) {
+						if(App->entity->player_type == MAGE)
+							App->entity->currentPlayer->lifePoints -= 35;
+						else if(App->entity->player_type == KNIGHT)
+							App->entity->currentPlayer->lifePoints -= 70;
+					}
 
 					movementSpeed = movementSpeed * 2;
 					cooldown_Speed.Start();

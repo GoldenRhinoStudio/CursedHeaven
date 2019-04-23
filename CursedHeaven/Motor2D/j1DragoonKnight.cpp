@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Timer.h"
 #include "j1Scene1.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -144,6 +145,10 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 						&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
+						if (App->dialog->law == 1) {
+							App->entity->currentPlayer->lifePoints -= App->entity->currentPlayer->lifePoints / 2;
+						}
+
 						lastPosition = position;
 
 						if (direction != NONE_) {
@@ -188,6 +193,10 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
+
+					if (App->dialog->law == 2) {
+						App->entity->currentPlayer->lifePoints -= App->entity->currentPlayer->lifePoints / 2;
+					}
 
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();

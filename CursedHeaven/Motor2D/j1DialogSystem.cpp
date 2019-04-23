@@ -11,6 +11,7 @@
 
 j1DialogSystem::j1DialogSystem()
 {
+	
 	srand(time(NULL));
 }
 bool j1DialogSystem::Awake(pugi::xml_node& conf) {
@@ -27,7 +28,7 @@ bool j1DialogSystem::Start() {
 
 	dialogFont = App->font->Load("fonts/Pixeled.ttf", 15);
 
-	int law = (1 + rand() % 4);
+	law = (1 + rand() % 2);
 
 	if (law == 1) {
 		pugi::xml_document	DialogConfig_file;
@@ -41,7 +42,7 @@ bool j1DialogSystem::Start() {
 		dialogA = createDialog(DialogConfig_file, 0);
 
 		Dialog_List.push_back(dialogA);
-
+		
 		counter = 0;
 	}
 
@@ -102,7 +103,7 @@ bool j1DialogSystem::Update(float dt) {
 	if (currentDialog != nullptr && currentDialog->currentNode->dialogActive == true) {
 
 		currentDialog->Input();
-		currentDialog->Draw();
+		currentDialog->Draw(temp_tex, temp);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
@@ -114,14 +115,14 @@ bool j1DialogSystem::Update(float dt) {
 	return true;
 }
 
-void Dialogue::Draw() {
+void Dialogue::Draw(SDL_Texture* temp_tex, SDL_Rect temp) {
 
-	SDL_Rect temp;
-	SDL_Texture* temp_tex;
+	//SDL_Rect temp;
 	SDL_Texture* Dialog_Textures = App->dialog->returnDialog_Textures();
 	Character temp_Character = App->dialog->getCharacter(currentNode->GetCharacterID());
 
-	temp.x = temp.y = 0;
+	temp.x = 0;
+	temp.y = 0;
 	float scale = 3;
 	//WRITTING MACHINE LOOK
 	App->dialog->counter++;
@@ -136,7 +137,9 @@ void Dialogue::Draw() {
 			currentNode->dialogEnded = true;
 	}
 
-	temp_tex = App->font->Print(App->dialog->temp_text_print.c_str(), temp.w, temp.h, 500, { 0,0,0,255 }, App->dialog->dialogFont);
+	text = App->dialog->temp_text_print.c_str();
+
+	temp_tex = App->font->Print(text, temp.w, temp.h, 500, { 0, 0, 0, 255 }, App->dialog->dialogFont);
 
 	if (currentNode->dialogChart.y + currentNode->TextScrollPositon + temp.h / scale >= App->dialog->SpawnDialog_Section.y + App->dialog->SpawnDialog_Section.h / scale)
 	currentNode->dialogStop = true;
@@ -272,7 +275,7 @@ bool j1DialogSystem::createNodes(pugi::xml_document& Dialog, Dialogue* Dialogue_
 		for (pugi::xml_node Options_node = Dialog_node.child("Option"); Options_node != nullptr; Options_node = Options_node.next_sibling()) {
 
 			DialogueOptions *Options = new DialogueOptions(Options_node.child_value());
-			Options->optionText_tex = App->font->Print(Options->text.c_str(), Options->optionText_Rect.w, Options->optionText_Rect.h, 0, { 0,0,0,255 }, App->dialog->dialogFont);
+			Options->optionText_tex = App->font->Print(Options->text.c_str(), Options->optionText_Rect.w, Options->optionText_Rect.h, 0, { 0, 0, 0, 255 }, App->dialog->dialogFont);
 			Options->NodeID = Options_node.attribute("ID").as_int();
 			Options->nextNodeID = Options_node.attribute("NextNode").as_int();
 			Options->Minimum_Influence_Level = Options_node.attribute("influenceLevel").as_int();
@@ -377,9 +380,9 @@ bool treeDialogNode::setUp_rects(int lineMargin) {
 	App->font->CalcSize(text.c_str(), width_comp, height_comp, App->dialog->dialogFont);
 
 	if (width_comp >= lineMargin)
-		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, lineMargin, { 0,0,0,255 }, App->dialog->dialogFont);
+		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, lineMargin, { 0, 0, 0, 255 }, App->dialog->dialogFont);
 	else
-		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, 0, { 0,0,0,255 }, App->dialog->dialogFont);
+		temp_tex = App->font->Print(text.c_str(), Temp_Rect.w, Temp_Rect.h, 0, { 0, 0, 0, 255 }, App->dialog->dialogFont);
 
 	Rect_Modifier = Temp_Rect.w + App->dialog->getCharacter(characterID).characterRect.w * scale;
 	dialogChart = App->dialog->GeneraldialogChart;

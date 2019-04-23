@@ -220,6 +220,7 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 			App->entity->currentPlayer->score_points += 100;
 			App->audio->PlayFx(App->audio->boss_death);
 			dead = true;
+			App->entity->currentPlayer->victory = true;
 			collider->to_delete = true;
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {

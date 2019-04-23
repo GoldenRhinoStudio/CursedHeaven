@@ -71,6 +71,8 @@ public:
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;
+	j1Timer statsTime;
+	uint lastStatsTime = 0;
 
 private:
 	SDL_Texture* debug_tex = nullptr;

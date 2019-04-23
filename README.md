@@ -1,4 +1,10 @@
 # CursedHeaven
+
+## About the game
+
+Cursed Heaven is a dungeon crawler game based in the Game Boy Advance version of Final Fantasy Tactics. The game is set in an alternative timeline inside the FF universe, in which our brave hero must climb to the top of the floating islands. There, he will be able to place the Legendary Stone of the Sky in order to release Heaven from its' deadly curse.
+
+Go to our GitHub: https://github.com/GoldenRhinoStudio/CursedHeaven
 Go to our web page: https://goldenrhinostudio.com/
 
 ## Controls
@@ -11,7 +17,9 @@ Go to our web page: https://goldenrhinostudio.com/
 * D - Right
 * Q - Ability 1
 * E - Ability 2
-* P - Basic attack
+* Left click - Basic attack
+* Escape - Pause
+* Tab - Show player statistics
 
 ### Xbox gamepad
 
@@ -19,8 +27,13 @@ Go to our web page: https://goldenrhinostudio.com/
 * A - Choose / Accept
 * Y - Ability 1
 * B - Ability 2
-* X - Basic attack
+* Right trigger - Basic attack
+* Start - Pause
+* Back - Show player statistics
 
+### Debug fetrures
+* F9 - Show colliders
+* F3 - Go back to menu
 
 ## Credits
 

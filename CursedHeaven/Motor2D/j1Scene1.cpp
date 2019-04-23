@@ -263,7 +263,11 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu(); 
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN 
+		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
+
+		lastStatsTime = statsTime.Read();
+
 		if (profile_active) profile_active = false;
 		else profile_active = true;
 	}

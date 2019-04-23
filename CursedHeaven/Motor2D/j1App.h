@@ -18,7 +18,10 @@ class j1Textures;
 class j1Audio;
 class j1SceneMenu;
 class j1SceneCredits;
+class j1SceneSettings;
 class j1ChooseCharacter;
+class j1SceneLose;
+class j1SceneVictory;
 class j1Scene1;
 class j1Scene2;
 class j1Map;
@@ -29,6 +32,7 @@ class j1EntityManager;
 class j1Fonts;
 class j1Gui;
 class j1Particles;
+class j1DialogSystem;
 
 class j1App
 {
@@ -99,7 +103,10 @@ public:
 	j1Audio*			audio = nullptr;
 	j1SceneMenu*		menu = nullptr;
 	j1SceneCredits*		credits = nullptr;
+	j1SceneSettings*	settings = nullptr;
 	j1ChooseCharacter*	choose_character = nullptr;
+	j1SceneLose*		lose = nullptr;
+	j1SceneVictory*		victory = nullptr;
 	j1Scene1*			scene1 = nullptr;
 	j1Map*				map = nullptr;
 	j1FadeToBlack*		fade = nullptr;
@@ -109,6 +116,7 @@ public:
 	j1Fonts*			font = nullptr;
 	j1Gui*				gui = nullptr;
 	j1Particles*		particles = nullptr;
+	j1DialogSystem*		dialog = nullptr;
 
 	bool				gamePaused = false;
 

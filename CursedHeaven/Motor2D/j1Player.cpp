@@ -7,18 +7,19 @@
 #include "j1Player.h"
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
+#include "j1BlackMage.h"
 #include "j1Box.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Window.h"
-#include "j1Particles.h"
+#include "j1Audio.h"
 
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER) {}
 
 j1Player::~j1Player() {}
 
 void j1Player::UpdateCameraPosition(float dt)
-{
+{/*
 	if (!changing_room) {
 		App->render->camera.x = -position.x * App->win->GetScale() + (App->win->width / 2);
 		App->render->camera.y = -position.y * App->win->GetScale() + (App->win->height / 2);
@@ -51,23 +52,23 @@ void j1Player::UpdateCameraPosition(float dt)
 
 		else changing_room = false;
 	}
-
+	*/
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == j1KeyState::KEY_REPEAT)
-		App->render->camera.x -= 20;
+		App->render->camera.x -= 30;
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == j1KeyState::KEY_REPEAT)
-		App->render->camera.x += 20;
+		App->render->camera.x += 30;
 	if (App->input->GetKey(SDL_SCANCODE_UP) == j1KeyState::KEY_REPEAT)
-		App->render->camera.y += 20;
+		App->render->camera.y += 30;
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == j1KeyState::KEY_REPEAT)
-		App->render->camera.y -= 20;
+		App->render->camera.y -= 30;
 }
 
-void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic) {
+void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
 
-	if (do_logic)
-		ChangeRoom(position.x, position.y);
+	/*if (do_logic)
+		ChangeRoom(position.x, position.y);*/
 
-	if (!changing_room) {
+	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 
 		// GodMode controls
 		if (GodMode) {
@@ -75,7 +76,7 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 			{
 				position.x += godModeSpeed * dt;
 				facingRight = true;
-				currentPlayer->direction = DIRECTION::RIGHT_;
+				direction = DIRECTION::RIGHT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
@@ -83,7 +84,7 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 				position.x += godModeSpeed * dt;
 				position.y -= (godModeSpeed / 2) * dt;
 				facingRight = true;
-				currentPlayer->direction = DIRECTION::UP_RIGHT_;
+				direction = DIRECTION::UP_RIGHT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
@@ -91,14 +92,14 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 				position.x += godModeSpeed * dt;
 				position.y += (godModeSpeed / 2) * dt;
 				facingRight = true;
-				currentPlayer->direction = DIRECTION::DOWN_RIGHT_;
+				direction = DIRECTION::DOWN_RIGHT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
 			{
 				position.x -= godModeSpeed * dt;
 				facingRight = false;
-				currentPlayer->direction = DIRECTION::LEFT_;
+				direction = DIRECTION::LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
@@ -106,7 +107,7 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 				position.x -= godModeSpeed * dt;
 				position.y -= (godModeSpeed / 2) * dt;
 				facingRight = true;
-				currentPlayer->direction = DIRECTION::UP_LEFT_;
+				direction = DIRECTION::UP_LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
@@ -114,27 +115,27 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 				position.x -= godModeSpeed * dt;
 				position.y += (godModeSpeed / 2) * dt;
 				facingRight = true;
-				currentPlayer->direction = DIRECTION::DOWN_LEFT_;
+				direction = DIRECTION::DOWN_LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
 			{
 				position.y -= godModeSpeed * dt;
-				currentPlayer->direction = DIRECTION::UP_;
+				direction = DIRECTION::UP_;
 			}
 
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
 			{
 				position.y += godModeSpeed * dt;
-				currentPlayer->direction = DIRECTION::DOWN_;
+				direction = DIRECTION::DOWN_;
 			}
 
 			// Idle
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
 				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
 				&& attacking == false) {
-				currentPlayer->direction = DIRECTION::NONE_;
+				direction = DIRECTION::NONE_;
 			}
 		}
 		else {
@@ -153,32 +154,33 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 
 			// Direction controls	
 			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(right)) {
-				position.x += horizontalSpeed * dt;
+				if (movement)
+					position.x += speed * dt;
 				facingRight = true;
-				currentPlayer->direction = DIRECTION::RIGHT_;
+				direction = DIRECTION::RIGHT_;
 			}
 
 			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(left)) {
-				position.x -= horizontalSpeed * dt;
+				if (movement)
+					position.x -= speed * dt;
 				facingRight = false;
-				currentPlayer->direction = DIRECTION::LEFT_;
+				direction = DIRECTION::LEFT_;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY < -6400) {
 				if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(up_left))
 					|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(up_right))) {
 
-					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::UP_RIGHT_;
-					else currentPlayer->direction = DIRECTION::UP_LEFT_;
-
-					position.y -= (horizontalSpeed * dt) / 2;
+					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::UP_RIGHT_;
+					else direction = DIRECTION::UP_LEFT_;
+					if (movement)
+						position.y -= (speed * dt) / 2;
 				}
 				else
-					if (CheckWalkability(up) && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE)
-						&& (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)) {
-
-						position.y -= horizontalSpeed * dt;
-						currentPlayer->direction = DIRECTION::UP_;
+					if (CheckWalkability(up)) {
+						if (movement)
+							position.y -= speed * dt;
+						direction = DIRECTION::UP_;
 					}
 			}
 
@@ -186,24 +188,25 @@ void j1Player::ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_l
 				if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(down_left))
 					|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(down_right))) {
 
-					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) currentPlayer->direction = DIRECTION::DOWN_RIGHT_;
-					else currentPlayer->direction = DIRECTION::DOWN_LEFT_;
-
-					position.y += (horizontalSpeed * dt) / 2;
+					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::DOWN_RIGHT_;
+					else direction = DIRECTION::DOWN_LEFT_;
+					if (movement)
+						position.y += (speed * dt) / 2;
 				}
 				else if (CheckWalkability(down)) {
-
-					position.y += horizontalSpeed * dt;
-					currentPlayer->direction = DIRECTION::DOWN_;
+					if (movement)
+						position.y += speed * dt;
+					direction = DIRECTION::DOWN_;
 				}
 			}
 		}
 	}
 }
 
-void j1Player::SetMovementAnimations(Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
-	Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down) {
+void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
+	Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down, Animation* death) {
 
+	if (dead) animation = death;
 
 	if (direction == UP_LEFT_ || direction == UP_RIGHT_) animation = diagonal_up;
 	else if (direction == DOWN_LEFT_ || direction == DOWN_RIGHT_) animation = diagonal_down;
@@ -211,120 +214,161 @@ void j1Player::SetMovementAnimations(Animation* idle_up, Animation* idle_down, A
 	else if (direction == DOWN_) animation = go_down;
 	else if (direction == UP_) animation = go_up;
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
+	if (direction == UP_LEFT_ || direction == LEFT_ || direction == DOWN_LEFT_)
+		animation->flip = true;
+	else 
+		animation->flip = false;
+
+	if ((App->entity->mage != nullptr && App->entity->mage->active_Q)
+		|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE) {
+		&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE)
+		&& (App->input->gamepadLAxisY < 6400 && App->input->gamepadLAxisY > -6400
+		&& App->input->gamepadLAxisX < 6400 && App->input->gamepadLAxisX > -6400))){
+
 		if (animation == go_up) animation = idle_up;
 		else if (animation == go_down) animation = idle_down;
-		else if (animation == diagonal_up) animation = idle_diagonal_up;
 		else if (animation == diagonal_down) animation = idle_diagonal_down;
+		else if (animation == diagonal_up) animation = idle_diagonal_up;
 		else if (animation == lateral) animation = idle_lateral;
+
+		// Direction controls	
+		if (App->input->gamepadRAxisX > 6400) {
+			animation = idle_lateral;
+			facingRight = true;
+		}
+		if (App->input->gamepadRAxisX < -6400) {
+			animation = idle_lateral;
+			facingRight = false;
+		}
+		if (App->input->gamepadRAxisY < -6400) {
+			if ((App->input->gamepadRAxisX < -6400)	|| (App->input->gamepadRAxisX > 6400)) animation = idle_diagonal_up;
+			else animation = idle_up;
+		}
+		if (App->input->gamepadRAxisY > 6400) {
+			if ((App->input->gamepadRAxisX < -6400) || (App->input->gamepadRAxisX > 6400)) animation = idle_diagonal_down;
+			else animation = idle_down;			
+		}
 
 		direction = DIRECTION::NONE_;
 	}
 }
 
-void j1Player::Shot(float x, float y) {
-
-	//to change where the particle is born (in this case: from the centre of the player aprox (+8,+8))
-	fPoint margin;
-	margin.x = 8;
-	margin.y = 8;
-
-	fPoint edge;
-	edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
-	edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
-
-	//float distance = sqrt(((edge.x) ^ 2) + ((edge.y) ^ 2));
-	//edge.NormalizeVector();
-
-	//if the map is very big and its not enough accurate, we should use long double for the var angle
-	double angle = -(atan2(edge.y, edge.x));
-
-	//float angle = 1 / cos(edge.x / distance);
-
-	fPoint speed_particle;
-
-	App->particles->particle_speed = { 200,200 };
-
-	speed_particle.x = App->particles->particle_speed.x * cos(angle);
-	speed_particle.y = App->particles->particle_speed.y * sin(angle);
-
-	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, speed_particle, COLLIDER_SHOT);
-}
-
 void j1Player::ChangeRoom(int x, int y) {
-	// Room 1 to 2 (42,28) to (42,17)
-	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 28)
+	
+	// 8,71 to 8,61 1-2
+	if ((App->map->WorldToMap((int)x, (int)y).x == 10 || App->map->WorldToMap((int)x, (int)y).x == 11 || App->map->WorldToMap((int)x, (int)y).x == 12)
+		&& App->map->WorldToMap((int)x, (int)y).y == 68)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(42, 17).x;
-		position.y = App->map->MapToWorld(42, 17).y;
+		
 	}
-	// Room 2 to 1 (42,18) to (42,29)
-	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 18)
+
+	// 19,60 to 23,60 2-3
+	if (App->map->WorldToMap((int)x, (int)y).x == 23 && 
+		(App->map->WorldToMap((int)x, (int)y).y == 62 || App->map->WorldToMap((int)x, (int)y).y == 61 || App->map->WorldToMap((int)x, (int)y).y == 63))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(42, 29).x;
-		position.y = App->map->MapToWorld(42, 29).y;
+		
 	}
-	// Room 1 to 3 (38,32) to (20,32)
-	if (App->map->WorldToMap((int)x, (int)y).x == 38 && App->map->WorldToMap((int)x, (int)y).y == 32)
+	
+	// 13,50 to 13,46 2-4
+	if ((App->map->WorldToMap((int)x, (int)y).x == 15 || App->map->WorldToMap((int)x, (int)y).x == 16 || App->map->WorldToMap((int)x, (int)y).x == 17)
+		&& App->map->WorldToMap((int)x, (int)y).y == 49)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(20, 32).x;
-		position.y = App->map->MapToWorld(20, 32).y;
+		
 	}
-	// Room 3 to 1 (21,32) to (39,32)
-	if (App->map->WorldToMap((int)x, (int)y).x == 21 && App->map->WorldToMap((int)x, (int)y).y == 32)
+
+	// 20,36 to 20,25 4-7
+	if ((App->map->WorldToMap((int)x, (int)y).x == 22 || App->map->WorldToMap((int)x, (int)y).x == 23 || App->map->WorldToMap((int)x, (int)y).x == 24)
+		&& App->map->WorldToMap((int)x, (int)y).y == 34)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(39, 32).x;
-		position.y = App->map->MapToWorld(39, 32).y;
+		
 	}
-	// Room 1 to 4 (46,32) to (72,32)
-	if (App->map->WorldToMap((int)x, (int)y).x == 46 && App->map->WorldToMap((int)x, (int)y).y == 32)
+
+	// 29,49 to 29,46 3-4
+	if ((App->map->WorldToMap((int)x, (int)y).x == 31 || App->map->WorldToMap((int)x, (int)y).x == 32 || App->map->WorldToMap((int)x, (int)y).x == 33)
+		&& App->map->WorldToMap((int)x, (int)y).y == 50)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(72, 32).x;
-		position.y = App->map->MapToWorld(72, 32).y;
+		
 	}
-	// Room 4 to 1 (71,32) to (45,32)
-	if (App->map->WorldToMap((int)x, (int)y).x == 71 && App->map->WorldToMap((int)x, (int)y).y == 32)
+	
+	// 33,42 to 36,42 4-5
+	if (App->map->WorldToMap((int)x, (int)y).x == 36 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 44 || App->map->WorldToMap((int)x, (int)y).y == 45 || App->map->WorldToMap((int)x, (int)y).y == 43))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(45, 32).x;
-		position.y = App->map->MapToWorld(45, 32).y;
+		
 	}
-	// Room 1 to 5 (42,36) to (42,48)
-	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 36)
+	
+	// 46,42 to 49,42 5-6
+	if (App->map->WorldToMap((int)x, (int)y).x == 49 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 44 || App->map->WorldToMap((int)x, (int)y).y == 45 || App->map->WorldToMap((int)x, (int)y).y == 43))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(42, 48).x;
-		position.y = App->map->MapToWorld(42, 48).y;
+		
 	}
-	// Room 5 to 1 (42,47) to (42,35)
-	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 47)
+	
+	// 35,36 to 35,33 5-8
+	if ((App->map->WorldToMap((int)x, (int)y).x == 38 || App->map->WorldToMap((int)x, (int)y).x == 39 || App->map->WorldToMap((int)x, (int)y).x == 37)
+		&& App->map->WorldToMap((int)x, (int)y).y == 37)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(42, 35).x;
-		position.y = App->map->MapToWorld(42, 35).y;
+		
 	}
-	// Room 6 to 5 (42,77) to (42,60)
-	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 77)
+	
+	// 69,13 to 69,17 10-11
+	if ((App->map->WorldToMap((int)x, (int)y).x == 71 || App->map->WorldToMap((int)x, (int)y).x == 72 || App->map->WorldToMap((int)x, (int)y).x == 70)
+		&& App->map->WorldToMap((int)x, (int)y).y == 16)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(43, 60).x;
-		position.y = App->map->MapToWorld(43, 60).y;
+		
 	}
-	// Room 5 to 6 (42,61) to (42,78)
-	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 61)
+	
+	// 84,29 to 84,38 11-12
+	if ((App->map->WorldToMap((int)x, (int)y).x == 86 || App->map->WorldToMap((int)x, (int)y).x == 87 || App->map->WorldToMap((int)x, (int)y).x == 85)
+		&& App->map->WorldToMap((int)x, (int)y).y == 35)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(43, 78).x;
-		position.y = App->map->MapToWorld(43, 78).y;
+		
 	}
+	
+	// 75,70 to 75,41 6-12
+	if (App->map->WorldToMap((int)x, (int)y).x == 75 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 42 || App->map->WorldToMap((int)x, (int)y).y == 43 || App->map->WorldToMap((int)x, (int)y).y == 44))
+	{
+		
+	}
+	
+	// 33,59 to 36,59 3-13
+	if (App->map->WorldToMap((int)x, (int)y).x == 36 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 61 || App->map->WorldToMap((int)x, (int)y).y == 59 || App->map->WorldToMap((int)x, (int)y).y == 60))
+	{
+		
+	}
+	
+	// 68,59 to 76,59 13-12
+	if (App->map->WorldToMap((int)x, (int)y).x == 74 && 
+		(App->map->WorldToMap((int)x, (int)y).y == 62 || App->map->WorldToMap((int)x, (int)y).y == 61 || App->map->WorldToMap((int)x, (int)y).y == 60))
+	{
+		
+	}
+	
+	// 20,16 to 20,12 7-9
+	if ((App->map->WorldToMap((int)x, (int)y).x == 22 || App->map->WorldToMap((int)x, (int)y).x == 23 || App->map->WorldToMap((int)x, (int)y).x == 21)
+		&& App->map->WorldToMap((int)x, (int)y).y == 16)
+	{
+		
+	}
+	
+	// 34,19 to 31,19 8-7
+	if (App->map->WorldToMap((int)x, (int)y).x == 35 && 
+		(App->map->WorldToMap((int)x, (int)y).y == 21 || App->map->WorldToMap((int)x, (int)y).y == 22 || App->map->WorldToMap((int)x, (int)y).y == 20))
+	{
+		
+	}
+	
+	// 42,17 to 43,12 8-10
+	if ((App->map->WorldToMap((int)x, (int)y).x == 45 || App->map->WorldToMap((int)x, (int)y).x == 46 || App->map->WorldToMap((int)x, (int)y).x == 44)
+		&& App->map->WorldToMap((int)x, (int)y).y == 16)
+	{
+		
+	}
+
 }
 
 // Detects collisions
@@ -332,19 +376,21 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_1->type == COLLIDER_PLAYER || col_1->type == COLLIDER_NONE)
 	{
-		//If the player collides with win colliders
-		if (col_2->type == COLLIDER_WIN)
-		{
-			App->fade->FadeToBlack();
-
-			if (App->scene1->active)
-				App->scene1->changingScene = true;
+		//If the player collides with death colliders				
+		if (invulCounter.Read() >= lastTime_invul + invulTime) {
+			receivedDamage = false;
+			lastTime_invul = invulCounter.Read();
 		}
-		else
-		//If the player collides with death colliders
-		if (col_2->type == COLLIDER_ENEMY)
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY)
 		{
-			if (App->scene1->active)
+			lifePoints -= App->entity->slime_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+			receivedDamage = true;
+			
+			if (lifePoints <= 0) dead = true;
+			/*if (App->scene1->active)
 				App->scene1->settings_window->position = App->gui->settingsPosition;
 
 			App->fade->FadeToBlack(3.0f);
@@ -358,14 +404,40 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 				score_points = 0;
 			}
 			else if (App->scene1->active)
-				App->scene1->backToMenu = true;
+				App->scene1->backToMenu = true;*/
+		}
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)
+		{			
+			lifePoints -= App->entity->mindflyer_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+			receivedDamage = true;
+
+			if (lifePoints <= 0) dead = true;
+			
+			/*if (App->scene1->active)
+				App->scene1->settings_window->position = App->gui->settingsPosition;
+
+			App->fade->FadeToBlack(3.0f);
+
+			if (dead)
+			{
+				App->entity->DestroyEntities();
+
+				dead = true;
+				points = 0;
+				score_points = 0;
+			}
+			else if (App->scene1->active)
+				App->scene1->backToMenu = true;*/
 		}
 	}
 };
 
 bool j1Player::CheckWalkability(iPoint pos) const {
 
-	bool ret = false;
+	/*bool ret = false;
 
 	if ((pos.x >= 0 && pos.x < App->map->data.width)
 		&& (pos.y >= 0 && pos.y < App->map->data.height))
@@ -384,5 +456,6 @@ bool j1Player::CheckWalkability(iPoint pos) const {
 		}		
 	}
 
-	return ret;
+	return ret;*/
+	return true;
 }

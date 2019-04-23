@@ -34,6 +34,8 @@ enum ENTITY_TYPES
 	PLAYER,
 	COIN,
 	NPC,
+	SLIME,
+	MINDFLYER,
 	UNKNOWN
 };
 
@@ -66,7 +68,6 @@ public:
 
 	// Destructor
 	~j1EntityManager();
-	j1Player* player;
 
 	bool Awake(pugi::xml_node&);
 	bool Start();
@@ -74,6 +75,7 @@ public:
 	// Called every frame
 	bool PreUpdate();
 	bool Update(float dt);
+	bool DrawEntityOrder(float dt);
 	bool PostUpdate();
 
 	bool CleanUp();
@@ -102,15 +104,18 @@ public:
 	j1Tank*				tank = nullptr;
 	j1Rogue*			rogue = nullptr;
 
+	j1Player*			currentPlayer = nullptr;
+
 	j1Judge*			judge = nullptr;
 
-
-	uint current_height = 0;
 	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;
 
-private:
+	int mindflyer_Damage = 0;
+	int slime_Damage = 0;
 
+private:
+	int entity_logic = 0;
 	EntityInfo			queue[MAX_ENTITIES];
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;

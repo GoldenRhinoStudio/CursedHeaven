@@ -58,6 +58,23 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	MusicVolume(DEFAULT_VOLUME);
 	FxVolume(DEFAULT_VOLUME);
 
+	slime_damage = LoadFx("audio/fx/song384.wav");
+	boss_damage = LoadFx("audio/fx/song139.wav");
+	dash = LoadFx("audio/fx/song133.wav");
+	explosion = LoadFx("audio/fx/song402.wav");
+	rage_bm = LoadFx("audio/fx/song154.wav");
+	rage_dk = LoadFx("audio/fx/song383.wav");
+	attack_bm = LoadFx("audio/fx/song105.wav");
+	attack_dk = LoadFx("audio/fx/song346.wav");
+	death_bm = LoadFx("audio/fx/song508.wav");
+	death_dk = LoadFx("audio/fx/song295.wav");
+	damage_bm = LoadFx("audio/fx/song117.wav");
+	damage_dk = LoadFx("audio/fx/song509.wav");
+	slime_death = LoadFx("audio/fx/song122.wav");
+	boss_death = LoadFx("audio/fx/song501.wav");
+	slime_attack = LoadFx("audio/fx/song125.wav");
+	boss_attack = LoadFx("audio/fx/song431.wav");
+
 	return ret;
 }
 

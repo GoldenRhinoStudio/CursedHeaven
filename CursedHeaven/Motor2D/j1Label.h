@@ -23,6 +23,9 @@ public:
 	_TTF_Font* font = nullptr;
 	SDL_Color color;
 	const char* text = nullptr;
+
+private:
+	SDL_Rect temp;
 };
 
 #endif // __j1LABEL_H__

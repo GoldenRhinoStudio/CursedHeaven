@@ -22,4 +22,9 @@ Fila altura 46px
 Horizontal    33px   30px  31px  30px (Height on last one 50 px) 
 
 
+Death Anim
+Vertical 48
+Horizontal  30  39  (Maintain the first one for a while then the second too)
+
 Idle Loop1 Loop2
+

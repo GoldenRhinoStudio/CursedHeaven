@@ -12,6 +12,9 @@
 #include "j1Rogue.h"
 #include "j1Tank.h"
 #include "j1Judge.h"
+#include "j1Slime.h"
+#include "j1MindFlyer.h"
+#include "j1Map.h"
 
 #include "j1Player.h"
 
@@ -64,17 +67,43 @@ bool j1EntityManager::Update(float dt)
 	BROFILER_CATEGORY("EntityManagerUpdate", Profiler::Color::LightSeaGreen)
 
 	accumulatedTime += dt;
-	if (accumulatedTime >= updateMsCycle)
+	if (accumulatedTime >= updateMsCycle && !do_logic) {
 		do_logic = true;
-
-	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
-	{
-		(*item)->Update(dt, do_logic);
+		entity_logic = 0;
 	}
 
-	if (do_logic) {
+	int i = 0;
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+		if (do_logic){
+			if (entity_logic == i) {
+				(*item)->Update(dt, true);
+			}
+			else
+				(*item)->Update(dt, false);
+			i++;
+		}else
+			(*item)->Update(dt, do_logic);
+	}
+
+	entity_logic++;
+
+	if (do_logic && entity_logic >= entities.size()) {
 		accumulatedTime = 0.0f;
 		do_logic = false;
+	}
+
+	return true;
+}
+
+bool j1EntityManager::DrawEntityOrder(float dt)
+{
+	BROFILER_CATEGORY("EntityManagerUpdate", Profiler::Color::LightSeaGreen)
+
+	
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+		(*item)->DrawOrder(dt);
 	}
 
 	return true;
@@ -145,8 +174,8 @@ void j1EntityManager::AddEnemy(int x, int y, ENTITY_TYPES type)
 		if (queue[i].type == ENTITY_TYPES::UNKNOWN)
 		{
 			queue[i].type = type;
-			queue[i].position.x = x;
-			queue[i].position.y = y;
+			queue[i].position.x = App->map->MapToWorld(x, y).x;
+			queue[i].position.y = App->map->MapToWorld(x, y).y;
 			break;
 		}
 	}
@@ -159,6 +188,10 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
 		{
 			j1Entity* entity;
+			if (queue[i].type == SLIME)
+				entity = new j1Slime(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == MINDFLYER)
+				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
 
 			entities.push_back(entity);
 			entity->Start();
@@ -186,6 +219,13 @@ void j1EntityManager::CreatePlayer()
 	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);
 	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
 	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);*/
+
+	if (knight != nullptr) currentPlayer = knight;
+	else if (mage != nullptr) currentPlayer = mage;
+	/*else if (rogue != nullptr)  currentPlayer = rogue;
+	else if (tank != nullptr)  currentPlayer = tank;*/
+
+	currentPlayer->invulCounter.Start();
 }
 
 void j1EntityManager::CreateNPC()

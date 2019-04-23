@@ -1,14 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="p2Log.cpp">
-      <Filter>Programantion 2</Filter>
+    <ClCompile Include="j1Textures.cpp">
+      <Filter>Development\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1App.cpp">
-      <Filter>Development\Core</Filter>
+    <ClCompile Include="PugiXml\src\pugixml.cpp">
+      <Filter>Development\Tools\PuguiXML</Filter>
     </ClCompile>
-    <ClCompile Include="j1Main.cpp">
-      <Filter>Development\Core</Filter>
+    <ClCompile Include="j1Map.cpp">
+      <Filter>Development\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Scene1.cpp">
+      <Filter>Development\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1Timer.cpp">
       <Filter>Development\Tools</Filter>
@@ -16,71 +19,26 @@
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Development\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="PugiXml\src\pugixml.cpp">
-      <Filter>Development\Tools\PuguiXML</Filter>
-    </ClCompile>
-    <ClCompile Include="j1SceneMenu.cpp">
-      <Filter>Development\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Scene1.cpp">
-      <Filter>Development\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1SceneCredits.cpp">
-      <Filter>Development\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Map.cpp">
-      <Filter>Development\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Textures.cpp">
-      <Filter>Development\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Audio.cpp">
+    <ClCompile Include="j1Window.cpp">
       <Filter>Development\Modules\Media</Filter>
     </ClCompile>
     <ClCompile Include="j1Render.cpp">
       <Filter>Development\Modules\Media</Filter>
     </ClCompile>
-    <ClCompile Include="j1Window.cpp">
+    <ClCompile Include="j1Audio.cpp">
       <Filter>Development\Modules\Media</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Label.cpp">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Fonts.cpp">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Gui.cpp">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Hud.cpp">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Button.cpp">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Box.cpp">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Collisions.cpp">
-      <Filter>Development\Modules\Interactions</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Pathfinding.cpp">
-      <Filter>Development\Modules\Interactions</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Particles.cpp">
-      <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
     <ClCompile Include="j1FadeToBlack.cpp">
       <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
-    <ClCompile Include="j1BlackMage.cpp">
-      <Filter>Development\Modules\Entities\Player</Filter>
+    <ClCompile Include="j1Collisions.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
-    <ClCompile Include="j1DragoonKnight.cpp">
-      <Filter>Development\Modules\Entities\Player</Filter>
+    <ClCompile Include="j1Input.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
-    <ClCompile Include="j1Player.cpp">
-      <Filter>Development\Modules\Entities\Player</Filter>
+    <ClCompile Include="j1Pathfinding.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
     <ClCompile Include="j1Entity.cpp">
       <Filter>Development\Modules\Entities</Filter>
@@ -88,34 +46,106 @@
     <ClCompile Include="j1EntityManager.cpp">
       <Filter>Development\Modules\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="j1Judge.cpp">
-      <Filter>Development\Modules\Entities\NPCs</Filter>
+    <ClCompile Include="j1App.cpp">
+      <Filter>Development\Core</Filter>
     </ClCompile>
-    <ClCompile Include="j1Input.cpp">
+    <ClCompile Include="j1Main.cpp">
+      <Filter>Development\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Gui.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Fonts.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Button.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneMenu.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Label.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Box.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneCredits.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Hud.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="p2Log.cpp">
+      <Filter>Programation 2</Filter>
+    </ClCompile>
+    <ClCompile Include="TileQuadtree.cpp">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Player.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Particles.cpp">
       <Filter>Development\Modules\Interactions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1DragoonKnight.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="j1BlackMage.cpp">
+      <Filter>Development\Modules\Entities\Player</Filter>
     </ClCompile>
     <ClCompile Include="j1ChooseCharacter.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1DialogSystem.cpp">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneSettings.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Slime.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Judge.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1MindFlyer.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneLose.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1SceneVictory.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="p2Point.h">
-      <Filter>Programantion 2</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Log.h">
-      <Filter>Programantion 2</Filter>
+    <ClInclude Include="j1Textures.h">
+      <Filter>Development\Modules</Filter>
     </ClInclude>
     <ClInclude Include="p2Defs.h">
-      <Filter>Programantion 2</Filter>
+      <Filter>Programation 2</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Point.h">
+      <Filter>Programation 2</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
+      <Filter>Development\Tools\PuguiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugixml.hpp">
+      <Filter>Development\Tools\PuguiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Map.h">
+      <Filter>Development\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Scene1.h">
+      <Filter>Development\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="p2Animation.h">
-      <Filter>Programantion 2</Filter>
-    </ClInclude>
-    <ClInclude Include="j1App.h">
-      <Filter>Development\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Module.h">
-      <Filter>Development\Core</Filter>
+      <Filter>Programation 2</Filter>
     </ClInclude>
     <ClInclude Include="j1Timer.h">
       <Filter>Development\Tools</Filter>
@@ -123,83 +153,29 @@
     <ClInclude Include="j1PerfTimer.h">
       <Filter>Development\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="PugiXml\src\pugixml.hpp">
-      <Filter>Development\Tools\PuguiXML</Filter>
+    <ClInclude Include="j1Player.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
-      <Filter>Development\Tools\PuguiXML</Filter>
-    </ClInclude>
-    <ClInclude Include="j1SceneMenu.h">
-      <Filter>Development\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Scene1.h">
-      <Filter>Development\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="j1SceneCredits.h">
-      <Filter>Development\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Map.h">
-      <Filter>Development\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Textures.h">
-      <Filter>Development\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Audio.h">
+    <ClInclude Include="j1Window.h">
       <Filter>Development\Modules\Media</Filter>
     </ClInclude>
     <ClInclude Include="j1Render.h">
       <Filter>Development\Modules\Media</Filter>
     </ClInclude>
-    <ClInclude Include="j1Window.h">
+    <ClInclude Include="j1Audio.h">
       <Filter>Development\Modules\Media</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Label.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Fonts.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Gui.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Hud.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Button.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Box.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1UserInterfaceElement.h">
-      <Filter>Development\Modules\GraphicUserInterface</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Collisions.h">
-      <Filter>Development\Modules\Interactions</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Pathfinding.h">
-      <Filter>Development\Modules\Interactions</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Particles.h">
-      <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
     <ClInclude Include="j1FadeToBlack.h">
       <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
-    <ClInclude Include="j1BlackMage.h">
-      <Filter>Development\Modules\Entities\Player</Filter>
+    <ClInclude Include="j1Collisions.h">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
-    <ClInclude Include="j1DragoonKnight.h">
-      <Filter>Development\Modules\Entities\Player</Filter>
+    <ClInclude Include="j1Input.h">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
-    <ClInclude Include="j1Rogue.h">
-      <Filter>Development\Modules\Entities\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Tank.h">
-      <Filter>Development\Modules\Entities\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Player.h">
-      <Filter>Development\Modules\Entities\Player</Filter>
+    <ClInclude Include="j1Pathfinding.h">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
     <ClInclude Include="j1Entity.h">
       <Filter>Development\Modules\Entities</Filter>
@@ -207,58 +183,132 @@
     <ClInclude Include="j1EntityManager.h">
       <Filter>Development\Modules\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="j1Judge.h">
-      <Filter>Development\Modules\Entities\NPCs</Filter>
+    <ClInclude Include="j1Module.h">
+      <Filter>Development\Core</Filter>
     </ClInclude>
-    <ClInclude Include="j1Input.h">
+    <ClInclude Include="j1App.h">
+      <Filter>Development\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Gui.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Fonts.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1UserInterfaceElement.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Button.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Label.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneMenu.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Box.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneCredits.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Hud.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="p2Log.h">
+      <Filter>Programation 2</Filter>
+    </ClInclude>
+    <ClInclude Include="TileQuadtree.h">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Development\Tools\Quadtrees</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Particles.h">
       <Filter>Development\Modules\Interactions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1DragoonKnight.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="j1BlackMage.h">
+      <Filter>Development\Modules\Entities\Player</Filter>
     </ClInclude>
     <ClInclude Include="j1ChooseCharacter.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="j1DialogSystem.h">
+      <Filter>Development\Modules\GraphicUserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneSettings.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Slime.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1MindFlyer.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneLose.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneVictory.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\config.xml" />
-  </ItemGroup>
-  <ItemGroup>
+    <Filter Include="Programation 2">
+      <UniqueIdentifier>{a8bfab6a-5472-4969-943e-861a8b493f08}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Development">
-      <UniqueIdentifier>{d0ffb69f-ba91-4bd0-87d3-f19d7579afc0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Programantion 2">
-      <UniqueIdentifier>{a6286378-a355-44a3-9adc-50ce4ea69f1b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Development\Core">
-      <UniqueIdentifier>{febd36b8-ebbe-45e4-b499-fb07921ace83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Development\Modules">
-      <UniqueIdentifier>{d4610e84-b42a-49ca-a1ce-c0d4228f6ecb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Development\Scenes">
-      <UniqueIdentifier>{5d50c15d-df33-4463-a921-b311eae0e822}</UniqueIdentifier>
+      <UniqueIdentifier>{cb944693-b9d0-484c-bad2-02d5a7cdbec6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Development\Tools">
-      <UniqueIdentifier>{5a42d40c-09f1-4ff8-a33b-ebf3438e5428}</UniqueIdentifier>
+      <UniqueIdentifier>{42c748be-4a37-49de-970f-5be811d06b38}</UniqueIdentifier>
     </Filter>
     <Filter Include="Development\Tools\PuguiXML">
-      <UniqueIdentifier>{f1d3e439-706e-49a8-b614-c4fff6cdef57}</UniqueIdentifier>
+      <UniqueIdentifier>{7cb78d67-17cc-45eb-af97-e2106becce7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Scenes">
+      <UniqueIdentifier>{e07660eb-d36f-4cc9-af59-324d31c2f2f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules">
+      <UniqueIdentifier>{244722d1-90ce-423d-8e7a-556211865a32}</UniqueIdentifier>
     </Filter>
     <Filter Include="Development\Modules\Media">
-      <UniqueIdentifier>{3eba5cdd-ced4-4629-86cf-9767a93e101d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Development\Modules\GraphicUserInterface">
-      <UniqueIdentifier>{557df63f-970f-45ad-a0b8-62c5538d43b8}</UniqueIdentifier>
+      <UniqueIdentifier>{34972cc5-2a08-44c7-8820-dc864e675500}</UniqueIdentifier>
     </Filter>
     <Filter Include="Development\Modules\Interactions">
-      <UniqueIdentifier>{dba997ab-1c6a-4ec0-bfc9-9677fdb1a75a}</UniqueIdentifier>
+      <UniqueIdentifier>{2b61e39a-7a6e-4fd6-91e0-a443829b55b8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Development\Modules\Entities">
-      <UniqueIdentifier>{bdcf8e7c-fd2b-4612-8303-1796bc1dce27}</UniqueIdentifier>
+      <UniqueIdentifier>{2602bd76-7163-4fd8-855a-6e49d5563390}</UniqueIdentifier>
     </Filter>
     <Filter Include="Development\Modules\Entities\Player">
-      <UniqueIdentifier>{4589b561-c9e0-415e-8beb-27643d31eb95}</UniqueIdentifier>
+      <UniqueIdentifier>{60fc6ea4-d366-47bf-adf2-49e7c5fba259}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Development\Modules\Entities\NPCs">
-      <UniqueIdentifier>{28aebaae-d63c-4451-b068-a183c95cfcb9}</UniqueIdentifier>
+    <Filter Include="Development\Core">
+      <UniqueIdentifier>{4e40a7e1-5ec2-4dd0-9d4b-62cd6e2ce8e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Development\Modules\GraphicUserInterface">
+      <UniqueIdentifier>{12d42398-2970-43ff-8668-cdab242895b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Tools\Quadtrees">
+      <UniqueIdentifier>{01c82455-fa91-4281-9b2c-a3b333f54257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\Enemies">
+      <UniqueIdentifier>{f2c7492a-a97f-4b48-add3-e384b87be8d5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\config.xml">
+      <Filter>Development\Tools</Filter>
+    </Xml>
+    <Xml Include="..\Game\animations.xml">
+      <Filter>Development\Tools</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

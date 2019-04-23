@@ -1,10 +1,11 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
 #include "j1Window.h"
 #include "j1Render.h"
 #include "j1EntityManager.h"
+#include "j1Map.h"
 #include "j1Player.h"
+#include "j1Collisions.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -62,7 +63,7 @@ bool j1Render::Start()
 {
 	LOG("render start");
 
-	SDL_RenderSetLogicalSize(renderer, App->win->width, App->win->height);
+	//SDL_RenderSetLogicalSize(renderer, App->win->width, App->win->height); //LIMIT SCREEN VIEW
 	SDL_RenderGetViewport(renderer, &viewport);
 	return true;
 }
@@ -72,6 +73,20 @@ bool j1Render::PreUpdate()
 {
 	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
 
+
+	while(!map_sprites.empty())
+	{
+		map_sprites.pop_back();
+	}
+	map_sprites.clear();
+
+	while (!entities_sprites.empty())
+	{
+		entities_sprites.pop_back();
+	}
+	entities_sprites.clear();
+
+
 	SDL_RenderClear(renderer); 
 	return true;
 }
@@ -80,29 +95,36 @@ bool j1Render::Update(float dt)
 {
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen)
 
-	if (App->entity->player != nullptr) {
+	j1Player* player = nullptr;
+
+	if (App->entity->knight != nullptr) player = (j1Player*)App->entity->knight;
+	else if (App->entity->mage != nullptr) player = (j1Player*)App->entity->mage;
+	/*else if (App->entity->rogue != nullptr) player = (j1Player*)App->entity->rogue;
+	else if (App->entity->tank != nullptr) (j1Player*)App->entity->tank;*/
+
+	if (player != nullptr) {
 		
-		if (!App->entity->player->changing_room) {
-			camera.x = -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2;
-			camera.y = -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2;
+		if (!player->changing_room) {
+			camera.x = -player->position.x * (App->win->GetScale()) + App->win->width / 2;
+			camera.y = -player->position.y * (App->win->GetScale()) + App->win->height / 2;
 		}
 
-		if (App->entity->player->changing_room == true) {
-			if (camera.x < -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2) {
-				camera.x += 500 * dt;
+		if (player->changing_room == true) {
+			if (camera.x < -player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+				camera.x += 250 * dt;
 			}
-			else if (camera.x > -App->entity->player->position.x * (App->win->GetScale()) + App->win->width / 2) {
-				camera.x -= 500 * dt;
+			else if (camera.x > -player->position.x * (App->win->GetScale()) + App->win->width / 2) {
+				camera.x -= 250 * dt;
 			}
-			else App->entity->player->changing_room = false;
+			else player->changing_room = false;
 
-			if (camera.y < -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+			if (camera.y < -player->position.y * (App->win->GetScale()) + App->win->height / 2) {
 				camera.y += 250 * dt;
 			}
-			else if (camera.y > -App->entity->player->position.y * (App->win->GetScale()) + App->win->height / 2) {
+			else if (camera.y > -player->position.y * (App->win->GetScale()) + App->win->height / 2) {
 				camera.y -= 250 * dt;
 			}
-			else App->entity->player->changing_room = false;
+			else player->changing_room = false;
 		}
 	}
 
@@ -224,6 +246,49 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	return ret;
 }
 
+// Blit to screen
+bool j1Render::BlitDialog(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float Scale, double angle, int pivot_x, int pivot_y) const
+{
+	bool ret = true;
+	uint scale = Scale;
+
+	SDL_Rect rect;
+	rect.x = (int)(camera.x * speed) + x * scale;
+	rect.y = (int)(camera.y * speed) + y * scale;
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
+
 bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
@@ -304,4 +369,165 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	}
 
 	return ret;
+}
+
+bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>& priority) const
+{
+	BROFILER_CATEGORY("OrderBlit", Profiler::Color::Gold)
+	bool ret = true;
+	while (priority.empty() == false) {
+		TileData* Image = priority.top();
+
+		uint size = App->win->GetScale();
+		SDL_Rect r;
+		r.x = (int)(camera.x * Image->speed) + Image->x * size;
+		r.y = (int)(camera.y * Image->speed) + Image->y * size;
+
+		if (Image->section != NULL) {
+			r.w = Image->section->w;
+			r.h = Image->section->h;
+		}
+		else {
+			SDL_QueryTexture(Image->texture, NULL, NULL, &r.w, &r.h);
+		}
+		SDL_RendererFlip flag;
+		if (Image->flip == true)
+			flag = SDL_FLIP_HORIZONTAL;
+		else
+			flag = SDL_FLIP_NONE;
+
+		(int)r.w *= Image->scale * Image->blitScale;
+		(int)r.h *= Image->scale * Image->blitScale;
+
+		SDL_Point* point = NULL;
+		SDL_Point img2;
+
+		if (Image->pivot_x != INT_MAX && Image->pivot_y != INT_MAX) {
+			img2.x = Image->pivot_x;
+			img2.y = Image->pivot_y;
+			point = &img2;
+		}
+		if (SDL_RenderCopyEx(renderer, Image->texture, Image->section, &r, Image->angle, point, flag) != 0) {
+			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			ret = false;
+		}
+		priority.pop();
+	}
+	for (int i = 0; i < App->map->Rectvec.size(); i++) {
+	RELEASE(App->map->Rectvec[i]);
+	}
+
+	App->map->Rectvec.clear();
+	return ret;
+}
+
+void j1Render::reOrder() {
+
+	BROFILER_CATEGORY("Order", Profiler::Color::Green)
+	bool behind = false;
+	int aux_height = 0;
+	int sum_height = 0;
+	iPoint pos1 = { 0,0 };
+	iPoint pos2 = { 0,0 }; 
+	int order = 0;
+	for (std::vector<TileData*>::iterator item_map = map_sprites.begin(); item_map != map_sprites.end(); ++item_map)
+	{
+		TileData* img2 = *item_map;
+		pos2 = App->map->WorldToMap(img2->x, img2->y);
+		App->map->Tile_WorldMap(pos2, img2->height);	
+
+		//for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
+		//{
+		//	
+		//	TileData* img1 = *item;
+		//	pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y);
+		//	App->map->Tile_WorldMap(pos1, img1->height);
+
+
+		//		if (img1->height < img2->height && !img1->behind) {//check
+
+		//			if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
+		//			{
+		//				img1->order = img2->order + 0.5f;
+		//			}
+		//			else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
+		//			{
+		//				img1->order = img2->order + 0.5f;
+		//			}
+		//			else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
+		//			{
+		//				img1->order = img2->order + 0.5f;
+		//			}
+		//			else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
+		//			{
+		//				img1->order = img2->order + 0.5f;
+		//			}
+		//			else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
+		//			{
+		//				img1->order = img2->order - 0.5f;
+		//				img1->behind = true;
+		//			}
+		//			else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
+		//			{
+		//				img1->order = img2->order - 0.5f;
+		//				img1->behind = true;
+		//			}
+		//			else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
+		//			{
+		//				img1->order = img2->order + 0.5f;
+		//			}
+		//			else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
+		//			{
+		//				img1->order = img2->order - 0.5f;
+		//				img1->behind = true;
+		//			}
+		//			else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
+		//			{
+		//				img1->order = img2->order - 0.5f;
+		//				img1->behind = true;
+		//			}
+
+		//		}
+		//		else if (img1->height >= img2->height && !img1->behind) {
+		//			if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+		//				(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
+		//				(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
+		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
+		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
+		//				(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
+		//				(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+		//				(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
+		//				(pos2.x == pos1.x && pos2.y == pos1.y)) //current
+		//			{/*
+		//				if (img2->id % 2 != 0)
+		//					img1->order = img2->order + 1.0f;
+		//				else*/
+		//				if(img2->order > img1->order)
+		//					img1->order = img2->order + 0.5f;
+		//			}
+		//		}
+		//}
+		OrderToRender.push(img2);
+		order = img2->order + 1;
+	}
+	if (!entities_sprites.empty()) {
+		TileData* player = entities_sprites.front();
+		player->order = order;
+
+		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
+		{
+			TileData* img1 = *item;
+
+			if (player != img1) {
+				if (img1->col->rect.y + img1->col->rect.h < player->col->rect.y) {
+					img1->order = player->order - 0.1;
+				}
+				else {
+					img1->order = player->order + 0.1;
+				}
+			}
+			OrderToRender.push(img1);
+		}
+	}
 }

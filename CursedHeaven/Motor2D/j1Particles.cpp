@@ -15,15 +15,6 @@ j1Particles::j1Particles()
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
-
-	SDL_Rect r = { 232, 103, 16, 12 };
-	shot_right.anim.PushBack(r);
-	shot_right.anim.PushBack({ 250, 103, 16, 12 });
-	shot_right.anim.loop = true;
-	shot_right.life = 2500;
-	/*shot_right.speed.x = 100;
-	shot_right.speed.y = 100;*/
-	shot_right.speed = particle_speed;
 }
 
 j1Particles::~j1Particles()
@@ -34,6 +25,15 @@ bool j1Particles::Start()
 {
 	LOG("Loading particles");
 	part_tex = App->tex->Load("textures/character/particles.png");
+
+	// Mage basic attack
+	shot_right.anim.LoadAnimation("shot", "mage");
+	shot_right.life = 2500;
+
+	// Mage Q
+	explosion.anim.LoadAnimation("explosion", "mage");
+	explosion.life = 570;
+
 	return true;
 }
 
@@ -57,8 +57,10 @@ bool j1Particles::Update(float dt)
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
 		Particle* p = active[i];
+
 		if (p == nullptr)
 			continue;
+
 		if (p->Update(dt) == false)
 		{
 			delete p;
@@ -66,24 +68,20 @@ bool j1Particles::Update(float dt)
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			SDL_Rect r_anim = { 238, 109, 6, 6 };
-			App->render->Blit(part_tex, p->position.x, p->position.y, &r_anim, SDL_FLIP_NONE);
+			App->render->Blit(part_tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
 
-			/*switch (p->Type) {
-			case p->SHOOT:
-				App->render->Blit(part_tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
-				break;
-			}*/
 			if (p->fx_played == false)
 			{
 				p->fx_played = true;
+				//Play your fx here
 			}
 		}
 	}
+
 	return true;
 }
 
-void j1Particles::AddParticle(const Particle& particle, int x, int y, fPoint speed, COLLIDER_TYPE collider_type, Uint32 delay)
+void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, COLLIDER_TYPE collider_type, Uint32 delay)
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
@@ -93,13 +91,10 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, fPoint spe
 			p->born = SDL_GetTicks() + delay;
 			p->position.x = x;
 			p->position.y = y;
-			p->speed = speed;
-			//p->Type = particle.Type;
-			float dt = App->GetDt();
 			if (collider_type != COLLIDER_NONE) {
-				p->collider = App->collisions->AddCollider({ (int)p->position.x, (int)p->position.y, 6, 6 }, collider_type, this);
-				//p->collider->type = COLLIDER_SHOT;
+				p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
 			}
+			Collider* test = p->collider;
 			active[i] = p;
 			break;
 		}
@@ -114,12 +109,15 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 		// Always destroy particles that collide
 		if (active[i] != nullptr && active[i]->collider == c1)
 		{
-			delete active[i];
-			active[i] = nullptr;
-			break;
+			if (active[i]->anim.Finished()) {
+				delete active[i];
+				active[i] = nullptr;
+				break;
+			}
 		}
 	}
 }
+
 
 // -------------------------------------------------------------
 // -------------------------------------------------------------
@@ -136,9 +134,8 @@ Particle::Particle(const Particle& p) :
 
 Particle::~Particle()
 {
-	if (collider != nullptr) {
+	if (collider != nullptr)
 		collider->to_delete = true;
-	}
 }
 
 bool Particle::Update(float dt)
@@ -154,10 +151,8 @@ bool Particle::Update(float dt)
 	position.y += speed.y * dt;
 
 
-	if (collider != nullptr) {
+	if (collider != nullptr)
 		collider->SetPos(position.x, position.y);
-		if (collider->type == COLLIDER_SHOT)
-			collider->SetPos(position.x, position.y);
-	}
+
 	return ret;
 }

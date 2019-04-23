@@ -38,24 +38,27 @@ public:
 	bool CleanUp();
 
 	// Called to change scene
-	void ChangeSceneChoose();
+	void ChangeScene();
 
 public:
 
+	j1Box* info_window = nullptr;
+
 	std::list<j1Button*> chooseCharacterButtons;
-
-	bool chosenMage = false;
-	bool chosenKnight = false;
-	bool chosenTank = false;
-	bool chosenRogue = false;
-
+	std::list<j1Label*> chooseCharacterLabels;
+	std::list<j1Box*> chooseCharacterBoxes;
+	
+	j1Timer	startup_time;
 	bool startGame = false;
+	bool backToMenu = false;
 
 private:
 
-	SDL_Texture* graphics = nullptr;
+	_TTF_Font* font = nullptr;
+	_TTF_Font* font2 = nullptr;
 	SDL_Texture* button_tex = nullptr;
-	SDL_Rect background;
+	SDL_Texture* gui_tex2 = nullptr;
+	SDL_Texture* info_tex = nullptr;
 
 	SCENE currentScene = SCENE::CHOOSE;
 };

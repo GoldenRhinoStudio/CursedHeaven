@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.1.</title>
+    <title>Cursed Heaven v0.3.</title>
     <organization>UPC</organization>
   </app>
 	
@@ -12,8 +12,8 @@
   </renderer>
 
   <window>
-    <resolution width="1024" height="768" scale="2"/>
-    <fullscreen value="false"/>
+    <resolution width="1024" height="768" scale="3"/>
+    <fullscreen value="true"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
@@ -25,30 +25,42 @@
   
   <player>
 	<blackMage>
-	  <size width="18" height="8"/>
-	  <margin x="2" y="20" colisionMargin="3"/>
+	  <size width="9" height="9"/>
+	  <margin x="6" y="28" colisionMargin="3"/>
 	  <speed>
-	    <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="80.0f"/>
-	    <physics initialFalling="0.0f" falling="0.0f" acceleration="550.0f"  jumpNumber="0" maxJumps="2"/>
+	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="20" leftColliderSpawnPos="-16"/>
-	  <combat basicDamage="150" rageDamage="100" dashSpeed="300"/>
+	  <combat basicDamage="200" fireDamage="100" lifePoints="100" resitance="50"/>
+	  <cooldowns Q="10000" E="15000" increasedSpeed="5000" explosion="600" invulTime="1000"/>
 	</blackMage>
 	
 	<dragoonKnight>
 	  <size width="18" height="8"/>
-	  <margin x="2" y="20" colisionMargin="3"/>
+	  <margin x="3" y="28" colisionMargin="3"/>
 	  <speed>
-	    <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="80.0f"/>
-	    <physics initialFalling="0.0f" falling="0.0f" acceleration="550.0f"  jumpNumber="0" maxJumps="2"/>
+	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="20" leftColliderSpawnPos="-16"/>
-	  <combat basicDamage="150" rageDamage="100" dashSpeed="300"/>
+	  <combat basicDamage="150" rageDamage="100" dashSpeed="300" lifePoints="200" resitance="100"/>
+	  <cooldowns Q="5000" E="25000" rage="5000" invulTime="1000"/>
 	</dragoonKnight>
 	
   </player>  
   
   <entityManager updateMsCycle="0.1f"/>
+  
+  <slime speed="50.0f" life="600">
+	  <margin x="10" y="10"/>
+	  <colliderSize w="35" h="35"/>
+	  <combat damage="20"/>
+  </slime>  
+  
+  <mindflyer speed="100.0f" life="3000">
+	  <margin x="10" y="10"/>
+	  <colliderSize w="35" h="35"/>
+	  <combat shotTime="1000" damage="30"/>
+  </mindflyer>
 
   <map>
 	<blitSpeed backgrounds="0.7f" fog="0.85f" map="1.0f"/>
@@ -56,9 +68,9 @@
   </map>  
   
   <gui>
-	<scale buttonsScale="0.5f" boxScale="0.23f" logoScale="0.2f"/>
-	<positions settingsPositionX="54" settingsPositionY="10"/>
-	<sliderLimits maximum="108" minimum="58"/>
+	<scale buttonsScale="0.47f" boxScale="0.28f" creditsboxScale="0.32f" logoScale="0.35f"/>
+	<positions settingsPositionX="120" settingsPositionY="50"/>
+	<sliderLimits maximum="225" minimum="155"/>
 	<colors a="255">
 		<beige r="245" g="245" b="220"/>
 		<brown r="73" g="31" b="10"/>

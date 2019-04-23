@@ -92,8 +92,12 @@ private:
 public:
 	// Controller
 	SDL_GameController* controller = nullptr;
+
 	int gamepadLAxisX = 0;
 	int gamepadLAxisY = 0;
+
+	int gamepadRAxisX = 0;
+	int gamepadRAxisY = 0;
 };
 
 #endif // __j1INPUT_H__

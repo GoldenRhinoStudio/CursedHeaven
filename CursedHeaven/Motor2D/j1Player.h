@@ -5,6 +5,7 @@
 #include "p2Point.h"
 #include "p2Animation.h"
 #include "j1Entity.h"
+#include "j1Timer.h"
 
 struct SDL_Texture;
 struct Collider;
@@ -54,11 +55,10 @@ public:
 	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition(float dt);
 	bool CheckWalkability(iPoint pos) const;
-	void ManagePlayerMovement(j1Player* currentPlayer, float dt, bool do_logic);
-	void SetMovementAnimations(Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
-		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down);
+	void ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed);
+	void SetMovementAnimations(DIRECTION& direction, Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
+		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down, Animation* death);
 	void ChangeRoom(int x, int y);
-	void Shot(float x, float y);
 
 public:
 
@@ -68,7 +68,8 @@ public:
 	// Size of the player collider, where x = w and y = h
 	iPoint playerSize;
 	iPoint margin;
-
+	
+	int room = 6;
 	uint points = 0;
 	uint score_points = 0;
 	uint playerLife = 0;
@@ -77,8 +78,21 @@ public:
 
 	j1Hud* hud = nullptr;
 
-	// Attack values
-	uint basicDamage = 0;
+	// Animations of the player
+	Animation idle_diagonal_up;
+	Animation idle_diagonal_down;
+	Animation idle_lateral;
+	Animation idle_down;
+	Animation idle_up;
+
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+
+	Animation godmode;
+	Animation death;
 
 	int attackBlittingX;
 	int attackBlittingY;
@@ -86,17 +100,30 @@ public:
 	int leftAttackSpawnPos;
 
 	float godModeSpeed;
-	float horizontalSpeed;
+	float movementSpeed;
 
 	bool player_start = false;
 	bool dead = false;
+	bool victory = false;
 	bool loadedAudios = false;
 	bool changing_room = false;
+	bool receivedDamage = false;
 
 	bool GodMode = false;
 	bool attacking = false;
+	bool available_Q = false;
 	bool active_Q = false;
+	bool firstTimeQ = true;
+	bool available_E = false;
 	bool active_E = false;
+	bool firstTimeE = true;
+
+	// The player stays untouchable for a second
+	j1Timer invulCounter;
+	uint lastTime_invul = 0;
+	uint invulTime = 0;
+
+
 };
 
 #endif // __j1PLAYER_H__

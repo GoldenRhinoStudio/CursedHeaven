@@ -35,17 +35,24 @@ public:
 	virtual bool CleanUp() {
 		return true;
 	};
+	virtual bool DrawOrder(float dt) {
+		return true;
+	}
 
 public:
 
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
-	virtual void Draw(SDL_Rect r, bool flip = false, int x = 0, int y = 0);
+	virtual void Draw(SDL_Rect* r, bool flip = false, int x = 0, int y = 0, float scale = 1.0f);
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 
 	ENTITY_TYPES type;
 	DIRECTION direction;
+
+	bool movement = false;
+
+	uint current_height = 0;
 
 	fPoint position;
 	fPoint initialPosition;
@@ -54,7 +61,14 @@ public:
 	Animation* animation = nullptr;
 	Collider* collider = nullptr;
 	SDL_Texture* sprites = nullptr;
+	SDL_Texture* debug_tex = nullptr;
 
+	float height = 0;
+	float order = 0;
+	// Combat values
+	int basicDamage = 0;
+	int lifePoints = 0;
+	int initialLifePoints = 0;
 };
 
 #endif // __ENTITY_H__

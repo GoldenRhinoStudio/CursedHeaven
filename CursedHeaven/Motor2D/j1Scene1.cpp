@@ -10,6 +10,9 @@
 #include "j1Window.h"
 #include "j1Map.h"
 #include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
+#include "j1Tank.h"
+#include "j1Rogue.h"
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
@@ -21,8 +24,11 @@
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
-#include "j1Particles.h"
 #include "j1ChooseCharacter.h"
+#include "j1DialogSystem.h"
+#include "j1Particles.h"
+#include "j1SceneLose.h"
+#include "j1SceneVictory.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -48,8 +54,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 		LOG("Scene1 not active.");
 
 	// Copying the position of the player
-	initialScene1Position.x = 250;
-	initialScene1Position.y = 1080;
+	initialScene1Position.x = 0;
+	initialScene1Position.y = 0;
 
 	return ret;
 }
@@ -57,10 +63,12 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene1::Start()
 {
+
 	if (active)
-	{
+	{	
+		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("Openland_map.tmx"))
+		if (App->map->Load("greenmount_v2.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -72,60 +80,45 @@ bool j1Scene1::Start()
 			RELEASE_ARRAY(data);
 		}
 
-		//Judge
-		App->entity->CreateNPC();
-		App->entity->judge->Start();
-		App->particles->Start();
-
 		// The audio is played	
-		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song034.ogg", 1.0f);
 
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
-		gui_tex = App->tex->Load("gui/atlas.png");
+		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
 
 		// Loading fonts
-		font = App->font->Load("fonts/PixelCowboy/PixelCowboy.otf", 8);
+		font = App->font->Load("fonts/Pixeled.ttf", 10);
 
 		// Creating UI
-		SDL_Rect section = { 537, 0, 663, 712 };
+		SDL_Rect section = { 9,460,315,402 };
 		settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
 		settings_window->visible = false;
 
-		SDL_Rect idle = { 0, 391, 84, 49 };
-		SDL_Rect hovered = { 0, 293, 84, 49 };
-		SDL_Rect clicked = { 0, 342, 84, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 31, 105, idle, hovered, clicked, gui_tex, SAVE_GAME, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 78, 105, idle, hovered, clicked, gui_tex, CLOSE_GAME, (j1UserInterfaceElement*)settings_window);
+		SDL_Rect idle = { 631, 12, 151, 38 };
+		SDL_Rect hovered = { 963, 12, 151, 38 };
+		SDL_Rect clicked = { 797, 14, 151, 37 };
 
-		App->gui->CreateBox(&scene1Boxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&scene1Boxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 416, 72, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
+		SDL_Rect slider_r = { 860,334,180,5 };
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 65, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 100, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
 
-		SDL_Rect idle2 = { 28, 201, 49, 49 };
-		SDL_Rect hovered2 = { 77, 201, 49, 49 };
-		SDL_Rect clicked2 = { 126, 201, 49, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 63, 135, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateBox(&scene1Boxes, BOX, 50, 55, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
+		App->gui->CreateBox(&scene1Boxes, BOX, 50, 90, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 
-		SDL_Rect idle4 = { 417, 292, 49, 49 };
-		SDL_Rect hovered4 = { 417, 345, 49, 49 };
-		SDL_Rect clicked4 = { 417, 400, 49, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 37, 135, idle4, hovered4, clicked4, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 20, idle, hovered, clicked, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
 
-		SDL_Rect idle5 = { 270, 633, 49, 49 };
-		SDL_Rect hovered5 = { 319, 633, 49, 49 };
-		SDL_Rect clicked5 = { 368, 633, 49, 49 };
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 89, 135, idle5, hovered5, clicked5, gui_tex, OTHER_LEVEL, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
-		App->gui->CreateLabel(&scene1Labels, LABEL, 44, 9, font, "Settings", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 30, 50, font, "Sound", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 30, 89, font, "Music", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 38, 143, font, "Menu", App->gui->grey, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 33, 110, font, "Save", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 81, 110, font, "Quit", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, font, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, font, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
-		PlaceEntities();
+		PlaceEntities(6);
 
 		startup_time.Start();
+		windowTime.Start();
 	}
 
 	return true;
@@ -135,7 +128,7 @@ bool j1Scene1::Start()
 bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
-
+	current_points.erase();
 	return true;
 }
 
@@ -145,18 +138,25 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
+	finishedDialogue = true;
+	
+	/*if (startDialogue)
+		App->dialog->StartDialogEvent(App->dialog->dialogA);*/
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
-	// ---------------------------------------------------------------------------------------------------------------------		
 
-	App->gui->UpdateButtonsState(&scene1Buttons);
+	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
+	score_player = App->entity->currentPlayer->score_points;
+	current_points = std::to_string(score_player);
 
 	if (App->scene1->startup_time.Read() > 1700) {
-		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN || closeSettings) {
+		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
+			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
 			App->gamePaused = !App->gamePaused;
+			lastWindowTime = windowTime.Read();
 
 			settings_window->position = { App->gui->settingsPosition.x - App->render->camera.x / (int)App->win->GetScale(),
 				App->gui->settingsPosition.y - App->render->camera.y / (int)App->win->GetScale() };
@@ -249,13 +249,13 @@ bool j1Scene1::Update(float dt)
 	// Managing scene transitions
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN || resettingLevel)
 	{
-		resettingLevel = true;
+		/*resettingLevel = true;
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
 			App->render->camera.x = 0;
 			resettingLevel = false;
-		}
+		}*/
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || changingScene) {
@@ -267,26 +267,44 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu(); 
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN 
+		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
+
+		lastStatsTime = statsTime.Read();
+
+		if (profile_active) profile_active = false;
+		else profile_active = true;
+	}
+
+	if (App->entity->currentPlayer->dead == true) {
+		toLoseScene = true;
+
+		App->fade->FadeToBlack();
+
+		if (App->fade->IsFading() == 0)
+			ChangeSceneDeath();
+	}
+
+	if (App->entity->currentPlayer->victory == true) {
+		toVictoryScene = true;
+
+		App->fade->FadeToBlack();
+
+		if (App->fade->IsFading() == 0)
+			ChangeSceneVictory();
+	}
+
 	if (backToMenu && App->fade->IsFading() == 0)
 		ChangeSceneMenu();
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-
+	
 	App->map->Draw();
-
-	// Blitting patfhinding if debug is activated
-	if (App->collisions->debug) {
-
-		const std::vector<iPoint>* path = App->path->GetLastPath();
-
-		for (uint i = 0; i < path->size(); ++i)
-		{
-			iPoint pos = App->map->MapToWorld((*path).at(i).x, (*path).at(i).y);
-			App->render->Blit(debug_tex, pos.x, pos.y);
-		}
-	}
+	App->entity->DrawEntityOrder(dt);
+	App->render->reOrder();
+	App->render->OrderBlit(App->render->OrderToRender);
 
 	return true;
 }
@@ -295,7 +313,6 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
-
 	return continueGame;
 }
 
@@ -313,8 +330,55 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 	return true;
 }
 
-void j1Scene1::PlaceEntities()
+void j1Scene1::PlaceEntities(int room)
 {
+	App->entity->AddEnemy(13, 83, SLIME);
+	App->entity->AddEnemy(16, 79, SLIME);
+	App->entity->AddEnemy(7, 74, SLIME);
+
+	App->entity->AddEnemy(6, 57, SLIME);
+	App->entity->AddEnemy(15, 54, SLIME);
+	App->entity->AddEnemy(17, 61, SLIME);
+
+	App->entity->AddEnemy(31, 65, SLIME);
+	App->entity->AddEnemy(28, 65, SLIME);
+	App->entity->AddEnemy(28, 53, SLIME);
+
+	App->entity->AddEnemy(29, 40, SLIME);
+	App->entity->AddEnemy(33, 41, SLIME);
+	App->entity->AddEnemy(14, 41, SLIME);
+
+	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(43, 39, SLIME);
+	App->entity->AddEnemy(38, 41, SLIME);
+
+	App->entity->AddEnemy(29, 19, SLIME);
+	App->entity->AddEnemy(28, 22, SLIME);
+	App->entity->AddEnemy(26, 26, SLIME);
+
+	App->entity->AddEnemy(46, 25, SLIME);
+	App->entity->AddEnemy(45, 32, SLIME);
+	App->entity->AddEnemy(38, 28, SLIME);
+
+	App->entity->AddEnemy(23, 4, SLIME);
+	App->entity->AddEnemy(12, 4, SLIME);
+	App->entity->AddEnemy(17, 13, SLIME);
+
+	App->entity->AddEnemy(49, 4, SLIME);
+	App->entity->AddEnemy(60, 7, SLIME);
+	App->entity->AddEnemy(59, 11, SLIME);
+	App->entity->AddEnemy(70, 8, SLIME);
+
+	App->entity->AddEnemy(85, 23, SLIME);
+	App->entity->AddEnemy(80, 19, SLIME);
+	App->entity->AddEnemy(70, 25, SLIME);
+
+	App->entity->AddEnemy(88, 46, SLIME);
+	App->entity->AddEnemy(80, 42, SLIME);
+	App->entity->AddEnemy(85, 60, SLIME);
+	App->entity->AddEnemy(80, 65, SLIME);
+
+	App->entity->AddEnemy(54, 68, MINDFLYER);
 }
 
 // Called before quitting
@@ -329,10 +393,11 @@ bool j1Scene1::CleanUp()
 	App->tex->CleanUp();
 	App->entity->DestroyEntities();
 	App->gui->CleanUp();
+	App->particles->CleanUp();
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
-	/*if (App->entity->mage) App->entity->mage->CleanUp();
-	if (App->entity->rogue) App->entity->rogue->CleanUp();
+	if (App->entity->mage) App->entity->mage->CleanUp();
+	/*if (App->entity->rogue) App->entity->rogue->CleanUp();
 	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
@@ -362,6 +427,8 @@ void j1Scene1::ChangeSceneMenu()
 {
 	App->scene1->active = false;
 	App->menu->active = true;
+	changingScene = false;
+	App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();
@@ -370,4 +437,32 @@ void j1Scene1::ChangeSceneMenu()
 	App->menu->Start();
 	App->render->camera = { 0,0 };
 	backToMenu = false;
+}
+
+void j1Scene1::ChangeSceneDeath() {
+	App->scene1->active = false;
+	App->lose->active = true;
+	App->dialog->CleanUp();
+
+	CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
+	App->entity->active = false;
+	App->lose->Start();
+	App->render->camera = { 0,0 };
+	toLoseScene = false;
+}
+
+void j1Scene1::ChangeSceneVictory() {
+	App->scene1->active = false;
+	App->victory->active = true;
+	App->dialog->CleanUp();
+
+	CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
+	App->entity->active = false;
+	App->victory->Start();
+	App->render->camera = { 0,0 };
+	toVictoryScene = false;
 }

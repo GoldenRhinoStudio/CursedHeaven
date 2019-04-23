@@ -4,8 +4,9 @@
 #include "j1Pathfinding.h"
 
 #include <algorithm>
+#include "Brofiler/Brofiler.h"
 
-j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
+j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0)
 {
 	name.assign("pathfinding");
 }
@@ -20,8 +21,6 @@ j1PathFinding::~j1PathFinding()
 bool j1PathFinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
-
-	last_path.clear();
 	RELEASE_ARRAY(map);
 	return true;
 }
@@ -60,35 +59,52 @@ uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
-Movement j1PathFinding::CheckDirection(std::vector<iPoint>& path) const
+Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * node) const
 {
-	if (path.size() >= 2)
+	if (path->size() > 1 && *node < path->size() - 1)
 	{
-		iPoint tile = path[0];
-		iPoint next_tile = path[1];
+		iPoint tile = path->at(*node);
+		iPoint next_tile = path->at(*node + 1);
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
 
-		if (x_difference == 1 && y_difference == 1) return DOWN_RIGHT;
-		else if (x_difference == 1 && y_difference == -1) return UP_RIGHT;
-		else if (x_difference == -1 && y_difference == 1) return DOWN_LEFT;
-		else if (x_difference == -1 && y_difference == -1) return UP_LEFT;
-		else if (x_difference == 1) return RIGHT;			
-		else if (x_difference == -1) return LEFT;
-		else if (y_difference == 1)	return DOWN;			
-		else if (y_difference == -1) return UP;
+		if (x_difference > 0 && y_difference > 0) return DOWN_RIGHT;
+		else if (x_difference > 0 && y_difference < 0) return UP_RIGHT;
+		else if (x_difference < 0 && y_difference > 0) return DOWN_LEFT;
+		else if (x_difference < 0 && y_difference < 0) return UP_LEFT;
+		else if (x_difference > 0 && y_difference < 0) return RIGHT;
+		else if (x_difference < 0 && y_difference == 0) return LEFT;
+		else if (x_difference == 0 && y_difference > 0)	return DOWN;
+		else if (x_difference == 0 && y_difference < 0) return UP;
 	}
 
 	else return NONE;
 }
 
-Movement j1PathFinding::CheckDirectionGround(std::vector<iPoint>& path) const
-{
-	if (path.size() >= 2)
+bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, fPoint* position) {
+
+	if (path->size() > 1 && *cnode < path->size() - 1)
 	{
-		iPoint tile = path[0];
-		iPoint next_tile = path[1];
+		int* node = cnode;
+		iPoint prevDest = path->at(*node);
+		iPoint currentDest = path->at(*node + 1);
+
+		bool reachedX = (prevDest.x <= currentDest.x && position->x >= currentDest.x)
+			|| (prevDest.x >= currentDest.x && position->x <= currentDest.x);
+		bool reachedY = (prevDest.y <= currentDest.y && position->y >= currentDest.y)
+			|| (prevDest.y >= currentDest.y && position->y <= currentDest.y);
+		return (reachedX & reachedY);
+	}
+	return false;
+}
+
+Movement j1PathFinding::CheckDirectionGround(const std::vector<iPoint>* path) const
+{
+	if (path->size() >= 2)
+	{
+		iPoint tile = path->at(0);
+		iPoint next_tile = path->at(1);
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
@@ -103,42 +119,49 @@ Movement j1PathFinding::CheckDirectionGround(std::vector<iPoint>& path) const
 }
 
 // To request all tiles involved in the last generated path
-const std::vector<iPoint>* j1PathFinding::GetLastPath() const
+std::vector<iPoint>* j1PathFinding::GetLastPath() const
 {
-	return &last_path;
+	return last_path;
 }
 
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-PathNode* PathList::Find(const iPoint& point)
+std::list<PathNode>::iterator PathList::Find(const iPoint& point)
 {
-	for (std::list<PathNode>::iterator item = list.begin(); item != list.end(); ++item)
+	std::list<PathNode>::iterator item = list.begin();
+
+	while (item != list.end())
 	{
+
 		if ((*item).pos == point)
-			return &(*item);
+			return item;
+
+		item = next(item);
 	}
 
-	return NULL;
+	return list.end();
 }
 
 // PathList ------------------------------------------------------------------------
 // Returns the Pathnode with lowest score in this list or NULL if empty
 // ---------------------------------------------------------------------------------
-const PathNode* PathList::GetNodeLowestScore() const
+std::list<PathNode>::iterator PathList::GetNodeLowestScore()
 {
-	const PathNode* ret = NULL;
+	std::list<PathNode>::iterator ret;
 	int min = 65535;
 
-	for (std::list<PathNode>::const_iterator item = list.end(); item != list.begin(); --item)
+	std::list<PathNode>::iterator item = list.begin();
+
+	while (item != list.end())
 	{
 		if ((*item).Score() < min)
 		{
 			min = (*item).Score();
-			ret = &(*item);
+			ret = item;
 		}
+		item = next(item);
 	}
-
 	return ret;
 }
 
@@ -221,12 +244,21 @@ int PathNode::Score() const
 // ----------------------------------------------------------------------------------
 int PathNode::CalculateF(const iPoint& destination)
 {
-	g = parent->g + 1;
+	/*g = parent->g + 1;
 
 	int x_distance = abs(pos.x - destination.x);
 	int y_distance = abs(pos.y - destination.y);
 
-	h = (x_distance + y_distance) * min(x_distance, y_distance);
+	h = (x_distance + y_distance) * min(x_distance, y_distance);*/
+
+	g = parent->g + 1;
+
+	double D = 1;
+	double D2 = 2;
+	int dx = abs(pos.x - destination.x);
+	int dy = abs(pos.y - destination.y);
+
+	h = D * (dx + dy) + (D2 - 2 * D) * min(dx, dy);
 
 	return g + h;
 }
@@ -234,79 +266,155 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 // Actual A* algorithm: return number of steps in the creation of the path or -1 ----
 // ----------------------------------------------------------------------------------
-std::vector<iPoint>* j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
+int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 {
-	BROFILER_CATEGORY("CreatePath", Profiler::Color::SlateGray)
+	BROFILER_CATEGORY("CreatePath", Profiler::Color::Gray)
 
-	//last_path.clear();
-	//// If origin or destination are not walkable, return -1
-	//if (IsWalkable(origin) && IsWalkable(destination)) {
+		int ret = -1;
 
-	//	// We create two lists: open, close, and we add the origin tile to open, and iterate while we have tile in the open list
-	//	PathList open, close;
-	//	PathNode origin(0, origin.DistanceNoSqrt(destination), origin, nullptr);
-	//	open.list.push_back(origin);
+	if (!IsWalkable(origin) || !IsWalkable(destination))
+		return ret;
 
-	//	while (open.list.size() > 0)
-	//	{
-	//		// We move the lowest score cell from open list to the closed list
-	//		close.list.push_back(*open.GetNodeLowestScore());
-	//		open.list.remove(*open.GetNodeLowestScore());
+	PathList open;
+	PathList close;
+	last_path = new std::vector<iPoint>();
 
-	//		if (close.list.end->data.pos != destination)
-	//		{
-	//			// We fill a list of all adjancent nodes
-	//			PathList adjancent;
+	open.list.push_back(PathNode(0, 0, origin, NULL));
 
-	//			// We iterate adjancent nodes:
-	//			close.list.end->data.FindWalkableAdjacents(adjancent);
+	while (open.list.size() > 0) {
 
-	//			for (std::list<PathNode>::iterator item = adjancent.list.begin(); item != adjancent.list.end(); ++item)
-	//			{
-	//				// Ignore nodes in the closed list
-	//				if (close.Find((*item).pos))
-	//					continue;
+		std::list<PathNode>::iterator aux = open.GetNodeLowestScore();
+		close.list.push_back(*aux);
 
-	//				// If it is already in the open list, check if it is a better path (compare G)
-	//				else if (open.Find((*item).pos))
-	//				{
-	//					PathNode tmp = *open.Find((*item).pos);
-	//					(*item).CalculateF(destination);
-	//					if (tmp.g > (*item).g)
-	//					{
-	//						// If it is a better path, Update the parent
-	//						tmp.parent = (*item).parent;
-	//					}
-	//				}
-	//				// If it is NOT found, calculate its F and add it to the open list
-	//				else
-	//				{
-	//					(*item).CalculateF(destination);
-	//					open.list.push_back(*item);
-	//				}
-	//			}
-	//			adjancent.list.clear();
-	//		}
-	//		else
-	//		{
-	//			// If we just added the destination, we are done!
-	//			//for (p2List_item<PathNode>* iterator = close.list.end; iterator->data.parent != nullptr; iterator = close.Find(iterator->data.parent->pos))
-	//			for (std::list<PathNode>::iterator item = close.list.end(); (*item).parent != nullptr; item = close.Find((*item).parent->pos))
-	//			{
-	//				// Backtrack to create the final path
-	//				last_path.push_back((*item).pos);
-	//				if ((*item).parent == nullptr)
-	//					last_path.push_back((*close.list.begin()).pos);
-	//			}
+		std::list<PathNode>::iterator lower = prev(close.list.end());
+		open.list.erase(aux);
 
-	//			// We use the Pathnode::parent and Flip() the path when you are finish
-	//			reverse(last_path.begin(), last_path.end());
+		if ((*lower).pos == destination) {
+			const PathNode *new_node = &(*lower);
 
-	//			return &last_path;
-	//		}
-	//	}
-	//}
+			while (new_node) {
 
-	return nullptr;
+				last_path->push_back(new_node->pos);
+				new_node = new_node->parent;
+			}
+
+			std::reverse(last_path->begin(), last_path->end());
+			ret = last_path->size();
+			break;
+		}
+
+		PathList AdjacentNodes;
+		AdjacentNodes.list.clear();
+
+		(*lower).FindWalkableAdjacents(AdjacentNodes);
+		std::list<PathNode>::iterator it = AdjacentNodes.list.begin();
+
+		for (; it != AdjacentNodes.list.end(); it = next(it)) {
+
+			if (close.Find((*it).pos) != close.list.end())
+				continue;
+
+			std::list<PathNode>::iterator adj_node = open.Find((*it).pos);
+
+			if (adj_node == open.list.end()) {
+
+				(*it).CalculateF(destination);
+				open.list.push_back(*it);
+			}
+			else if ((*adj_node).g > (*it).g + 1) {
+
+				(*adj_node).parent = (*it).parent;
+				(*adj_node).CalculateF(destination);
+
+			}
+		}
+	}
+
+	return ret;
+}
+
+
+PathList PathNode::PruneNeighbours(const iPoint& destination, j1PathFinding* PF_Module) {
+
+	PathList ret;
+
+	//TODO 2: Here we do the step that A* does in its core and that we deleted in TODO1
+	//Fill the neighbours list with the real or immediate neighbours
+	//Then iterate it
+	PathList neighbours;
+	FindWalkableAdjacents(neighbours);
+
+	std::list<PathNode>::iterator item = neighbours.list.begin();
+	for (; item != neighbours.list.end(); item = next(item)) {
+
+		//TODO 3: For each iteration, calculate the direction from current node
+		//to its neighbour. You can use CLAMP (defined in p2Defs)
+		iPoint direction(CLAMP((*item).pos.x - pos.x, 1, -1), CLAMP((*item).pos.y - pos.y, 1, -1));
+
+		//TODO 4: Make a Jump towards the calculated direction to find the next Jump Point
+		//and, if any Jump Point is found, add it to the list that we must return
+		PathNode* JumpPoint = PF_Module->Jump(pos, direction, destination, this);
+
+		if (JumpPoint != nullptr)
+			ret.list.push_back(*JumpPoint);
+	}
+
+	return ret;
+}
+
+
+PathNode* j1PathFinding::Jump(iPoint current_position, iPoint direction, const iPoint& destination, PathNode* parent) {
+
+	//Determine next possible Jump Point's Position
+	iPoint JumpPoint_pos(current_position.x + direction.x, current_position.y + direction.y);
+
+	//If next point isn't walkable, return nullptr
+	if (IsWalkable(JumpPoint_pos) == false)
+		return nullptr;
+
+	PathNode *ret_JumpPoint = new PathNode(-1, -1, JumpPoint_pos, parent);
+
+	//If next point is goal, return it
+	if (ret_JumpPoint->pos == destination)
+		return ret_JumpPoint;
+
+
+	//TODO 5: Check if there is any possible Jump Point in Straight Directions (horizontal and vertical)
+	//If found any, return it. Else, keep jumping in the same direction
+	/// Checking Horizontals
+	if (direction.x != 0 && direction.y == 0) {
+
+		if (IsWalkable(current_position + iPoint(0, 1)) == false && IsWalkable(current_position + iPoint(direction.x, 1)) == true)
+			return ret_JumpPoint;
+
+		else if (IsWalkable(current_position + iPoint(0, -1)) == false && IsWalkable(current_position + iPoint(direction.x, -1)) == true)
+			return ret_JumpPoint;
+
+	}
+	/// Checking Verticals
+	else if (direction.x == 0 && direction.y != 0) {
+
+		if (IsWalkable(current_position + iPoint(1, 0)) == false && IsWalkable(current_position + iPoint(1, direction.y)) == true)
+			return ret_JumpPoint;
+
+		else if (IsWalkable(current_position + iPoint(-1, 0)) == false && IsWalkable(current_position + iPoint(-1, direction.y)) == true)
+			return ret_JumpPoint;
+	}
+	//TODO 6: Do the same check than for Straight Lines but now for Diagonals!
+	//(Remember prunning rules for diagonals!)
+	/// Checking Diagonals
+	else if (direction.x != 0 && direction.y != 0) {
+
+		if (IsWalkable(current_position + iPoint(direction.x, 0)) == false)
+			return ret_JumpPoint;
+		else if (IsWalkable(current_position + iPoint(0, direction.y)) == false)
+			return ret_JumpPoint;
+
+		if (Jump(JumpPoint_pos, iPoint(direction.x, 0), destination, parent) != nullptr
+			|| Jump(JumpPoint_pos, iPoint(0, direction.y), destination, parent) != nullptr)
+			return ret_JumpPoint;
+	}
+
+	return Jump(JumpPoint_pos, direction, destination, parent);
 }
 

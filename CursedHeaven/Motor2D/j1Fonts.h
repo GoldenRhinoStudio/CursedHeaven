@@ -27,17 +27,18 @@ public:
 	bool CleanUp();
 
 	// Load Font
-	_TTF_Font* const Load(const char* path, int size = 12);
+	_TTF_Font* Load(const char* path, int size = 12);
 
 	// Create a surface from text
-	SDL_Texture* Print(const char* text, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = NULL);
+	SDL_Texture* Print(const char* text, int &width, int &height, int endLine_separation, SDL_Color color = { 255, 255, 255, 255 }, _TTF_Font* font = nullptr);
 
 	bool CalcSize(const char* text, int& width, int& height, _TTF_Font* font = NULL) const;
 
 public:
 
 	std::list<_TTF_Font*>	fonts;
-	_TTF_Font*			default = nullptr;
+	_TTF_Font*	default = nullptr;
+	SDL_Surface* surface = nullptr;
 };
 
 #endif // __j1FONTS_H__

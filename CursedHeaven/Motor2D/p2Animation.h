@@ -11,6 +11,7 @@ public:
 	bool loop = true;
 	float speed = 1.0f;
 	SDL_Rect frames[MAX_FRAMES];
+	bool flip = false;
 
 private:
 	float current_frame;
@@ -23,7 +24,10 @@ public:
 
 	Animation::Animation() {}
 
-	Animation::Animation(const Animation&) {}
+	Animation(const Animation& anim) : loop(anim.loop), speed(anim.speed), last_frame(anim.last_frame)
+	{
+		SDL_memcpy(&frames, anim.frames, sizeof(frames));
+	}
 
 	void PushBack(const SDL_Rect& rect)
 	{
@@ -68,7 +72,6 @@ public:
 	bool Finished()
 	{
 		if (loops > 0) {
-			loops = 0;
 			return true;
 		}
 		else
@@ -78,6 +81,7 @@ public:
 	void Reset()
 	{
 		current_frame = 0;
+		loops = 0;
 	}
 };
 

@@ -3,9 +3,11 @@
 
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <vector>
 #include <string>
 #include "j1Module.h"
 #include "j1Entity.h"
+#include "TileQuadtree.h"
 
 struct Properties
 {
@@ -35,6 +37,7 @@ struct MapLayer
 	std::string		name;
 	int				width;
 	int				height;
+	TileQuadtree*	tile_tree;
 	uint*			data;
 	Properties		properties;
 
@@ -96,6 +99,8 @@ struct MapData
 // ----------------------------------------------------
 class j1Map : public j1Module
 {
+	friend TileQuadtree;
+
 public:
 
 	j1Map();
@@ -105,6 +110,8 @@ public:
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
+
+	bool PostUpdate();
 
 	// Called each loop iteration
 	void Draw();
@@ -122,6 +129,10 @@ public:
 
 	void EntityMovement(j1Entity* entity);
 
+	void Tile_WorldMap(iPoint & pos, int height);
+
+	void Entity_WorldMap(iPoint & pos, int height);
+
 private:
 
 	bool LoadMap();
@@ -138,8 +149,18 @@ public:
 
 	MapData data;
 
+	bool draw_with_quadtrees;
+	//TEST
+	uint tiles_rendered;
+	std::vector<SDL_Rect*>	Rectvec;
 private:
+	uint next_gid = 0, next_height = 0;
 
+	int current_height = 0;
+
+private:
+	int order = 0;
+	int height = 0;
 	float bgBlitSpeed;
 	float fogBlitSpeed;
 	float mapBlitSpeed;

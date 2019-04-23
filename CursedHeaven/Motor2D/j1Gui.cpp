@@ -12,6 +12,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1SceneSettings.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -33,16 +34,17 @@ bool j1Gui::Awake(pugi::xml_node& config)
 	atlas_file_name = config.child("atlas").attribute("file").as_string("");
 	buttonsScale = config.child("scale").attribute("buttonsScale").as_float();
 	settingsWindowScale = config.child("scale").attribute("boxScale").as_float();
+	creditsWindowScale = config.child("scale").attribute("creditsboxScale").as_float();
 	logoScale = config.child("scale").attribute("logoScale").as_float();
 
 	// Copying box spawn position
 	settingsPosition.x = config.child("positions").attribute("settingsPositionX").as_int();
 	settingsPosition.y = config.child("positions").attribute("settingsPositionY").as_int();
 
-	slider1Y = 42;
-	slider2Y = 82;
-	lastSlider1X = 83;
-	lastSlider2X = 83;
+	slider1Y = 95;
+	slider2Y = 129;
+	lastSlider1X = 173;
+	lastSlider2X = 173;
 
 	minimum = config.child("sliderLimits").attribute("minimum").as_uint();
 	maximum = config.child("sliderLimits").attribute("maximum").as_uint();
@@ -92,10 +94,9 @@ bool j1Gui::PostUpdate()
 
 	// Blitting settings windows
 	if (App->scene1->settings_window != nullptr && App->scene1->settings_window->visible == true)
-		App->scene1->settings_window->Draw(App->gui->settingsWindowScale);
+		App->scene1->settings_window->Draw(0.4f);
 
 	//-------------------------
-
 
 	for (std::list<j1Button*>::iterator item = App->scene1->scene1Buttons.begin(); item != App->scene1->scene1Buttons.end(); ++item)
 	{
@@ -178,7 +179,7 @@ const SDL_Texture* j1Gui::GetAtlas() const
 	return atlas;
 }
 
-void j1Gui::UpdateButtonsState(std::list<j1Button*>* buttons) {
+void j1Gui::UpdateButtonsState(std::list<j1Button*>* buttons, float scale) {
 	int x, y; App->input->GetMousePosition(x, y);
 	
 	for (std::list<j1Button*>::iterator item = buttons->begin(); item != buttons->end(); ++item)
@@ -186,9 +187,9 @@ void j1Gui::UpdateButtonsState(std::list<j1Button*>* buttons) {
 
 		if ((*item)->visible == false || (*item)->bfunction == NO_FUNCTION) continue;
 
-		if (x - (App->render->camera.x / (int)(App->win->GetScale())) <= (*item)->position.x + (*item)->situation.w * App->gui->buttonsScale
+		if (x - (App->render->camera.x / (int)(App->win->GetScale())) <= (*item)->position.x + (*item)->situation.w * scale
 			&& x - (App->render->camera.x / (int)(App->win->GetScale())) >= (*item)->position.x
-			&& y - (App->render->camera.y / (int)(App->win->GetScale())) <= (*item)->position.y + (*item)->situation.h * App->gui->buttonsScale
+			&& y - (App->render->camera.y / (int)(App->win->GetScale())) <= (*item)->position.y + (*item)->situation.h * scale
 			&& y - (App->render->camera.y / (int)(App->win->GetScale())) >= (*item)->position.y) {
 
 			if(App->credits->active == false && App->menu->settings_window != nullptr && App->menu->settings_window->visible
@@ -345,7 +346,7 @@ void j1Gui::UpdateSliders(std::list<j1Box*>* sliders) {
 				(*item)->position.x = (*item)->maximum;
 
 			// After that we change the volume
-			if ((*item)->position.y < (*item)->parent->position.y + 50) {
+			if ((*item)->position.y < (*item)->parent->position.y + 60) {
 				if((*item)->position.x > lastPos)
 					App->audio->FxVolume(App->audio->GetFxVolume() + ((*item)->position.x - lastPos) * 2);
 				else

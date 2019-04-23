@@ -25,6 +25,7 @@ public:
 	// Called each loop iteration
 	bool PreUpdate();
 	bool Update(float dt, bool do_logic);
+	bool DrawOrder(float dt);
 	bool PostUpdate();
 
 	void LoadPlayerProperties();
@@ -36,31 +37,48 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+private:
+	void Shot(float x, float y, float dt);
+
 public:
 
-	// Animations of the player	
-	Animation idle_diagonal_up;
-	Animation idle_diagonal_down;
-	Animation idle_lateral;
-	Animation idle_down;
-	Animation idle_up;
+	// Animations of the mage
+	Animation attack_up;
+	Animation attack_down;
+	Animation attack_diagonal_up;
+	Animation attack_diagonal_down;
+	Animation attack_lateral;
 
-	Animation diagonal_up;
-	Animation diagonal_down;
-	Animation lateral;
-	Animation up;
-	Animation down;
+	Animation i_attack_up;
+	Animation i_attack_down;
+	Animation i_attack_diagonal_up;
+	Animation i_attack_diagonal_down;
+	Animation i_attack_lateral;
 
-	Animation godmode;
-	Animation death;
-
-	// Attacks
+	// Abilities
+	j1Timer cooldown_Explosion;
+	uint duration_Explosion = 0;
+	uint lastTime_Explosion = 0;
 	j1Timer cooldown_Q;
+	uint cooldownTime_Q = 0;
 	uint lastTime_Q = 0;
+	int fireDamage = 0;
+
 	j1Timer cooldown_E;
+	uint cooldownTime_E = 0;
 	uint lastTime_E = 0;
+	j1Timer cooldown_Speed;
+	uint duration_Speed = 0;
+	uint lastTime_Speed = 0;
 
 	// Sounds
+
+	uint deathSound;
+	uint playerHurt;
+	uint moveSound;
+	uint attackSound;
+	uint qability;
+	uint eability;
 
 };
 

@@ -50,13 +50,13 @@
   
   <entityManager updateMsCycle="0.1f"/>
   
-  <slime speed="50.0f" life="200">
+  <slime speed="50.0f" life="600">
 	  <margin x="10" y="10"/>
 	  <colliderSize w="35" h="35"/>
 	  <combat damage="20"/>
   </slime>  
   
-  <mindflyer speed="100.0f" life="2000">
+  <mindflyer speed="100.0f" life="10000">
 	  <margin x="10" y="10"/>
 	  <colliderSize w="35" h="35"/>
 	  <combat shotTime="2000" damage="30"/>

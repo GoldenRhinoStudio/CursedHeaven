@@ -39,6 +39,12 @@ public:
 	float GetMusicVolume();
 	float GetFxVolume();
 
+	int slime_damage, boss_damage;
+	int dash, explosion, rage_bm, rage_dk;
+	int attack_bm, death_bm, damage_bm;
+	int attack_dk, death_dk, damage_dk;
+	int slime_death, boss_death, slime_attack, boss_attack;
+
 private:
 
 	float currentmusicvolume;

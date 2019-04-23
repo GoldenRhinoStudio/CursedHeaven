@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Window.h"
+#include "j1Audio.h"
 
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER) {}
 
@@ -64,8 +65,8 @@ void j1Player::UpdateCameraPosition(float dt)
 
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
 
-	if (do_logic)
-		ChangeRoom(position.x, position.y);
+	/*if (do_logic)
+		ChangeRoom(position.x, position.y);*/
 
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 
@@ -384,6 +385,8 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 		if (!receivedDamage && col_2->type == COLLIDER_ENEMY)
 		{
 			lifePoints -= App->entity->slime_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
 			receivedDamage = true;
 			
 			if (lifePoints <= 0) dead = true;
@@ -407,6 +410,8 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)
 		{			
 			lifePoints -= App->entity->mindflyer_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
 			receivedDamage = true;
 
 			if (lifePoints <= 0) dead = true;

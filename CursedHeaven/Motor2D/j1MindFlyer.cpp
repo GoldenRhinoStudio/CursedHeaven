@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Particles.h"
+#include "j1Audio.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -134,6 +135,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 							App->particles->shot_right.speed = speed_particle[7];
 							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
 
+							App->audio->PlayFx(App->audio->boss_attack);
 							lastTime_Shot = shotTimer.Read();
 						}
 					}
@@ -199,19 +201,24 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
+			col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
+			App->audio->PlayFx(App->audio->boss_damage);
 			receivedBasicDamage = true;
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
+			col_2->to_delete = true;
 			if (App->entity->mage != nullptr)
 				lifePoints -= App->entity->mage->fireDamage;
+			App->audio->PlayFx(App->audio->boss_damage);
 
 			receivedAbilityDamage = true;
 		}
 
 		if (lifePoints <= 0) {
 			App->entity->currentPlayer->score_points += 100;
+			App->audio->PlayFx(App->audio->boss_death);
 			dead = true;
 			collider->to_delete = true;
 

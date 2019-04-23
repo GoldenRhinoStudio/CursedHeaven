@@ -58,21 +58,6 @@ bool j1BlackMage::Start() {
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/character/mage/Mage.png");
 
-	// Audios are loaded
-	LOG("Loading player audios");
-	if (!loadedAudios) {
-		deathSound = App->audio->LoadFx("audio/fx/song508.wav");
-		playerHurt = App->audio->LoadFx("audio/fx/song117.wav");
-		moveSound = App->audio->LoadFx("audio/fx/song507.wav");
-		attackSound = App->audio->LoadFx("audio/fx/song105.wav");
-		qability = App->audio->LoadFx("audio/fx/song402.wav");
-		eability = App->audio->LoadFx("audio/fx/song154.wav");
-
-
-
-		loadedAudios = true;
-	}
-
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
@@ -237,6 +222,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					lastTime_Explosion = cooldown_Explosion.Read();
 					App->particles->explosion.anim.Reset();
 					App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ABILITY);
+					App->audio->PlayFx(App->audio->explosion);
 					active_Q = true;
 					firstTimeQ = false;
 				}
@@ -252,6 +238,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
+					App->audio->PlayFx(App->audio->rage_bm);
 					movementSpeed = movementSpeed * 2;
 					cooldown_Speed.Start();
 					lastTime_Speed = cooldown_Speed.Read();
@@ -321,6 +308,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (dead) {
 
+		App->audio->PlayFx(App->audio->death_bm);
 		animation = &death;
 		App->fade->FadeToBlack();
 
@@ -543,5 +531,6 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 	App->particles->shot_right.speed = speed_particle;
 
 	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+	App->audio->PlayFx(App->audio->attack_bm);
 
 }

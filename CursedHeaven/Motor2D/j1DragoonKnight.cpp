@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Timer.h"
 #include "j1Scene1.h"
+#include "j1Audio.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -115,6 +116,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					// Attack control
 					if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
 
+						App->audio->PlayFx(App->audio->attack_dk);
 						attacking = true;
 						attackCollider->type = COLLIDER_ATTACK;
 
@@ -144,6 +146,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 						&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
+						App->audio->PlayFx(App->audio->dash);
 						lastPosition = position;
 
 						if (direction != NONE_) {
@@ -189,6 +192,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
+					App->audio->PlayFx(App->audio->rage_dk);
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();
 					lastTime_Rage =	cooldown_Rage.Read();

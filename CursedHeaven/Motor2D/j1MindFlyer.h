@@ -54,6 +54,7 @@ public:
 	iPoint colliderSize;
 
 	float speed;
+	int node = 0;
 
 	Movement direction;
 

@@ -288,7 +288,8 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
-	
+
+	current_points.erase();
 	return continueGame;
 }
 

@@ -305,47 +305,53 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities(int room)
 {
-	if (room = 1) {
+	App->entity->AddEnemy(13, 83, SLIME);
+	App->entity->AddEnemy(16, 79, SLIME);
+	App->entity->AddEnemy(7, 74, SLIME);
 
-	}
-	else if (room = 2) {
+	App->entity->AddEnemy(6, 57, SLIME);
+	App->entity->AddEnemy(15, 54, SLIME);
+	App->entity->AddEnemy(17, 61, SLIME);
 
-	}
-	else if (room = 3) {
+	App->entity->AddEnemy(31, 65, SLIME);
+	App->entity->AddEnemy(28, 65, SLIME);
+	App->entity->AddEnemy(28, 53, SLIME);
 
-	}
-	else if (room = 4) {
+	App->entity->AddEnemy(29, 40, SLIME);
+	App->entity->AddEnemy(33, 41, SLIME);
+	App->entity->AddEnemy(14, 41, SLIME);
 
-	}
-	else if (room = 5) {
+	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(43, 39, SLIME);
+	App->entity->AddEnemy(38, 41, SLIME);
 
-	}
-	else if (room = 6) {
+	App->entity->AddEnemy(29, 19, SLIME);
+	App->entity->AddEnemy(28, 22, SLIME);
+	App->entity->AddEnemy(26, 26, SLIME);
 
-	}
-	else if (room = 7) {
+	App->entity->AddEnemy(46, 25, SLIME);
+	App->entity->AddEnemy(45, 32, SLIME);
+	App->entity->AddEnemy(38, 28, SLIME);
 
-	}
-	else if (room = 8) {
+	App->entity->AddEnemy(23, 4, SLIME);
+	App->entity->AddEnemy(12, 4, SLIME);
+	App->entity->AddEnemy(17, 13, SLIME);
 
-	}
-	else if (room = 9) {
+	App->entity->AddEnemy(49, 4, SLIME);
+	App->entity->AddEnemy(60, 7, SLIME);
+	App->entity->AddEnemy(59, 11, SLIME);
+	App->entity->AddEnemy(70, 8, SLIME);
 
-	}
-	else if (room = 10) {
+	App->entity->AddEnemy(85, 23, SLIME);
+	App->entity->AddEnemy(80, 19, SLIME);
+	App->entity->AddEnemy(70, 25, SLIME);
 
-	}
-	else if (room = 11) {
+	App->entity->AddEnemy(88, 46, SLIME);
+	App->entity->AddEnemy(80, 42, SLIME);
+	App->entity->AddEnemy(85, 60, SLIME);
+	App->entity->AddEnemy(80, 65, SLIME);
 
-	}
-	else if (room = 12) {
-
-	}
-	else if (room = 13) {
-
-	}
-	App->entity->AddEnemy(-100, 1000, SLIME);
-	App->entity->AddEnemy(250, 850, MINDFLYER);
+	App->entity->AddEnemy(54, 68, MINDFLYER);
 }
 
 // Called before quitting

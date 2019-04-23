@@ -14,6 +14,7 @@
 #include "j1Judge.h"
 #include "j1Slime.h"
 #include "j1MindFlyer.h"
+#include "j1Map.h"
 
 #include "j1Player.h"
 
@@ -173,8 +174,8 @@ void j1EntityManager::AddEnemy(int x, int y, ENTITY_TYPES type)
 		if (queue[i].type == ENTITY_TYPES::UNKNOWN)
 		{
 			queue[i].type = type;
-			queue[i].position.x = x;
-			queue[i].position.y = y;
+			queue[i].position.x = App->map->MapToWorld(x, y).x;
+			queue[i].position.y = App->map->MapToWorld(x, y).y;
 			break;
 		}
 	}

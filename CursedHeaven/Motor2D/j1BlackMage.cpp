@@ -61,6 +61,15 @@ bool j1BlackMage::Start() {
 	// Audios are loaded
 	LOG("Loading player audios");
 	if (!loadedAudios) {
+		deathSound = App->audio->LoadFx("audio/fx/song508.wav");
+		playerHurt = App->audio->LoadFx("audio/fx/song117.wav");
+		moveSound = App->audio->LoadFx("audio/fx/song507.wav");
+		attackSound = App->audio->LoadFx("audio/fx/song105.wav");
+		qability = App->audio->LoadFx("audio/fx/song402.wav");
+		eability = App->audio->LoadFx("audio/fx/song154.wav");
+
+
+
 		loadedAudios = true;
 	}
 

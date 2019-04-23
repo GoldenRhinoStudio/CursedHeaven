@@ -313,14 +313,13 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	if (dead) {
 
 		animation = &death;
-		death.loop = false;
 		App->fade->FadeToBlack();
 
 		// Restarting the level in case the player dies
 		if (App->fade->IsFading() == 0)
 		{
 			position = { 200,750 };
-			lifePoints = 100;
+			lifePoints = initialLifePoints;
 			facingRight = true;
 
 			App->entity->DestroyEntities();
@@ -335,8 +334,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	// Checking for the heights
 	App->map->EntityMovement(App->entity->mage);
-
-
 
 	// Update collider position to player position
 	if (collider != nullptr)
@@ -501,10 +498,12 @@ void j1BlackMage::LoadPlayerProperties() {
 	basicDamage = combat.attribute("basicDamage").as_int();
 	fireDamage = combat.attribute("fireDamage").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
+	initialLifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	duration_Explosion = cd.attribute("explosion").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	duration_Speed = cd.attribute("increasedSpeed").as_uint();
+	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");

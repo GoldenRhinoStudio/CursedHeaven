@@ -223,6 +223,8 @@ void j1EntityManager::CreatePlayer()
 	else if (mage != nullptr) currentPlayer = mage;
 	/*else if (rogue != nullptr)  currentPlayer = rogue;
 	else if (tank != nullptr)  currentPlayer = tank;*/
+
+	currentPlayer->invulCounter.Start();
 }
 
 void j1EntityManager::CreateNPC()

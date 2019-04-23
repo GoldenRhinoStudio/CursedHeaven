@@ -59,7 +59,7 @@
         <animation x="58" y="185" w="29" h="46"/>
       </down>		
 	   
-	  <death loop="true" speed="4.0f">	
+	  <death loop="false" speed="4.0f">	
         <animation x="0" y="489" w="30" h="48"/>
         <animation x="30" y="489" w="39" h="48"/>
       </death>
@@ -174,7 +174,7 @@
         <animation x="42" y="74" w="21" h="37"/>
       </down>		
 	   
-	  <death loop="true" speed="4.0f">	
+	  <death loop="false" speed="4.0f">	
         <animation x="0" y="364" w="25" h="28"/>
         <animation x="25" y="364" w="34" h="28"/>
       </death>

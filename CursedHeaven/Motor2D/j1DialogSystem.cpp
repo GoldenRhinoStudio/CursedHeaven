@@ -236,7 +236,7 @@ void Dialogue::Input() {
 		}
 		if (currentNode->dialogEnded&&currentNode != nullptr&&currentNode->optionActive == false) {
 
-			if (checkOptions != nullptr&&checkOptions->startAgain == true)
+			if (checkOptions != nullptr && checkOptions->startAgain == true)
 				currentNode = dialogueNodes.front();
 
 			App->dialog->temp_text_print.clear();

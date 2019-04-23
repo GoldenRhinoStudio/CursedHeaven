@@ -137,7 +137,6 @@ bool j1Scene1::Update(float dt)
 	time_scene1 = startup_time.ReadSec();
 	if (startDialogue)
 		App->dialog->StartDialogEvent(App->dialog->dialogA);
-			
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
@@ -244,13 +243,13 @@ bool j1Scene1::Update(float dt)
 	// Managing scene transitions
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN || resettingLevel)
 	{
-		resettingLevel = true;
+		/*resettingLevel = true;
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
 			App->render->camera.x = 0;
 			resettingLevel = false;
-		}
+		}*/
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || changingScene) {
@@ -317,7 +316,7 @@ void j1Scene1::PlaceEntities()
 	App->entity->AddEnemy(-190, 1050, SLIME); //Add Slime
 	App->entity->AddEnemy(-200, 1050, SLIME); //Add Slime
 
-	App->entity->AddEnemy(200, 750, MINDFLYER); //Add Boss
+	App->entity->AddEnemy(250, 850, MINDFLYER); //Add Boss
 }
 
 // Called before quitting
@@ -366,6 +365,7 @@ void j1Scene1::ChangeSceneMenu()
 {
 	App->scene1->active = false;
 	App->menu->active = true;
+	changingScene = false;
 	App->dialog->CleanUp();
 
 	CleanUp();

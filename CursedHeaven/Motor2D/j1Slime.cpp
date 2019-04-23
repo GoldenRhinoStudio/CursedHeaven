@@ -203,14 +203,16 @@ void j1Slime::LoadProperties()
 	pugi::xml_node slime;
 	slime = config.child("slime");
 
-	speed = slime.attribute("speed").as_int();
-	lifePoints = slime.attribute("life").as_int();
-
 	// Copying the values of the collider
 	margin.x = slime.child("margin").attribute("x").as_int();
 	margin.y = slime.child("margin").attribute("y").as_int();
 	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
 	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
+
+	speed = slime.attribute("speed").as_int();
+	lifePoints = slime.attribute("life").as_int();
+	App->entity->slime_Damage = slime.child("combat").attribute("damage").as_int();
+
 }
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)

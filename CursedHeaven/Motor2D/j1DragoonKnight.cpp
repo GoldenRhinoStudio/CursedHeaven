@@ -444,6 +444,7 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	duration_Rage = cd.attribute("rage").as_uint();
+	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");

@@ -111,6 +111,9 @@ public:
 	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;
 
+	int mindflyer_Damage = 0;
+	int slime_Damage = 0;
+
 private:
 	int entity_logic = 0;
 	EntityInfo			queue[MAX_ENTITIES];

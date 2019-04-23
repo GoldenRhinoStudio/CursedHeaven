@@ -46,21 +46,6 @@ public:
 	void LoadProperties();
 	void Move(const std::vector<iPoint>* path, float dt);
 
-private:
-	Animation idle_diagonal_up;
-	Animation idle_diagonal_down;
-	Animation idle_lateral;
-	Animation idle_down;
-	Animation idle_up;
-
-	Animation diagonal_up;
-	Animation diagonal_down;
-	Animation lateral;
-	Animation up;
-	Animation down;
-
-	Animation death;
-
 public:
 	fPoint initialPosition;
 
@@ -77,6 +62,21 @@ public:
 	bool dead = false;
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
+
+private:
+	Animation idle_diagonal_up;
+	Animation idle_diagonal_down;
+	Animation idle_lateral;
+	Animation idle_down;
+	Animation idle_up;
+
+	Animation diagonal_up;
+	Animation diagonal_down;
+	Animation lateral;
+	Animation up;
+	Animation down;
+
+	Animation death;
 
 };
 #endif // __j1SLIME_H__

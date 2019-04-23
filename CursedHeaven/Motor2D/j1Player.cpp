@@ -69,8 +69,6 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 
-		if (lifePoints <= 0) dead = true;
-
 		// GodMode controls
 		if (GodMode) {
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
@@ -488,9 +486,42 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_1->type == COLLIDER_PLAYER || col_1->type == COLLIDER_NONE)
 	{
-		//If the player collides with death colliders
-		if (col_2->type == COLLIDER_ENEMY)
+		//If the player collides with death colliders				
+		if (invulCounter.Read() >= lastTime_invul + invulTime) {
+			receivedDamage = false;
+			lastTime_invul = invulCounter.Read();
+		}
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY)
 		{
+			lifePoints -= App->entity->slime_Damage;
+			receivedDamage = true;
+			
+			if (lifePoints <= 0) dead = true;
+			/*if (App->scene1->active)
+				App->scene1->settings_window->position = App->gui->settingsPosition;
+
+			App->fade->FadeToBlack(3.0f);
+
+			if (dead)
+			{
+				App->entity->DestroyEntities();
+
+				dead = true;
+				points = 0;
+				score_points = 0;
+			}
+			else if (App->scene1->active)
+				App->scene1->backToMenu = true;*/
+		}
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)
+		{			
+			lifePoints -= App->entity->mindflyer_Damage;
+			receivedDamage = true;
+
+			if (lifePoints <= 0) dead = true;
+			
 			/*if (App->scene1->active)
 				App->scene1->settings_window->position = App->gui->settingsPosition;
 

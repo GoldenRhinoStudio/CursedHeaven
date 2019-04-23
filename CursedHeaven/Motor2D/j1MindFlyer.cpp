@@ -87,30 +87,50 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE_MF) {
+					if (distance <= ATTACK_RANGE_MF /*&& App->scene1->bossFightOn*/) {
 						if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
-							int x = App->entity->currentPlayer->position.x;
-							int y = App->entity->currentPlayer->position.y;
 
-							// To change where the particle is born
-							fPoint margin;
-							margin.x = 8;
-							margin.y = 8;
+							fPoint speed_particle[8];
+							fPoint particle_speed = { 250,250 };
+							
+							speed_particle[0].x = particle_speed.x * cos(0 * DEGTORAD);
+							speed_particle[0].y = particle_speed.y * sin(0 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[0];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							
+							speed_particle[1].x = particle_speed.x * cos(180 * DEGTORAD);
+							speed_particle[1].y = particle_speed.y * sin(180 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[1];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+														
+							speed_particle[2].x = particle_speed.x * cos(-45 * DEGTORAD);
+							speed_particle[2].y = particle_speed.y * sin(-45 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[2];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							
+							speed_particle[3].x = particle_speed.x * cos(-135 * DEGTORAD);
+							speed_particle[3].y = particle_speed.y * sin(-135 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[3];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+														
+							speed_particle[4].x = particle_speed.x * cos(-315 * DEGTORAD);
+							speed_particle[4].y = particle_speed.y * sin(-315 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[4];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							
+							speed_particle[5].x = particle_speed.x * cos(-225 * DEGTORAD);
+							speed_particle[5].y = particle_speed.y * sin(-225 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[5];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							
+							speed_particle[6].x = particle_speed.x * cos(-90 * DEGTORAD);
+							speed_particle[6].y = particle_speed.y * sin(-90 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[6];
+							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
 
-							fPoint edge;
-							edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
-							edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
-
-							// If the map is very big and its not enough accurate, we should use long double for the var angle
-							double angle = -(atan2(edge.y, edge.x));
-
-							fPoint speed_particle;
-							fPoint p_speed = { 300, 300 };
-
-							speed_particle.x = p_speed.x * cos(angle);
-							speed_particle.y = p_speed.y * sin(angle);
-							App->particles->shot_right.speed = speed_particle;
-
+							speed_particle[7].x = particle_speed.x * cos(-270 * DEGTORAD);
+							speed_particle[7].y = particle_speed.y * sin(-270 * DEGTORAD);
+							App->particles->shot_right.speed = speed_particle[7];
 							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
 
 							lastTime_Shot = shotTimer.Read();
@@ -238,7 +258,8 @@ void j1MindFlyer::LoadProperties()
 	// Copying combat values
 	speed = mindflyer.attribute("speed").as_int();
 	lifePoints = mindflyer.attribute("life").as_int();
-	cooldown_Shot = mindflyer.attribute("shotTime").as_uint();
+	cooldown_Shot = mindflyer.child("combat").attribute("shotTime").as_uint();
+	App->entity->mindflyer_Damage = mindflyer.child("combat").attribute("damage").as_int();
 }
 
 void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)

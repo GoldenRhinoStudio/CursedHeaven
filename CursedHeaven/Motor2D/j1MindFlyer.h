@@ -64,7 +64,6 @@ public:
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
 
-
 private:
 	Animation idle_diagonal_up;
 	Animation idle_diagonal_down;

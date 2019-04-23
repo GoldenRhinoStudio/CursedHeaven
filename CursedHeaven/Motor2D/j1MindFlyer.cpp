@@ -140,7 +140,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 						}
 					}
 					else {
-						Move(path, dt);
+						//Move(path, dt);
 					}
 				}
 			}
@@ -201,7 +201,7 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
-			col_2->to_delete = true;
+			if (App->entity->player_type == MAGE) col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 			receivedBasicDamage = true;

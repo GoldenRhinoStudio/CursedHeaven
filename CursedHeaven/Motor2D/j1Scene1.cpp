@@ -138,12 +138,13 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
-	if (startDialogue)
-		App->dialog->StartDialogEvent(App->dialog->dialogA);
+	finishedDialogue = true;
+	
+	/*if (startDialogue)
+		App->dialog->StartDialogEvent(App->dialog->dialogA);*/
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
-	// ---------------------------------------------------------------------------------------------------------------------		
 
 	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);

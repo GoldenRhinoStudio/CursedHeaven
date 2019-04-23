@@ -13,6 +13,7 @@
 #include "j1Timer.h"
 #include "j1Scene1.h"
 #include "j1Audio.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -147,6 +148,14 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 						&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 						App->audio->PlayFx(App->audio->dash);
+
+						if (App->dialog->law == 1) {
+							if (App->entity->player_type == MAGE)
+								App->entity->currentPlayer->lifePoints -= 35;
+							else if (App->entity->player_type == KNIGHT)
+								App->entity->currentPlayer->lifePoints -= 76;
+						}
+
 						lastPosition = position;
 
 						if (direction != NONE_) {
@@ -193,6 +202,14 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 					App->audio->PlayFx(App->audio->rage_dk);
+
+					if (App->dialog->law == 2) {
+						if (App->entity->player_type == MAGE)
+							App->entity->currentPlayer->lifePoints -= 35;
+						else if (App->entity->player_type == KNIGHT)
+							App->entity->currentPlayer->lifePoints -= 76;
+					}
+
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();
 					lastTime_Rage =	cooldown_Rage.Read();

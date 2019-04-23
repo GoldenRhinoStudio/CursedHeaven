@@ -56,7 +56,7 @@
 	  <combat damage="20"/>
   </slime>  
   
-  <mindflyer speed="100.0f" life="10000">
+  <mindflyer speed="100.0f" life="3000">
 	  <margin x="10" y="10"/>
 	  <colliderSize w="35" h="35"/>
 	  <combat shotTime="2000" damage="30"/>

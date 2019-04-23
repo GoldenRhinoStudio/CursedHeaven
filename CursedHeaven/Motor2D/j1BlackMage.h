@@ -73,6 +73,13 @@ public:
 
 	// Sounds
 
+	uint deathSound;
+	uint playerHurt;
+	uint moveSound;
+	uint attackSound;
+	uint qability;
+	uint eability;
+
 };
 
 #endif // __j1BLACKMAGE_H__

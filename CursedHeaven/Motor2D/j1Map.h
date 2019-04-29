@@ -133,6 +133,8 @@ public:
 
 	void Entity_WorldMap(iPoint & pos, int height);
 
+	TileSet* GetTilesetFromTileId(int id) const;
+
 private:
 
 	bool LoadMap();
@@ -141,9 +143,6 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 	bool PutColliders(const char* file_name);
-
-	TileSet* GetTilesetFromTileId(int id) const;
-
 
 public:
 

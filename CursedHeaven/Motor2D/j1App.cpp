@@ -27,7 +27,7 @@
 #include "j1Particles.h"
 #include "j1DialogSystem.h"
 #include "j1Entity.h"
-
+#include "j1Minimap.h"
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -57,6 +57,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	dialog = new j1DialogSystem();
 	particles = new j1Particles();
 	collisions = new j1Collisions();
+	minimap = new j1Minimap();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -80,7 +81,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(gui);
 	AddModule(dialog);
 	AddModule(fade);
-	
+	AddModule(minimap);
+
 	// render last to swap buffer
 	AddModule(render);
 }

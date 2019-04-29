@@ -10,10 +10,12 @@
     <vsync value="true"/>
 	<camera initialX="0" initialY="0"/>
   </renderer>
+  
+  <minimap width="400" height="200"/>
 
   <window>
     <resolution width="1024" height="768" scale="3"/>
-    <fullscreen value="true"/>
+    <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>

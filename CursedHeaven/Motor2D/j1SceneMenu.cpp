@@ -193,7 +193,7 @@ bool j1SceneMenu::Update(float dt)
 
 	// Blitting the logo
 	SDL_Rect logo = { 854, 92, 801, 166 };
-	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, 1.0f, App->gui->logoScale);
+	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, true, App->gui->logoScale);
 
 	// Blitting the buttons and labels of the menu
 

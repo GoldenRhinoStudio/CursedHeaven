@@ -48,7 +48,7 @@ public:
 	uint width, height;
 
 	// Black Mage particles
-	Particle shot_right;
+	Particle mageShot;
 	Particle explosion;
 
 };

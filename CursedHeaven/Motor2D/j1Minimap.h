@@ -18,8 +18,9 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+	SDL_Texture*		minimap_tex = nullptr;
 
-private:
+public:
 
 	bool MinimapCoords(int& map_x, int& map_y);
 	void DrawCamera();
@@ -28,7 +29,6 @@ private:
 	void DrawMinimap();
 
 private:
-	SDL_Texture*		minimap_tex = nullptr;
 	SDL_Texture*		tex = nullptr;
 
 	SDL_Surface*		map_surface = nullptr;

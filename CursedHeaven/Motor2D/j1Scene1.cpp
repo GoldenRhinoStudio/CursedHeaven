@@ -29,6 +29,7 @@
 #include "j1Particles.h"
 #include "j1SceneLose.h"
 #include "j1SceneVictory.h"
+#include "j1Minimap.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -119,6 +120,7 @@ bool j1Scene1::Start()
 
 		startup_time.Start();
 		windowTime.Start();
+		App->minimap->Start();
 	}
 
 	return true;
@@ -313,6 +315,10 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
+	App->render->Blit(App->minimap->minimap_tex, 0, 0, NULL, SDL_FLIP_NONE, false);
+	App->minimap->MinimapBorders();
+	App->minimap->DrawEntities();
+	App->minimap->DrawCamera();
 	return continueGame;
 }
 

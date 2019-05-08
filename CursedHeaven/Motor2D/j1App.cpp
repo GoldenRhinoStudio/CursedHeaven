@@ -75,7 +75,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(victory);
 	AddModule(scene1);
 	AddModule(entity);
-	AddModule(particles);
+	AddModule(particles);	
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);

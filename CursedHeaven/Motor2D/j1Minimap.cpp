@@ -23,8 +23,8 @@ j1Minimap::~j1Minimap() {}
 
 bool j1Minimap::Awake(pugi::xml_node & config)
 {
-	minimap_width = config.attribute("width").as_int() / 3;
-	minimap_height = config.attribute("height").as_int() / 3;
+	minimap_width = config.attribute("width").as_int()/2;
+	minimap_height = config.attribute("height").as_int()/2;
 
 	return true;
 }
@@ -37,7 +37,7 @@ bool j1Minimap::Start()
 		// Initialize the variable "minimap_scale" to get the relation between the map width and
 		// the minimap width (defined at config.xml and initialized in Awake())
  		map_width = App->map->data.width * App->map->data.tile_width;
-		minimap_scale = minimap_width / map_width;
+ 		minimap_scale = minimap_width / map_width;
 
 		x_offset = App->map->data.tile_width / 2 * minimap_scale;
 		y_offset = App->map->data.tile_height / 2 * minimap_scale;
@@ -66,27 +66,27 @@ bool j1Minimap::Start()
 
 bool j1Minimap::Update(float dt)
 {	
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
-	{
-		int map_x, map_y;
-		
-		if (MinimapCoords(map_x, map_y))
-		{
-			// TODO 10: Assign to the center of the camera, the coordinates "map_x" and "map_y"
-			App->render->camera.x = -map_x + App->win->width / 2;
-			App->render->camera.y = -map_y + App->win->height / 2;
-		}
-	}
+	//if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	//{
+	//	int map_x, map_y;
+	//	
+	//	if (MinimapCoords(map_x, map_y))
+	//	{
+	//		// TODO 10: Assign to the center of the camera, the coordinates "map_x" and "map_y"
+	//		App->render->camera.x = -map_x + App->win->width / 2;
+	//		App->render->camera.y = -map_y + App->win->height / 2;
+	//	}
+	//}
 
 	return true;
 }
 
 bool j1Minimap::PostUpdate()
 {	
-	App->render->Blit(minimap_tex, 0, 0, NULL, SDL_FLIP_NONE, false);
+	/*App->render->Blit(minimap_tex, 0, 0, NULL, SDL_FLIP_NONE, false);
 	MinimapBorders();
 	DrawEntities();
-	DrawCamera();
+	DrawCamera();*/
 	
 	return true;
 }
@@ -129,28 +129,32 @@ void j1Minimap::DrawMinimap()
 {
 	std::list<MapLayer*>::const_iterator item = App->map->data.layers.cbegin();
 
+	
 	for (; item != App->map->data.layers.end(); item = next(item))
 	{
 		MapLayer* layer = *item;
 
-		for (int y = 0; y < App->map->data.height; ++y)
-		{
-			for (int x = 0; x < App->map->data.width; ++x)
+		if (layer->name != "Collisions") {
+			for (int y = 0; y < App->map->data.height; ++y)
 			{
-				int tile_id = layer->Get(x, y);
-				if (tile_id > 0)
+				for (int x = 0; x < App->map->data.width; ++x)
 				{
-					TileSet* tileset = App->map->GetTilesetFromTileId(tile_id);
+					int tile_id = layer->Get(x, y);
+					if (tile_id > 0)
+					{
+						TileSet* tileset = App->map->GetTilesetFromTileId(tile_id);
 
-					SDL_Rect r = tileset->GetTileRect(tile_id);
-					iPoint pos = App->map->MapToWorld(x, y);
-					
-					pos.x *= minimap_scale;
-					pos.y *= minimap_scale;
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						iPoint pos = App->map->MapToWorld(x, y);
 
-					// TODO 4: Blit the minimap. You need to pass all the parameters until renderer included.
-					// As it is an isometric map, keep in mind that x == 0 is in the middle of the map.
-					App->render->Blit(tex, pos.x + minimap_width / 2, pos.y, &r, SDL_FLIP_NONE, false, 1.0f, minimap_scale, map_renderer);
+						pos.x *= minimap_scale;
+						pos.y *= minimap_scale;
+
+						// TODO 4: Blit the minimap. You need to pass all the parameters until renderer included.
+						// As it is an isometric map, keep in mind that x == 0 is in the middle of the map.
+						//App->render->BlitMinimap(tex, pos.x + minimap_width / 2, pos.y, &r, false, map_renderer, minimap_scale);
+						App->render->Blit(tex, pos.x + minimap_width / 2, pos.y, &r, SDL_FLIP_NONE, false, 1.0f, minimap_scale, map_renderer);
+					}
 				}
 			}
 		}

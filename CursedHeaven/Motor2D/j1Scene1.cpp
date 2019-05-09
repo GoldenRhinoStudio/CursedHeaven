@@ -116,11 +116,12 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
+		lvl1_tex = App->tex->Load("maps/lvl1_map.PNG");
+
 		PlaceEntities(6);
 
 		startup_time.Start();
 		windowTime.Start();
-		App->minimap->Start();
 	}
 
 	return true;
@@ -315,10 +316,8 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
-	App->render->Blit(App->minimap->minimap_tex, 0, 0, NULL, SDL_FLIP_NONE, false);
-	App->minimap->MinimapBorders();
-	App->minimap->DrawEntities();
-	App->minimap->DrawCamera();
+	App->render->Blit(lvl1_tex, 0, App->win->height / 2 + 180, &rect, SDL_FLIP_NONE, false, 0.2f);
+
 	return continueGame;
 }
 

@@ -18,7 +18,6 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
-	SDL_Texture*		minimap_tex = nullptr;
 
 public:
 
@@ -26,24 +25,13 @@ public:
 	void DrawCamera();
 	void MinimapBorders();
 	void DrawEntities();
-	void DrawMinimap();
 
 private:
-	SDL_Texture*		tex = nullptr;
 
-	SDL_Surface*		map_surface = nullptr;
-
-	SDL_Renderer*		map_renderer = nullptr;
-
-	float minimap_scale;
-
-	int x_offset;
-	int y_offset;
-
-	float map_width;
+	SDL_Texture* lvl1_tex = nullptr;
+	SDL_Rect rect = { 0,0,691,341 };
 	
 	int minimap_width;
 	int minimap_height;
 
 };
-

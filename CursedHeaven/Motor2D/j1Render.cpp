@@ -439,7 +439,7 @@ void j1Render::reOrder() {
 		{
 			
 			TileData* img1 = *item;
-			pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y);
+			pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y + 12);
 			App->map->Tile_WorldMap(pos1, img1->height);
 
 
@@ -515,12 +515,31 @@ void j1Render::reOrder() {
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
 			TileData* img1 = *item;
+			pos1 = App->map->WorldToMap(img1->x, img1->y);
 
-			if (player != img1) {
-				if (img1->col->rect.y + img1->col->rect.h < player->col->rect.y) {
-					img1->order = player->order - 0.1;
+			for (std::vector<TileData*>::iterator item2 = entities_sprites.begin(); item2 != entities_sprites.end(); ++item2)
+			{
+				TileData* img2 = *item2;
+				pos2 = App->map->WorldToMap(img2->x, img2->y);
+
+				if (img2 != img1) {
+					if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+						(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
+						(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
+						(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+						(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
+						(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
+						(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
+						(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+						(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
+						(pos2.x == pos1.x && pos2.y == pos1.y)) {
+						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h) {
+							img1->order = img2->order - 0.2f;
+						}
+					}
 				}
 			}
+			
 			OrderToRender.push(img1);
 		}
 	}

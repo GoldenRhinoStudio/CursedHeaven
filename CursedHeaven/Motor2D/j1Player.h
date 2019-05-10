@@ -67,6 +67,7 @@ public:
 
 	// Size of the player collider, where x = w and y = h
 	iPoint playerSize;
+	iPoint attackSize;
 	iPoint margin;
 	
 	int room = 6;

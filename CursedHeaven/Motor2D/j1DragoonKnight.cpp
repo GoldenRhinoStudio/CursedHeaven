@@ -69,11 +69,11 @@ bool j1DragoonKnight::Start() {
 	position.y = 750;
 
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
 	else
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_PLAYER, App->entity);
 
-	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y + 5, attackSize.x, attackSize.y}, COLLIDER_NONE, App->entity);
 
 	hud = new j1Hud();
 	hud->Start();
@@ -243,18 +243,18 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		else if (attackCollider != nullptr) {
 
 			if (animation == &lateral || animation == &idle_lateral) {
-				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + 12);
+				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + 12);
 			}
-			else if (animation == &up || animation == &idle_up) attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - attackCollider->rect.h);
-			else if (animation == &down || animation == &idle_down)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y + attackCollider->rect.h);
+			else if (animation == &up || animation == &idle_up)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - attackCollider->rect.h + 5);
+			else if (animation == &down || animation == &idle_down)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - 2);
 			else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
-				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h);
-				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h);
+				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h + 5);
+				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h + 5);
 			}
 			else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
-				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y + attackCollider->rect.h);
-				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y + attackCollider->rect.h);
+				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - 5);
+				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - 5);
 			}
 		}
 
@@ -336,23 +336,24 @@ bool j1DragoonKnight::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			Draw(r, false, 0, 0, 0.8f);
+			if (animation == &down || animation == &idle_down) Draw(r, false, 0, 3, playerScale);
+			else Draw(r, false, 0, 0, playerScale);
 		else
-			Draw(r, true, 0, 0, 0.8f);
+			 Draw(r, true, -7, 0, playerScale);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, 0.8f);
-			else if (animation == &attack_up) Draw(r, false, 0, -2, 0.8f);
-			else if (animation == &attack_down) Draw(r, false, -4, -4, 0.8f);
-			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, 0.8f);
-			else Draw(r, false, 0, attackBlittingY, 0.8f);
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, playerScale);
+			else if (animation == &attack_up) Draw(r, false, 0, 0, playerScale);
+			else if (animation == &attack_down) Draw(r, false, -4, -1, playerScale);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, playerScale);
+			else Draw(r, false, 0, attackBlittingY, playerScale);
 		}
 		else {
-			if (animation == &attack_lateral_left) Draw(r, false, -6, -6, 0.8f);
-			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6, 0.8f);
-			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2, 0.8f);
-			else Draw(r, true, attackBlittingX, attackBlittingY, 0.8f);
+			if (animation == &attack_lateral_left) Draw(r, false, -13, -6, playerScale);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -11, -6, playerScale);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -11, -2, playerScale);
+			else Draw(r, true, attackBlittingX - 7, attackBlittingY, playerScale);
 		}
 	}
 	return true;
@@ -435,8 +436,11 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	// Copying the size of the player
 	playerSize.x = player.child("size").attribute("width").as_int();
 	playerSize.y = player.child("size").attribute("height").as_int();
+	attackSize.x = player.child("attackCollider").attribute("width").as_int();
+	attackSize.y = player.child("attackCollider").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
+	playerScale = player.attribute("scale").as_float();
 
 	// Copying attack values
 	attackBlittingX = player.child("attack").attribute("blittingX").as_int();

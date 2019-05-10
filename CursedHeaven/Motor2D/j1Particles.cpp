@@ -27,8 +27,8 @@ bool j1Particles::Start()
 	part_tex = App->tex->Load("textures/character/particles.png");
 
 	// Mage basic attack
-	shot_right.anim.LoadAnimation("shot", "mage");
-	shot_right.life = 2500;
+	mageShot.anim.LoadAnimation("shot", "mage");
+	mageShot.life = 1000;
 
 	// Mage Q
 	explosion.anim.LoadAnimation("explosion", "mage");

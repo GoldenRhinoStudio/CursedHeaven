@@ -67,11 +67,9 @@ bool j1BlackMage::Start() {
 	position.y = 750;
 
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_NONE, App->entity);
 	else
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
-
-	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_PLAYER, App->entity);
 
 	hud = new j1Hud();
 	hud->Start();
@@ -169,9 +167,10 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 								speed_particle.y = particle_speed.y * sin(-270 * DEGTORAD);
 							}
 
-							App->particles->shot_right.speed = speed_particle;
+							App->particles->mageShot.speed = speed_particle;
+							App->particles->mageShot.life = 500;
 
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
 						}
 
 						if (direction == NONE_) {
@@ -285,12 +284,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) animation = &idle_diagonal_up;
 				else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) animation = &idle_diagonal_down;
 				attacking = false;
-			}
-			else if (attackCollider != nullptr) {
-				if (facingRight)
-					attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-				else
-					attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
 			}
 
 			// God mode
@@ -462,9 +455,6 @@ bool j1BlackMage::CleanUp() {
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	if (attackCollider != nullptr)
-		attackCollider->to_delete = true;
-
 	if (hud)
 		hud->CleanUp();
 
@@ -491,8 +481,6 @@ void j1BlackMage::LoadPlayerProperties() {
 	// Copying attack values
 	attackBlittingX = player.child("attack").attribute("blittingX").as_int();
 	attackBlittingY = player.child("attack").attribute("blittingY").as_int();
-	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
-	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
 	// Copying combat values
 	pugi::xml_node combat = player.child("combat");
@@ -534,8 +522,8 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 
 	speed_particle.x = p_speed.x * cos(angle);
 	speed_particle.y = p_speed.y * sin(angle);
-	App->particles->shot_right.speed = speed_particle;
+	App->particles->mageShot.speed = speed_particle;
 
-	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+	App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
 	App->audio->PlayFx(App->audio->attack_bm);
 }

@@ -35,6 +35,7 @@ enum ENTITY_TYPES
 	COIN,
 	NPC,
 	SLIME,
+	FIRE,
 	MINDFLYER,
 	UNKNOWN
 };
@@ -113,6 +114,7 @@ public:
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
+	int fire_Damage = 0;
 
 private:
 	int entity_logic = 0;

@@ -248,7 +248,7 @@ void j1App::FinishUpdate()
 		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y);
 	}
 
-	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
+	sprintf_s(title, 256, "Cursed Heaven v0.5 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
 		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync, map_coords.x, map_coords.y);
 	App->win->SetTitle(title);
 

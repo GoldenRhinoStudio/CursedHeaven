@@ -1,27 +1,26 @@
-#ifndef __j1MINDFLYER_H__
-#define __j1MINDFLYER_H__
+#ifndef __j1FIRE_H__
+#define __j1FIRE_H__
 
 #include "PugiXml/src/pugixml.hpp"
 #include "p2Point.h"
 #include "p2Animation.h"
 #include "j1Pathfinding.h"
 #include "j1Entity.h"
-#include "j1Timer.h"
 
 #include <vector>
 
-#define ATTACK_RANGE_MF 15
+#define ATTACK_RANGE_FIRE 0
 
 struct SDL_Texture;
 //struct Collider;
 
-class j1MindFlyer : public j1Entity
+class j1Fire : public j1Entity
 {
 public:
-	j1MindFlyer(int x, int y, ENTITY_TYPES type);
+	j1Fire(int x, int y, ENTITY_TYPES type);
 
 	// Destructor
-	virtual ~j1MindFlyer();
+	virtual ~j1Fire();
 
 	// Called before the first frame
 	bool Start();
@@ -53,11 +52,11 @@ public:
 	iPoint colliderSize;
 
 	float speed;
-	int node = 0;
 
 	Movement direction;
 
 	std::vector<iPoint>* path;
+	int node = 0;
 
 	bool target_found = false;
 	bool dead = false;
@@ -65,22 +64,7 @@ public:
 	bool receivedAbilityDamage = false;
 
 private:
-	Animation idle_diagonal_up;
-	Animation idle_diagonal_down;
-	Animation idle_lateral;
-	Animation idle_down;
-	Animation idle_up;
+	Animation idle;
 
-	Animation diagonal_up;
-	Animation diagonal_down;
-	Animation lateral;
-	Animation up;
-	Animation down;
-
-	Animation death;
-
-	j1Timer shotTimer;
-	uint lastTime_Shot = 0;
-	uint cooldown_Shot = 0;
 };
-#endif // __j1MINDFLYER_H__
+#endif // __j1SLIME_H__

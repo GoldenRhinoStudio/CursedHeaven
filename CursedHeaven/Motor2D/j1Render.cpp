@@ -396,8 +396,8 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 		else
 			flag = SDL_FLIP_NONE;
 
-		r.w *= Image->scale;
-		r.h *= Image->scale;
+		(int)r.w *= Image->scale * Image->blitScale;
+		(int)r.h *= Image->scale * Image->blitScale;
 
 		SDL_Point* point = NULL;
 		SDL_Point img2;

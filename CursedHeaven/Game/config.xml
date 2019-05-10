@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.3.</title>
+    <title>Cursed Heaven v0.5</title>
     <organization>UPC</organization>
   </app>
 	
@@ -56,6 +56,12 @@
 	  <colliderSize w="35" h="35"/>
 	  <combat damage="20"/>
   </slime>  
+  
+  <fire speed="50.0f" life="300">
+	  <margin x="-10" y="-10"/>
+	  <colliderSize w="17" h="25"/>
+	  <combat damage="20"/>
+  </fire>  
   
   <mindflyer speed="100.0f" life="3000">
 	  <margin x="-12" y="-10"/>

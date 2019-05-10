@@ -13,6 +13,7 @@
 #include "j1Tank.h"
 #include "j1Judge.h"
 #include "j1Slime.h"
+#include "j1Fire.h"
 #include "j1MindFlyer.h"
 #include "j1Map.h"
 
@@ -190,6 +191,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 			j1Entity* entity;
 			if (queue[i].type == SLIME)
 				entity = new j1Slime(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == FIRE)
+				entity = new j1Fire(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == MINDFLYER)
 				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
 

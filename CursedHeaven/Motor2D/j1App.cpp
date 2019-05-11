@@ -26,6 +26,7 @@
 #include "j1App.h"
 #include "j1Particles.h"
 #include "j1DialogSystem.h"
+#include "j1Shop.h"
 #include "j1Entity.h"
 
 #include "Brofiler/Brofiler.h"
@@ -57,6 +58,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	dialog = new j1DialogSystem();
 	particles = new j1Particles();
 	collisions = new j1Collisions();
+	shop = new j1Shop();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -73,6 +75,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(lose);
 	AddModule(victory);
 	AddModule(scene1);
+	AddModule(shop);
 	AddModule(entity);
 	AddModule(particles);
 	AddModule(collisions);

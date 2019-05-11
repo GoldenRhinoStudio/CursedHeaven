@@ -29,6 +29,7 @@
 #include "j1Particles.h"
 #include "j1SceneLose.h"
 #include "j1SceneVictory.h"
+#include "j1Shop.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -379,6 +380,9 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(80, 65, SLIME);
 
 	App->entity->AddEnemy(54, 68, MINDFLYER);
+
+	App->shop->CreateItem(POTION, 200, 750);
+	App->shop->CreateItem(HEART, 220, 750);
 }
 
 // Called before quitting

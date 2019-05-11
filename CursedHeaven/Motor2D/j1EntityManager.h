@@ -33,6 +33,7 @@ enum ENTITY_TYPES
 {
 	PLAYER,
 	COIN,
+	ITEM,
 	NPC,
 	SLIME,
 	FIRE,

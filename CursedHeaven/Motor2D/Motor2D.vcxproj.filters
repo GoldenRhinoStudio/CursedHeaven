@@ -124,6 +124,9 @@
     <ClCompile Include="j1Fire.cpp">
       <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
     </ClCompile>
+    <ClCompile Include="j1Shop.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -263,6 +266,9 @@
     </ClInclude>
     <ClInclude Include="j1Fire.h">
       <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Shop.h">
+      <Filter>Development\Modules\Interactions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

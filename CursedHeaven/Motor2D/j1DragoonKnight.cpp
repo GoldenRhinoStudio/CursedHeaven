@@ -68,6 +68,8 @@ bool j1DragoonKnight::Start() {
 	position.x = 200;
 	position.y = 750;
 
+	coins = 300;
+
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
 	else
@@ -104,7 +106,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 		if (App->scene1->finishedDialogue == true) {
 
 			if (!attacking && !active_Q) {
-				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+				ManagePlayerMovement(direction, dt, do_logic, speed);
 				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 					&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);
 			}
@@ -462,7 +464,7 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed
-	pugi::xml_node speed = player.child("speed");
-	movementSpeed = speed.child("movement").attribute("horizontal").as_float();
-	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
+	pugi::xml_node movementSpeed = player.child("speed");
+	speed = movementSpeed.child("movement").attribute("horizontal").as_float();
+	godModeSpeed = movementSpeed.child("movement").attribute("godmode").as_float();
 }

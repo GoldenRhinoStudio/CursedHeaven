@@ -108,6 +108,7 @@
     <ClCompile Include="j1Box.cpp" />
     <ClCompile Include="j1SceneSettings.cpp" />
     <ClCompile Include="j1SceneVictory.cpp" />
+    <ClCompile Include="j1Shop.cpp" />
     <ClCompile Include="j1Slime.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Render.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="j1Box.h" />
     <ClInclude Include="j1SceneSettings.h" />
     <ClInclude Include="j1SceneVictory.h" />
+    <ClInclude Include="j1Shop.h" />
     <ClInclude Include="j1Slime.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1UserInterfaceElement.h" />

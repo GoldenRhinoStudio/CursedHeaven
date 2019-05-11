@@ -69,13 +69,24 @@ public:
 	iPoint playerSize;
 	iPoint attackSize;
 	iPoint margin;
-	
+
+	Collider* attackCollider = nullptr;
+
 	int room = 6;
 	uint points = 0;
 	uint score_points = 0;
 	uint playerLife = 0;
 
-	Collider* attackCollider = nullptr;
+	// Items
+	uint coins = 0;
+
+	uint potions = 0;
+	uint bootsLevel = 0;
+	uint swordLevel = 0;
+	uint heartLevel = 0;
+	uint armourLevel = 0;
+	uint hourglassLevel = 0;
+	uint bookLevel = 0;
 
 	j1Hud* hud = nullptr;
 
@@ -99,9 +110,7 @@ public:
 	int attackBlittingY;
 	int rightAttackSpawnPos;
 	int leftAttackSpawnPos;
-
 	float godModeSpeed;
-	float movementSpeed;
 
 	bool player_start = false;
 	bool dead = false;
@@ -109,8 +118,9 @@ public:
 	bool loadedAudios = false;
 	bool changing_room = false;
 	bool receivedDamage = false;
-
 	bool GodMode = false;
+
+	// Combat
 	bool attacking = false;
 	bool available_Q = false;
 	bool active_Q = false;
@@ -119,12 +129,16 @@ public:
 	bool active_E = false;
 	bool firstTimeE = true;
 
+	uint cooldownTime_Q = 0;
+	uint cooldownTime_E = 0;
+	uint lastTime_Q = 0;
+	uint lastTime_E = 0;
+
 	// The player stays untouchable for a second
 	j1Timer invulCounter;
 	uint lastTime_invul = 0;
 	uint invulTime = 0;
-
-
+	
 };
 
 #endif // __j1PLAYER_H__

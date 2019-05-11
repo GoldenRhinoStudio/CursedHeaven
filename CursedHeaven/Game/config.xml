@@ -85,6 +85,18 @@
 	</colors>
   </gui>
   
+  <shop>
+	<prizes>
+	  <boots p1="50" p2="50" p3="50"/>
+	  <sword p1="50" p2="50" p3="50"/>
+	  <heart p1="50" p2="50" p3="50"/>
+	  <armour p1="50" p2="50" p3="50"/>
+	  <hourglass p1="50" p2="50" p3="50"/>
+	  <book p1="50" p2="50" p3="50"/>
+	  <potion p="50"/>
+	</prizes>
+  </shop>
+  
   <menu>
   </menu>
   

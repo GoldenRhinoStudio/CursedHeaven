@@ -130,6 +130,7 @@ bool j1Item::Start() {
 	LOG("Loading player audios");
 
 	collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 20, 20 }, COLLIDER_ITEM, App->entity);
+	itemRefresh.Start();
 
 	return true;
 }
@@ -138,90 +139,90 @@ bool j1Item::Update(float dt, bool do_logic) {
 	
 	switch (type) {
 	case BOOTS:
-		if (App->entity->currentPlayer->bootsLevel == 0) {
+		if (App->shop->bootsLevel == 0) {
 			image = {0, 0, 0, 0};
 			prize = App->shop->boots_prize1;
 		}
-		else if (App->entity->currentPlayer->bootsLevel == 1) {
+		else if (App->shop->bootsLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->boots_prize2;
 		}
-		else if (App->entity->currentPlayer->bootsLevel == 2) {
+		else if (App->shop->bootsLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->boots_prize3;
 		}
 		break;
 
 	case SWORD:
-		if (App->entity->currentPlayer->swordLevel == 0) {
+		if (App->shop->swordLevel == 0) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->sword_prize1;
 		}
-		else if (App->entity->currentPlayer->swordLevel == 1) {
+		else if (App->shop->swordLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->sword_prize2;
 		}
-		else if (App->entity->currentPlayer->swordLevel == 2) {
+		else if (App->shop->swordLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->sword_prize3;
 		}
 		break;
 
 	case HEART:
-		if (App->entity->currentPlayer->heartLevel == 0) {
+		if (App->shop->heartLevel == 0) {
 			image = { 170, 0, 217, 217 };
 			prize = App->shop->heart_prize1;
 		}
-		else if (App->entity->currentPlayer->heartLevel == 1) {
+		else if (App->shop->heartLevel == 1) {
 			image = { 387, 0, 217, 217 };
 			prize = App->shop->heart_prize2;
 		}
-		else if (App->entity->currentPlayer->heartLevel == 2) {
+		else if (App->shop->heartLevel == 2) {
 			image = { 604, 0, 217, 217 };
 			prize = App->shop->heart_prize3;
 		}
 		break;
 
 	case ARMOUR:
-		if (App->entity->currentPlayer->armourLevel == 0) {
+		if (App->shop->armourLevel == 0) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->armour_prize1;
 		}
-		else if (App->entity->currentPlayer->armourLevel == 1) {
+		else if (App->shop->armourLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->armour_prize2;
 		}
-		else if (App->entity->currentPlayer->armourLevel == 2) {
+		else if (App->shop->armourLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->armour_prize3;
 		}
 		break;
 
 	case HOURGLASS:
-		if (App->entity->currentPlayer->hourglassLevel == 0) {
+		if (App->shop->hourglassLevel == 0) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->hourglass_prize1;
 		}
-		else if (App->entity->currentPlayer->hourglassLevel == 1) {
+		else if (App->shop->hourglassLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->hourglass_prize2;
 		}
-		else if (App->entity->currentPlayer->hourglassLevel == 2) {
+		else if (App->shop->hourglassLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->hourglass_prize3;
 		}
 		break;
 
 	case BOOK:
-		if (App->entity->currentPlayer->bookLevel == 0) {
+		if (App->shop->bookLevel == 0) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->book_prize1;
 		}
-		else if (App->entity->currentPlayer->bookLevel == 1) {
+		else if (App->shop->bookLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->book_prize2;
 		}
-		else if (App->entity->currentPlayer->bookLevel == 2) {
+		else if (App->shop->bookLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->book_prize3;
 		}
@@ -233,8 +234,7 @@ bool j1Item::Update(float dt, bool do_logic) {
 	}
 
 	// Blitting the item
-	if (type == POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
-	if (type == HEART) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
+	App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
 
 	return true;
 }
@@ -255,71 +255,89 @@ bool j1Item::CleanUp() {
 }
 
 void j1Item::OnCollision(Collider* c1, Collider* c2) {	
-	if (c2->type == COLLIDER_PLAYER || c2->type == COLLIDER_NONE) {
+	if (c2->type == COLLIDER_PLAYER) {
 
-		uint aux = 0;
-		uint cdrE = 0;
-		uint cdrQ = 0;
+		if (itemRefresh.Read() >= lastTime_refresh + 2000){
+			canBeBought = true;
+			lastTime_refresh = itemRefresh.Read();
+		}
 
-		if (App->entity->currentPlayer->coins >= prize) {
-			App->entity->currentPlayer->coins -= prize;
+		if (canBeBought) {
+			if (App->entity->currentPlayer->coins >= prize) {
+				App->entity->currentPlayer->coins -= prize;
 
-			switch (type) {
-			case BOOTS:
-				if (App->entity->currentPlayer->bootsLevel == 0) aux = App->entity->currentPlayer->speed * 0.1f;
-				else if (App->entity->currentPlayer->bootsLevel == 1) aux = App->entity->currentPlayer->speed * 0.15f;
-				else if (App->entity->currentPlayer->bootsLevel == 2) aux = App->entity->currentPlayer->speed * 0.25f;
+				uint aux = 0;
+				uint cdrE = 0;
+				uint cdrQ = 0;
 
-				App->entity->currentPlayer->speed += aux;
-				App->entity->currentPlayer->bootsLevel++;
-				break;
+				switch (type) {
+				case BOOTS:
+					if (App->shop->bootsLevel == 0) aux = App->entity->currentPlayer->speed * 0.1f;
+					else if (App->shop->bootsLevel == 1) aux = App->entity->currentPlayer->speed * 0.15f;
+					else if (App->shop->bootsLevel == 2) aux = App->entity->currentPlayer->speed * 0.25f;
 
-			case SWORD:
-				if (App->entity->currentPlayer->swordLevel == 0) App->entity->currentPlayer->basicDamage * 0.1f;
-				else if (App->entity->currentPlayer->swordLevel == 1) App->entity->currentPlayer->basicDamage * 0.15f;
-				else if (App->entity->currentPlayer->swordLevel == 2) App->entity->currentPlayer->basicDamage * 0.25f;
+					App->entity->currentPlayer->speed += aux;
+					App->shop->bootsLevel++;
+					break;
 
-				App->entity->currentPlayer->swordLevel++;
-				break;
+				case SWORD:
+					if (App->shop->swordLevel == 0) App->entity->currentPlayer->basicDamage * 0.1f;
+					else if (App->shop->swordLevel == 1) App->entity->currentPlayer->basicDamage * 0.15f;
+					else if (App->shop->swordLevel == 2) App->entity->currentPlayer->basicDamage * 0.25f;
 
-			case HEART:
-				if (App->entity->currentPlayer->heartLevel == 0) App->entity->currentPlayer->totalLifePoints + 30;
-				else if (App->entity->currentPlayer->heartLevel == 1) App->entity->currentPlayer->totalLifePoints + 55;
-				else if (App->entity->currentPlayer->heartLevel == 2) App->entity->currentPlayer->totalLifePoints + 80;
+					App->shop->swordLevel++;
+					break;
 
-				App->entity->currentPlayer->heartLevel++;
-				break;
+				case HEART:
+					if (App->shop->heartLevel == 0){
+						App->entity->currentPlayer->totalLifePoints + 30;
+						App->entity->currentPlayer->lifePoints + 30;
+					}
+					else if (App->shop->heartLevel == 1) {
+						App->entity->currentPlayer->totalLifePoints + 55;
+						App->entity->currentPlayer->lifePoints + 55;
+					}
+					else if (App->shop->heartLevel == 2){
+						App->entity->currentPlayer->totalLifePoints + 80;
+						App->entity->currentPlayer->lifePoints + 80;
+					}
 
-			case ARMOUR:
-				//App->entity->currentPlayer->totalLifePoints + 25;
-				break;
+					App->shop->heartLevel++;
+					break;						
 
-			case HOURGLASS:
-				if (App->entity->currentPlayer->hourglassLevel == 0) {
-					cdrE = App->entity->currentPlayer->cooldownTime_E * 0.1f;
-					cdrQ = App->entity->currentPlayer->cooldownTime_Q * 0.1f;
+				case ARMOUR:
+					//App->entity->currentPlayer->totalLifePoints + 25;
+					break;
+
+				case HOURGLASS:
+					if (App->shop->hourglassLevel == 0) {
+						cdrE = App->entity->currentPlayer->cooldownTime_E * 0.1f;
+						cdrQ = App->entity->currentPlayer->cooldownTime_Q * 0.1f;
+					}
+					else if (App->shop->hourglassLevel == 1) {
+						cdrE = App->entity->currentPlayer->cooldownTime_E * 0.15f;
+						cdrQ = App->entity->currentPlayer->cooldownTime_Q * 0.15f;
+					}
+					else if (App->shop->hourglassLevel == 2) {
+						cdrE = App->entity->currentPlayer->cooldownTime_E * 0.25f;
+						cdrQ = App->entity->currentPlayer->cooldownTime_Q * 0.25f;
+					}
+
+					App->entity->currentPlayer->cooldownTime_E -= cdrE;
+					App->entity->currentPlayer->cooldownTime_Q -= cdrQ;
+					App->shop->hourglassLevel++;
+					break;
+
+				case BOOK:
+					//App->entity->currentPlayer->totalLifePoints + 25;
+					break;
+
+				case POTION:
+					if (App->shop->potions < 3)	App->shop->potions++;
+					break;
 				}
-				else if (App->entity->currentPlayer->hourglassLevel == 1) {
-					cdrE = App->entity->currentPlayer->cooldownTime_E * 0.15f;
-					cdrQ = App->entity->currentPlayer->cooldownTime_Q * 0.15f;
-				}
-				else if (App->entity->currentPlayer->hourglassLevel == 2) {
-					cdrE = App->entity->currentPlayer->cooldownTime_E * 0.25f;
-					cdrQ = App->entity->currentPlayer->cooldownTime_Q * 0.25f;
-				}
 
-				App->entity->currentPlayer->cooldownTime_E -= cdrE;
-				App->entity->currentPlayer->cooldownTime_Q -= cdrQ;
-				App->entity->currentPlayer->hourglassLevel++;
-				break;
-
-			case BOOK:
-				//App->entity->currentPlayer->totalLifePoints + 25;
-				break;
-
-			case POTION:
-				if(App->entity->currentPlayer->potions < 3) App->entity->currentPlayer->potions++;
-				break;
+				canBeBought = false;
 			}
 		}
 	}

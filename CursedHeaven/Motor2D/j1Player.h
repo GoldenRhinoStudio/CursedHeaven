@@ -54,7 +54,6 @@ public:
 
 	virtual void LoadPlayerProperties() {};
 	void UpdateCameraPosition(float dt);
-	bool CheckWalkability(iPoint pos) const;
 	void ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed);
 	void SetMovementAnimations(DIRECTION& direction, Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
 		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down, Animation* death);
@@ -76,17 +75,7 @@ public:
 	uint points = 0;
 	uint score_points = 0;
 	uint playerLife = 0;
-
-	// Items
 	uint coins = 0;
-
-	uint potions = 0;
-	uint bootsLevel = 0;
-	uint swordLevel = 0;
-	uint heartLevel = 0;
-	uint armourLevel = 0;
-	uint hourglassLevel = 0;
-	uint bookLevel = 0;
 
 	j1Hud* hud = nullptr;
 

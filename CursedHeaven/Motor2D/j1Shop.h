@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "j1Entity.h"
+#include "j1Timer.h"
 #include <list>
 
 struct SDL_Texture;
@@ -44,8 +45,14 @@ public:
 
 private:
 	SDL_Rect image;
+
+	j1Timer itemRefresh;
+	uint lastTime_refresh = 0;
+	uint refreshTime = 0;
+	bool canBeBought = false;
 };
 
+// ---------------------------------------------------------------
 
 class j1Shop : public j1Module
 {
@@ -80,6 +87,15 @@ public:
 	uint hourglass_prize1, hourglass_prize2, hourglass_prize3;
 	uint book_prize1, book_prize2, book_prize3;
 	uint potion_prize;
+
+	// Items
+	uint potions = 0;
+	uint bootsLevel = 0;
+	uint swordLevel = 0;
+	uint heartLevel = 0;
+	uint armourLevel = 0;
+	uint hourglassLevel = 0;
+	uint bookLevel = 0;
 };
 
 #endif // __J1SHOP_H__

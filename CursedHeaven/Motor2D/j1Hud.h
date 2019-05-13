@@ -38,8 +38,6 @@ private:
 	SDL_Texture* profile_text = nullptr;
 	SDL_Texture* score = nullptr;
 
-	_TTF_Font* font = nullptr;
-
 	std::list<j1Label*> labels_list;
 	std::list<j1Button*> hud_buttons;
 

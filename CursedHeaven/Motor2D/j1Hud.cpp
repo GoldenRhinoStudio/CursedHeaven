@@ -24,8 +24,6 @@ bool j1Hud::Start()
 	life_points = 82;
 	life_points_max = App->entity->currentPlayer->lifePoints;
 	multiplier = 82 / life_points_max;
-
-	font = App->font->Load("fonts/Pixeled.ttf", 15);
 	
 	return true;
 }
@@ -140,7 +138,7 @@ bool j1Hud::Update(float dt)
 	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	App->tex->UnLoad(score);
-	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, font);
+	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, App->gui->font3);
 
 	App->render->BlitDialog(score, 65, 130, &temp, SDL_FLIP_NONE, 0);
 

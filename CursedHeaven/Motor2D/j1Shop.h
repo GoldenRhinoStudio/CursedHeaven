@@ -8,6 +8,7 @@
 
 struct SDL_Texture;
 struct Collider;
+class j1Label;
 
 enum ITEM_TYPE
 {
@@ -45,6 +46,9 @@ public:
 
 private:
 	SDL_Rect image;
+	SDL_Rect labelBg;
+
+	j1Label* description;
 
 	j1Timer itemRefresh;
 	uint lastTime_refresh = 0;
@@ -78,6 +82,7 @@ public:
 
 public:
 	std::list<j1Item*> items;
+	std::list<j1Label*> itemLabels;
 
 	// Prizes
 	uint boots_prize1, boots_prize2, boots_prize3;

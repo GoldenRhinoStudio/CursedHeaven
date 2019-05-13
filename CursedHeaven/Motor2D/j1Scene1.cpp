@@ -20,7 +20,6 @@
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
 #include "j1SceneMenu.h"
-#include "j1Fonts.h"
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
@@ -64,7 +63,6 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene1::Start()
 {
-
 	if (active)
 	{	
 		App->map->draw_with_quadtrees = true;
@@ -88,9 +86,6 @@ bool j1Scene1::Start()
 		debug_tex = App->tex->Load("maps/path2.png");
 		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
 
-		// Loading fonts
-		font = App->font->Load("fonts/Pixeled.ttf", 10);
-
 		// Creating UI
 		SDL_Rect section = { 9,460,315,402 };
 		settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
@@ -111,10 +106,10 @@ bool j1Scene1::Start()
 
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
-		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, font, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, font, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, App->gui->font2, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, App->gui->font2, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		PlaceEntities(6);
 

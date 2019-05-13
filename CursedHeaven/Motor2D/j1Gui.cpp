@@ -13,6 +13,7 @@
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
 #include "j1SceneSettings.h"
+#include "j1Fonts.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -72,6 +73,11 @@ bool j1Gui::Start()
 		hoverSound = App->audio->LoadFx("audio/fx/hover.wav");
 		loadedAudios = true;
 	}
+
+	// Loading fonts
+	font1 = App->font->Load("fonts/Pixeled.ttf", 5);
+	font2 = App->font->Load("fonts/Pixeled.ttf", 10);
+	font3 = App->font->Load("fonts/Pixeled.ttf", 15);
 
 	return true;
 }

@@ -291,15 +291,12 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 				case HEART:
 					if (App->shop->heartLevel == 0){
 						App->entity->currentPlayer->totalLifePoints += 30;
-						App->entity->currentPlayer->lifePoints += 30;
 					}
 					else if (App->shop->heartLevel == 1) {
 						App->entity->currentPlayer->totalLifePoints += 55;
-						App->entity->currentPlayer->lifePoints += 55;
 					}
 					else if (App->shop->heartLevel == 2){
 						App->entity->currentPlayer->totalLifePoints += 80;
-						App->entity->currentPlayer->lifePoints += 80;
 					}
 
 					App->shop->heartLevel++;

@@ -35,7 +35,6 @@ public:
 
 	// Called every frame
 	bool Update(float dt, bool do_logic);
-	bool DrawOrder(float dt);
 	void OnCollision(Collider* c1, Collider* c2);
 
 	bool CleanUp();
@@ -49,11 +48,6 @@ private:
 	SDL_Rect labelBg;
 
 	j1Label* description;
-
-	j1Timer itemRefresh;
-	uint lastTime_refresh = 0;
-	uint refreshTime = 0;
-	bool canBeBought = false;
 };
 
 // ---------------------------------------------------------------
@@ -71,9 +65,7 @@ public:
 	bool Start();
 
 	// Called every frame
-	bool PreUpdate();
 	bool Update(float dt);
-	bool PostUpdate();
 	bool CleanUp();
 
 	void OnCollision(Collider* c1, Collider* c2);

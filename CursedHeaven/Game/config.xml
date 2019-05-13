@@ -87,13 +87,13 @@
   
   <shop>
 	<prizes>
-	  <boots p1="50" p2="50" p3="50"/>
-	  <sword p1="50" p2="50" p3="50"/>
-	  <heart p1="50" p2="50" p3="50"/>
-	  <armour p1="50" p2="50" p3="50"/>
-	  <hourglass p1="50" p2="50" p3="50"/>
-	  <book p1="50" p2="50" p3="50"/>
-	  <potion p="50"/>
+	  <boots p1="30" p2="80" p3="150"/>
+	  <sword p1="30" p2="80" p3="150"/>
+	  <heart p1="30" p2="80" p3="150"/>
+	  <armour p1="30" p2="80" p3="150"/>
+	  <hourglass p1="30" p2="80" p3="150"/>
+	  <book p1="30" p2="80" p3="150"/>
+	  <potion p="30"/>
 	</prizes>
   </shop>
   

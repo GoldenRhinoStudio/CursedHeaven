@@ -116,7 +116,7 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
-		lvl1_tex = App->tex->Load("maps/lvl1_map.PNG");
+		lvl1_tex = App->tex->Load("maps/minimap2_lvl1.png");
 
 		PlaceEntities(6);
 
@@ -316,7 +316,7 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
-	App->render->Blit(lvl1_tex, 0, App->win->height / 2 + 180, &rect, SDL_FLIP_NONE, false, 0.2f);
+		App->render->Blit(lvl1_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
 
 	return continueGame;
 }

@@ -40,7 +40,7 @@ bool j1Minimap::Update(float dt)
 
 bool j1Minimap::PostUpdate()
 {	
-
+	DrawEntities();
 	return true;
 }
 
@@ -93,20 +93,16 @@ void j1Minimap::DrawEntities()
 {
 	int pos_x, pos_y;
 
-	//for (std::list<j1Entity*>::iterator item = App->entity_manager->entities.begin(); item != App->entity_manager->entities.end(); ++item) 
-	//{
-	//	// TODO 6: Initialize the variables "pos_x" and "pos_y" to get the position of an entity IN the minimap
-	//	pos_x = (*item)->position.x * minimap_scale;
-	//	pos_y = (*item)->position.y * minimap_scale;
+	for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
+		pos_x = (*item)->position.x * 0.125f;
+		pos_y = (*item)->position.y * 0.125f;
 
-	//	// TODO 7: Fill the missing parameters of DrawQuad() function.
-	//	// Take into account that it is an isometric map
-	//	if ((*item)->type == ENTITY_TYPE::ENEMY)
-	//		App->render->DrawQuad({ pos_x + minimap_width / 2, pos_y - y_offset, 4, 4 }, 255, 0, 0, 255, true, false);
-	//	
-	//	else if ((*item)->type == ENTITY_TYPE::PLAYER)
-	//		App->render->DrawQuad({ pos_x + minimap_width / 2, pos_y - y_offset, 4, 4 }, 0, 255, 0, 255, true, false);
-	//}
+		if ((*item)->type == ENTITY_TYPES::PLAYER)
+			App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 255, 0, 0, 255, true, false);
+		
+		else if ((*item)->type == ENTITY_TYPES::SLIME)
+			App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 0, 0, 255, 255, true, false);
+	}
 }
 
 

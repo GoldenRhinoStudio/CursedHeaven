@@ -217,9 +217,15 @@ void j1Slime::LoadProperties()
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
+	for (uint i = 0; i < path->size(); ++i)
+	{
+		iPoint pos = App->map->MapToWorld(path->at(i).x, path->at(i).y);
+		App->render->Blit(debug_tex, pos.x, pos.y);
+	}
+
 	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	if (App->path->check_nextTile(path, &node, &pos))
-		node++;
+	/*if (App->path->check_nextTile(path, &node, &pos))
+		node++;*/
 
 	LOG("Node: %i", node);
 	direction = App->path->CheckDirection(path, &node);
@@ -227,7 +233,7 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 	if (direction == Movement::DOWN_RIGHT)
 	{
 		animation = &diagonal_down;
-		position.y += speed * dt;
+		position.y += (speed * dt) / 2;
 		position.x += speed * dt;
 		animation->flip = false;
 	}
@@ -235,7 +241,7 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 	else if (direction == Movement::DOWN_LEFT)
 	{
 		animation = &diagonal_down;
-		position.y += speed * dt;
+		position.y += (speed * dt) / 2;
 		position.x -= speed * dt;
 		animation->flip = true;
 	}
@@ -243,7 +249,7 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 	else if (direction == Movement::UP_RIGHT)
 	{
 		animation = &diagonal_up;
-		position.y -= speed * dt;
+		position.y -= (speed * dt) / 2;
 		position.x += speed * dt;
 		animation->flip = false;
 	}
@@ -251,7 +257,7 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 	else if (direction == Movement::UP_LEFT)
 	{
 		animation = &diagonal_up;
-		position.y -= speed * dt;
+		position.y -= (speed * dt) / 2;
 		position.x -= speed * dt;
 		animation->flip = true;
 	}

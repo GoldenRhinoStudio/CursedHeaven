@@ -8,6 +8,7 @@
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
 #include "j1BlackMage.h"
+#include "j1Shop.h"
 #include "j1Box.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
@@ -139,18 +140,11 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 			}
 		}
 		else {
-			// Position of the player in map coordinates
-			iPoint mapPos = App->map->WorldToMap((int)position.x, (int)position.y);
 
-			iPoint up_right = { mapPos.x, mapPos.y - 1 };
-			iPoint down_left = { mapPos.x, mapPos.y + 1 };
-			iPoint down_right = { mapPos.x + 1, mapPos.y };
-			iPoint up_left = { mapPos.x - 1, mapPos.y };
-
-			iPoint right = { mapPos.x + 1, mapPos.y - 1 };
-			iPoint up = { mapPos.x - 1, mapPos.y - 1 };
-			iPoint down = { mapPos.x + 1, mapPos.y + 1 };;
-			iPoint left = { mapPos.x - 1, mapPos.y + 1 };
+			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)) {
+				App->shop->potions--;
+				App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+			}
 
 			// Direction controls	
 			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {

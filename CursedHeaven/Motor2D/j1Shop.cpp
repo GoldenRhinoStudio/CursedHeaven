@@ -51,6 +51,7 @@ bool j1Shop::Awake(pugi::xml_node& config)
 	book_prize3 = p.child("book").attribute("p3").as_uint();
 
 	potion_prize = p.child("potion").attribute("p").as_uint();
+	potionHealing = p.child("potion").attribute("healing").as_uint();
 
 	return true;
 }
@@ -76,7 +77,8 @@ void j1Shop::PlaceShop()
 	App->shop->CreateItem(HEART, -1050, 745);
 	App->shop->CreateItem(HEART, -1000, 715);
 
-	App->shop->CreateItem(HEART, 200, 750);
+	App->shop->CreateItem(HEART, 230, 750);
+	App->shop->CreateItem(POTION, 200, 750);
 }
 
 bool j1Shop::Update(float dt)
@@ -311,11 +313,13 @@ bool j1Item::CleanUp() {
 void j1Item::OnCollision(Collider* c1, Collider* c2) {	
 	if (c2->type == COLLIDER_PLAYER) {	
 
-		if (level > 2)
+		if (level > 2 && type != POTION)
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 96, 255, 160);
-		else
-		if (App->entity->currentPlayer->coins >= prize){
+		else if (App->entity->currentPlayer->coins < prize || (App->shop->potions == 3 && type == POTION)) {
 
+			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 255, 0, 0, 160);
+		} 
+		else {
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
 
 			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) {
@@ -393,8 +397,6 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 
 			}
 		}
-		else
-			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 255, 0, 0, 160);
 
 		description->Draw(0.7, -8);
 	}

@@ -2,6 +2,7 @@
 #include "j1App.h"
 #include "j1Textures.h"
 #include "j1UserInterfaceElement.h"
+#include "j1Shop.h"
 #include "j1Label.h"
 #include "j1Scene1.h"
 #include "j1Fonts.h"
@@ -22,8 +23,10 @@ bool j1Hud::Start()
 	hud_text = App->tex->Load("gui/hud.png");
 	profile_text = App->tex->Load("gui/player_profile.png");
 	life_points = 82;
-	life_points_max = App->entity->currentPlayer->lifePoints;
-	multiplier = 82 / life_points_max;
+	multiplier = 82 / (float)App->entity->currentPlayer->lifePoints;
+
+	// Potions
+	potions = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0gfffffffffffffffffffffffff", App->gui->beige);
 	
 	return true;
 }
@@ -86,14 +89,9 @@ bool j1Hud::Update(float dt)
 
 	// Lifebar
 	SDL_Rect lifebar = { 0,225,82,8 };
-	SDL_Rect lifebar_r = { 0,233,life_points,6 };
+	SDL_Rect lifebar_r = { 0,233, life_points, 6 };
 
-	if (App->entity->player_type == MAGE)
-		black_mage = true;
-	else if (App->entity->player_type == KNIGHT)
-		dragoon_knight = true;
-
-	if (black_mage) {
+	if (App->entity->player_type == MAGE) {
 		// Icon profile
 		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
@@ -110,7 +108,7 @@ bool j1Hud::Update(float dt)
 		}
 
 	}
-	else if (dragoon_knight) {
+	else if (App->entity->player_type == KNIGHT) {
 		// Icon profile
 		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
@@ -128,9 +126,11 @@ bool j1Hud::Update(float dt)
 
 	}
 
+	potions->Draw();
+
 	// Current points of the player (char*)
 	current_points = App->scene1->current_points.c_str();
-//	App->scene1->current_points.erase();
+	//App->scene1->current_points.erase();
 	SDL_Rect temp;
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
@@ -154,11 +154,11 @@ bool j1Hud::Update(float dt)
 
 	if (App->scene1->profile_active) {
 		
-		if (black_mage) {
+		if (App->entity->player_type == MAGE) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
 			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
 		}
-		else if (dragoon_knight) {
+		else if (App->entity->player_type == KNIGHT) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
 			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
 		}

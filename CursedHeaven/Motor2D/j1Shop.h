@@ -95,6 +95,8 @@ public:
 	uint armourLevel = 0;
 	uint hourglassLevel = 0;
 	uint bookLevel = 0;
+
+	uint potionHealing = 0;
 };
 
 #endif // __J1SHOP_H__

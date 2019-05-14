@@ -93,7 +93,7 @@
 	  <armour p1="30" p2="80" p3="150"/>
 	  <hourglass p1="30" p2="80" p3="150"/>
 	  <book p1="30" p2="80" p3="150"/>
-	  <potion p="30"/>
+	  <potion p="30" healing="50"/>
 	</prizes>
   </shop>
   

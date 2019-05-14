@@ -3,27 +3,20 @@
 
 #include "j1App.h"
 #include "j1Map.h"
-#include "j1Input.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
-#include "j1Collisions.h"
 #include "j1Render.h"
-#include "j1Window.h"
-#include "j1DragoonKnight.h"
-#include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
 #include "j1FadeToBlack.h"
-#include "j1Pathfinding.h"
-#include "j1Gui.h"
 #include "j1SceneMenu.h"
-#include "j1Fonts.h"
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
 #include "j1ChooseCharacter.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
+#include "j1Shop.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -254,5 +247,6 @@ void j1ChooseCharacter::ChangeScene() {
 	App->entity->active = true;
 	App->entity->CreatePlayer();
 	App->entity->Start();
+	App->shop->Start();
 }
 

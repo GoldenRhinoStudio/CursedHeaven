@@ -10,19 +10,15 @@
 #include "j1Input.h"
 
 #include "Brofiler/Brofiler.h"
+#include <time.h>
 
 j1Shop::j1Shop()
 {
 	name.assign("shop");
+	srand(time(NULL));
 }
 
 j1Shop::~j1Shop() {}
-
-bool j1Shop::Start()
-{
-
-	return true;
-}
 
 bool j1Shop::Awake(pugi::xml_node& config)
 {
@@ -54,9 +50,33 @@ bool j1Shop::Awake(pugi::xml_node& config)
 	book_prize2 = p.child("book").attribute("p2").as_uint();
 	book_prize3 = p.child("book").attribute("p3").as_uint();
 
-	potion_prize = p.child("sword").attribute("p").as_uint();
+	potion_prize = p.child("potion").attribute("p").as_uint();
 
 	return true;
+}
+
+bool j1Shop::Start() {
+
+	return true;
+}
+
+void j1Shop::PlaceShop()
+{
+	// Creating the shop
+	/*int item1 = (rand() % 7);
+	App->shop->CreateItem((ITEM_TYPE)item1, 170, 750);
+
+	int item2 = (rand() % 7);
+	App->shop->CreateItem((ITEM_TYPE)item2, 200, 750);
+
+	int item3 = (rand() % 7);
+	App->shop->CreateItem((ITEM_TYPE)item3, 230, 750);*/
+
+	App->shop->CreateItem(POTION, -1100, 715);
+	App->shop->CreateItem(HEART, -1050, 745);
+	App->shop->CreateItem(HEART, -1000, 715);
+
+	App->shop->CreateItem(HEART, 200, 750);
 }
 
 bool j1Shop::Update(float dt)
@@ -80,6 +100,14 @@ bool j1Shop::CleanUp()
 		(*item)->CleanUp();
 		items.remove(*item);
 	}
+
+	potions = 0;
+	bootsLevel = 0;
+	swordLevel = 0;
+	heartLevel = 0;
+	armourLevel = 0;
+	hourglassLevel = 0;
+	bookLevel = 0;
 
 	return true;
 }
@@ -123,31 +151,32 @@ bool j1Item::Start() {
 	// Audios are loaded
 	LOG("Loading player audios");
 
-	collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 20, 20 }, COLLIDER_ITEM, App->entity);
+	if(type == HEART) collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 22, 22 }, COLLIDER_ITEM, App->entity);
+	if (type == POTION) collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 15, 25 }, COLLIDER_ITEM, App->entity);
 
 	switch (type) {
 	case BOOTS:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Boots: 30G", App->gui->beige);			
+		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Speed +1: 30G", App->gui->beige);			
 		break;
 
 	case SWORD:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Sword: 30G", App->gui->beige);
+		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Attack +1: 30G", App->gui->beige);
 		break;
 
 	case HEART:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Heart: 30G", App->gui->beige);
+		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Life +1: 30G", App->gui->beige);
 		break;
 
 	case ARMOUR:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Armour: 30G", App->gui->beige);
+		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Armour +1: 30G", App->gui->beige);
 		break;
 
 	case HOURGLASS:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Hourglass: 30G", App->gui->beige);
+		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "CDR +1: 30G", App->gui->beige);
 		break;
 
 	case BOOK:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Book: 30G", App->gui->beige);
+		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Ability +1: 30G", App->gui->beige);
 		break;
 
 	case POTION:
@@ -169,13 +198,15 @@ bool j1Item::Update(float dt, bool do_logic) {
 		else if (App->shop->bootsLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->boots_prize2;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Boots: 80G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Speed +2: 80G", App->gui->beige);
 		}
 		else if (App->shop->bootsLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->boots_prize3;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Boots: 150G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Speed +3: 150G", App->gui->beige);
 		}
+		else
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
 
 	case SWORD:
@@ -186,13 +217,15 @@ bool j1Item::Update(float dt, bool do_logic) {
 		else if (App->shop->swordLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->sword_prize2;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Sword: 80G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Attack +2: 80G", App->gui->beige);
 		}
 		else if (App->shop->swordLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->sword_prize3;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Sword: 150G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Attack +3: 150G", App->gui->beige);
 		}
+		else
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
 
 	case HEART:
@@ -203,13 +236,14 @@ bool j1Item::Update(float dt, bool do_logic) {
 		else if (App->shop->heartLevel == 1) {
 			image = { 387, 0, 217, 217 };
 			prize = App->shop->heart_prize2;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Heart: 80G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Life +2: 80G", App->gui->beige);
 		}
 		else if (App->shop->heartLevel == 2) {
 			image = { 604, 0, 217, 217 };
 			prize = App->shop->heart_prize3;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Heart: 150G", App->gui->beige);
-		}
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Life +3: 150G", App->gui->beige);
+		}else
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
 
 	case ARMOUR:
@@ -223,13 +257,15 @@ bool j1Item::Update(float dt, bool do_logic) {
 		else if (App->shop->hourglassLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->hourglass_prize2;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Hourglass: 80G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "CDR +2: 80G", App->gui->beige);
 		}
 		else if (App->shop->hourglassLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->hourglass_prize3;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Hourglass: 150G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "CDR +3: 150G", App->gui->beige);
 		}
+		else
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
 
 	case BOOK:
@@ -240,13 +276,15 @@ bool j1Item::Update(float dt, bool do_logic) {
 		else if (App->shop->bookLevel == 1) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->book_prize2;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Book: 80G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Ability +2: 80G", App->gui->beige);
 		}
 		else if (App->shop->bookLevel == 2) {
 			image = { 0, 0, 0, 0 };
 			prize = App->shop->book_prize3;
-			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Book: 150G", App->gui->beige);
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Ability +3: 150G", App->gui->beige);
 		}
+		else
+			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
 
 	case POTION:
@@ -255,7 +293,8 @@ bool j1Item::Update(float dt, bool do_logic) {
 	}
 
 	// Blitting the item
-	App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
+	if (type == POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
+	else App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
 
 	return true;
 }
@@ -272,13 +311,17 @@ bool j1Item::CleanUp() {
 void j1Item::OnCollision(Collider* c1, Collider* c2) {	
 	if (c2->type == COLLIDER_PLAYER) {	
 
+		if (level > 2)
+			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 96, 255, 160);
+		else
 		if (App->entity->currentPlayer->coins >= prize){
 
-			App->render->DrawQuad({ (int)position.x - 10, (int)position.y, 40, 10 }, 0, 0, 0, 160);
+			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
 
 			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) {
 
 				App->entity->currentPlayer->coins -= prize;
+				level++;
 
 				uint aux = 0;
 				uint cdrE = 0;
@@ -351,8 +394,8 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 			}
 		}
 		else
-			App->render->DrawQuad({ (int)position.x - 10, (int)position.y, 40, 10 }, 255, 0, 0, 160);
+			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 255, 0, 0, 160);
 
-		description->Draw(0.7, -5);
+		description->Draw(0.7, -8);
 	}
 }

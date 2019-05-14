@@ -112,6 +112,7 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		PlaceEntities(6);
+		App->shop->PlaceShop();
 
 		startup_time.Start();
 		windowTime.Start();
@@ -376,8 +377,6 @@ void j1Scene1::PlaceEntities(int room)
 
 	App->entity->AddEnemy(54, 68, MINDFLYER);
 
-	App->shop->CreateItem(POTION, 200, 750);
-	App->shop->CreateItem(HEART, 230, 750);
 }
 
 // Called before quitting
@@ -432,6 +431,7 @@ void j1Scene1::ChangeSceneMenu()
 	CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
+	App->shop->CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
 	App->render->camera = { 0,0 };
@@ -448,6 +448,7 @@ void j1Scene1::ChangeSceneDeath() {
 	App->entity->CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
+	App->shop->CleanUp();
 	App->render->camera = { 0,0 };
 	toLoseScene = false;
 }
@@ -458,6 +459,7 @@ void j1Scene1::ChangeSceneVictory() {
 	App->dialog->CleanUp();
 
 	CleanUp();
+	App->shop->CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
 	App->entity->active = false;

@@ -12,7 +12,7 @@ class j1Label;
 
 enum ITEM_TYPE
 {
-	BOOTS,
+	BOOTS = 0,
 	SWORD,
 	HEART,
 	ARMOUR,
@@ -41,6 +41,7 @@ public:
 
 public:
 	uint prize;
+	uint level = 0;
 	ITEM_TYPE type = NO_ITEM;
 
 private:
@@ -70,6 +71,7 @@ public:
 
 	void OnCollision(Collider* c1, Collider* c2);
 	j1Item* j1Shop::CreateItem(ITEM_TYPE type, int x, int y);
+	void PlaceShop();
 
 
 public:

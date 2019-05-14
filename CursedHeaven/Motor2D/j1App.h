@@ -32,7 +32,6 @@ class j1EntityManager;
 class j1Fonts;
 class j1Gui;
 class j1Particles;
-class j1DialogSystem;
 
 class j1App
 {
@@ -116,7 +115,6 @@ public:
 	j1Fonts*			font = nullptr;
 	j1Gui*				gui = nullptr;
 	j1Particles*		particles = nullptr;
-	j1DialogSystem*		dialog = nullptr;
 
 	bool				gamePaused = false;
 

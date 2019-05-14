@@ -21,22 +21,23 @@ bool j1Hud::Start()
 {
 	hud_text = App->tex->Load("gui/hud.png");
 	profile_text = App->tex->Load("gui/player_profile.png");
+	dialog_tex = App->tex->Load("textures/dialog_cursedheaven.png");
 	life_points = 82;
 	life_points_max = App->entity->currentPlayer->lifePoints;
 	multiplier = 82 / life_points_max;
 
-	font = App->font->Load("fonts/Pixeled.ttf", 15);
+	font = App->font->Load("fonts/Pixeled.ttf", 5);
 	
 	return true;
 }
 
 bool j1Hud::Update(float dt)
 {
-	App->gui->UpdateButtonsState(&hud_buttons, App->gui->buttonsScale);
+	/*App->gui->UpdateButtonsState(&hud_buttons, App->gui->buttonsScale);*/
 
 	life_points = App->entity->currentPlayer->lifePoints * multiplier;
 
-	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
+	/*for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 		if ((*item)->visible) {
 			switch ((*item)->state) {
 			case IDLE:
@@ -56,7 +57,7 @@ bool j1Hud::Update(float dt)
 				break;
 			}
 		}
-	}
+	}*/
 
 	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
@@ -90,6 +91,9 @@ bool j1Hud::Update(float dt)
 	SDL_Rect lifebar = { 0,225,82,8 };
 	SDL_Rect lifebar_r = { 0,233,life_points,6 };
 
+	//dialog
+	SDL_Rect chart = { 0, 0, 284, 71 };
+
 	if (App->entity->player_type == MAGE)
 		black_mage = true;
 	else if (App->entity->player_type == KNIGHT)
@@ -110,6 +114,8 @@ bool j1Hud::Update(float dt)
 		if (!App->entity->currentPlayer->available_E) {
 			App->render->Blit(hud_text, 15, 400, &bm_notavailable_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
 		}
+
+		/*App->render->Blit(dialog_tex, 0, 20, &chart, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);*/
 
 	}
 	else if (dragoon_knight) {
@@ -142,17 +148,11 @@ bool j1Hud::Update(float dt)
 	App->tex->UnLoad(score);
 	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, font);
 
-	App->render->BlitDialog(score, 65, 130, &temp, SDL_FLIP_NONE, 0);
+	App->render->Blit(score, 78, 125, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
-	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
-		(*item)->Draw(App->gui->buttonsScale);
-	}
-	for (std::list<j1Label*>::iterator item = labels_list.begin(); item != labels_list.end(); ++item) {
-		(*item)->Draw(1.0f, 0, 0, false);
-	}
 
 	if (App->scene1->profile_active) {
 		
@@ -176,14 +176,14 @@ bool j1Hud::CleanUp()
 	App->tex->UnLoad(profile_text);
 	App->tex->UnLoad(score);
 
-	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
-		(*item)->CleanUp();
-		hud_buttons.remove(*item);
-	}
-	for (std::list<j1Label*>::iterator item = labels_list.begin(); item != labels_list.end(); ++item) {
+	//for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
+	//	(*item)->CleanUp();
+	//	hud_buttons.remove(*item);
+	//}
+	/*for (std::list<j1Label*>::iterator item = labels_list.begin(); item != labels_list.end(); ++item) {
 		(*item)->CleanUp();
 		labels_list.remove(*item);
-	}
+	}*/
 
 	return true;
 }

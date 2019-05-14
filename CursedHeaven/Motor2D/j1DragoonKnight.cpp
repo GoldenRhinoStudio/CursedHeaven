@@ -78,6 +78,9 @@ bool j1DragoonKnight::Start() {
 	hud = new j1Hud();
 	hud->Start();
 
+	dialog = new j1DialogSystem();
+	dialog->Start();
+
 	// Starting ability timers
 	cooldown_Q.Start();
 	cooldown_E.Start();
@@ -101,121 +104,119 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		if (App->scene1->finishedDialogue == true) {
+		if (!attacking && !active_Q) {
+			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
+			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
+				&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);
+		}
 
-			if (!attacking && !active_Q) {
-				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
-				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
-					&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);
+		// ---------------------------------------------------------------------------------------------------------------------
+		// COMBAT
+		// ---------------------------------------------------------------------------------------------------------------------
+		if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
+			if (!attacking) {
+				// Attack control
+				if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
+
+					App->audio->PlayFx(App->audio->attack_dk);
+					attacking = true;
+					attackCollider->type = COLLIDER_ATTACK;
+
+					if (animation == &lateral || animation == &idle_lateral) {
+						if (facingRight) animation = &attack_lateral_right;
+						else animation = &attack_lateral_left;
+					}
+					else if (animation == &up || animation == &idle_up) animation = &attack_up;
+					else if (animation == &down || animation == &idle_down)	animation = &attack_down;
+					else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+						if(facingRight) animation = &attack_diagonal_up_right;
+						else animation = &attack_diagonal_up_left;
+					}
+					else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+						if (facingRight) animation = &attack_diagonal_down_right;
+						else animation = &attack_diagonal_down_left;
+					}
+				}
+
+				if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
+				else available_Q = false;
+
+				if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
+				else available_E = false;
+
+				// Ability control
+				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
+
+					App->audio->PlayFx(App->audio->dash);
+
+					//if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 76;						
+
+					lastPosition = position;
+
+					if (direction != NONE_) {
+						active_Q = true;
+						firstTimeQ = false;
+					}
+				}
+
+				if (active_Q) {
+
+					if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
+						position.x += dashSpeed * dt;
+					else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
+						position.x -= dashSpeed * dt;
+					else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
+						position.y -= dashSpeed * dt;
+					else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
+						position.y += dashSpeed * dt;
+					else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
+						position.x -= dashSpeed * dt;
+						position.y -= dashSpeed * dt;
+					}
+					else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
+						position.x += dashSpeed * dt;
+						position.y -= dashSpeed * dt;
+					}
+					else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
+						position.x -= dashSpeed * dt;
+						position.y += dashSpeed * dt;
+					}
+					else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
+						position.x += dashSpeed * dt;
+						position.y += dashSpeed * dt;
+					}
+					else {
+						cooldown_Q.Start();
+						lastTime_Q = cooldown_Q.Read();
+						active_Q = false;
+					}
+				}
 			}
 
-			// ---------------------------------------------------------------------------------------------------------------------
-			// COMBAT
-			// ---------------------------------------------------------------------------------------------------------------------
-			if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
-				if (!attacking) {
-					// Attack control
-					if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
+			if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
-						App->audio->PlayFx(App->audio->attack_dk);
-						attacking = true;
-						attackCollider->type = COLLIDER_ATTACK;
+				App->audio->PlayFx(App->audio->rage_dk);
 
-						if (animation == &lateral || animation == &idle_lateral) {
-							if (facingRight) animation = &attack_lateral_right;
-							else animation = &attack_lateral_left;
-						}
-						else if (animation == &up || animation == &idle_up) animation = &attack_up;
-						else if (animation == &down || animation == &idle_down)	animation = &attack_down;
-						else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
-							if(facingRight) animation = &attack_diagonal_up_right;
-							else animation = &attack_diagonal_up_left;
-						}
-						else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
-							if (facingRight) animation = &attack_diagonal_down_right;
-							else animation = &attack_diagonal_down_left;
-						}
-					}
+				//if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 76;
 
-					if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
-					else available_Q = false;
+				basicDamage += rageDamage;
+				cooldown_Rage.Start();
+				lastTime_Rage =	cooldown_Rage.Read();
+				active_E = true;
+				firstTimeE = false;
+			}
 
-					if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
-					else available_E = false;
+			if (active_E && cooldown_Rage.Read() >= lastTime_Rage + duration_Rage) {
 
-					// Ability control
-					if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-						&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
-
-						App->audio->PlayFx(App->audio->dash);
-
-						//if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 76;						
-
-						lastPosition = position;
-
-						if (direction != NONE_) {
-							active_Q = true;
-							firstTimeQ = false;
-						}
-					}
-
-					if (active_Q) {
-
-						if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
-							position.x += dashSpeed * dt;
-						else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
-							position.x -= dashSpeed * dt;
-						else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
-							position.y -= dashSpeed * dt;
-						else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
-							position.y += dashSpeed * dt;
-						else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-							position.x -= dashSpeed * dt;
-							position.y -= dashSpeed * dt;
-						}
-						else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-							position.x += dashSpeed * dt;
-							position.y -= dashSpeed * dt;
-						}
-						else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-							position.x -= dashSpeed * dt;
-							position.y += dashSpeed * dt;
-						}
-						else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-							position.x += dashSpeed * dt;
-							position.y += dashSpeed * dt;
-						}
-						else {
-							cooldown_Q.Start();
-							lastTime_Q = cooldown_Q.Read();
-							active_Q = false;
-						}
-					}
-				}
-
-				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
-					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
-
-					App->audio->PlayFx(App->audio->rage_dk);
-
-					//if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 76;
-
-					basicDamage += rageDamage;
-					cooldown_Rage.Start();
-					lastTime_Rage =	cooldown_Rage.Read();
-					active_E = true;
-					firstTimeE = false;
-				}
-
-				if (active_E && cooldown_Rage.Read() >= lastTime_Rage + duration_Rage) {
-
-					basicDamage -= rageDamage;
-					cooldown_E.Start();
-					lastTime_E = cooldown_E.Read();
-					active_E = false;
-				}
+				basicDamage -= rageDamage;
+				cooldown_E.Start();
+				lastTime_E = cooldown_E.Read();
+				active_E = false;
 			}
 		}
+
 
 		// Attack management
 		if (attack_lateral_right.Finished() || attack_lateral_left.Finished() || attack_up.Finished() || attack_down.Finished() || attack_diagonal_up_right.Finished() || attack_diagonal_up_left.Finished()
@@ -309,8 +310,8 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
 
-	if (App->scene1->finishedDialogue)
-		hud->Update(dt);
+	//if (App->scene1->finishedDialogue)
+	//	hud->Update(dt);
 
 	// We update the camera to follow the player every frame
 	//UpdateCameraPosition(dt);
@@ -323,8 +324,8 @@ bool j1DragoonKnight::PostUpdate() {
 
 	BROFILER_CATEGORY("DragoonKnightPostUpdate", Profiler::Color::Yellow)
 
-		if (App->scene1->finishedDialogue)
-			hud->Update(0);
+		dialog->Update(0);
+		hud->Update(0);
 
 		return true;
 }

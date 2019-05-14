@@ -10,6 +10,7 @@
 struct SDL_Texture;
 struct Collider;
 class j1Hud;
+class j1DialogSystem;
 
 class j1Player : public j1Entity
 {
@@ -78,6 +79,7 @@ public:
 	Collider* attackCollider = nullptr;
 
 	j1Hud* hud = nullptr;
+	j1DialogSystem* dialog = nullptr;
 
 	// Animations of the player
 	Animation idle_diagonal_up;

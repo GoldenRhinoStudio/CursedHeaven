@@ -25,7 +25,6 @@
 #include "j1Gui.h"
 #include "j1App.h"
 #include "j1Particles.h"
-#include "j1DialogSystem.h"
 #include "j1Entity.h"
 
 #include "Brofiler/Brofiler.h"
@@ -54,7 +53,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	fade = new j1FadeToBlack();
 	font = new j1Fonts();
 	gui = new j1Gui();
-	dialog = new j1DialogSystem();
 	particles = new j1Particles();
 	collisions = new j1Collisions();
 
@@ -78,7 +76,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);
-	AddModule(dialog);
 	AddModule(fade);
 	
 	// render last to swap buffer

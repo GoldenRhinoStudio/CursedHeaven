@@ -138,7 +138,6 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
-	finishedDialogue = true;
 	
 	/*if (startDialogue)
 		App->dialog->StartDialogEvent(App->dialog->dialogA);*/
@@ -428,7 +427,7 @@ void j1Scene1::ChangeSceneMenu()
 	App->scene1->active = false;
 	App->menu->active = true;
 	changingScene = false;
-	App->dialog->CleanUp();
+	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();
@@ -442,7 +441,7 @@ void j1Scene1::ChangeSceneMenu()
 void j1Scene1::ChangeSceneDeath() {
 	App->scene1->active = false;
 	App->lose->active = true;
-	App->dialog->CleanUp();
+	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();
@@ -456,7 +455,7 @@ void j1Scene1::ChangeSceneDeath() {
 void j1Scene1::ChangeSceneVictory() {
 	App->scene1->active = false;
 	App->victory->active = true;
-	App->dialog->CleanUp();
+	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();

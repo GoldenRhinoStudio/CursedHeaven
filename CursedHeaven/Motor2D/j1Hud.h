@@ -37,6 +37,7 @@ private:
 	SDL_Texture* hud_text = nullptr;
 	SDL_Texture* profile_text = nullptr;
 	SDL_Texture* score = nullptr;
+	SDL_Texture* dialog_tex = nullptr;
 
 	_TTF_Font* font = nullptr;
 

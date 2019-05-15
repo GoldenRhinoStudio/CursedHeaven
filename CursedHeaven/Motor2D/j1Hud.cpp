@@ -26,7 +26,7 @@ bool j1Hud::Start()
 	multiplier = 82 / (float)App->entity->currentPlayer->lifePoints;
 
 	// Potions
-	potions = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0gfffffffffffffffffffffffff", App->gui->beige);
+	potions = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0", App->gui->brown);
 	
 	return true;
 }
@@ -126,7 +126,7 @@ bool j1Hud::Update(float dt)
 
 	}
 
-	potions->Draw();
+	potions->Draw(0.5, 0, 0, false);
 
 	// Current points of the player (char*)
 	current_points = App->scene1->current_points.c_str();

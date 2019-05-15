@@ -15,6 +15,14 @@ j1Particles::j1Particles()
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
+
+	// Mage basic attack
+	mageShot.anim.LoadAnimation("shot", "mage");
+	mageShot.life = 1000;
+
+	// Mage Q
+	explosion.anim.LoadAnimation("explosion", "mage");
+	explosion.life = 570;
 }
 
 j1Particles::~j1Particles()
@@ -26,13 +34,6 @@ bool j1Particles::Start()
 	LOG("Loading particles");
 	part_tex = App->tex->Load("textures/character/particles.png");
 
-	// Mage basic attack
-	mageShot.anim.LoadAnimation("shot", "mage");
-	mageShot.life = 1000;
-
-	// Mage Q
-	explosion.anim.LoadAnimation("explosion", "mage");
-	explosion.life = 570;
 
 	return true;
 }
@@ -101,7 +102,6 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, 
 	}
 }
 
-// every time a particle hits a wall it triggers an explosion particle
 void j1Particles::OnCollision(Collider* c1, Collider* c2)
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
@@ -109,15 +109,14 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 		// Always destroy particles that collide
 		if (active[i] != nullptr && active[i]->collider == c1)
 		{
-			if (active[i]->anim.Finished()) {
-				delete active[i];
-				active[i] = nullptr;
-				break;
-			}
+			//AddParticle(...) ---> If we want to print an explosion when hitting an enemy
+			delete active[i];
+			active[i] = nullptr;
+			break;
+		
 		}
 	}
 }
-
 
 // -------------------------------------------------------------
 // -------------------------------------------------------------

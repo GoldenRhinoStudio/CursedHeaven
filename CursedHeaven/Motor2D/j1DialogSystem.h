@@ -39,9 +39,12 @@ public:
 	SDL_Texture* dialog_tex3 = nullptr;
 	std::list<j1Label*> text_list;
 	_TTF_Font* dialogFont = nullptr;
+	j1Timer timer;
+	uint time_passed = 0;
 
 	bool law1Active = false;
 	bool law2Active = false;
+	bool canSkip = false;
 
 	int times = 0;
 

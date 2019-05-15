@@ -59,9 +59,14 @@ bool j1DialogSystem::Update(float dt) {
 
 	if (law1Active == true)
 	{
-		App->render->Blit(dialog_tex, 0, 20, &chart1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+		time_passed = timer.ReadSec();
 
-		if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
+		if (time_passed >= 1.5) {
+			App->render->Blit(dialog_tex, 0, 20, &chart1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			canSkip = true;
+		}
+
+		if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
 			times += 1;
 			LOG("times: %d", times);
 		}
@@ -85,9 +90,14 @@ bool j1DialogSystem::Update(float dt) {
 	}
 	else if (law2Active == true)
 	{
-		App->render->Blit(dialog_tex, 0, 20, &chart1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+		time_passed = timer.ReadSec();
 
-		if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
+		if (time_passed >= 1.5) {
+			App->render->Blit(dialog_tex, 0, 20, &chart1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			canSkip = true;
+		}
+
+		if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
 			times += 1;
 			LOG("times: %d", times);
 		}

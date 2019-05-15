@@ -196,6 +196,7 @@ void j1SceneVictory::ChangeScene(SCENE objectiveScene)
 		App->scene1->active = true;
 		App->scene1->Start();
 		App->particles->Start();
+		App->scene1->finishedDialog = false;
 		//App->dialog->active = true;
 		//App->dialog->Start();
 

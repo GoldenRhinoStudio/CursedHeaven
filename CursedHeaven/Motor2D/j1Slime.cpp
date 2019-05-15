@@ -60,7 +60,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
-		collider->SetPos(position.x + margin.x, position.y + margin.y);
+		collider->SetPos(position.x /*+ margin.x*/, position.y/* + margin.y*/);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		

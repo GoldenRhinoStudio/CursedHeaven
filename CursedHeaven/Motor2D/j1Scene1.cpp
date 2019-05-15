@@ -116,7 +116,7 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
-		lvl1_tex = App->tex->Load("maps/minimap2_lvl1.png");
+		lvl1_tex = App->tex->Load("maps/minimap_lvl1.png");
 
 		PlaceEntities(6);
 
@@ -392,7 +392,7 @@ bool j1Scene1::CleanUp()
 	LOG("Freeing scene");
 	App->tex->UnLoad(gui_tex);
 	App->tex->UnLoad(debug_tex);
-
+	App->tex->UnLoad(lvl1_tex);
 	App->map->CleanUp();
 	App->collisions->CleanUp();
 	App->tex->CleanUp();

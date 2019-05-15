@@ -588,7 +588,10 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 void j1Map::EntityMovement(j1Entity* entity)
 {
 	BROFILER_CATEGORY("EntityMovement", Profiler::Color::Blue)
-	iPoint current_tile = WorldToMap(entity->collider->rect.x, entity->collider->rect.y);
+	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
+	int y = entity->collider->rect.y + entity->collider->rect.h - 5;
+
+	iPoint current_tile = WorldToMap(x, y);
 	iPoint next_tile = { 0,0 };
 
 	uint height0_gid = 0, height1_gid = 0;
@@ -907,6 +910,71 @@ void j1Map::EntityMovement(j1Entity* entity)
 		}
 	}
 }
+
+void j1Map::EntityMovementTest(j1Entity* entity) {
+	
+	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
+	int y = entity->collider->rect.y + entity->height / 2;
+	
+	iPoint current_tile = WorldToMap(x, y);
+	iPoint next_tile = { 0,0 };
+
+	uint height0_gid = 0, height1_gid = 0;
+
+	height1_gid = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y);
+
+	if (height1_gid == 0) 
+		height0_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+
+	uint current_gid;
+	uint tile_id = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+
+	int sum = (tile_id % 2 != 0) ? 1 : 0;
+
+	if (height1_gid != 0) {		//entity is on the second layer
+		current_gid = height1_gid;
+		entity->height = 2 + sum;
+		entity->current_height = 1;
+	}
+	else {				                //entity is on the first layer
+		current_gid = height0_gid;
+		entity->height = 0 + sum;
+		entity->current_height = 0;
+	}
+
+	// tiles of the first layer | height == 0
+	uint up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);
+	uint down_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y + 1);
+	uint down_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y);
+	uint up_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y);
+
+	uint right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
+	uint up_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
+	uint down_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
+	uint left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
+
+
+	// tiles of the second layer | height == 1
+	uint up_right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y - 1);
+	uint down_left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y + 1);
+	uint down_right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y);
+	uint up_left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y);
+
+	uint right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
+	uint up_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
+	uint down_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
+	uint left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
+
+
+	bool height0_semiblock = false, height1_semiblock = false;
+	bool height0_next = false, height1_next = false;
+
+	DIRECTION direction;
+
+	direction = entity->direction;
+
+}
+
 
 void j1Map::Tile_WorldMap(iPoint& pos, int height){	
 	int re2 = 0;

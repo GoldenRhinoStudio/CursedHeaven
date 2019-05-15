@@ -12,18 +12,11 @@ public:
 	j1Minimap();
 	virtual ~j1Minimap();
 
-	bool Awake(pugi::xml_node& config);
-
-	bool Start();
 	bool Update(float dt);
 	bool PostUpdate();
-	bool CleanUp();
 
 public:
 
-	bool MinimapCoords(int& map_x, int& map_y);
-	void DrawCamera();
-	void MinimapBorders();
 	void DrawEntities();
 
 private:

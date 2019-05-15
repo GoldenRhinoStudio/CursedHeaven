@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Window.h"
+#include "j1Audio.h"
 
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER) {}
 
@@ -68,8 +69,6 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 		ChangeRoom(position.x, position.y);*/
 
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
-
-		if (lifePoints <= 0) dead = true;
 
 		// GodMode controls
 		if (GodMode) {
@@ -257,230 +256,119 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 }
 
 void j1Player::ChangeRoom(int x, int y) {
-	// 8,71 to 8,61
-	if (App->map->WorldToMap((int)x, (int)y).x == 8 && App->map->WorldToMap((int)x, (int)y).y == 71)
+	
+	// 8,71 to 8,61 1-2
+	if ((App->map->WorldToMap((int)x, (int)y).x == 10 || App->map->WorldToMap((int)x, (int)y).x == 11 || App->map->WorldToMap((int)x, (int)y).x == 12)
+		&& App->map->WorldToMap((int)x, (int)y).y == 68)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(8, 61).x;
-		position.y = App->map->MapToWorld(8, 61).y;
+		
 	}
-	// 8,62 to 8,72
-	if (App->map->WorldToMap((int)x, (int)y).x == 8 && App->map->WorldToMap((int)x, (int)y).y == 62)
+
+	// 19,60 to 23,60 2-3
+	if (App->map->WorldToMap((int)x, (int)y).x == 23 && 
+		(App->map->WorldToMap((int)x, (int)y).y == 62 || App->map->WorldToMap((int)x, (int)y).y == 61 || App->map->WorldToMap((int)x, (int)y).y == 63))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(8, 72).x;
-		position.y = App->map->MapToWorld(8, 72).y;
+		
 	}
-	// 19,60 to 23,60
-	if (App->map->WorldToMap((int)x, (int)y).x == 19 && App->map->WorldToMap((int)x, (int)y).y == 60)
+	
+	// 13,50 to 13,46 2-4
+	if ((App->map->WorldToMap((int)x, (int)y).x == 15 || App->map->WorldToMap((int)x, (int)y).x == 16 || App->map->WorldToMap((int)x, (int)y).x == 17)
+		&& App->map->WorldToMap((int)x, (int)y).y == 49)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(23, 60).x;
-		position.y = App->map->MapToWorld(23, 60).y;
+		
 	}
-	// 22,60 to 18,60
-	if (App->map->WorldToMap((int)x, (int)y).x == 22 && App->map->WorldToMap((int)x, (int)y).y == 60)
+
+	// 20,36 to 20,25 4-7
+	if ((App->map->WorldToMap((int)x, (int)y).x == 22 || App->map->WorldToMap((int)x, (int)y).x == 23 || App->map->WorldToMap((int)x, (int)y).x == 24)
+		&& App->map->WorldToMap((int)x, (int)y).y == 34)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(18, 60).x;
-		position.y = App->map->MapToWorld(18, 60).y;
+		
 	}
-	// 13,50 to 13,46
-	if (App->map->WorldToMap((int)x, (int)y).x == 13 && App->map->WorldToMap((int)x, (int)y).y == 49)
+
+	// 29,49 to 29,46 3-4
+	if ((App->map->WorldToMap((int)x, (int)y).x == 31 || App->map->WorldToMap((int)x, (int)y).x == 32 || App->map->WorldToMap((int)x, (int)y).x == 33)
+		&& App->map->WorldToMap((int)x, (int)y).y == 50)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(13, 46).x;
-		position.y = App->map->MapToWorld(13, 46).y;
+		
 	}
-	// 13,45 to 13,49
-	if (App->map->WorldToMap((int)x, (int)y).x == 13 && App->map->WorldToMap((int)x, (int)y).y == 45)
+	
+	// 33,42 to 36,42 4-5
+	if (App->map->WorldToMap((int)x, (int)y).x == 36 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 44 || App->map->WorldToMap((int)x, (int)y).y == 45 || App->map->WorldToMap((int)x, (int)y).y == 43))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(13, 50).x;
-		position.y = App->map->MapToWorld(13, 50).y;
+		
 	}
-	// 20,36 to 20,25
-	if (App->map->WorldToMap((int)x, (int)y).x == 20 && App->map->WorldToMap((int)x, (int)y).y == 36)
+	
+	// 46,42 to 49,42 5-6
+	if (App->map->WorldToMap((int)x, (int)y).x == 49 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 44 || App->map->WorldToMap((int)x, (int)y).y == 45 || App->map->WorldToMap((int)x, (int)y).y == 43))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(20, 25).x;
-		position.y = App->map->MapToWorld(20, 25).y;
+		
 	}
-	// 20,26 to 20,37
-	if (App->map->WorldToMap((int)x, (int)y).x == 20 && App->map->WorldToMap((int)x, (int)y).y == 26)
+	
+	// 35,36 to 35,33 5-8
+	if ((App->map->WorldToMap((int)x, (int)y).x == 38 || App->map->WorldToMap((int)x, (int)y).x == 39 || App->map->WorldToMap((int)x, (int)y).x == 37)
+		&& App->map->WorldToMap((int)x, (int)y).y == 37)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(20, 37).x;
-		position.y = App->map->MapToWorld(20, 37).y;
+		
 	}
-	// 29,49 to 29,46
-	if (App->map->WorldToMap((int)x, (int)y).x == 29 && App->map->WorldToMap((int)x, (int)y).y == 49)
+	
+	// 69,13 to 69,17 10-11
+	if ((App->map->WorldToMap((int)x, (int)y).x == 71 || App->map->WorldToMap((int)x, (int)y).x == 72 || App->map->WorldToMap((int)x, (int)y).x == 70)
+		&& App->map->WorldToMap((int)x, (int)y).y == 16)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(29, 46).x;
-		position.y = App->map->MapToWorld(29, 46).y;
+		
 	}
-	// 29,47 to 29,50
-	if (App->map->WorldToMap((int)x, (int)y).x == 29 && App->map->WorldToMap((int)x, (int)y).y == 47)
+	
+	// 84,29 to 84,38 11-12
+	if ((App->map->WorldToMap((int)x, (int)y).x == 86 || App->map->WorldToMap((int)x, (int)y).x == 87 || App->map->WorldToMap((int)x, (int)y).x == 85)
+		&& App->map->WorldToMap((int)x, (int)y).y == 35)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(29, 50).x;
-		position.y = App->map->MapToWorld(29, 50).y;
+		
 	}
-	// 33,42 to 36,42
-	if (App->map->WorldToMap((int)x, (int)y).x == 33 && App->map->WorldToMap((int)x, (int)y).y == 42)
+	
+	// 75,70 to 75,41 6-12
+	if (App->map->WorldToMap((int)x, (int)y).x == 75 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 42 || App->map->WorldToMap((int)x, (int)y).y == 43 || App->map->WorldToMap((int)x, (int)y).y == 44))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(36, 42).x;
-		position.y = App->map->MapToWorld(36, 42).y;
+		
 	}
-	// 35,42 to 32,42
-	if (App->map->WorldToMap((int)x, (int)y).x == 35 && App->map->WorldToMap((int)x, (int)y).y == 42)
+	
+	// 33,59 to 36,59 3-13
+	if (App->map->WorldToMap((int)x, (int)y).x == 36 &&
+		(App->map->WorldToMap((int)x, (int)y).y == 61 || App->map->WorldToMap((int)x, (int)y).y == 59 || App->map->WorldToMap((int)x, (int)y).y == 60))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(32, 42).x;
-		position.y = App->map->MapToWorld(32, 42).y;
+		
 	}
-	// 46,42 to 49,42
-	if (App->map->WorldToMap((int)x, (int)y).x == 46 && App->map->WorldToMap((int)x, (int)y).y == 42)
+	
+	// 68,59 to 76,59 13-12
+	if (App->map->WorldToMap((int)x, (int)y).x == 74 && 
+		(App->map->WorldToMap((int)x, (int)y).y == 62 || App->map->WorldToMap((int)x, (int)y).y == 61 || App->map->WorldToMap((int)x, (int)y).y == 60))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(49, 42).x;
-		position.y = App->map->MapToWorld(49, 42).y;
+		
 	}
-	// 48,42 to 45,42
-	if (App->map->WorldToMap((int)x, (int)y).x == 48 && App->map->WorldToMap((int)x, (int)y).y == 42)
+	
+	// 20,16 to 20,12 7-9
+	if ((App->map->WorldToMap((int)x, (int)y).x == 22 || App->map->WorldToMap((int)x, (int)y).x == 23 || App->map->WorldToMap((int)x, (int)y).x == 21)
+		&& App->map->WorldToMap((int)x, (int)y).y == 16)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(45, 42).x;
-		position.y = App->map->MapToWorld(45, 42).y;
+		
 	}
-	// 35,36 to 35,33
-	if (App->map->WorldToMap((int)x, (int)y).x == 36 && App->map->WorldToMap((int)x, (int)y).y == 36)
+	
+	// 34,19 to 31,19 8-7
+	if (App->map->WorldToMap((int)x, (int)y).x == 35 && 
+		(App->map->WorldToMap((int)x, (int)y).y == 21 || App->map->WorldToMap((int)x, (int)y).y == 22 || App->map->WorldToMap((int)x, (int)y).y == 20))
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(36, 33).x;
-		position.y = App->map->MapToWorld(36, 33).y;
+		
 	}
-	// 35,34 to 35,37
-	if (App->map->WorldToMap((int)x, (int)y).x == 36 && App->map->WorldToMap((int)x, (int)y).y == 34)
+	
+	// 42,17 to 43,12 8-10
+	if ((App->map->WorldToMap((int)x, (int)y).x == 45 || App->map->WorldToMap((int)x, (int)y).x == 46 || App->map->WorldToMap((int)x, (int)y).x == 44)
+		&& App->map->WorldToMap((int)x, (int)y).y == 16)
 	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(36, 37).x;
-		position.y = App->map->MapToWorld(36, 37).y;
+		
 	}
-	// 69,13 to 69,17
-	if (App->map->WorldToMap((int)x, (int)y).x == 69 && App->map->WorldToMap((int)x, (int)y).y == 13)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(69, 17).x;
-		position.y = App->map->MapToWorld(69, 17).y;
-	}
-	// 69,16 to 69,12
-	if (App->map->WorldToMap((int)x, (int)y).x == 69 && App->map->WorldToMap((int)x, (int)y).y == 16)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(69, 14).x;
-		position.y = App->map->MapToWorld(69, 14).y;
-	}
-	// 84,29 to 84,38
-	if (App->map->WorldToMap((int)x, (int)y).x == 84 && App->map->WorldToMap((int)x, (int)y).y == 29)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(84, 38).x;
-		position.y = App->map->MapToWorld(84, 38).y;
-	}
-	// 84,37 to 84,28
-	if (App->map->WorldToMap((int)x, (int)y).x == 84 && App->map->WorldToMap((int)x, (int)y).y == 37)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(84, 28).x;
-		position.y = App->map->MapToWorld(84, 28).y;
-	}
-	// 75,70 to 75,41
-	if (App->map->WorldToMap((int)x, (int)y).x == 75 && App->map->WorldToMap((int)x, (int)y).y == 70)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(75, 41).x;
-		position.y = App->map->MapToWorld(75, 41).y;
-	}
-	// 75,41 to 69,41
-	if (App->map->WorldToMap((int)x, (int)y).x == 75 && App->map->WorldToMap((int)x, (int)y).y == 41)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(69, 41).x;
-		position.y = App->map->MapToWorld(69, 41).y;
-	}
-	// 33,59 to 36,59
-	if (App->map->WorldToMap((int)x, (int)y).x == 33 && App->map->WorldToMap((int)x, (int)y).y == 59)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(36, 59).x;
-		position.y = App->map->MapToWorld(36, 59).y;
-	}
-	// 35,59 to 32,59
-	if (App->map->WorldToMap((int)x, (int)y).x == 35 && App->map->WorldToMap((int)x, (int)y).y == 59)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(32, 59).x;
-		position.y = App->map->MapToWorld(32, 59).y;
-	}
-	// 68,59 to 76,59
-	if (App->map->WorldToMap((int)x, (int)y).x == 68 && App->map->WorldToMap((int)x, (int)y).y == 59)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(76, 59).x;
-		position.y = App->map->MapToWorld(76, 59).y;
-	}
-	// 75,59 to 69,59
-	if (App->map->WorldToMap((int)x, (int)y).x == 75 && App->map->WorldToMap((int)x, (int)y).y == 59)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(69, 59).x;
-		position.y = App->map->MapToWorld(69, 59).y;
-	}
-	// 20,16 to 20,12
-	if (App->map->WorldToMap((int)x, (int)y).x == 20 && App->map->WorldToMap((int)x, (int)y).y == 16)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(20, 12).x;
-		position.y = App->map->MapToWorld(20, 12).y;
-	}
-	// 20,13 to 20,17
-	if (App->map->WorldToMap((int)x, (int)y).x == 19 && App->map->WorldToMap((int)x, (int)y).y == 13)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(19, 17).x;
-		position.y = App->map->MapToWorld(19, 17).y;
-	}
-	// 34,19 to 31,19
-	if (App->map->WorldToMap((int)x, (int)y).x == 34 && App->map->WorldToMap((int)x, (int)y).y == 19)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(31, 19).x;
-		position.y = App->map->MapToWorld(31, 19).y;
-	}
-	// 32,19 to 35,19
-	if (App->map->WorldToMap((int)x, (int)y).x == 32 && App->map->WorldToMap((int)x, (int)y).y == 19)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(35, 19).x;
-		position.y = App->map->MapToWorld(35, 19).y;
-	}
-	// 42,17 to 43,12
-	if (App->map->WorldToMap((int)x, (int)y).x == 42 && App->map->WorldToMap((int)x, (int)y).y == 17)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(43, 12).x;
-		position.y = App->map->MapToWorld(43, 12).y;
-	}
-	// 43,13 to 43,18
-	if (App->map->WorldToMap((int)x, (int)y).x == 43 && App->map->WorldToMap((int)x, (int)y).y == 13)
-	{
-		changing_room = true;
-		position.x = App->map->MapToWorld(43, 18).x;
-		position.y = App->map->MapToWorld(43, 18).y;
-	}
+
 }
 
 // Detects collisions
@@ -488,18 +376,46 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_1->type == COLLIDER_PLAYER || col_1->type == COLLIDER_NONE)
 	{
-		//If the player collides with win colliders
-		if (col_2->type == COLLIDER_WIN)
-		{
-			App->fade->FadeToBlack();
-
-			if (App->scene1->active)
-				App->scene1->changingScene = true;
+		//If the player collides with death colliders				
+		if (invulCounter.Read() >= lastTime_invul + invulTime) {
+			receivedDamage = false;
+			lastTime_invul = invulCounter.Read();
 		}
-		else
-		//If the player collides with death colliders
-		if (col_2->type == COLLIDER_ENEMY)
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY)
 		{
+			lifePoints -= App->entity->slime_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+			receivedDamage = true;
+			
+			if (lifePoints <= 0) dead = true;
+			/*if (App->scene1->active)
+				App->scene1->settings_window->position = App->gui->settingsPosition;
+
+			App->fade->FadeToBlack(3.0f);
+
+			if (dead)
+			{
+				App->entity->DestroyEntities();
+
+				dead = true;
+				points = 0;
+				score_points = 0;
+			}
+			else if (App->scene1->active)
+				App->scene1->backToMenu = true;*/
+		}
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)
+		{			
+			lifePoints -= App->entity->mindflyer_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+			receivedDamage = true;
+
+			if (lifePoints <= 0) dead = true;
+			
 			/*if (App->scene1->active)
 				App->scene1->settings_window->position = App->gui->settingsPosition;
 

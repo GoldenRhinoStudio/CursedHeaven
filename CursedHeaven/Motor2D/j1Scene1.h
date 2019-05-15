@@ -40,18 +40,22 @@ public:
 
 	// Called to change scene
 	void ChangeSceneMenu();
+	void ChangeSceneDeath();
+	void ChangeSceneVictory();
 
 	// Load and Save
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
-	void PlaceEntities();
+	void PlaceEntities(int room);
 
 public:
 	j1Box* settings_window = nullptr;
 	fPoint initialScene1Position;
 	bool player_created = false;
 	bool backToMenu = false;
+	bool toLoseScene = false;
+	bool toVictoryScene = false;
 
 	std::list<j1Button*> scene1Buttons;
 	std::list<j1Label*> scene1Labels;
@@ -63,9 +67,14 @@ public:
 	bool startDialogue = true;
 	bool finishedDialogue = false;
 	bool profile_active = false;
+	bool bossFightOn = false;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;
+	j1Timer statsTime;
+	uint lastStatsTime = 0;
+	std::string current_points;
+	int score_player = 0;
 
 private:
 	SDL_Texture* debug_tex = nullptr;

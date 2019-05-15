@@ -59,7 +59,7 @@
         <animation x="58" y="185" w="29" h="46"/>
       </down>		
 	   
-	  <death loop="true" speed="4.0f">	
+	  <death loop="false" speed="4.0f">	
         <animation x="0" y="489" w="30" h="48"/>
         <animation x="30" y="489" w="39" h="48"/>
       </death>
@@ -174,7 +174,7 @@
         <animation x="42" y="74" w="21" h="37"/>
       </down>		
 	   
-	  <death loop="true" speed="4.0f">	
+	  <death loop="false" speed="4.0f">	
         <animation x="0" y="364" w="25" h="28"/>
         <animation x="25" y="364" w="34" h="28"/>
       </death>
@@ -304,6 +304,58 @@
         <animation x="99" y="143" w="35" h="34"/>
       </down>			   
 	</slime>
+	
+	<mindflyer>
+      <idleD_up loop="true" speed="7.0f">
+        <animation x="0" y="105" w="24" h="35"/>
+	  </idleD_up>
+	  
+      <idleD_down loop="true" speed="7.0f">
+        <animation x="0" y="35" w="21" h="35"/>
+	  </idleD_down>
+	  
+      <idleLateral loop="true" speed="7.0f">
+        <animation x="0" y="0" w="22" h="35"/>
+      </idleLateral>		
+	  
+      <idleUp loop="true" speed="7.0f">
+        <animation x="0" y="140" w="23" h="35"/>
+      </idleUp>
+	  
+      <idleDown loop="true" speed="7.0f">
+        <animation x="0" y="70" w="23" h="35"/>
+      </idleDown>		
+		
+      <diagonalUp loop="true" speed="7.0f">
+        <animation x="0" y="105" w="24" h="35"/>
+        <animation x="24" y="105" w="24" h="35"/>
+        <animation x="48" y="105" w="24" h="35"/>
+      </diagonalUp>
+	  
+      <diagonalDown loop="true" speed="7.0f">
+        <animation x="0" y="35" w="21" h="35"/>
+        <animation x="21" y="35" w="21" h="35"/>
+        <animation x="42" y="35" w="21" h="35"/>
+      </diagonalDown>		 
+
+      <lateral loop="true" speed="7.0f">
+        <animation x="0" y="0" w="22" h="35"/>
+        <animation x="22" y="0" w="22" h="35"/>
+        <animation x="44" y="0" w="22" h="35"/>
+      </lateral>			
+  	  	  
+      <up loop="true" speed="7.0f">
+        <animation x="0" y="140" w="23" h="35"/>
+        <animation x="23" y="140" w="23" h="35"/>
+        <animation x="46" y="140" w="23" h="35"/>
+      </up>
+	  
+      <down loop="true" speed="7.0f">
+        <animation x="0" y="70" w="23" h="35"/>
+        <animation x="23" y="70" w="23" h="35"/>
+        <animation x="46" y="70" w="23" h="35"/>
+      </down>			   
+	</mindflyer>
 	
     <coin>
       <idle loop ="true" speed="10.0f">

@@ -1,28 +1,28 @@
-#ifndef __j1SLIME_H__
-#define __j1SLIME_H__
+#ifndef __j1MINDFLYER_H__
+#define __j1MINDFLYER_H__
 
 #include "PugiXml/src/pugixml.hpp"
 #include "p2Point.h"
 #include "p2Animation.h"
 #include "j1Pathfinding.h"
 #include "j1Entity.h"
+#include "j1Timer.h"
 
 #include <vector>
 
 #define DETECTION_RANGE 10
-#define ATTACK_RANGE 0
-#define ATTACK_RANGE_SLIME 0
+#define ATTACK_RANGE_MF 15
 
 struct SDL_Texture;
 //struct Collider;
 
-class j1Slime : public j1Entity
+class j1MindFlyer : public j1Entity
 {
 public:
-	j1Slime(int x, int y, ENTITY_TYPES type);
+	j1MindFlyer(int x, int y, ENTITY_TYPES type);
 
 	// Destructor
-	virtual ~j1Slime();
+	virtual ~j1MindFlyer();
 
 	// Called before the first frame
 	bool Start();
@@ -54,11 +54,11 @@ public:
 	iPoint colliderSize;
 
 	float speed;
+	int node = 0;
 
 	Movement direction;
 
 	std::vector<iPoint>* path;
-	int node = 0;
 
 	bool target_found = false;
 	bool dead = false;
@@ -80,5 +80,8 @@ private:
 
 	Animation death;
 
+	j1Timer shotTimer;
+	uint lastTime_Shot = 0;
+	uint cooldown_Shot = 0;
 };
-#endif // __j1SLIME_H__
+#endif // __j1MINDFLYER_H__

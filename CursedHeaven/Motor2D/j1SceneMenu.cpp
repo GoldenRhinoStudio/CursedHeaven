@@ -50,7 +50,7 @@ bool j1SceneMenu::Start()
 		App->map->Load("menu.tmx");
 
 		// The audio is played
-		App->audio->PlayMusic("audio/music/menu_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song012.ogg", 1.0f);
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
@@ -67,7 +67,7 @@ bool j1SceneMenu::Start()
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = {963, 12, 151, 38 };
-		SDL_Rect clicked = { 797, 14, 151, 37 };
+		SDL_Rect clicked = { 797, 12, 151, 38 };
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 50 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, OPEN_CREDITS);
 		App->gui->CreateButton(&menuButtons, BUTTON, 130, 150 + 70, idle, hovered, clicked, gui_tex2, CLOSE_GAME);

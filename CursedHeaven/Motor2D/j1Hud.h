@@ -31,10 +31,12 @@ public:
 	bool dragoon_knight = false;
 
 	float life_points_max, life_points;
+	char const *current_points;
 
 private:
 	SDL_Texture* hud_text = nullptr;
 	SDL_Texture* profile_text = nullptr;
+	SDL_Texture* score = nullptr;
 
 	_TTF_Font* font = nullptr;
 

@@ -27,6 +27,8 @@
 #include "j1ChooseCharacter.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
+#include "j1SceneLose.h"
+#include "j1SceneVictory.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -66,7 +68,7 @@ bool j1Scene1::Start()
 	{	
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("greenmount.tmx"))
+		if (App->map->Load("greenmount_v2.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -79,7 +81,7 @@ bool j1Scene1::Start()
 		}
 
 		// The audio is played	
-		App->audio->PlayMusic("audio/music/level1_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song034.ogg", 1.0f);
 
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
@@ -113,7 +115,7 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
-		PlaceEntities();
+		PlaceEntities(6);
 
 		startup_time.Start();
 		windowTime.Start();
@@ -126,6 +128,7 @@ bool j1Scene1::Start()
 bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
+	current_points.erase();
 	return true;
 }
 
@@ -135,16 +138,18 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
-	if (startDialogue)
-		App->dialog->StartDialogEvent(App->dialog->dialogA);
-			
+	finishedDialogue = true;
+	
+	/*if (startDialogue)
+		App->dialog->StartDialogEvent(App->dialog->dialogA);*/
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
-	// ---------------------------------------------------------------------------------------------------------------------		
 
 	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
+	score_player = App->entity->currentPlayer->score_points;
+	current_points = std::to_string(score_player);
 
 	if (App->scene1->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
@@ -244,13 +249,13 @@ bool j1Scene1::Update(float dt)
 	// Managing scene transitions
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN || resettingLevel)
 	{
-		resettingLevel = true;
+		/*resettingLevel = true;
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
 			App->render->camera.x = 0;
 			resettingLevel = false;
-		}
+		}*/
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || changingScene) {
@@ -262,9 +267,31 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu(); 
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN) {
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN 
+		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
+
+		lastStatsTime = statsTime.Read();
+
 		if (profile_active) profile_active = false;
 		else profile_active = true;
+	}
+
+	if (App->entity->currentPlayer->dead == true) {
+		toLoseScene = true;
+
+		App->fade->FadeToBlack();
+
+		if (App->fade->IsFading() == 0)
+			ChangeSceneDeath();
+	}
+
+	if (App->entity->currentPlayer->victory == true) {
+		toVictoryScene = true;
+
+		App->fade->FadeToBlack();
+
+		if (App->fade->IsFading() == 0)
+			ChangeSceneVictory();
 	}
 
 	if (backToMenu && App->fade->IsFading() == 0)
@@ -286,7 +313,6 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
-	
 	return continueGame;
 }
 
@@ -304,18 +330,55 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 	return true;
 }
 
-void j1Scene1::PlaceEntities()
+void j1Scene1::PlaceEntities(int room)
 {
-	App->entity->AddEnemy(-100, 1000, SLIME); //Add Slime
-	//App->entity->AddEnemy(-120, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-130, 1100, SLIME); //Add Slime
-	//App->entity->AddEnemy(-140, 1150, SLIME); //Add Slime
-	//App->entity->AddEnemy(-150, 1200, SLIME); //Add Slime
-	//App->entity->AddEnemy(-160, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-170, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-180, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-190, 1050, SLIME); //Add Slime
-	//App->entity->AddEnemy(-200, 1050, SLIME); //Add Slime
+	App->entity->AddEnemy(13, 83, SLIME);
+	App->entity->AddEnemy(16, 79, SLIME);
+	App->entity->AddEnemy(7, 74, SLIME);
+
+	App->entity->AddEnemy(6, 57, SLIME);
+	App->entity->AddEnemy(15, 54, SLIME);
+	App->entity->AddEnemy(17, 61, SLIME);
+
+	App->entity->AddEnemy(31, 65, SLIME);
+	App->entity->AddEnemy(28, 65, SLIME);
+	App->entity->AddEnemy(28, 53, SLIME);
+
+	App->entity->AddEnemy(29, 40, SLIME);
+	App->entity->AddEnemy(33, 41, SLIME);
+	App->entity->AddEnemy(14, 41, SLIME);
+
+	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(43, 39, SLIME);
+	App->entity->AddEnemy(38, 41, SLIME);
+
+	App->entity->AddEnemy(29, 19, SLIME);
+	App->entity->AddEnemy(28, 22, SLIME);
+	App->entity->AddEnemy(26, 26, SLIME);
+
+	App->entity->AddEnemy(46, 25, SLIME);
+	App->entity->AddEnemy(45, 32, SLIME);
+	App->entity->AddEnemy(38, 28, SLIME);
+
+	App->entity->AddEnemy(23, 4, SLIME);
+	App->entity->AddEnemy(12, 4, SLIME);
+	App->entity->AddEnemy(17, 13, SLIME);
+
+	App->entity->AddEnemy(49, 4, SLIME);
+	App->entity->AddEnemy(60, 7, SLIME);
+	App->entity->AddEnemy(59, 11, SLIME);
+	App->entity->AddEnemy(70, 8, SLIME);
+
+	App->entity->AddEnemy(85, 23, SLIME);
+	App->entity->AddEnemy(80, 19, SLIME);
+	App->entity->AddEnemy(70, 25, SLIME);
+
+	App->entity->AddEnemy(88, 46, SLIME);
+	App->entity->AddEnemy(80, 42, SLIME);
+	App->entity->AddEnemy(85, 60, SLIME);
+	App->entity->AddEnemy(80, 65, SLIME);
+
+	App->entity->AddEnemy(54, 68, MINDFLYER);
 }
 
 // Called before quitting
@@ -364,6 +427,7 @@ void j1Scene1::ChangeSceneMenu()
 {
 	App->scene1->active = false;
 	App->menu->active = true;
+	changingScene = false;
 	App->dialog->CleanUp();
 
 	CleanUp();
@@ -373,4 +437,32 @@ void j1Scene1::ChangeSceneMenu()
 	App->menu->Start();
 	App->render->camera = { 0,0 };
 	backToMenu = false;
+}
+
+void j1Scene1::ChangeSceneDeath() {
+	App->scene1->active = false;
+	App->lose->active = true;
+	App->dialog->CleanUp();
+
+	CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
+	App->entity->active = false;
+	App->lose->Start();
+	App->render->camera = { 0,0 };
+	toLoseScene = false;
+}
+
+void j1Scene1::ChangeSceneVictory() {
+	App->scene1->active = false;
+	App->victory->active = true;
+	App->dialog->CleanUp();
+
+	CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
+	App->entity->active = false;
+	App->victory->Start();
+	App->render->camera = { 0,0 };
+	toVictoryScene = false;
 }

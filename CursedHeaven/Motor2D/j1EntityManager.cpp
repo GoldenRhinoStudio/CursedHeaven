@@ -13,6 +13,8 @@
 #include "j1Tank.h"
 #include "j1Judge.h"
 #include "j1Slime.h"
+#include "j1MindFlyer.h"
+#include "j1Map.h"
 
 #include "j1Player.h"
 
@@ -172,8 +174,8 @@ void j1EntityManager::AddEnemy(int x, int y, ENTITY_TYPES type)
 		if (queue[i].type == ENTITY_TYPES::UNKNOWN)
 		{
 			queue[i].type = type;
-			queue[i].position.x = x;
-			queue[i].position.y = y;
+			queue[i].position.x = App->map->MapToWorld(x, y).x;
+			queue[i].position.y = App->map->MapToWorld(x, y).y;
 			break;
 		}
 	}
@@ -188,6 +190,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 			j1Entity* entity;
 			if (queue[i].type == SLIME)
 				entity = new j1Slime(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == MINDFLYER)
+				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
 
 			entities.push_back(entity);
 			entity->Start();
@@ -220,6 +224,8 @@ void j1EntityManager::CreatePlayer()
 	else if (mage != nullptr) currentPlayer = mage;
 	/*else if (rogue != nullptr)  currentPlayer = rogue;
 	else if (tank != nullptr)  currentPlayer = tank;*/
+
+	currentPlayer->invulCounter.Start();
 }
 
 void j1EntityManager::CreateNPC()

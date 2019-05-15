@@ -5,6 +5,7 @@
 #include "p2Point.h"
 #include "p2Animation.h"
 #include "j1Entity.h"
+#include "j1Timer.h"
 
 struct SDL_Texture;
 struct Collider;
@@ -66,8 +67,10 @@ public:
 
 	// Size of the player collider, where x = w and y = h
 	iPoint playerSize;
+	iPoint attackSize;
 	iPoint margin;
-
+	
+	int room = 6;
 	uint points = 0;
 	uint score_points = 0;
 	uint playerLife = 0;
@@ -102,8 +105,10 @@ public:
 
 	bool player_start = false;
 	bool dead = false;
+	bool victory = false;
 	bool loadedAudios = false;
 	bool changing_room = false;
+	bool receivedDamage = false;
 
 	bool GodMode = false;
 	bool attacking = false;
@@ -113,6 +118,13 @@ public:
 	bool available_E = false;
 	bool active_E = false;
 	bool firstTimeE = true;
+
+	// The player stays untouchable for a second
+	j1Timer invulCounter;
+	uint lastTime_invul = 0;
+	uint invulTime = 0;
+
+
 };
 
 #endif // __j1PLAYER_H__

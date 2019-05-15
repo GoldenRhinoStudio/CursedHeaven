@@ -64,19 +64,19 @@ bool j1SceneCredits::Start()
 		// Go Back 
 		SDL_Rect idle6 = { 382, 508, 37, 36 };
 		SDL_Rect hovered6 = { 343, 508, 37, 36 };
-		SDL_Rect clicked6 = { 421, 511, 37, 33 };
+		SDL_Rect clicked6 = { 421, 508, 37, 36 };
 		App->gui->CreateButton(&creditsButtons, BUTTON, 7, 7, idle6, hovered6, clicked6, gui_tex2, GO_TO_MENU);
 
 		// Github
-		SDL_Rect idlegh = { 631, 145 , 36, 40 };
-		SDL_Rect hoveredgh = { 631, 221 , 36, 40 };
-		SDL_Rect clickedgh = { 631, 185 , 36, 37 };
+		SDL_Rect idlegh = { 631, 145 , 36, 39 };
+		SDL_Rect hoveredgh = { 631, 223 , 36, 39 };
+		SDL_Rect clickedgh = { 631, 184 , 36, 39 };
 		App->gui->CreateButton(&creditsButtons, BUTTON, 151, 188, idlegh, hoveredgh, clickedgh, gui_tex2, LINK, (j1UserInterfaceElement*)credits_window);
 
 		// Web
-		SDL_Rect idleweb = { 667, 145 , 36, 40 };
-		SDL_Rect hoveredweb = { 667, 221 , 36, 40 };
-		SDL_Rect clickedweb = { 667, 185 , 36, 37 };
+		SDL_Rect idleweb = { 667, 145 , 36, 39 };
+		SDL_Rect hoveredweb = { 667, 223 , 36, 39 };
+		SDL_Rect clickedweb = { 667, 184 , 36, 39 };
 		App->gui->CreateButton(&creditsButtons, BUTTON, 171, 188, idleweb, hoveredweb, clickedweb, gui_tex2, LINK2, (j1UserInterfaceElement*)credits_window);
 
 		startup_time.Start();

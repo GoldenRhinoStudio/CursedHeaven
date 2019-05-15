@@ -11,6 +11,7 @@
 #include "j1BlackMage.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
+#include "j1Audio.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -39,8 +40,8 @@ j1Slime::~j1Slime() {}
 
 bool j1Slime::Start()
 {
-	// Textures are loaded
-	LOG("Loading harpy textures");
+	LOG("Loading slime texture");
+
 	sprites = App->tex->Load("textures/enemies/Slime.png");
 	debug_tex = App->tex->Load("maps/path2.png");
 
@@ -58,7 +59,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
-		collider->SetPos(position.x, position.y);
+		collider->SetPos(position.x + margin.x, position.y + margin.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
@@ -73,8 +74,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 			if (App->entity->currentPlayer->dead == false)
 			{
 				if (do_logic) {
-					if(path != nullptr)
-						path->clear();
+					/*if(path != nullptr)
+						path->clear();*/
 
 					if (App->path->CreatePath(origin, destination) > 0) {
 						path = App->path->GetLastPath();
@@ -86,18 +87,16 @@ bool j1Slime::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE) {
-						//atack slime
+					if (distance <= ATTACK_RANGE_SLIME) {
+						App->audio->PlayFx(App->audio->slime_attack);
 					}
-					else {
-						Move(path, dt);
-					}
-				}
+					Move(path, dt);
+				}//fix attack
 			}
 		}
 		else {
-			if (path != nullptr)
-				path->clear();
+		/*	if (path != nullptr)
+				path->clear();*/
 			target_found = false;
 		}
 
@@ -130,16 +129,16 @@ bool j1Slime::DrawOrder(float dt) {
 
 bool j1Slime::CleanUp()
 {
-	LOG("Unloading harpy");
+	LOG("Unloading slime");
 	App->tex->UnLoad(sprites);
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	if (path != nullptr) {
+	/*if (path != nullptr) {
 		path->clear();
 		RELEASE(path);
 		target_found = false;
-	}
+	}*/
 
 	return true;
 }
@@ -154,19 +153,24 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
+			if (App->entity->player_type == MAGE) col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
+			App->audio->PlayFx(App->audio->slime_damage);
 			receivedBasicDamage = true;
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
+			col_2->to_delete = true;
 			if(App->entity->mage != nullptr)
 				lifePoints -= App->entity->mage->fireDamage;
+			App->audio->PlayFx(App->audio->slime_damage);
 
 			receivedAbilityDamage = true;
 		}
 
 		if (lifePoints <= 0) {
 			App->entity->currentPlayer->score_points += 100;
+			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
 
@@ -205,14 +209,16 @@ void j1Slime::LoadProperties()
 	pugi::xml_node slime;
 	slime = config.child("slime");
 
-	speed = slime.attribute("speed").as_int();
-	lifePoints = slime.attribute("life").as_int();
-
 	// Copying the values of the collider
 	margin.x = slime.child("margin").attribute("x").as_int();
 	margin.y = slime.child("margin").attribute("y").as_int();
 	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
 	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
+
+	speed = slime.attribute("speed").as_int();
+	lifePoints = slime.attribute("life").as_int();
+	App->entity->slime_Damage = slime.child("combat").attribute("damage").as_int();
+
 }
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
@@ -226,7 +232,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
 	/*if (App->path->check_nextTile(path, &node, &pos))
 		node++;*/
-
 	LOG("Node: %i", node);
 	direction = App->path->CheckDirection(path, &node);
 

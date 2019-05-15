@@ -14,6 +14,7 @@
 #include "j1Map.h"
 #include "j1Timer.h"
 #include "j1Particles.h"
+#include "j1DialogSystem.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -58,12 +59,6 @@ bool j1BlackMage::Start() {
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/character/mage/Mage.png");
 
-	// Audios are loaded
-	LOG("Loading player audios");
-	if (!loadedAudios) {
-		loadedAudios = true;
-	}
-
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
@@ -72,11 +67,9 @@ bool j1BlackMage::Start() {
 	position.y = 750;
 
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_NONE, App->entity);
 	else
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
-
-	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_PLAYER, App->entity);
 
 	hud = new j1Hud();
 	hud->Start();
@@ -174,9 +167,10 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 								speed_particle.y = particle_speed.y * sin(-270 * DEGTORAD);
 							}
 
-							App->particles->shot_right.speed = speed_particle;
+							App->particles->mageShot.speed = speed_particle;
+							App->particles->mageShot.life = 500;
 
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
 						}
 
 						if (direction == NONE_) {
@@ -206,6 +200,8 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
+					//if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 35;
+
 					iPoint explosionPos;
 					iPoint p = { (int)position.x, (int)position.y };
 
@@ -228,6 +224,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					lastTime_Explosion = cooldown_Explosion.Read();
 					App->particles->explosion.anim.Reset();
 					App->particles->AddParticle(App->particles->explosion, explosionPos.x, explosionPos.y, dt, COLLIDER_ABILITY);
+					App->audio->PlayFx(App->audio->explosion);
 					active_Q = true;
 					firstTimeQ = false;
 				}
@@ -242,6 +239,10 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				// Extra speed
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
+
+					App->audio->PlayFx(App->audio->rage_bm);
+
+					//if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 35;
 
 					movementSpeed = movementSpeed * 2;
 					cooldown_Speed.Start();
@@ -284,12 +285,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) animation = &idle_diagonal_down;
 				attacking = false;
 			}
-			else if (attackCollider != nullptr) {
-				if (facingRight)
-					attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-				else
-					attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
-			}
 
 			// God mode
 			if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
@@ -312,15 +307,15 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (dead) {
 
+		App->audio->PlayFx(App->audio->death_bm);
 		animation = &death;
-		death.loop = false;
 		App->fade->FadeToBlack();
 
 		// Restarting the level in case the player dies
 		if (App->fade->IsFading() == 0)
 		{
 			position = { 200,750 };
-			lifePoints = 100;
+			lifePoints = initialLifePoints;
 			facingRight = true;
 
 			App->entity->DestroyEntities();
@@ -335,8 +330,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	// Checking for the heights
 	App->map->EntityMovement(App->entity->mage);
-
-
 
 	// Update collider position to player position
 	if (collider != nullptr)
@@ -462,9 +455,6 @@ bool j1BlackMage::CleanUp() {
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	if (attackCollider != nullptr)
-		attackCollider->to_delete = true;
-
 	if (hud)
 		hud->CleanUp();
 
@@ -491,8 +481,6 @@ void j1BlackMage::LoadPlayerProperties() {
 	// Copying attack values
 	attackBlittingX = player.child("attack").attribute("blittingX").as_int();
 	attackBlittingY = player.child("attack").attribute("blittingY").as_int();
-	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
-	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
 	// Copying combat values
 	pugi::xml_node combat = player.child("combat");
@@ -501,10 +489,12 @@ void j1BlackMage::LoadPlayerProperties() {
 	basicDamage = combat.attribute("basicDamage").as_int();
 	fireDamage = combat.attribute("fireDamage").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
+	initialLifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	duration_Explosion = cd.attribute("explosion").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	duration_Speed = cd.attribute("increasedSpeed").as_uint();
+	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
@@ -532,8 +522,8 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 
 	speed_particle.x = p_speed.x * cos(angle);
 	speed_particle.y = p_speed.y * sin(angle);
-	App->particles->shot_right.speed = speed_particle;
+	App->particles->mageShot.speed = speed_particle;
 
-	App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
-	lifePoints -= 10;
+	App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
+	App->audio->PlayFx(App->audio->attack_bm);
 }

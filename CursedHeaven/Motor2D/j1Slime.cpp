@@ -63,7 +63,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
 		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
-		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y) };
+		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
 
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 

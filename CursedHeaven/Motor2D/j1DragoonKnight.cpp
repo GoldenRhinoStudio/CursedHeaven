@@ -104,6 +104,9 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
+		if (App->scene1->finishedDialog) {
+
+		
 		if (!attacking && !active_Q) {
 			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 			SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
@@ -275,6 +278,8 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				collider->type = COLLIDER_PLAYER;
 			}
 		}
+
+		}
 	}
 	if (dead) {
 
@@ -325,6 +330,8 @@ bool j1DragoonKnight::PostUpdate() {
 	BROFILER_CATEGORY("DragoonKnightPostUpdate", Profiler::Color::Yellow)
 
 		dialog->Update(0);
+
+	if (App->scene1->finishedDialog)
 		hud->Update(0);
 
 		return true;

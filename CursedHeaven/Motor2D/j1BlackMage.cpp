@@ -104,7 +104,9 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
+		if (App->scene1->finishedDialog) {
 
+		
 		if (!active_Q) {
 			ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 		}
@@ -307,6 +309,8 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				collider->type = COLLIDER_PLAYER;
 			}
 		}
+
+		}
 	
 	}
 
@@ -401,6 +405,8 @@ bool j1BlackMage::PostUpdate() {
 	BROFILER_CATEGORY("BlackMagePostUpdate", Profiler::Color::Yellow)
 
 		dialog->Update(0);
+
+	if(App->scene1->finishedDialog)
 		hud->Update(0);
 
 	return true;

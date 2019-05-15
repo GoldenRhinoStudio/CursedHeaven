@@ -79,6 +79,8 @@ bool j1DialogSystem::Update(float dt) {
 		if (times == 3) {
 			App->tex->UnLoad(dialog_tex3);
 			times = 0;
+			App->scene1->finishedDialog = true;
+			law1Active = false;
 		}
 	}
 	else if (law2Active == true)
@@ -103,6 +105,8 @@ bool j1DialogSystem::Update(float dt) {
 		if (times == 3) {
 			App->tex->UnLoad(dialog_tex3);
 			times = 0;
+			App->scene1->finishedDialog = true;
+			law2Active = false;
 		}
 	}
 

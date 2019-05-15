@@ -26,7 +26,7 @@ bool j1Hud::Start()
 	multiplier = 82 / (float)App->entity->currentPlayer->lifePoints;
 
 	// Potions
-	potions = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0", App->gui->brown);
+	potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0", App->gui->brown);
 	
 	return true;
 }
@@ -123,10 +123,26 @@ bool j1Hud::Update(float dt)
 		if (!App->entity->currentPlayer->available_E) {
 			App->render->Blit(hud_text, 15, 400, &dk_notavailable_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
 		}
-
 	}
 
-	potions->Draw(0.5, 0, 0, false);
+	/*if (App->shop->potions == 0) {
+		delete potionsLabel;
+		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0", App->gui->brown);
+	}
+	else if (App->shop->potions == 1) {
+		delete potionsLabel;
+		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x1", App->gui->brown);
+	}
+	else if (App->shop->potions == 2) {
+		delete potionsLabel;
+		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x2", App->gui->brown);
+	}
+	else if (App->shop->potions == 3) {
+		delete potionsLabel;
+		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x3", App->gui->brown);
+	};*/
+
+	potionsLabel->Draw(0.5, 0, 0, false);
 
 	// Current points of the player (char*)
 	current_points = App->scene1->current_points.c_str();

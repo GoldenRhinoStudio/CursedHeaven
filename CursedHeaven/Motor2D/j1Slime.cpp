@@ -42,7 +42,7 @@ bool j1Slime::Start()
 {
 	LOG("Loading slime texture");
 
-	sprites = App->tex->Load("textures/enemies/Slime.png");
+	sprites = App->tex->Load("textures/enemies/Slimes/Slime.png");
 	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();

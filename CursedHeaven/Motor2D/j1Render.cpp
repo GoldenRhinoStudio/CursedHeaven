@@ -532,7 +532,7 @@ void j1Render::reOrder() {
 						(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
 						(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
 						(pos2.x == pos1.x && pos2.y == pos1.y)) {
-						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h && img2->order > img1->order) {
+						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h && !img1->behind) {
 							img1->order = img2->order - 0.2f;
 						}
 					}

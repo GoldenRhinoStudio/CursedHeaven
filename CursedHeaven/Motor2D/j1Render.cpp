@@ -571,7 +571,6 @@ void j1Render::reOrder() {
 				pos2 = App->map->WorldToMap(img2->x, img2->y);
 				if (img2 != img1) {
 					if (img1->col->CheckCollision(img2->col->rect)){
-						LOG("TOUHCING");
 						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h + img2->margin.y) {
 							img1->order = img2->order - 0.2f;
 						}

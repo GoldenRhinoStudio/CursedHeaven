@@ -6,8 +6,6 @@
 #include "p2Animation.h"
 #include "p2Log.h"
 
-#define DETECTION_RANGE 10
-
 struct Collider;
 class Animation;
 struct SDL_Texture;
@@ -70,7 +68,7 @@ public:
 	// Combat values
 	int basicDamage = 0;
 	int lifePoints = 0;
-	int totalLifePoints = 0;
+	int initialLifePoints = 0;
 };
 
 #endif // __ENTITY_H__

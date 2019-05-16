@@ -14,7 +14,6 @@ class j1Rogue;
 class j1Tank;
 class j1Player;
 class j1Judge;
-class j1Seller;
 
 struct SDL_Texture;
 
@@ -34,10 +33,8 @@ enum ENTITY_TYPES
 {
 	PLAYER,
 	COIN,
-	ITEM,
 	NPC,
 	SLIME,
-	FIRE,
 	MINDFLYER,
 	UNKNOWN
 };
@@ -54,7 +51,7 @@ enum NPC_TYPES
 {
 	JUDGE,
 	OLDMAN,
-	SELLER
+	MERCHANT 
 };
 
 struct EntityInfo
@@ -89,6 +86,7 @@ public:
 	
 	void OnCollision(Collider* c1, Collider* c2);
 	void CreatePlayer();
+	void CreateNPC();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
 
@@ -109,14 +107,12 @@ public:
 	j1Player*			currentPlayer = nullptr;
 
 	j1Judge*			judge = nullptr;
-	j1Seller*			seller = nullptr;
 
 	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
-	int fire_Damage = 0;
 
 private:
 	int entity_logic = 0;

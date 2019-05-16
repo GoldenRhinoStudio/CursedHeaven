@@ -148,6 +148,7 @@ bool j1SceneCredits::Update(float dt)
 
 	App->map->Draw();
 
+
 	// Blitting the buttons
 	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
 		(*item)->Draw(App->gui->buttonsScale);

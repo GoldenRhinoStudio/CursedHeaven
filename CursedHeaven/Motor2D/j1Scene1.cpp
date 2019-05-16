@@ -20,6 +20,7 @@
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
 #include "j1SceneMenu.h"
+#include "j1Fonts.h"
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
@@ -28,7 +29,6 @@
 #include "j1Particles.h"
 #include "j1SceneLose.h"
 #include "j1SceneVictory.h"
-#include "j1Shop.h"
 #include "j1Minimap.h"
 
 #include "Brofiler/Brofiler.h"
@@ -64,11 +64,12 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene1::Start()
 {
+
 	if (active)
 	{	
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("greenmount_v2.tmx"))
+		if (App->map->Load("Test.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -86,6 +87,9 @@ bool j1Scene1::Start()
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
 		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
+
+		// Loading fonts
+		font = App->font->Load("fonts/Pixeled.ttf", 10);
 
 		// Creating UI
 		SDL_Rect section = { 9,460,315,402 };
@@ -107,15 +111,14 @@ bool j1Scene1::Start()
 
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
-		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, App->gui->font2, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, App->gui->font2, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, font, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, font, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		lvl1_tex = App->tex->Load("maps/minimap_lvl1.png");
 
 		PlaceEntities(6);
-		App->shop->PlaceShop();
 
 		startup_time.Start();
 		windowTime.Start();
@@ -339,28 +342,28 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(7, 74, SLIME);
 
 	App->entity->AddEnemy(6, 57, SLIME);
-	App->entity->AddEnemy(15, 54, FIRE);
-	App->entity->AddEnemy(17, 61, FIRE);
-								  
-	App->entity->AddEnemy(31, 65, FIRE);
-	App->entity->AddEnemy(28, 65, FIRE);
-	App->entity->AddEnemy(28, 53, FIRE);
-								  
-	App->entity->AddEnemy(29, 40, FIRE);
-	App->entity->AddEnemy(33, 41, FIRE);
-	App->entity->AddEnemy(14, 41, FIRE);
-								  
-	App->entity->AddEnemy(46, 47, FIRE);
-	App->entity->AddEnemy(43, 39, FIRE);
-	App->entity->AddEnemy(38, 41, FIRE);
-								 
-	App->entity->AddEnemy(29, 19, FIRE);
-	App->entity->AddEnemy(28, 22, FIRE);
-	App->entity->AddEnemy(26, 26, FIRE);
-								 
-	App->entity->AddEnemy(46, 25, FIRE);
-	App->entity->AddEnemy(45, 32, FIRE);
-	App->entity->AddEnemy(38, 28, FIRE);
+	App->entity->AddEnemy(15, 54, SLIME);
+	App->entity->AddEnemy(17, 61, SLIME);
+
+	App->entity->AddEnemy(31, 65, SLIME);
+	App->entity->AddEnemy(28, 65, SLIME);
+	App->entity->AddEnemy(28, 53, SLIME);
+
+	App->entity->AddEnemy(29, 40, SLIME);
+	App->entity->AddEnemy(33, 41, SLIME);
+	App->entity->AddEnemy(14, 41, SLIME);
+
+	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(43, 39, SLIME);
+	App->entity->AddEnemy(38, 41, SLIME);
+
+	App->entity->AddEnemy(29, 19, SLIME);
+	App->entity->AddEnemy(28, 22, SLIME);
+	App->entity->AddEnemy(26, 26, SLIME);
+
+	App->entity->AddEnemy(46, 25, SLIME);
+	App->entity->AddEnemy(45, 32, SLIME);
+	App->entity->AddEnemy(38, 28, SLIME);
 
 	App->entity->AddEnemy(23, 4, SLIME);
 	App->entity->AddEnemy(12, 4, SLIME);
@@ -381,7 +384,6 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(80, 65, SLIME);
 
 	App->entity->AddEnemy(54, 68, MINDFLYER);
-
 }
 
 // Called before quitting
@@ -436,7 +438,6 @@ void j1Scene1::ChangeSceneMenu()
 	CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
-	App->shop->CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
 	App->render->camera = { 0,0 };
@@ -453,7 +454,6 @@ void j1Scene1::ChangeSceneDeath() {
 	App->entity->CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
-	App->shop->CleanUp();
 	App->render->camera = { 0,0 };
 	toLoseScene = false;
 }
@@ -464,7 +464,6 @@ void j1Scene1::ChangeSceneVictory() {
 	App->dialog->CleanUp();
 
 	CleanUp();
-	App->shop->CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
 	App->entity->active = false;

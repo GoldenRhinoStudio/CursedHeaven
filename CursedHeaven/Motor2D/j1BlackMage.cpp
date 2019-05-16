@@ -77,7 +77,6 @@ bool j1BlackMage::Start() {
 	// Starting ability timers
 	cooldown_Q.Start();
 	cooldown_E.Start();
-	potionTime.Start();
 
 	player_start = true;
 	return true;
@@ -102,7 +101,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		if (App->scene1->finishedDialogue == true) {
 
 			if (!active_Q) {
-				ManagePlayerMovement(direction, dt, do_logic, speed);
+				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 			}
 			if (!attacking)
 				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
@@ -245,7 +244,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 					//if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 35;
 
-					speed = speed * 2;
+					movementSpeed = movementSpeed * 2;
 					cooldown_Speed.Start();
 					lastTime_Speed = cooldown_Speed.Read();
 					active_E = true;
@@ -254,7 +253,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 				if (active_E && cooldown_Speed.Read() >= lastTime_Speed + duration_Speed) {
 
-					speed = speed / 2;
+					movementSpeed = movementSpeed / 2;
 					cooldown_E.Start();
 					lastTime_E = cooldown_E.Read();
 					active_E = false;
@@ -316,7 +315,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 		if (App->fade->IsFading() == 0)
 		{
 			position = { 200,750 };
-			lifePoints = totalLifePoints;
+			lifePoints = initialLifePoints;
 			facingRight = true;
 
 			App->entity->DestroyEntities();
@@ -490,7 +489,7 @@ void j1BlackMage::LoadPlayerProperties() {
 	basicDamage = combat.attribute("basicDamage").as_int();
 	fireDamage = combat.attribute("fireDamage").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
-	totalLifePoints = combat.attribute("lifePoints").as_int();
+	initialLifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	duration_Explosion = cd.attribute("explosion").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
@@ -498,10 +497,10 @@ void j1BlackMage::LoadPlayerProperties() {
 	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed
-	pugi::xml_node movementSpeed = player.child("speed");
+	pugi::xml_node speed = player.child("speed");
 
-	speed = movementSpeed.child("movement").attribute("horizontal").as_float();
-	godModeSpeed = movementSpeed.child("movement").attribute("godmode").as_float();
+	movementSpeed = speed.child("movement").attribute("horizontal").as_float();
+	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
 }
 
 void j1BlackMage::Shot(float x, float y, float dt) {

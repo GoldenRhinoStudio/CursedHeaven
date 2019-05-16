@@ -8,7 +8,6 @@
 #include "j1Render.h"
 #include "j1FadeToBlack.h"
 #include "j1BlackMage.h"
-#include "j1Shop.h"
 #include "j1Box.h"
 #include "j1Map.h"
 #include "j1Scene1.h"
@@ -140,23 +139,28 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 			}
 		}
 		else {
+			// Position of the player in map coordinates
+			iPoint mapPos = App->map->WorldToMap((int)position.x, (int)position.y);
 
-			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_R) == j1KeyState::KEY_DOWN || 
-				(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && potionTime.Read() >= lastPotionTime + 500))) {
-				App->shop->potions--;
-				lastPotionTime = potionTime.Read();
-				App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
-			}
+			iPoint up_right = { mapPos.x, mapPos.y - 1 };
+			iPoint down_left = { mapPos.x, mapPos.y + 1 };
+			iPoint down_right = { mapPos.x + 1, mapPos.y };
+			iPoint up_left = { mapPos.x - 1, mapPos.y };
+
+			iPoint right = { mapPos.x + 1, mapPos.y - 1 };
+			iPoint up = { mapPos.x - 1, mapPos.y - 1 };
+			iPoint down = { mapPos.x + 1, mapPos.y + 1 };;
+			iPoint left = { mapPos.x - 1, mapPos.y + 1 };
 
 			// Direction controls	
-			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
+			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(right)) {
 				if (movement)
 					position.x += speed * dt;
 				facingRight = true;
 				direction = DIRECTION::RIGHT_;
 			}
 
-			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)) {
+			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(left)) {
 				if (movement)
 					position.x -= speed * dt;
 				facingRight = false;
@@ -164,30 +168,33 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY < -6400) {
-				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)
-					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
+				if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(up_left))
+					|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(up_right))) {
 
 					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::UP_RIGHT_;
 					else direction = DIRECTION::UP_LEFT_;
 					if (movement)
 						position.y -= (speed * dt) / 2;
 				}
-				else if (movement){
-					position.y -= speed * dt;
-					direction = DIRECTION::UP_;
-				}
+				else
+					if (CheckWalkability(up)) {
+						if (movement)
+							position.y -= speed * dt;
+						direction = DIRECTION::UP_;
+					}
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY > 6400) {
-				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)
-					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
+				if (((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400) && CheckWalkability(down_left))
+					|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) && CheckWalkability(down_right))) {
 
 					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::DOWN_RIGHT_;
 					else direction = DIRECTION::DOWN_LEFT_;
 					if (movement)
 						position.y += (speed * dt) / 2;
 				}
-				else if (movement){
+				else if (CheckWalkability(down)) {
+					if (movement)
 						position.y += speed * dt;
 					direction = DIRECTION::DOWN_;
 				}
@@ -361,6 +368,7 @@ void j1Player::ChangeRoom(int x, int y) {
 	{
 		
 	}
+
 }
 
 // Detects collisions
@@ -382,6 +390,21 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 			receivedDamage = true;
 			
 			if (lifePoints <= 0) dead = true;
+			/*if (App->scene1->active)
+				App->scene1->settings_window->position = App->gui->settingsPosition;
+
+			App->fade->FadeToBlack(3.0f);
+
+			if (dead)
+			{
+				App->entity->DestroyEntities();
+
+				dead = true;
+				points = 0;
+				score_points = 0;
+			}
+			else if (App->scene1->active)
+				App->scene1->backToMenu = true;*/
 		}
 
 		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)
@@ -392,6 +415,47 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 			receivedDamage = true;
 
 			if (lifePoints <= 0) dead = true;
+			
+			/*if (App->scene1->active)
+				App->scene1->settings_window->position = App->gui->settingsPosition;
+
+			App->fade->FadeToBlack(3.0f);
+
+			if (dead)
+			{
+				App->entity->DestroyEntities();
+
+				dead = true;
+				points = 0;
+				score_points = 0;
+			}
+			else if (App->scene1->active)
+				App->scene1->backToMenu = true;*/
 		}
 	}
 };
+
+bool j1Player::CheckWalkability(iPoint pos) const {
+
+	/*bool ret = false;
+
+	if ((pos.x >= 0 && pos.x < App->map->data.width)
+		&& (pos.y >= 0 && pos.y < App->map->data.height))
+	{
+		if (App->entity->current_height == 0) {
+			if (App->map->data.layers.begin()._Ptr->_Next->_Next->_Next->_Myval->Get(pos.x, pos.y) == 0)
+				ret = true;
+		}
+		else if (App->entity->current_height == 1) {
+			if (App->map->data.layers.begin()._Ptr->_Next->_Next->_Next->_Next->_Myval->Get(pos.x, pos.y) == 0)
+				ret = true;
+		}
+		else if (App->entity->current_height == 2) {
+			if (App->map->data.layers.begin()._Ptr->_Next->_Next->_Next->_Next->_Next->_Myval->Get(pos.x, pos.y) == 0)
+				ret = true;
+		}		
+	}
+
+	return ret;*/
+	return true;
+}

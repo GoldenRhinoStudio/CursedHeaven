@@ -60,9 +60,13 @@ public:
 	uint duration_Explosion = 0;
 	uint lastTime_Explosion = 0;
 	j1Timer cooldown_Q;
+	uint cooldownTime_Q = 0;
+	uint lastTime_Q = 0;
 	int fireDamage = 0;
 
 	j1Timer cooldown_E;
+	uint cooldownTime_E = 0;
+	uint lastTime_E = 0;
 	j1Timer cooldown_Speed;
 	uint duration_Speed = 0;
 	uint lastTime_Speed = 0;

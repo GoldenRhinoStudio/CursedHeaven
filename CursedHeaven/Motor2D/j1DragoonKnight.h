@@ -52,10 +52,14 @@ public:
 
 	// Abilities
 	j1Timer cooldown_Q;
+	uint cooldownTime_Q = 0;
+	uint lastTime_Q = 0;
 	fPoint lastPosition;
 	uint dashSpeed = 0;
 
 	j1Timer cooldown_E;
+	uint cooldownTime_E = 0;
+	uint lastTime_E = 0;
 	j1Timer cooldown_Rage;
 	uint duration_Rage = 0;
 	uint lastTime_Rage = 0;

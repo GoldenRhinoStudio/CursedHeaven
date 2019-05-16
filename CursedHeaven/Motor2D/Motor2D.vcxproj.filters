@@ -106,29 +106,20 @@
     <ClCompile Include="j1SceneSettings.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1Slime.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Judge.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1MindFlyer.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="j1SceneLose.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1SceneVictory.cpp">
       <Filter>Development\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1MindFlyer.cpp">
-      <Filter>Development\Modules\Entities\Enemies\Bosses</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Slime.cpp">
-      <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Judge.cpp">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Fire.cpp">
-      <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Shop.cpp">
-      <Filter>Development\Modules\Interactions</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Seller.cpp">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="j1Minimap.cpp">
       <Filter>Development\Modules</Filter>
@@ -255,29 +246,20 @@
     <ClInclude Include="j1SceneSettings.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="j1Slime.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1MindFlyer.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
     <ClInclude Include="j1SceneLose.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="j1SceneVictory.h">
       <Filter>Development\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="j1MindFlyer.h">
-      <Filter>Development\Modules\Entities\Enemies\Bosses</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Slime.h">
-      <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Judge.h">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Fire.h">
-      <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Shop.h">
-      <Filter>Development\Modules\Interactions</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Seller.h">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="j1Minimap.h">
       <Filter>Development\Modules</Filter>
@@ -325,12 +307,6 @@
     </Filter>
     <Filter Include="Development\Modules\Entities\Enemies">
       <UniqueIdentifier>{f2c7492a-a97f-4b48-add3-e384b87be8d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Development\Modules\Entities\Enemies\Bosses">
-      <UniqueIdentifier>{933ccfa0-48f8-4524-8d42-991e538af9f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Development\Modules\Entities\Enemies\Normal enemies">
-      <UniqueIdentifier>{094dc6c5-2330-4170-885b-92d237264dd4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

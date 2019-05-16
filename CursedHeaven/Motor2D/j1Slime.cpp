@@ -31,7 +31,7 @@ j1Slime::j1Slime(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES:
 	up.LoadAnimation("up", "slime", false);
 	down.LoadAnimation("down", "slime", false);
 
-	// Setting slime position
+	// Setting harpy position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
@@ -122,7 +122,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 bool j1Slime::DrawOrder(float dt) {
 
-	// Drawing the fire
+	// Drawing the harpy
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (position.x - App->entity->currentPlayer->position.x >= 0)

@@ -15,8 +15,6 @@ Go to our web page: https://goldenrhinostudio.com/
 * A - Left 
 * S - Down
 * D - Right
-* R - Drink potion
-* Intro - Choose / Accept
 * Q - Ability 1
 * E - Ability 2
 * Left click - Basic attack
@@ -27,7 +25,6 @@ Go to our web page: https://goldenrhinostudio.com/
 
 * Left joystick - Move
 * A - Choose / Accept
-* X - Drink potion
 * Y - Ability 1
 * B - Ability 2
 * Right trigger - Basic attack

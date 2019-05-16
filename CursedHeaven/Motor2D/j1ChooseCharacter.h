@@ -53,6 +53,9 @@ public:
 	bool backToMenu = false;
 
 private:
+
+	_TTF_Font* font = nullptr;
+	_TTF_Font* font2 = nullptr;
 	SDL_Texture* button_tex = nullptr;
 	SDL_Texture* gui_tex2 = nullptr;
 	SDL_Texture* info_tex = nullptr;

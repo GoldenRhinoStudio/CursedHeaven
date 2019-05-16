@@ -88,11 +88,6 @@ public:
 	const SDL_Texture* GetAtlas() const;
 
 public:
-	// Pixeled.ttf font
-	_TTF_Font* font1 = nullptr;
-	_TTF_Font* font2 = nullptr;
-	_TTF_Font* font3 = nullptr;
-
 	float buttonsScale;
 	float settingsWindowScale;
 	float creditsWindowScale;
@@ -121,10 +116,12 @@ public:
 	bool debug = false;
 
 private:
+
 	SDL_Texture* atlas = nullptr;
 	std::string atlas_file_name;
 
 	bool loadedAudios = false;
+
 };
 
 #endif // __j1GUI_H__

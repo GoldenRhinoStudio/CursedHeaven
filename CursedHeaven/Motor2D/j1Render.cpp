@@ -521,7 +521,6 @@ void j1Render::reOrder() {
 			{
 				TileData* img2 = *item2;
 				pos2 = App->map->WorldToMap(img2->x, img2->y);
-
 				if (img2 != img1) {
 					if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
 						(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
@@ -533,13 +532,12 @@ void j1Render::reOrder() {
 						(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
 						(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
 						(pos2.x == pos1.x && pos2.y == pos1.y)) {
-						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h) {
+						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h && !img1->behind) {
 							img1->order = img2->order - 0.2f;
 						}
 					}
 				}
 			}
-
 			OrderToRender.push(img1);
 		}
 	}

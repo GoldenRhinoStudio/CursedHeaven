@@ -990,10 +990,10 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 		}
 	}
 	
-	/*if (current_gid % 2 != 1)
+	if (current_gid % 2 != 1)
 		entity->height = 0;
 	else
-		entity->height = 1;*/
+		entity->height = 1;
 
 	LOG("height: %f", entity->height);
 

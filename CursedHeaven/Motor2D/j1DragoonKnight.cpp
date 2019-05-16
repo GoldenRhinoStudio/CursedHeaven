@@ -299,7 +299,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	App->map->EntityMovement(App->entity->knight);
+	App->map->EntityMovementTest(App->entity->knight);
 
 	// Update collider position to player position
 	if (collider != nullptr)
@@ -336,24 +336,24 @@ bool j1DragoonKnight::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			if (animation == &down || animation == &idle_down) Draw(r, false, 0, 3, playerScale);
-			else Draw(r, false, 0, 0, playerScale);
+			if (animation == &down || animation == &idle_down) Draw(r, false, 0, 3, playerScale, offset);
+			else Draw(r, false, 0, 0, playerScale, offset);
 		else
-			 Draw(r, true, -7, 0, playerScale);
+			 Draw(r, true, -7, 0, playerScale, offset);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, playerScale);
-			else if (animation == &attack_up) Draw(r, false, 0, 0, playerScale);
-			else if (animation == &attack_down) Draw(r, false, -4, -1, playerScale);
-			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, playerScale);
-			else Draw(r, false, 0, attackBlittingY, playerScale);
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, playerScale, offset);
+			else if (animation == &attack_up) Draw(r, false, 0, 0, playerScale, offset);
+			else if (animation == &attack_down) Draw(r, false, -4, -1, playerScale, offset);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, playerScale, offset);
+			else Draw(r, false, 0, attackBlittingY, playerScale, offset);
 		}
 		else {
-			if (animation == &attack_lateral_left) Draw(r, false, -13, -6, playerScale);
-			else if (animation == &attack_diagonal_down_left) Draw(r, false, -11, -6, playerScale);
-			else if (animation == &attack_diagonal_up_left) Draw(r, false, -11, -2, playerScale);
-			else Draw(r, true, attackBlittingX - 7, attackBlittingY, playerScale);
+			if (animation == &attack_lateral_left) Draw(r, false, -13, -6, playerScale, offset);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -11, -6, playerScale, offset);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -11, -2, playerScale, offset);
+			else Draw(r, true, attackBlittingX - 7, attackBlittingY, playerScale, offset);
 		}
 	}
 	return true;
@@ -440,6 +440,7 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	attackSize.y = player.child("attackCollider").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
+	offset = player.child("margin").attribute("offset").as_int();
 	playerScale = player.attribute("scale").as_float();
 
 	// Copying attack values

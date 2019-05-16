@@ -14,6 +14,7 @@ class j1Rogue;
 class j1Tank;
 class j1Player;
 class j1Judge;
+class j1Seller;
 
 struct SDL_Texture;
 
@@ -53,7 +54,7 @@ enum NPC_TYPES
 {
 	JUDGE,
 	OLDMAN,
-	MERCHANT 
+	SELLER
 };
 
 struct EntityInfo
@@ -88,7 +89,6 @@ public:
 	
 	void OnCollision(Collider* c1, Collider* c2);
 	void CreatePlayer();
-	void CreateNPC();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
 
@@ -109,6 +109,7 @@ public:
 	j1Player*			currentPlayer = nullptr;
 
 	j1Judge*			judge = nullptr;
+	j1Seller*			seller = nullptr;
 
 	PLAYER_TYPES player_type;
 	NPC_TYPES npc_type = JUDGE;

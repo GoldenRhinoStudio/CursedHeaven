@@ -141,7 +141,7 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 		}
 		else {
 
-			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)) {
+			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_R) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN)) {
 				App->shop->potions--;
 				App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
 			}

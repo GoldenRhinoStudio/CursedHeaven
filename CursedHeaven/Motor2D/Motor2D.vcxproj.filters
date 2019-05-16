@@ -127,6 +127,9 @@
     <ClCompile Include="j1Shop.cpp">
       <Filter>Development\Modules\Interactions</Filter>
     </ClCompile>
+    <ClCompile Include="j1Seller.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -269,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="j1Shop.h">
       <Filter>Development\Modules\Interactions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Seller.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

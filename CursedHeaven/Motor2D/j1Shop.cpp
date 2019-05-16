@@ -7,6 +7,7 @@
 #include "j1Player.h"
 #include "j1Label.h"
 #include "j1Shop.h"
+#include "j1Seller.h"
 #include "j1Input.h"
 
 #include "Brofiler/Brofiler.h"
@@ -65,17 +66,16 @@ void j1Shop::PlaceShop()
 {
 	// Creating the shop
 	int item1 = (rand() % 6);
-	App->shop->CreateItem((ITEM_TYPE)item1, 170, 750);
+	App->shop->CreateItem(POTION, -1100, 715);
 
 	int item2 = (rand() % 6);
-	App->shop->CreateItem((ITEM_TYPE)item2, 200, 750);
+	App->shop->CreateItem(HEART, -1050, 745);
 
 	int item3 = (rand() % 6);
-	App->shop->CreateItem((ITEM_TYPE)item3, 230, 750);
+	App->shop->CreateItem(HEART, -1000, 715);
 
-	/*App->shop->CreateItem(POTION, -1100, 715);
-	App->shop->CreateItem(HEART, -1050, 745);
-	App->shop->CreateItem(HEART, -1000, 715);*/
+	App->entity->CreateEntity(NPC, -1050, 705);
+
 }
 
 bool j1Shop::Update(float dt)

@@ -31,7 +31,6 @@ j1Fire::~j1Fire() {}
 bool j1Fire::Start()
 {
 	LOG("Loading fire texture");
-
 	sprites = App->tex->Load("textures/enemies/FireEnemy.png");
 	debug_tex = App->tex->Load("maps/path2.png");
 

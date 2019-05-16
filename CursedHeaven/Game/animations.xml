@@ -248,10 +248,19 @@
 	</mage>
 </player>
   
-  <!------------------------------->
-  <!-- Animations of the enemies -->
-  <!------------------------------->
   <enemies>   
+	<!------------------------------->
+	<!-- Animations other entities -->
+	<!------------------------------->
+	<seller>
+      <idle loop="true" speed="7.0f">
+        <animation x="0" y="71" w="22" h="34"/>
+	  </idle>
+	</seller>
+	
+	<!------------------------------->
+	<!-- Animations of the enemies -->
+	<!------------------------------->
 	<slime>
       <idleD_up loop="true" speed="7.0f">
         <animation x="0" y="37" w="30" h="36"/>

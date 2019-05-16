@@ -29,6 +29,7 @@
 #include "j1Particles.h"
 #include "j1SceneLose.h"
 #include "j1SceneVictory.h"
+#include "j1Minimap.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -68,7 +69,7 @@ bool j1Scene1::Start()
 	{	
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("greenmount_v2.tmx"))
+		if (App->map->Load("Test.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -114,6 +115,8 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, font, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+
+		lvl1_tex = App->tex->Load("maps/minimap_lvl1.png");
 
 		PlaceEntities(6);
 
@@ -313,6 +316,8 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
+		App->render->Blit(lvl1_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
+
 	return continueGame;
 }
 
@@ -387,7 +392,7 @@ bool j1Scene1::CleanUp()
 	LOG("Freeing scene");
 	App->tex->UnLoad(gui_tex);
 	App->tex->UnLoad(debug_tex);
-
+	App->tex->UnLoad(lvl1_tex);
 	App->map->CleanUp();
 	App->collisions->CleanUp();
 	App->tex->CleanUp();

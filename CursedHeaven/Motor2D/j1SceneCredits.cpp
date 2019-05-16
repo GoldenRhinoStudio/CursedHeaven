@@ -175,7 +175,7 @@ bool j1SceneCredits::Update(float dt)
 
 	}
 
-	App->render->Blit(license, 50, 50, NULL, SDL_FLIP_NONE, 0, 0.24f);
+	App->render->Blit(license, 50, 50, NULL, SDL_FLIP_NONE, false, 0.24f);
 
 
 

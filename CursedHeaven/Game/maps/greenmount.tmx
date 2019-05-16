@@ -10016,7 +10016,7 @@
  <layer id="10" name="Collisions" width="100" height="100" opacity="0.39">
   <properties>
    <property name="Navigation" type="int" value="1"/>
-   <property name="NoDraw" type="int" value="1"/>
+   <property name="Nodraw" type="int" value="1"/>
   </properties>
   <data>
    <tile gid="24"/>

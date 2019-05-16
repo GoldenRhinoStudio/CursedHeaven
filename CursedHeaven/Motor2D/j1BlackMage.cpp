@@ -77,6 +77,7 @@ bool j1BlackMage::Start() {
 	// Starting ability timers
 	cooldown_Q.Start();
 	cooldown_E.Start();
+	potionTime.Start();
 
 	player_start = true;
 	return true;

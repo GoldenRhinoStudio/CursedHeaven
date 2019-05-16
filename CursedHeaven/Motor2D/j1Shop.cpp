@@ -75,7 +75,6 @@ void j1Shop::PlaceShop()
 	App->shop->CreateItem(HEART, -1000, 715);
 
 	App->entity->CreateEntity(NPC, -1050, 705);
-
 }
 
 bool j1Shop::Update(float dt)
@@ -308,8 +307,11 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 		else {
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
 
-			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) {
+			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN 
+				|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN 
+				&& (App->shop->buyingTime.Read() >= App->shop->lastBuyingTime + 500))) {
 
+				App->shop->lastBuyingTime = App->shop->buyingTime.Read();
 				App->entity->currentPlayer->coins -= prize;
 				level++;
 

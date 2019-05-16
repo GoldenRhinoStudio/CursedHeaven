@@ -127,7 +127,9 @@ public:
 	j1Timer invulCounter;
 	uint lastTime_invul = 0;
 	uint invulTime = 0;
-	
+
+	j1Timer potionTime;
+	uint lastPotionTime = 0;
 };
 
 #endif // __j1PLAYER_H__

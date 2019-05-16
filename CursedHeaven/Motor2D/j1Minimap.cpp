@@ -21,7 +21,6 @@ j1Minimap::j1Minimap()
 
 j1Minimap::~j1Minimap() {}
 
-
 bool j1Minimap::Update(float dt)
 {	
 	return true;
@@ -32,10 +31,6 @@ bool j1Minimap::PostUpdate()
 	DrawEntities();
 	return true;
 }
-
-
-
-
 
 void j1Minimap::DrawEntities()
 {
@@ -52,5 +47,3 @@ void j1Minimap::DrawEntities()
 			App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 0, 0, 255, 255, true, false);
 	}
 }
-
-

@@ -97,6 +97,9 @@ public:
 	uint bookLevel = 0;
 
 	uint potionHealing = 0;
+
+	j1Timer buyingTime;
+	uint lastBuyingTime = 0;
 };
 
 #endif // __J1SHOP_H__

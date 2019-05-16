@@ -69,7 +69,7 @@ bool j1Scene1::Start()
 	{	
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("Test.tmx"))
+		if (App->map->Load("greenmount.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;

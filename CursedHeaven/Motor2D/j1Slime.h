@@ -54,6 +54,8 @@ public:
 	float speed;
 
 	Movement direction;
+	fPoint lastPosition;
+	bool knockbackOn = false;
 
 	std::vector<iPoint>* path;
 	int node = 0;
@@ -77,6 +79,8 @@ private:
 	Animation down;
 
 	Animation death;
+
+	float knockbackSpeed = 0.0f;
 
 };
 #endif // __j1SLIME_H__

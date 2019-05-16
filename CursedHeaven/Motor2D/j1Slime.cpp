@@ -69,35 +69,58 @@ bool j1Slime::Update(float dt, bool do_logic)
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
-		{
-			
-			if (App->entity->currentPlayer->dead == false)
+		{			
+			if (knockbackOn)
 			{
-				if (do_logic) {
-					/*if(path != nullptr)
-						path->clear();*/
-
-					if (App->path->CreatePath(origin, destination) > 0) {
-						path = App->path->GetLastPath();
-						target_found = true;
-						node = 0;
-					}
-					else {
-						target_found = false;
-					}
+				if ((animation == &lateral || animation == &idle_lateral) && (position.x <= lastPosition.x + 50.0f))
+					position.x -= knockbackSpeed * dt;
+				else if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0 && (position.x >= lastPosition.x - 50.0f))
+					position.x += knockbackSpeed * dt;
+				else if ((animation == &up || animation == &idle_up) && (position.y >= lastPosition.y - 50.0f))
+					position.y += knockbackSpeed * dt;
+				else if ((animation == &down || animation == &idle_down) && (position.y <= lastPosition.y + 50.0f))
+					position.y -= knockbackSpeed * dt;
+				/*else if ((animation == &diagonal_up || animation == &idle_diagonal_up) && (position.x >= lastPosition.x - 60.0f) && (position.y >= lastPosition.y - 30.0f)) {
+					position.x -= knockbackSpeed * dt;
+					position.y -= knockbackSpeed * dt;
 				}
-				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE_SLIME) {
-						App->audio->PlayFx(App->audio->slime_attack);
-					}else
-						Move(path, dt);
-					LOG("MOVING");
+				else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 60.0f) && (position.y >= lastPosition.y - 30.0f)) {
+					position.x += knockbackSpeed * dt;
+					position.y -= knockbackSpeed * dt;
 				}
-				else if (!target_found && path != nullptr) {
-					LOG("NOT FOUND");
+				else if ((animation == &diagonal_down || animation == &idle_diagonal_down) && (position.x >= lastPosition.x - 60.0f) && (position.y <= lastPosition.y + 30.0f)) {
+					position.x -= knockbackSpeed * dt;
+					position.y += knockbackSpeed * dt;
 				}
-					//fix attack
+				else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 60.0f) && (position.y <= lastPosition.y + 30.0f)) {
+					position.x += knockbackSpeed * dt;
+					position.y += knockbackSpeed * dt;
+				}*/
+				else
+					knockbackOn = false;
 			}
+			else if (do_logic) {
+				/*if(path != nullptr)
+					path->clear();*/
+
+				if (App->path->CreatePath(origin, destination) > 0) {
+					path = App->path->GetLastPath();
+					target_found = true;
+					node = 0;
+				}
+				else target_found = false;				
+			}
+			else if (target_found && path != nullptr) {
+				if (distance <= ATTACK_RANGE_SLIME) {
+					App->audio->PlayFx(App->audio->slime_attack);
+				}
+				else Move(path, dt);
+
+				LOG("MOVING");
+			}
+			else if (!target_found && path != nullptr)
+				LOG("NOT FOUND");			
+					//fix attack			
 		}
 		else {
 		/*	if (path != nullptr)
@@ -110,19 +133,16 @@ bool j1Slime::Update(float dt, bool do_logic)
 			animation = &idle_down;
 			position = initialPosition;
 		}
-
 	}
-
+	
 	App->map->EntityMovement(this);
-
-
 	
 	return true;
 }
 
 bool j1Slime::DrawOrder(float dt) {
 
-	// Drawing the fire
+	// Drawing the slime
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (position.x - App->entity->currentPlayer->position.x >= 0)
@@ -159,6 +179,12 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
 			if (App->entity->player_type == MAGE) col_2->to_delete = true;
+			
+			if (lifePoints > 0) {
+				lastPosition = position;
+				knockbackOn = true;
+			}
+			
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->slime_damage);
 			receivedBasicDamage = true;
@@ -220,7 +246,8 @@ void j1Slime::LoadProperties()
 	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
 	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
 
-	speed = slime.attribute("speed").as_int();
+	speed = slime.attribute("speed").as_float();
+	knockbackSpeed = slime.attribute("knockback").as_float();
 	lifePoints = slime.attribute("life").as_int();
 	App->entity->slime_Damage = slime.child("combat").attribute("damage").as_int();
 

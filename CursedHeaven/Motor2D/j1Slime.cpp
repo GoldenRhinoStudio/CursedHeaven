@@ -89,9 +89,14 @@ bool j1Slime::Update(float dt, bool do_logic)
 				if (target_found && path != nullptr) {
 					if (distance <= ATTACK_RANGE_SLIME) {
 						App->audio->PlayFx(App->audio->slime_attack);
-					}
-					Move(path, dt);
-				}//fix attack
+					}else
+						Move(path, dt);
+					LOG("MOVING");
+				}
+				else if (!target_found && path != nullptr) {
+					LOG("NOT FOUND");
+				}
+					//fix attack
 			}
 		}
 		else {
@@ -232,7 +237,6 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
 	/*if (App->path->check_nextTile(path, &node, &pos))
 		node++;*/
-	LOG("Node: %i", node);
 	direction = App->path->CheckDirection(path, &node);
 
 	if (direction == Movement::DOWN_RIGHT)
@@ -288,7 +292,7 @@ void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 		position.x += speed * dt;
 	}
 
-	else if (direction == Movement::LEFT)
+	else
 	{
 		animation = &lateral;
 		animation->flip = true;

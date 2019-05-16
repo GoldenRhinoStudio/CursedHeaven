@@ -70,6 +70,7 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * nod
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
+		LOG("x:%i y:%i", x_difference, y_difference);
 
 		if (x_difference > 0 && y_difference > 0) return DOWN;
 		else if (x_difference > 0 && y_difference < 0) return RIGHT;

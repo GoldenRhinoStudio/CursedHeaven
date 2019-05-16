@@ -2,6 +2,7 @@
 #define __j1TEXTURES_H__
 
 #include "j1Module.h"
+#include "j1Render.h"
 #include <list>
 
 struct SDL_Texture;
@@ -26,9 +27,9 @@ public:
 	bool CleanUp();
 
 	// Load Texture
-	SDL_Texture* const	Load(const char* path);
+	SDL_Texture* const	Load(const char* path, SDL_Renderer*renderer = App->render->renderer);
 	bool				UnLoad(SDL_Texture* texture);
-	SDL_Texture* const	LoadSurface(SDL_Surface* surface);
+	SDL_Texture* const	LoadSurface(SDL_Surface* surface, SDL_Renderer*renderer = App->render->renderer);
 	void				GetSize(const SDL_Texture* texture, uint& width, uint& height) const;
 
 public:

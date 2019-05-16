@@ -130,6 +130,9 @@
     <ClCompile Include="j1Seller.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="j1Minimap.cpp">
+      <Filter>Development\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -275,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="j1Seller.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Minimap.h">
+      <Filter>Development\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

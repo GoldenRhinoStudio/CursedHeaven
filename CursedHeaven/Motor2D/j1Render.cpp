@@ -534,21 +534,22 @@ void j1Render::reOrder() {
 				}
 
 			}
-			else if (img1->height >= img2->height && !img1->behind) {
+			else if (img1->height >= img2->height ) {
 				if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
 					(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
 					(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
 					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
 					(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
 					(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
-					(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
-					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
 					(pos2.x == pos1.x && pos2.y == pos1.y)) //current
-				{/*
-					if (img2->id % 2 != 0)
-						img1->order = img2->order + 1.0f;
-					else*/
+				{
+					if (img2->order > img1->order)
+						img1->order = img2->order + 0.5f;
+				}
+				else if ((pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
+					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) && //down-left
+					!img1->behind) {
 					if (img2->order > img1->order)
 						img1->order = img2->order + 0.5f;
 				}

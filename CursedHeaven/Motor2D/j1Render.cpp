@@ -483,78 +483,78 @@ void j1Render::reOrder() {
 		pos2 = App->map->WorldToMap(img2->x, img2->y);
 		App->map->Tile_WorldMap(pos2, img2->height);	
 
-		//for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
-		//{
-		//	
-		//	TileData* img1 = *item;
-		//	pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y);
-		//	App->map->Tile_WorldMap(pos1, img1->height);
+		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
+		{
+			
+			TileData* img1 = *item;
+			pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y);
+			App->map->Tile_WorldMap(pos1, img1->height);
 
 
-		//		if (img1->height < img2->height && !img1->behind) {//check
+				if (img1->height < img2->height && !img1->behind) {//check
 
-		//			if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-		//			else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-		//			else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-		//			else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
+					if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
+					{
+						img1->order = img2->order - 0.5f;
+						img1->behind = true;
+					}
+					else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
+					{
+						img1->order = img2->order - 0.5f;
+						img1->behind = true;
+					}
+					else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
+					{
+						img1->order = img2->order + 0.5f;
+					}
+					else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
+					{
+						img1->order = img2->order - 0.5f;
+						img1->behind = true;
+					}
+					else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
+					{
+						img1->order = img2->order - 0.5f;
+						img1->behind = true;
+					}
 
-		//		}
-		//		else if (img1->height >= img2->height && !img1->behind) {
-		//			if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
-		//				(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
-		//				(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
-		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
-		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
-		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
-		//				(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
-		//				(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-		//				(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
-		//				(pos2.x == pos1.x && pos2.y == pos1.y)) //current
-		//			{/*
-		//				if (img2->id % 2 != 0)
-		//					img1->order = img2->order + 1.0f;
-		//				else*/
-		//				if(img2->order > img1->order)
-		//					img1->order = img2->order + 0.5f;
-		//			}
-		//		}
-		//}
+				}
+				else if (img1->height >= img2->height && !img1->behind) {
+					if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+						(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
+						(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
+						(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+						(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
+						(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
+						(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
+						(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+						(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
+						(pos2.x == pos1.x && pos2.y == pos1.y)) //current
+					{/*
+						if (img2->id % 2 != 0)
+							img1->order = img2->order + 1.0f;
+						else*/
+						if(img2->order > img1->order)
+							img1->order = img2->order + 0.5f;
+					}
+				}
+		}
 		OrderToRender.push(img2);
 		order = img2->order + 1;
 	}

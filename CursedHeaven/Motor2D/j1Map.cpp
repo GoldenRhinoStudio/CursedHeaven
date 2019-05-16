@@ -914,33 +914,13 @@ void j1Map::EntityMovement(j1Entity* entity)
 void j1Map::EntityMovementTest(j1Entity* entity) {
 	
 	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
-	int y = entity->collider->rect.y + entity->height / 2;
+	int y = entity->collider->rect.y + entity->collider->rect.h - 5;
 	
 	iPoint current_tile = WorldToMap(x, y);
 	iPoint next_tile = { 0,0 };
 
-	uint height0_gid = 0, height1_gid = 0;
-
-	height1_gid = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y);
-
-	if (height1_gid == 0) 
-		height0_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
-
-	uint current_gid;
-	uint tile_id = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
-
-	int sum = (tile_id % 2 != 0) ? 1 : 0;
-
-	if (height1_gid != 0) {		//entity is on the second layer
-		current_gid = height1_gid;
-		entity->height = 2 + sum;
-		entity->current_height = 1;
-	}
-	else {				                //entity is on the first layer
-		current_gid = height0_gid;
-		entity->height = 0 + sum;
-		entity->current_height = 0;
-	}
+	uint current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+	uint next_gid = 0;
 
 	// tiles of the first layer | height == 0
 	uint up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);
@@ -953,42 +933,194 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	uint down_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
 	uint left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
 
-
-	// tiles of the second layer | height == 1
-	uint up_right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y - 1);
-	uint down_left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y + 1);
-	uint down_right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y);
-	uint up_left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y);
-
-	uint right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
-	uint up_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
-	uint down_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
-	uint left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
-
-
-	bool height0_semiblock = false, height1_semiblock = false;
-	bool height0_next = false, height1_next = false;
-
 	DIRECTION direction;
 
 	direction = entity->direction;
+
+	bool going_up = false;
+	bool going_down = false;
+
+	if (current_gid != 0) 
+	{
+		switch (direction)
+		{
+		case UP_:
+			next_gid = up_gid;
+			next_tile = { current_tile.x - 1, current_tile.y - 1 };
+			break;
+		case DOWN_:		
+			next_gid = down_gid;
+			next_tile = { current_tile.x + 1, current_tile.y + 1 };
+			break;
+		case RIGHT_:		
+			next_gid = right_gid;
+			next_tile = { current_tile.x + 1, current_tile.y - 1 };
+			break;
+		case LEFT_:		
+			next_gid = left_gid;
+			next_tile = { current_tile.x - 1, current_tile.y + 1 };
+			break;
+		case UP_RIGHT_:	
+			next_gid = up_right_gid;
+			next_tile = { current_tile.x, current_tile.y - 1 };
+			break;
+		case UP_LEFT_:
+			next_gid = up_left_gid;
+			next_tile = { current_tile.x - 1, current_tile.y };
+			break;
+		case DOWN_RIGHT_:
+			next_gid = down_right_gid;
+			next_tile = { current_tile.x + 1, current_tile.y };
+			break;
+		case DOWN_LEFT_:
+			next_gid = down_left_gid;
+			next_tile = { current_tile.x, current_tile.y + 1 };
+			break;
+		}
+	}
+
+	if (next_gid != 0)
+	{
+		if (current_gid % next_gid != 0)
+		{
+			if (current_gid % 2 == 0)
+				going_up = true;
+			else
+				going_down = true;
+		}
+	}
+	
+	if (current_gid % 2 != 1)
+		entity->height = 0;
+	else
+		entity->height = 1;
+
+	if (next_gid == 5 || next_gid == 6 || next_gid == 0)
+		entity->movement = false;
+
+	else
+	{
+		entity->movement = true;
+
+		if (going_up)
+		{
+			if (direction == UP_)
+			{
+
+			}
+
+			else if (direction == DOWN_)
+			{
+
+			}
+
+			else if (direction == RIGHT_)
+			{
+				if ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && ((down_right_gid != next_gid) || (down_gid != next_gid)))
+					entity->position.y -= 1;
+
+				else
+				{
+					entity->position.x += 1;
+					entity->position.y += 1;
+				}
+			}
+
+
+			else if (direction == LEFT_)
+			{
+				if ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && ((down_left_gid != next_gid) || (left_gid != next_gid)))
+					entity->position.y -= 1;
+				
+				else 
+				{
+					entity->position.x -= 1;
+					entity->position.y += 1;
+				}
+			}
+
+			else if (direction == UP_RIGHT_)
+			{
+				entity->position.y -= 1;
+			}
+
+			else if (direction == UP_LEFT_)
+			{
+				entity->position.y -= 1;
+			}
+
+			else if (direction == DOWN_RIGHT_)
+			{
+				entity->position.y += 1;
+			}
+
+			else if (direction == DOWN_LEFT_)
+			{
+				entity->position.y += 1;
+			}
+		}
+
+		else if (going_down)
+		{
+			if (direction == UP_)
+			{
+
+			}
+
+			else if (direction == DOWN_)
+			{
+
+			}
+
+			else if (direction == RIGHT_)
+			{
+
+			}
+
+			else if (direction == LEFT_)
+			{
+
+			}
+
+			else if (direction == UP_RIGHT_)
+			{
+				entity->position.x += 1;
+			}
+
+			else if (direction == UP_LEFT_)
+			{
+				entity->position.x -= 1;
+			}
+
+			else if (direction == DOWN_RIGHT_)
+			{
+				entity->position.y += 1;
+			}
+
+			else if (direction == DOWN_LEFT_)
+			{
+				entity->position.y += 1;
+			}
+		}
+	}
 
 }
 
 
 void j1Map::Tile_WorldMap(iPoint& pos, int height){	
 	int re2 = 0;
-	if (height < 2) {
+	if (height < 2) 
 		re2 = 0;
-	}
+	
 	else if (height < 4 && height >= 2)
 		re2 = 1;
-	else if (height < 6 && height >= 4) {
+	
+	else if (height < 6 && height >= 4) 
 		re2 = 2;
-	}
-	else if (height < 8 && height >= 6) {
+
+	else if (height < 8 && height >= 6)
 		re2 = 3;
-	}
+	
 	pos.x += re2;
 	pos.y += re2;
 }

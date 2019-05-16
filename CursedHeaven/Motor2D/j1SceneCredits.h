@@ -49,7 +49,6 @@ public:
 	j1Box* credits_window = nullptr;
 
 private:
-
 	SDL_Texture* gui_tex2 = nullptr;
 	SDL_Texture* license = nullptr;
 

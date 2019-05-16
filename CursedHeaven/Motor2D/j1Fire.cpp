@@ -1,4 +1,4 @@
-#include "j1Slime.h"
+#include "j1Fire.h"
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
@@ -15,67 +15,56 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1Slime::j1Slime(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1Fire::j1Fire(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
 {
 	animation = NULL;
 
-	idle_diagonal_up.LoadAnimation("idleD_up", "slime", false);
-	idle_diagonal_down.LoadAnimation("idleD_down", "slime", false);
-	idle_lateral.LoadAnimation("idleLateral", "slime", false);
-	idle_down.LoadAnimation("idleDown", "slime", false);
-	idle_up.LoadAnimation("idleUp", "slime", false);
+	idle.LoadAnimation("idle", "fire", false);	
 
-	diagonal_up.LoadAnimation("diagonalUp", "slime", false);
-	diagonal_down.LoadAnimation("diagonalDown", "slime", false);
-	lateral.LoadAnimation("lateral", "slime", false);
-	up.LoadAnimation("up", "slime", false);
-	down.LoadAnimation("down", "slime", false);
-
-	// Setting slime position
+	// Setting fire position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
 
-j1Slime::~j1Slime() {}
+j1Fire::~j1Fire() {}
 
-bool j1Slime::Start()
+bool j1Fire::Start()
 {
-	LOG("Loading slime texture");
-
-	sprites = App->tex->Load("textures/enemies/Slimes/Slime.png");
+	LOG("Loading fire texture");
+	sprites = App->tex->Load("textures/enemies/FireEnemy.png");
 	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();
 
-	animation = &idle_down;
+	animation = &idle;
 
 	collider = App->collisions->AddCollider({ (int)position.x - margin.x, (int)position.y - margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
 	return true;
 }
 
-bool j1Slime::Update(float dt, bool do_logic)
+bool j1Fire::Update(float dt, bool do_logic)
 {
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
 		collider->SetPos(position.x + margin.x, position.y + margin.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
-		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
-		
-		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
-		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
+		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
 
+		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
+		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
+		//fix destination
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
-			
+
 			if (App->entity->currentPlayer->dead == false)
 			{
 				if (do_logic) {
 					/*if(path != nullptr)
-						path->clear();*/
+					path->clear();*/
 
 					if (App->path->CreatePath(origin, destination) > 0) {
 						path = App->path->GetLastPath();
@@ -87,27 +76,22 @@ bool j1Slime::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE_SLIME) {
+					if (distance <= ATTACK_RANGE_FIRE) {
 						App->audio->PlayFx(App->audio->slime_attack);
-					}else
-						Move(path, dt);
-					LOG("MOVING");
-				}
-				else if (!target_found && path != nullptr) {
-					LOG("NOT FOUND");
-				}
-					//fix attack
+					}
+					Move(path, dt);
+				}//fix attack
 			}
 		}
 		else {
-		/*	if (path != nullptr)
-				path->clear();*/
+			/*	if (path != nullptr)
+			path->clear();*/
 			target_found = false;
 		}
 
 		if (App->entity->currentPlayer->position == App->entity->currentPlayer->initialPosition)
 		{
-			animation = &idle_down;
+			animation = &idle;
 			position = initialPosition;
 		}
 
@@ -116,11 +100,11 @@ bool j1Slime::Update(float dt, bool do_logic)
 	App->map->EntityMovement(this);
 
 
-	
+
 	return true;
 }
 
-bool j1Slime::DrawOrder(float dt) {
+bool j1Fire::DrawOrder(float dt) {
 
 	// Drawing the fire
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
@@ -132,7 +116,7 @@ bool j1Slime::DrawOrder(float dt) {
 	return true;
 }
 
-bool j1Slime::CleanUp()
+bool j1Fire::CleanUp()
 {
 	LOG("Unloading slime");
 	App->tex->UnLoad(sprites);
@@ -140,23 +124,23 @@ bool j1Slime::CleanUp()
 		collider->to_delete = true;
 
 	/*if (path != nullptr) {
-		path->clear();
-		RELEASE(path);
-		target_found = false;
+	path->clear();
+	RELEASE(path);
+	target_found = false;
 	}*/
 
 	return true;
 }
 
-bool j1Slime::PostUpdate() {
+bool j1Fire::PostUpdate() {
 
 	return true;
 }
 
-void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
+void j1Fire::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
-		
+
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
 			if (App->entity->player_type == MAGE) col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
@@ -166,7 +150,7 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
 			col_2->to_delete = true;
-			if(App->entity->mage != nullptr)
+			if (App->entity->mage != nullptr)
 				lifePoints -= App->entity->mage->fireDamage;
 			App->audio->PlayFx(App->audio->slime_damage);
 
@@ -190,12 +174,12 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 	}
 }
 
-bool j1Slime::Load(pugi::xml_node & data)
+bool j1Fire::Load(pugi::xml_node & data)
 {
 	return true;
 }
 
-bool j1Slime::Save(pugi::xml_node& data) const
+bool j1Fire::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
 
@@ -205,97 +189,81 @@ bool j1Slime::Save(pugi::xml_node& data) const
 	return true;
 }
 
-void j1Slime::LoadProperties()
+void j1Fire::LoadProperties()
 {
 	pugi::xml_document config_file;
 	config_file.load_file("config.xml");
 	pugi::xml_node config;
 	config = config_file.child("config");
-	pugi::xml_node slime;
-	slime = config.child("slime");
+	pugi::xml_node fire;
+	fire = config.child("fire");
 
 	// Copying the values of the collider
-	margin.x = slime.child("margin").attribute("x").as_int();
-	margin.y = slime.child("margin").attribute("y").as_int();
-	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
-	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
+	margin.x = fire.child("margin").attribute("x").as_int();
+	margin.y = fire.child("margin").attribute("y").as_int();
+	colliderSize.x =  fire.child("colliderSize").attribute("w").as_int();
+	colliderSize.y = fire.child("colliderSize").attribute("h").as_int();
 
-	speed = slime.attribute("speed").as_int();
-	lifePoints = slime.attribute("life").as_int();
-	App->entity->slime_Damage = slime.child("combat").attribute("damage").as_int();
+	speed = fire.attribute("speed").as_int();
+	lifePoints = fire.attribute("life").as_int();
+	App->entity->fire_Damage = fire.child("combat").attribute("damage").as_int();
 
 }
 
-void j1Slime::Move(const std::vector<iPoint>* path, float dt)
+void j1Fire::Move(const std::vector<iPoint>* path, float dt)
 {
-	for (uint i = 0; i < path->size(); ++i)
-	{
-		iPoint pos = App->map->MapToWorld(path->at(i).x, path->at(i).y);
-		App->render->Blit(debug_tex, pos.x, pos.y);
-	}
-
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	/*if (App->path->check_nextTile(path, &node, &pos))
-		node++;*/
+	LOG("Node: %i", node);
 	direction = App->path->CheckDirection(path, &node);
 
 	if (direction == Movement::DOWN_RIGHT)
 	{
-		animation = &diagonal_down;
-		position.y += (speed * dt) / 2;
+		position.y += speed * dt;
 		position.x += speed * dt;
 		animation->flip = false;
 	}
 
 	else if (direction == Movement::DOWN_LEFT)
 	{
-		animation = &diagonal_down;
-		position.y += (speed * dt) / 2;
+		position.y += speed * dt;
 		position.x -= speed * dt;
 		animation->flip = true;
 	}
 
 	else if (direction == Movement::UP_RIGHT)
 	{
-		animation = &diagonal_up;
-		position.y -= (speed * dt) / 2;
+		position.y -= speed * dt;
 		position.x += speed * dt;
 		animation->flip = false;
 	}
 
 	else if (direction == Movement::UP_LEFT)
 	{
-		animation = &diagonal_up;
-		position.y -= (speed * dt) / 2;
+		position.y -= speed * dt;
 		position.x -= speed * dt;
 		animation->flip = true;
 	}
 
 	else if (direction == Movement::DOWN)
 	{
-		animation = &down;
 		position.y += speed * dt;
 		animation->flip = false;
 	}
 
 	else if (direction == Movement::UP)
 	{
-		animation = &up;
 		position.y -= speed * dt;
 		animation->flip = false;
 	}
 
 	else if (direction == Movement::RIGHT)
 	{
-		animation = &lateral;
-		animation->flip = false;
 		position.x += speed * dt;
+		animation->flip = false;
 	}
 
-	else
+	else if (direction == Movement::LEFT)
 	{
-		animation = &lateral;
-		animation->flip = true;
 		position.x -= speed * dt;
+		animation->flip = true;
 	}
 }

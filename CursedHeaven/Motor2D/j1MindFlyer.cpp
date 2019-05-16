@@ -32,7 +32,7 @@ j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTIT
 	up.LoadAnimation("up", "mindflyer", false);
 	down.LoadAnimation("down", "mindflyer", false);
 
-	// Setting harpy position
+	// Setting mindflyer position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
@@ -166,7 +166,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 bool j1MindFlyer::DrawOrder(float dt) {
 
-	// Drawing the harpy
+	// Drawing the mindflyer
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (position.x - App->entity->currentPlayer->position.x >= 0)

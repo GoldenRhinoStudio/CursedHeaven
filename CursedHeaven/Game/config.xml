@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.3.</title>
+    <title>Cursed Heaven v0.5</title>
     <organization>UPC</organization>
   </app>
 	
@@ -27,8 +27,8 @@
   
   <player>
 	<blackMage>
-	  <size width="21" height="35"/>
-	  <margin x="0" y="0" colisionMargin="3"/>
+	  <size width="18" height="13"/>
+	  <margin x="3" y="23" colisionMargin="3"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
@@ -59,6 +59,12 @@
 	  <combat damage="20"/>
   </slime>  
   
+  <fire speed="50.0f" life="300">
+	  <margin x="-10" y="-10"/>
+	  <colliderSize w="17" h="25"/>
+	  <combat damage="20"/>
+  </fire>  
+  
   <mindflyer speed="100.0f" life="3000">
 	  <margin x="-12" y="-10"/>
 	  <colliderSize w="35" h="35"/>
@@ -80,6 +86,18 @@
 		<grey r="134" g="136" b="138"/>
 	</colors>
   </gui>
+  
+  <shop>
+	<prizes>
+	  <boots p1="30" p2="80" p3="150"/>
+	  <sword p1="30" p2="80" p3="150"/>
+	  <heart p1="30" p2="80" p3="150"/>
+	  <armour p1="30" p2="80" p3="150"/>
+	  <hourglass p1="30" p2="80" p3="150"/>
+	  <book p1="30" p2="80" p3="150"/>
+	  <potion p="30" healing="50"/>
+	</prizes>
+  </shop>
   
   <menu>
   </menu>

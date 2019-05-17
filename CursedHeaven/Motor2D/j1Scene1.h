@@ -81,6 +81,9 @@ private:
 	SDL_Texture* debug_tex = nullptr;
 	SDL_Texture* gui_tex = nullptr;
 
+	SDL_Texture* lvl1_tex = nullptr;
+	SDL_Rect rect = { 0,0,400,200};
+
 	_TTF_Font* font = nullptr;
 
 	bool closeSettings = false;

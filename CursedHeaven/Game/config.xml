@@ -10,6 +10,8 @@
     <vsync value="true"/>
 	<camera initialX="0" initialY="0"/>
   </renderer>
+  
+  <minimap width="400" height="200"/>
 
   <window>
     <resolution width="1024" height="768" scale="3"/>
@@ -25,8 +27,8 @@
   
   <player>
 	<blackMage>
-	  <size width="18" height="13"/>
-	  <margin x="3" y="23" colisionMargin="3"/>
+	  <size width="21" height="35"/>
+	  <margin x="0" y="0" colisionMargin="3" offset="8"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
@@ -36,9 +38,9 @@
 	</blackMage>
 	
 	<dragoonKnight scale="0.8f">
-	  <size width="18" height="13"/>
+	  <size width="21" height="35"/>
 	  <attackCollider width="18" height="24"/>
-	  <margin x="3" y="23" colisionMargin="3"/>
+	  <margin x="0" y="0" colisionMargin="3"  offset="15"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>

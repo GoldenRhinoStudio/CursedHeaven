@@ -121,6 +121,9 @@
     <ClCompile Include="j1SceneVictory.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1Minimap.cpp">
+      <Filter>Development\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -257,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="j1SceneVictory.h">
       <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Minimap.h">
+      <Filter>Development\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -128,10 +128,13 @@ public:
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
 	void EntityMovement(j1Entity* entity);
+	void EntityMovementTest(j1Entity* entity);
 
 	void Tile_WorldMap(iPoint & pos, int height);
 
 	void Entity_WorldMap(iPoint & pos, int height);
+
+	TileSet* GetTilesetFromTileId(int id) const;
 
 private:
 
@@ -141,9 +144,6 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 	bool PutColliders(const char* file_name);
-
-	TileSet* GetTilesetFromTileId(int id) const;
-
 
 public:
 

@@ -2,6 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Pathfinding.h"
+#include "j1Map.h"
 
 #include <algorithm>
 #include "Brofiler/Brofiler.h"
@@ -63,20 +64,22 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * nod
 {
 	if (path->size() > 1 && *node < path->size() - 1)
 	{
-		iPoint tile = path->at(*node);
-		iPoint next_tile = path->at(*node + 1);
+		iPoint tile = { path->at(*node).x, path->at(*node).y };
+		iPoint next_tile = { path->at(*node + 1).x, path->at(*node + 1).y };
+
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
+		LOG("x:%i y:%i", x_difference, y_difference);
 
-		if (x_difference > 0 && y_difference > 0) return DOWN_RIGHT;
-		else if (x_difference > 0 && y_difference < 0) return UP_RIGHT;
-		else if (x_difference < 0 && y_difference > 0) return DOWN_LEFT;
-		else if (x_difference < 0 && y_difference < 0) return UP_LEFT;
+		if (x_difference > 0 && y_difference > 0) return DOWN;
 		else if (x_difference > 0 && y_difference < 0) return RIGHT;
-		else if (x_difference < 0 && y_difference == 0) return LEFT;
-		else if (x_difference == 0 && y_difference > 0)	return DOWN;
-		else if (x_difference == 0 && y_difference < 0) return UP;
+		else if (x_difference < 0 && y_difference > 0) return LEFT;
+		else if (x_difference < 0 && y_difference < 0) return UP;
+		else if (x_difference == 0 && y_difference < 0) return UP_RIGHT;
+		else if (x_difference < 0 && y_difference == 0) return UP_LEFT;
+		else if (x_difference > 0 && y_difference == 0) return DOWN_RIGHT;
+		else if (x_difference == 0 && y_difference > 0)	return DOWN_LEFT;
 	}
 
 	else return NONE;
@@ -84,11 +87,10 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * nod
 
 bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, fPoint* position) {
 
-	if (path->size() > 1 && *cnode < path->size() - 1)
+	if (path->size() > 1 && *cnode != path->size() - 1)
 	{
-		int* node = cnode;
-		iPoint prevDest = path->at(*node);
-		iPoint currentDest = path->at(*node + 1);
+		iPoint prevDest = path->at(*cnode);
+		iPoint currentDest = path->at(*cnode + 1);
 
 		bool reachedX = (prevDest.x <= currentDest.x && position->x >= currentDest.x)
 			|| (prevDest.x >= currentDest.x && position->x <= currentDest.x);

@@ -195,10 +195,9 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float blitScale, double angle, int pivot_x, int pivot_y, bool use_camera) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, bool use_camera, float blitscale, float scale, SDL_Renderer* renderer,  float speed, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
 	SDL_Rect rect;
 
 	if (use_camera)
@@ -208,15 +207,14 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	}
 	else
 	{
-		rect.x = x * SCREEN_SIZE;
-		rect.y = y * SCREEN_SIZE;
+		rect.x = x;
+		rect.y = y;
 	}
 
 
 	if (section != NULL)
 	{
 		rect.w = section->w;
-
 		rect.h = section->h;
 	}
 	else
@@ -224,8 +222,99 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	(int)rect.w *= scale * blitScale;
-	(int)rect.h *= scale * blitScale;
+	rect.w *= scale * blitscale;
+	rect.h *= scale * blitscale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
+bool j1Render::BlitMinimap(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool use_camera, SDL_Renderer* renderer, float scale, float speed, double angle, int pivot_x, int pivot_y) const
+{
+	bool ret = true;
+
+	SDL_Rect rect;
+
+	if (use_camera)
+	{
+		rect.x = (int)(camera.x * speed) + x * scale;
+		rect.y = (int)(camera.y * speed) + y * scale;
+	}
+	else
+	{
+		rect.x = x;
+		rect.y = y;
+	}
+
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+// Blit to screen
+bool j1Render::BlitDialog(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float Scale, double angle, int pivot_x, int pivot_y) const
+{
+	bool ret = true;
+	uint scale = Scale;
+
+	SDL_Rect rect;
+	rect.x = (int)(camera.x * speed) + x * scale;
+	rect.y = (int)(camera.y * speed) + y * scale;
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
@@ -396,34 +485,36 @@ void j1Render::reOrder() {
 		{
 
 			TileData* img1 = *item;
-			pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y + 12);
-			App->map->Tile_WorldMap(pos1, img1->height);
 
 
 			if (img1->height < img2->height && !img1->behind) {//check
 
-				if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
+				App->map->Tile_WorldMap(pos1, img1->height);
+
+				if (pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1)//top-left
+				{
+					img1->order = img2->order + 0.5f;
+					
+				}
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x)//top
 				{
 					img1->order = img2->order + 0.5f;
 				}
-				else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x + 1)//top-right
 				{
 					img1->order = img2->order + 0.5f;
 				}
-				else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
-				{
-					img1->order = img2->order + 0.5f;
-				}
-				else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
+				else if ((pos2.x == pos1.x - 1) && pos2.y == pos1.y) //left
 				{
 					img1->order = img2->order + 0.5f;
 				}
 				else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
 				{
-					img1->order = img2->order - 0.5f;
 					img1->behind = true;
+					img1->order = img2->order + 0.5f;
 				}
-				else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y)//right
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
@@ -432,33 +523,33 @@ void j1Render::reOrder() {
 				{
 					img1->order = img2->order + 0.5f;
 				}
-				else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
+				else if (pos2.x == pos1.x && pos2.y == pos1.y + 1 )//bottom
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
 				}
-				else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1)//bottom-right
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
 				}
-
 			}
-			else if (img1->height >= img2->height && !img1->behind) {
-				if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+			else if (img1->height >= img2->height ) {
+
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
+				App->map->Tile_WorldMap(pos1, img1->height);
+
+				if (((pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//down-right
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+					(pos2.x == pos1.x && pos2.y == pos1.y) || //current
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) ||
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
 					(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
 					(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
-					(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
-					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
-					(pos2.x == pos1.x && pos2.y == pos1.y)) //current
-				{/*
-					if (img2->id % 2 != 0)
-						img1->order = img2->order + 1.0f;
-					else*/
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y))
+					&& //down-left
+					!img1->behind) {
 					if (img2->order > img1->order)
 						img1->order = img2->order + 0.5f;
 				}
@@ -468,7 +559,6 @@ void j1Render::reOrder() {
 	}
 	if (!entities_sprites.empty()) {
 		TileData* player = entities_sprites.front();
-
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
 			TileData* img1 = *item;
@@ -478,25 +568,14 @@ void j1Render::reOrder() {
 			{
 				TileData* img2 = *item2;
 				pos2 = App->map->WorldToMap(img2->x, img2->y);
-
 				if (img2 != img1) {
-					if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
-						(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
-						(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
-						(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
-						(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
-						(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
-						(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
-						(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-						(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
-						(pos2.x == pos1.x && pos2.y == pos1.y)) {
-						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h) {
+					if (img1->col->CheckCollision(img2->col->rect)){
+						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h + img2->margin.y) {
 							img1->order = img2->order - 0.2f;
 						}
 					}
 				}
 			}
-
 			OrderToRender.push(img1);
 		}
 	}

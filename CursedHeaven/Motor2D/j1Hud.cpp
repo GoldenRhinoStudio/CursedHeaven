@@ -101,18 +101,18 @@ bool j1Hud::Update(float dt)
 
 	if (black_mage) {
 		// Icon profile
-		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
 
 		// Abilities
 		// Q
-		App->render->Blit(hud_text, 15, 300, &bm_available_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		App->render->Blit(hud_text, 15, 300, &bm_available_q, SDL_FLIP_NONE, false, 0.5f);
 		if (!App->entity->currentPlayer->available_Q) {
-			App->render->Blit(hud_text, 15, 300, &bm_notavailable_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+			App->render->Blit(hud_text, 15, 300, &bm_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
 		}
 		// E
-		App->render->Blit(hud_text, 15, 400, &bm_available_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		App->render->Blit(hud_text, 15, 400, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
 		if (!App->entity->currentPlayer->available_E) {
-			App->render->Blit(hud_text, 15, 400, &bm_notavailable_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+			App->render->Blit(hud_text, 15, 400, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 		}
 
 		/*App->render->Blit(dialog_tex, 0, 20, &chart, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);*/
@@ -120,18 +120,18 @@ bool j1Hud::Update(float dt)
 	}
 	else if (dragoon_knight) {
 		// Icon profile
-		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, false);
 
 		// Abilities
 		// Q
-		App->render->Blit(hud_text, 15, 300, &dk_available_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		App->render->Blit(hud_text, 15, 300, &dk_available_q, SDL_FLIP_NONE, false, 0.5f);
 		if (!App->entity->currentPlayer->available_Q) {
-			App->render->Blit(hud_text, 15, 300, &dk_notavailable_q, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+			App->render->Blit(hud_text, 15, 300, &dk_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
 		}
 		// E
-		App->render->Blit(hud_text, 15, 400, &dk_available_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+		App->render->Blit(hud_text, 15, 400, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
 		if (!App->entity->currentPlayer->available_E) {
-			App->render->Blit(hud_text, 15, 400, &dk_notavailable_e, SDL_FLIP_NONE, 1.0f, 0.5f, 0.0, pivot, pivot, false);
+			App->render->Blit(hud_text, 15, 400, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 		}
 
 	}
@@ -143,26 +143,26 @@ bool j1Hud::Update(float dt)
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
 
-	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, false);
 
 	App->tex->UnLoad(score);
 	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, font);
 
 	App->render->Blit(score, 69, 130, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
-	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, false);
+	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, false);
 
 
 	if (App->scene1->profile_active) {
 		
 		if (black_mage) {
-			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
-			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
+			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, false, 0.3f);
+			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, false, 0.3f);
 		}
 		else if (dragoon_knight) {
-			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
-			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, 1.0f, 0.3f, 0.0, pivot, pivot, false);
+			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, false, 0.3f);
+			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, false, 0.3f);
 		}
 
 	}

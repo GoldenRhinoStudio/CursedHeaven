@@ -70,6 +70,7 @@ public:
 	iPoint playerSize;
 	iPoint attackSize;
 	iPoint margin;
+	int offset;
 	
 	int room = 6;
 	uint points = 0;

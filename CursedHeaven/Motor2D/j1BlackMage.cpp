@@ -67,9 +67,9 @@ bool j1BlackMage::Start() {
 	position.y = 750;
 
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y - 8}, COLLIDER_NONE, App->entity);
 	else
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_PLAYER, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y - 8}, COLLIDER_PLAYER, App->entity);
 
 
 	dialog = new j1DialogSystem();
@@ -338,7 +338,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	App->map->EntityMovement(App->entity->mage);
+	App->map->EntityMovementTest(this);
 
 	// Update collider position to player position
 	if (collider != nullptr)
@@ -379,21 +379,21 @@ bool j1BlackMage::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			Draw(r);
+			Draw(r,false,0,0,1,offset);
 		else
-			Draw(r, true);
+			Draw(r, true, 0, 0, 1, offset);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down || animation == &i_attack_up || animation == &i_attack_down) {
-			if (animation == &attack_down || animation == &i_attack_down) Draw(r, false, -4);
-			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, false, 0, 2);
-			else Draw(r);
+			if (animation == &attack_down || animation == &i_attack_down) Draw(r, false, -4, 1, offset);
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, false, 0, 2,1,offset);
+			else Draw(r, false, 0, 0, 1, offset);
 		}
 		else {
-			if (animation == &attack_lateral || animation == &i_attack_lateral) Draw(r, true, -4);
-			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) Draw(r, true, -6);
-			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, true, -6, 2);
-			else Draw(r, true, attackBlittingX, attackBlittingY);
+			if (animation == &attack_lateral || animation == &i_attack_lateral) Draw(r, true, -4, 1, offset);
+			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) Draw(r, true, -6, 1, offset);
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, true, -6, 2, 1, offset);
+			else Draw(r, true, attackBlittingX, attackBlittingY, 1, offset);
 		}
 	}
 	return true;
@@ -488,6 +488,7 @@ void j1BlackMage::LoadPlayerProperties() {
 	playerSize.y = player.child("size").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
+	offset = player.child("margin").attribute("offset").as_int();
 
 	// Copying attack values
 	attackBlittingX = player.child("attack").attribute("blittingX").as_int();

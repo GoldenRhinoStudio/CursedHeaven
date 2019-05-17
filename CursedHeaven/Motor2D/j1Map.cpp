@@ -983,7 +983,7 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 
 	if (next_gid != 0)
 	{
-		if (current_gid % next_gid != 0)
+		if ((current_gid % 2 - next_gid % 2) != 0)
 		{
 			if (current_gid % 2 == 0)
 				going_up = true;

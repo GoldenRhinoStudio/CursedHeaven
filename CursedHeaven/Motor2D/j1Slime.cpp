@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Audio.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -112,7 +113,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	App->map->EntityMovementTest(this);
 
-	collider->SetPos(position.x + margin.x, position.y + margin.y);
+	collider->SetPos(position.x, position.y);
 
 	
 	return true;
@@ -153,6 +154,17 @@ bool j1Slime::PostUpdate() {
 
 void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (col_2->type == COLLIDER_ATTACK) 
+	{
+		for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
+		{
+			if (App->particles->active[i] != nullptr)
+			{
+				delete App->particles->active[i];
+				App->particles->active[i] = nullptr;
+			}
+		}
+	}
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {

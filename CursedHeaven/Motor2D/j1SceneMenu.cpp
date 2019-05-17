@@ -173,6 +173,7 @@ bool j1SceneMenu::Update(float dt)
 	if (App->fade->IsFading() == 0) {
 		if (chooseChar) {
 			ChangeScene(CHOOSE);
+			App->scene1->finishedDialog = false;
 			//App->choose_character->active = true;
 			//player_created = false;
 		}

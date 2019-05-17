@@ -55,7 +55,7 @@
   
   <slime speed="50.0f" life="600">
 	  <margin x="-10" y="-10"/>
-	  <colliderSize w="35" h="35"/>
+	  <colliderSize w="15" h="15"/>
 	  <combat damage="20"/>
   </slime>  
   

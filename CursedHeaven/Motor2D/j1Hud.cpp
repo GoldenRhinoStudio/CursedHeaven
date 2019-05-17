@@ -148,7 +148,7 @@ bool j1Hud::Update(float dt)
 	App->tex->UnLoad(score);
 	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, font);
 
-	App->render->Blit(score, 69, 130, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->BlitHUD(score, 69, 130, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, false);
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, false);

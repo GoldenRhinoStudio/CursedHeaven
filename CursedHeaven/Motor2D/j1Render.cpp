@@ -467,6 +467,57 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 	return ret;
 }
 
+bool j1Render::BlitHUD(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, float speed, float blitScale, double angle, int pivot_x, int pivot_y, bool use_camera) const
+{
+	bool ret = true;
+	uint scale = App->win->GetScale();
+	SDL_Rect rect;
+
+	if (use_camera)
+	{
+		rect.x = (int)(camera.x * speed) + x * scale;
+		rect.y = (int)(camera.y * speed) + y * scale;
+	}
+	else
+	{
+		rect.x = x * SCREEN_SIZE;
+		rect.y = y * SCREEN_SIZE;
+	}
+
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	(int)rect.w *= scale * blitScale;
+	(int)rect.h *= scale * blitScale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
 void j1Render::reOrder() {
 
 	BROFILER_CATEGORY("Order", Profiler::Color::Green)

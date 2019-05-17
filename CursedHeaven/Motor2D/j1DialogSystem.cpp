@@ -69,14 +69,14 @@ bool j1DialogSystem::Update(float dt) {
 
 	if (App->scene1->active) {
 
-		App->render->Blit(judge_tex, 225, 750, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+		App->render->BlitHUD(judge_tex, 225, 750, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
 
 		if (law1Active == true)
 		{
 			time_passed = timer.ReadSec();
 
 			if (time_passed >= 2) {
-				App->render->Blit(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}
 
@@ -87,12 +87,12 @@ bool j1DialogSystem::Update(float dt) {
 		
 			if (times == 1) {
 				App->tex->UnLoad(dialog_tex);
-				App->render->Blit(dialog_tex2, 400, 550, &chartoption1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex2, 400, 550, &chartoption1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 
 			if (times == 2) {
 				App->tex->UnLoad(dialog_tex2);
-				App->render->Blit(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 		
 			if (times == 3) {
@@ -108,7 +108,7 @@ bool j1DialogSystem::Update(float dt) {
 			time_passed = timer.ReadSec();
 
 			if (time_passed >= 2) {
-				App->render->Blit(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}
 
@@ -119,12 +119,12 @@ bool j1DialogSystem::Update(float dt) {
 
 			if (times == 1) {
 				App->tex->UnLoad(dialog_tex);
-				App->render->Blit(dialog_tex2, 400, 550, &chartoption2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex2, 400, 550, &chartoption2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 
 			if (times == 2) {
 				App->tex->UnLoad(dialog_tex2);
-				App->render->Blit(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 
 			if (times == 3) {

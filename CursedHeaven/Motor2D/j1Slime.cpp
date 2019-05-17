@@ -59,7 +59,6 @@ bool j1Slime::Update(float dt, bool do_logic)
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
-		collider->SetPos(position.x + margin.x, position.y + margin.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
@@ -91,10 +90,8 @@ bool j1Slime::Update(float dt, bool do_logic)
 						App->audio->PlayFx(App->audio->slime_attack);
 					}
 						Move(path, dt);
-					LOG("MOVING");
 				}
 				else if (!target_found && path != nullptr) {
-					LOG("NOT FOUND");
 				}
 					//fix attack
 			}
@@ -113,8 +110,9 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	}
 
-	App->map->EntityMovement(this);
+	App->map->EntityMovementTest(this);
 
+	collider->SetPos(position.x + margin.x, position.y + margin.y);
 
 	
 	return true;
@@ -228,74 +226,76 @@ void j1Slime::LoadProperties()
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
-	for (uint i = 0; i < path->size(); ++i)
+	/*for (uint i = 0; i < path->size(); ++i)
 	{
 		iPoint pos = App->map->MapToWorld(path->at(i).x, path->at(i).y);
 		App->render->Blit(debug_tex, pos.x, pos.y);
-	}
+	}*/ //blit path
 
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	/*if (App->path->check_nextTile(path, &node, &pos))
-		node++;*/
+	iPoint pos = App->map->WorldToMap((int)collider->rect.x + (int)collider->rect.w/2, (int)collider->rect.y + (int)collider->rect.h);
+
 	direction = App->path->CheckDirection(path, &node);
 
+	if (App->path->check_nextTile(path, &node, &pos,direction)) {
+		node++;
+	}
+
+	fPoint next_position = position;
+
+	
 	if (direction == Movement::DOWN_RIGHT)
 	{
 		animation = &diagonal_down;
-		position.y += (speed * dt) / 2;
-		position.x += speed * dt;
+		next_position.y += (speed * dt) / 2;
+		next_position.x += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::DOWN_LEFT)
 	{
 		animation = &diagonal_down;
-		position.y += (speed * dt) / 2;
-		position.x -= speed * dt;
+		next_position.y += (speed * dt) / 2;
+		next_position.x -= speed * dt;
 		animation->flip = true;
 	}
-
 	else if (direction == Movement::UP_RIGHT)
 	{
 		animation = &diagonal_up;
-		position.y -= (speed * dt) / 2;
-		position.x += speed * dt;
+		next_position.y -= (speed * dt) / 2;
+		next_position.x += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::UP_LEFT)
 	{
 		animation = &diagonal_up;
-		position.y -= (speed * dt) / 2;
-		position.x -= speed * dt;
+		next_position.y -= (speed * dt) / 2;
+		next_position.x -= speed * dt;
 		animation->flip = true;
 	}
-
 	else if (direction == Movement::DOWN)
 	{
 		animation = &down;
-		position.y += speed * dt;
+		next_position.y += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::UP)
 	{
 		animation = &up;
-		position.y -= speed * dt;
+		next_position.y -= speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::RIGHT)
 	{
 		animation = &lateral;
 		animation->flip = false;
-		position.x += speed * dt;
+		next_position.x += speed * dt;
 	}
-
-	else
+	else if (direction == Movement::LEFT)
 	{
 		animation = &lateral;
 		animation->flip = true;
-		position.x -= speed * dt;
+		next_position.x -= speed * dt;
 	}
+
+	if (App->path->IsWalkable(App->map->WorldToMap((int)next_position.x, (int)next_position.y)))
+		position = next_position;
 }

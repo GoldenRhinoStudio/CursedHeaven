@@ -273,8 +273,8 @@ void j1MindFlyer::LoadProperties()
 
 void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 {
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	if (App->path->check_nextTile(path, &node, &pos))
+	iPoint pos = { collider->rect.x + collider->rect.w/2, collider->rect.y + collider->rect.h};
+	if (App->path->check_nextTile(path, &node, &pos, direction))
 		node++;
 	direction = App->path->CheckDirection(path,&node);
 

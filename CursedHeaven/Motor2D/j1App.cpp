@@ -247,7 +247,7 @@ void j1App::FinishUpdate()
 
 	iPoint map_coords = { 0,0 };
 	if (App->entity->currentPlayer != nullptr) {
-		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y);
+		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + (int)App->entity->currentPlayer->collider->rect.h);
 	}
 
 	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",

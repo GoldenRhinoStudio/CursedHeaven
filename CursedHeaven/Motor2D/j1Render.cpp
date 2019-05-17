@@ -480,40 +480,42 @@ void j1Render::reOrder() {
 	{
 		TileData* img2 = *item_map;
 		pos2 = App->map->WorldToMap(img2->x, img2->y);
-		//App->map->Tile_WorldMap(pos2, img2->height);
+		App->map->Tile_WorldMap(pos2, img2->height);
 
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
 
 			TileData* img1 = *item;
-			pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w/2, (int)img1->col->rect.y + img1->col->rect.h - img1->margin.y + 5);
-			//App->map->Tile_WorldMap(pos1, img1->height);
 
 
 			if (img1->height < img2->height && !img1->behind) {//check
 
-				if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
+				App->map->Tile_WorldMap(pos1, img1->height);
+
+				if (pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1)//top-left
 				{
 					img1->order = img2->order + 0.5f;
 					
 				}
-				else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x)//top
 				{
 					img1->order = img2->order + 0.5f;
 				}
-				else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x + 1)//top-right
 				{
 					img1->order = img2->order + 0.5f;
 				}
-				else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
+				else if ((pos2.x == pos1.x - 1) && pos2.y == pos1.y) //left
 				{
 					img1->order = img2->order + 0.5f;
 				}
 				else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
 				{
+					img1->behind = true;
 					img1->order = img2->order + 0.5f;
 				}
-				else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y)//right
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
@@ -522,33 +524,32 @@ void j1Render::reOrder() {
 				{
 					img1->order = img2->order + 0.5f;
 				}
-				else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
+				else if (pos2.x == pos1.x && pos2.y == pos1.y + 1 )//bottom
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
 				}
-				else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1)//bottom-right
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
 				}
-
 			}
 			else if (img1->height >= img2->height ) {
-				if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
+				App->map->Tile_WorldMap(pos1, img1->height);
+
+				if (((pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//down-right
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+					(pos2.x == pos1.x && pos2.y == pos1.y) || //current
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) ||
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
 					(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
 					(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
-					(pos2.x == pos1.x && pos2.y == pos1.y)) //current
-				{
-					if (img2->order > img1->order)
-						img1->order = img2->order + 0.5f;
-				}
-				else if ((pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
-					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) && //down-left
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y))
+					&& //down-left
 					!img1->behind) {
 					if (img2->order > img1->order)
 						img1->order = img2->order + 0.5f;
@@ -559,7 +560,6 @@ void j1Render::reOrder() {
 	}
 	if (!entities_sprites.empty()) {
 		TileData* player = entities_sprites.front();
-
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
 			TileData* img1 = *item;

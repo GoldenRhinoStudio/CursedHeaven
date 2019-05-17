@@ -914,7 +914,7 @@ void j1Map::EntityMovement(j1Entity* entity)
 void j1Map::EntityMovementTest(j1Entity* entity) {
 	
 	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
-	int y = entity->collider->rect.y + entity->collider->rect.h - 5;
+	int y = entity->collider->rect.y + entity->collider->rect.h;
 	
 	iPoint current_tile = WorldToMap(x, y);
 	iPoint next_tile = { 0,0 };
@@ -995,7 +995,6 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	else
 		entity->height = 1;
 
-	LOG("height: %f", entity->height);
 
 	if (next_gid == 5 || next_gid == 6 || next_gid == 0)
 		entity->movement = false;

@@ -256,5 +256,6 @@ void j1ChooseCharacter::ChangeScene() {
 	App->entity->active = true;
 	App->entity->CreatePlayer();
 	App->entity->Start();
+	
 }
 

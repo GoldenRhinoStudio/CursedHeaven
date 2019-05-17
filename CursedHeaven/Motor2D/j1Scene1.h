@@ -68,6 +68,7 @@ public:
 	bool finishedDialog = false;
 	bool profile_active = false;
 	bool bossFightOn = false;
+	bool judgeAppears1 = false;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;

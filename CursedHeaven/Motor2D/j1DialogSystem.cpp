@@ -27,6 +27,7 @@ bool j1DialogSystem::Start() {
 	bool ret = true;
 
 	dialogFont = App->font->Load("fonts/Pixeled.ttf", 5);
+	judge_tex = App->tex->Load("textures/character/judge/Judge.png");
 	dialog_tex = App->tex->Load("textures/dialog_final.png");
 	dialog_tex2 = App->tex->Load("textures/dialog_final.png");
 	dialog_tex3 = App->tex->Load("textures/dialog_final.png");
@@ -52,73 +53,93 @@ bool j1DialogSystem::Start() {
 bool j1DialogSystem::Update(float dt) {
 
 	//Rects
-	SDL_Rect chart1 = { 0, 0, 284, 71 };
-	SDL_Rect chartoption1 = { 0, 142, 220, 54 };
-	SDL_Rect chartoption2 = { 0, 196, 220, 54 };
-	SDL_Rect chart2 = { 0, 71, 284, 71 };
+	SDL_Rect chartoption1 = { 277, 0, 221, 54 };
+	SDL_Rect chartoption2 = { 277, 54, 220, 54 };
 
-	if (law1Active == true)
-	{
-		time_passed = timer.ReadSec();
+	SDL_Rect chart1s1 = { 0, 0, 277, 61 };
+	SDL_Rect chart2s1 = { 0, 61, 276, 61 };
 
-		if (time_passed >= 1.5) {
-			App->render->Blit(dialog_tex, 0, 20, &chart1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-			canSkip = true;
-		}
+	SDL_Rect chart1s2 = { 0, 122, 277, 61 };
+	SDL_Rect chart2s2 = { 0, 183, 277, 61 };
 
-		if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
-			times += 1;
-			LOG("times: %d", times);
-		}
+	SDL_Rect chart3s2 = { 0, 244, 277, 61 };
+	SDL_Rect chart4s2 = { 277, 108, 279, 61 };
+
+	SDL_Rect judgeRect = { 42, 2, 22, 33 };
+
+	if (App->scene1->active) {
+
+		App->render->Blit(judge_tex, 225, 750, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+
+		if (law1Active == true)
+		{
+			time_passed = timer.ReadSec();
+
+			if (time_passed >= 2) {
+				App->render->Blit(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				canSkip = true;
+			}
+
+			if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
+				times += 1;
+				LOG("times: %d", times);
+			}
 		
-		if (times == 1) {
-			App->tex->UnLoad(dialog_tex);
-			App->render->Blit(dialog_tex2, 400, 550, &chartoption1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-		}
+			if (times == 1) {
+				App->tex->UnLoad(dialog_tex);
+				App->render->Blit(dialog_tex2, 400, 550, &chartoption1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			}
 
-		if (times == 2) {
-			App->tex->UnLoad(dialog_tex2);
-			App->render->Blit(dialog_tex3, 0, 20, &chart2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-		}
+			if (times == 2) {
+				App->tex->UnLoad(dialog_tex2);
+				App->render->Blit(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			}
 		
-		if (times == 3) {
-			App->tex->UnLoad(dialog_tex3);
-			times = 0;
-			App->scene1->finishedDialog = true;
-			law1Active = false;
+			if (times == 3) {
+				App->tex->UnLoad(dialog_tex3);
+				times = 0;
+				App->scene1->finishedDialog = true;
+				law1Active = false;
+			}
+		}
+		else if (law2Active == true)
+		{
+			
+			time_passed = timer.ReadSec();
+
+			if (time_passed >= 2) {
+				App->render->Blit(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				canSkip = true;
+			}
+
+			if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
+				times += 1;
+				LOG("times: %d", times);
+			}
+
+			if (times == 1) {
+				App->tex->UnLoad(dialog_tex);
+				App->render->Blit(dialog_tex2, 400, 550, &chartoption2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			}
+
+			if (times == 2) {
+				App->tex->UnLoad(dialog_tex2);
+				App->render->Blit(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			}
+
+			if (times == 3) {
+				App->tex->UnLoad(dialog_tex3);
+				times = 0;
+				App->scene1->finishedDialog = true;
+				law2Active = false;
+			}
 		}
 	}
-	else if (law2Active == true)
+
+	/*else if (App->scene2->active) 
 	{
-		time_passed = timer.ReadSec();
 
-		if (time_passed >= 1.5) {
-			App->render->Blit(dialog_tex, 0, 20, &chart1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-			canSkip = true;
-		}
-
-		if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
-			times += 1;
-			LOG("times: %d", times);
-		}
-
-		if (times == 1) {
-			App->tex->UnLoad(dialog_tex);
-			App->render->Blit(dialog_tex2, 400, 550, &chartoption2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-		}
-
-		if (times == 2) {
-			App->tex->UnLoad(dialog_tex2);
-			App->render->Blit(dialog_tex3, 0, 20, &chart2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
-		}
-
-		if (times == 3) {
-			App->tex->UnLoad(dialog_tex3);
-			times = 0;
-			App->scene1->finishedDialog = true;
-			law2Active = false;
-		}
-	}
+	}*/
 
 	return true;
 }
@@ -129,6 +150,7 @@ bool j1DialogSystem::CleanUp() {
 	App->tex->UnLoad(dialog_tex);
 	App->tex->UnLoad(dialog_tex2);
 	App->tex->UnLoad(dialog_tex3);
+	App->tex->UnLoad(judge_tex);
 
 	return true;
 };

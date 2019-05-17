@@ -32,8 +32,7 @@ public:
 public:
 
 	int law = 0;
-	char* words;
-	SDL_Texture* words_tex;
+	SDL_Texture* judge_tex = nullptr;
 	SDL_Texture* dialog_tex = nullptr;
 	SDL_Texture* dialog_tex2 = nullptr;
 	SDL_Texture* dialog_tex3 = nullptr;

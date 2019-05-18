@@ -82,6 +82,7 @@
     <ClCompile Include="j1Collisions.cpp" />
     <ClCompile Include="j1DialogSystem.cpp" />
     <ClCompile Include="j1DragoonKnight.cpp" />
+    <ClCompile Include="j1Fire.cpp" />
     <ClCompile Include="j1Hud.cpp" />
     <ClCompile Include="j1Judge.cpp" />
     <ClCompile Include="j1MindFlyer.cpp" />
@@ -108,6 +109,8 @@
     <ClCompile Include="j1Box.cpp" />
     <ClCompile Include="j1SceneSettings.cpp" />
     <ClCompile Include="j1SceneVictory.cpp" />
+    <ClCompile Include="j1Seller.cpp" />
+    <ClCompile Include="j1Shop.cpp" />
     <ClCompile Include="j1Slime.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Render.cpp" />
@@ -126,6 +129,7 @@
     <ClInclude Include="j1Collisions.h" />
     <ClInclude Include="j1DialogSystem.h" />
     <ClInclude Include="j1DragoonKnight.h" />
+    <ClInclude Include="j1Fire.h" />
     <ClInclude Include="j1Hud.h" />
     <ClInclude Include="j1Judge.h" />
     <ClInclude Include="j1MindFlyer.h" />
@@ -148,6 +152,8 @@
     <ClInclude Include="j1Box.h" />
     <ClInclude Include="j1SceneSettings.h" />
     <ClInclude Include="j1SceneVictory.h" />
+    <ClInclude Include="j1Seller.h" />
+    <ClInclude Include="j1Shop.h" />
     <ClInclude Include="j1Slime.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Turret.h" />

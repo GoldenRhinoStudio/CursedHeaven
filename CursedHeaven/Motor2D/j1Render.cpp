@@ -442,8 +442,8 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 		else
 			flag = SDL_FLIP_NONE;
 
-		r.w *= Image->scale;
-		r.h *= Image->scale;
+		r.w *= Image->scale * Image->blitScale;
+		r.h *= Image->scale * Image->blitScale;
 
 		SDL_Point* point = NULL;
 		SDL_Point img2;
@@ -483,7 +483,6 @@ bool j1Render::BlitHUD(SDL_Texture * texture, int x, int y, const SDL_Rect * sec
 		rect.x = x * SCREEN_SIZE;
 		rect.y = y * SCREEN_SIZE;
 	}
-
 
 	if (section != NULL)
 	{

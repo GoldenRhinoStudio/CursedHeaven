@@ -19,7 +19,7 @@ public:
 	SDL_Texture * texture;
 	int					x;
 	int					y;
-	int				scale;
+	int					scale;
 	int					pivot_x;
 	int					pivot_y;
 	SDL_Rect*			section;

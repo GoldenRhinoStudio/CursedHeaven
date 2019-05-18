@@ -16,7 +16,7 @@ public:
 	~j1Seller();
 
 	bool Start();
-	bool Update(float dt, bool do_logic); 
+	bool Update(float dt, bool do_logic);
 	bool DrawOrder(float dt);
 	bool CleanUp();
 

@@ -16,6 +16,7 @@
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
+#include "j1Shop.h"
 #include "j1SceneMenu.h"
 #include "j1Fonts.h"
 #include "j1Label.h"
@@ -250,12 +251,11 @@ void j1ChooseCharacter::ChangeScene() {
 	App->scene1->active = true;
 	App->scene1->Start();
 	App->particles->Start();
-	//App->dialog->active = true;
-	//App->dialog->Start();
+	App->dialog->active = true;
+	App->dialog->Start();
 	
 	App->entity->active = true;
 	App->entity->CreatePlayer();
-	App->entity->Start();
-	
+	App->entity->Start();	
 }
 

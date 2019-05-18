@@ -75,7 +75,7 @@ void j1Shop::PlaceShop()
 	int item3 = (rand() % 6);
 	App->shop->CreateItem(HEART, -1000, 715);
 
-	App->entity->CreateEntity(NPC, -1050, 705);
+	App->entity->CreateEntity(SELLER, -1050, 705);
 
 	//App->shop->CreateItem(POTION, 240, 715);
 }
@@ -83,9 +83,9 @@ void j1Shop::PlaceShop()
 bool j1Shop::Update(float dt)
 {
 	BROFILER_CATEGORY("ShopUpdate", Profiler::Color::LightSeaGreen)
-	
 
-	return true;
+
+		return true;
 }
 
 bool j1Shop::CleanUp()
@@ -139,10 +139,10 @@ void j1Shop::OnCollision(Collider* c1, Collider* c2)
 
 // ------------------------------------------------
 
-j1Item::j1Item(int x, int y, ITEM_TYPE type) 
+j1Item::j1Item(int x, int y, ITEM_TYPE type)
 	: j1Entity(x, y, ITEM), type(type) {}
 
-j1Item::~j1Item(){}
+j1Item::~j1Item() {}
 
 bool j1Item::Start() {
 	// Textures are loaded
@@ -152,7 +152,7 @@ bool j1Item::Start() {
 	// Audios are loaded
 	LOG("Loading player audios");
 
-	if (type == POTION) collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 15, 25 }, COLLIDER_ITEM, App->entity); 
+	if (type == POTION) collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 15, 25 }, COLLIDER_ITEM, App->entity);
 	else collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 22, 22 }, COLLIDER_ITEM, App->entity);
 
 	switch (type) {
@@ -201,7 +201,7 @@ bool j1Item::Start() {
 }
 
 bool j1Item::Update(float dt, bool do_logic) {
-	
+
 	switch (type) {
 	case BOOTS:
 		if (App->shop->bootsLevel == 1) {
@@ -298,27 +298,27 @@ bool j1Item::CleanUp() {
 	LOG("Unloading the player");
 	App->tex->UnLoad(sprites);
 
-	if (collider != nullptr) 
+	if (collider != nullptr)
 		collider->to_delete = true;
 
 	return true;
 }
 
-void j1Item::OnCollision(Collider* c1, Collider* c2) {	
-	if (c2->type == COLLIDER_PLAYER) {	
+void j1Item::OnCollision(Collider* c1, Collider* c2) {
+	if (c2->type == COLLIDER_PLAYER) {
 
 		if (level > 2 && type != POTION)
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 96, 255, 160);
 		else if (App->entity->currentPlayer->coins < prize || (App->shop->potions == 3 && type == POTION)) {
 
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 255, 0, 0, 160);
-		} 
+		}
 		else {
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
 
-			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN 
-				|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN 
-				&& (App->shop->buyingTime.Read() >= App->shop->lastBuyingTime + 500))) {
+			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN
+				|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN
+					&& (App->shop->buyingTime.Read() >= App->shop->lastBuyingTime + 500))) {
 
 				App->shop->lastBuyingTime = App->shop->buyingTime.Read();
 				App->entity->currentPlayer->coins -= prize;
@@ -352,7 +352,7 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 					if (App->shop->heartLevel == 0)	App->entity->currentPlayer->totalLifePoints += 30;
 					else if (App->shop->heartLevel == 1) App->entity->currentPlayer->totalLifePoints += 55;
 					else if (App->shop->heartLevel == 2) App->entity->currentPlayer->totalLifePoints += 80;
-					
+
 					App->shop->heartLevel++;
 					break;
 

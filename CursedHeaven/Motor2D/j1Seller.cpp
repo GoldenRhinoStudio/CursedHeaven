@@ -6,9 +6,9 @@
 #include "j1EntityManager.h"
 #include <time.h>
 
-j1Seller::j1Seller(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::NPC) {
+j1Seller::j1Seller(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SELLER) {
 
-	animation = NULL; 
+	animation = NULL;
 	idle.LoadAnimation("idle", "seller", false);
 }
 
@@ -19,14 +19,15 @@ bool j1Seller::Start()
 	LOG("Loading seller texture");
 	sprites = App->tex->Load("textures/character/Rogue/Rogue.png");
 
+	collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 0, 0 }, COLLIDER_NONE, App->entity);
+
 	animation = &idle;
 	height = 3;
 
-	collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 30, 30 }, COLLIDER_PLAYER, App->entity);
 	return true;
 }
 
-bool j1Seller::DrawOrder(float dt) 
+bool j1Seller::DrawOrder(float dt)
 {
 	// Drawing the seller
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);

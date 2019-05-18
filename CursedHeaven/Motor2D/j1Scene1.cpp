@@ -333,7 +333,7 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities(int room)
 {
-	/*App->entity->AddEnemy(13, 83, SLIME);
+	App->entity->AddEnemy(13, 83, SLIME);
 	App->entity->AddEnemy(16, 79, SLIME);
 	App->entity->AddEnemy(7, 74, SLIME);
 
@@ -379,7 +379,7 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(85, 60, SLIME);
 	App->entity->AddEnemy(80, 65, SLIME);
 
-	App->entity->AddEnemy(54, 68, MINDFLYER);*/
+	App->entity->AddEnemy(54, 68, MINDFLYER);
 }
 
 // Called before quitting

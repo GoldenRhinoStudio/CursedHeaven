@@ -21,12 +21,10 @@ j1DialogSystem::~j1DialogSystem()
 {
 }
 
-
 bool j1DialogSystem::Start() {
 
 	bool ret = true;
 
-	dialogFont = App->font->Load("fonts/Pixeled.ttf", 5);
 	judge_tex = App->tex->Load("textures/character/judge/Judge.png");
 	dialog_tex = App->tex->Load("textures/dialog_final.png");
 	dialog_tex2 = App->tex->Load("textures/dialog_final.png");
@@ -80,7 +78,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && canSkip == true) {
 				times += 1;
 				LOG("times: %d", times);
 			}
@@ -112,7 +110,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if (App->input->GetMouseButtonDown(1) == KEY_DOWN && canSkip == true) {
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && canSkip == true) {
 				times += 1;
 				LOG("times: %d", times);
 			}
@@ -143,7 +141,6 @@ bool j1DialogSystem::Update(float dt) {
 
 	return true;
 }
-
 
 bool j1DialogSystem::CleanUp() {
 

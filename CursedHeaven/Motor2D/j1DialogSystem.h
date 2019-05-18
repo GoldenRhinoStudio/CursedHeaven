@@ -19,7 +19,7 @@ class j1Label;
 struct _TTF_Font;
 struct SDL_Texture;
 
-class j1DialogSystem
+class j1DialogSystem : public j1Module
 {
 public:
 	j1DialogSystem();
@@ -36,8 +36,8 @@ public:
 	SDL_Texture* dialog_tex = nullptr;
 	SDL_Texture* dialog_tex2 = nullptr;
 	SDL_Texture* dialog_tex3 = nullptr;
+
 	std::list<j1Label*> text_list;
-	_TTF_Font* dialogFont = nullptr;
 	j1Timer timer;
 	uint time_passed = 0;
 
@@ -46,9 +46,7 @@ public:
 	bool canSkip = false;
 
 	int times = 0;
-
 	int pivot = 2147483647;
-
 };
 
 #endif 

@@ -109,9 +109,6 @@
     <ClCompile Include="j1Slime.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="j1Judge.cpp">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="j1MindFlyer.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
@@ -124,12 +121,8 @@
     <ClCompile Include="j1Minimap.cpp">
       <Filter>Development\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1Turret.cpp" />
     <ClCompile Include="j1Shop.cpp">
       <Filter>Development\Modules\Interactions</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Seller.cpp">
-      <Filter>Development\Modules\Entities</Filter>
     </ClCompile>
     <ClCompile Include="j1Fire.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
@@ -154,6 +147,15 @@
     </ClCompile>
     <ClCompile Include="j1Color.cpp">
       <Filter>Development\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Turret.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Judge.cpp">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Seller.cpp">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,9 +282,6 @@
     <ClInclude Include="j1Slime.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="j1Judge.h">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="j1MindFlyer.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
@@ -295,12 +294,8 @@
     <ClInclude Include="j1Minimap.h">
       <Filter>Development\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="j1Turret.h" />
     <ClInclude Include="j1Shop.h">
       <Filter>Development\Modules\Interactions</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Seller.h">
-      <Filter>Development\Modules\Entities</Filter>
     </ClInclude>
     <ClInclude Include="j1Fire.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
@@ -325,6 +320,15 @@
     </ClInclude>
     <ClInclude Include="j1Color.h">
       <Filter>Development\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Turret.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Seller.h">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -372,6 +376,9 @@
     </Filter>
     <Filter Include="Development\Modules\Interactions\Transitions">
       <UniqueIdentifier>{bbb8299d-ddfa-487f-bdd3-4d0a583c20f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\NPCs">
+      <UniqueIdentifier>{6cf0f290-ba60-49a8-be4e-b7f6cc59b7a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

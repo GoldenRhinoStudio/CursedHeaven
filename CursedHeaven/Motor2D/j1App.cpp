@@ -84,9 +84,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);
+	AddModule(minimap);
 	AddModule(dialog);
 	AddModule(fade);
-	AddModule(minimap);
 	AddModule(transitions);
 
 	// render last to swap buffer

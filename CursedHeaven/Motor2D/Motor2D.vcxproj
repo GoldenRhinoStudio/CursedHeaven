@@ -76,10 +76,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FadeToColor.cpp" />
     <ClCompile Include="j1BlackMage.cpp" />
     <ClCompile Include="j1Button.cpp" />
     <ClCompile Include="j1ChooseCharacter.cpp" />
     <ClCompile Include="j1Collisions.cpp" />
+    <ClCompile Include="j1Color.cpp" />
     <ClCompile Include="j1DialogSystem.cpp" />
     <ClCompile Include="j1DragoonKnight.cpp" />
     <ClCompile Include="j1Fire.cpp" />
@@ -115,18 +117,25 @@
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
+    <ClCompile Include="j1TransitionManager.cpp" />
+    <ClCompile Include="j1Transitions.cpp" />
     <ClCompile Include="j1Turret.cpp" />
     <ClCompile Include="j1Window.cpp" />
+    <ClCompile Include="Lines.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Squares.cpp" />
     <ClCompile Include="TileQuadtree.cpp" />
+    <ClCompile Include="Wipe.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FadeToColor.h" />
     <ClInclude Include="j1BlackMage.h" />
     <ClInclude Include="j1Button.h" />
     <ClInclude Include="j1ChooseCharacter.h" />
     <ClInclude Include="j1Collisions.h" />
+    <ClInclude Include="j1Color.h" />
     <ClInclude Include="j1DialogSystem.h" />
     <ClInclude Include="j1DragoonKnight.h" />
     <ClInclude Include="j1Fire.h" />
@@ -156,8 +165,11 @@
     <ClInclude Include="j1Shop.h" />
     <ClInclude Include="j1Slime.h" />
     <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1TransitionManager.h" />
+    <ClInclude Include="j1Transitions.h" />
     <ClInclude Include="j1Turret.h" />
     <ClInclude Include="j1UserInterfaceElement.h" />
+    <ClInclude Include="Lines.h" />
     <ClInclude Include="p2Animation.h" />
     <ClInclude Include="j1Audio.h" />
     <ClInclude Include="j1Input.h" />
@@ -172,7 +184,9 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Squares.h" />
     <ClInclude Include="TileQuadtree.h" />
+    <ClInclude Include="Wipe.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml" />

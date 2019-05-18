@@ -134,6 +134,27 @@
     <ClCompile Include="j1Fire.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="j1TransitionManager.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Transitions.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeToColor.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Lines.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Squares.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Wipe.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Color.cpp">
+      <Filter>Development\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -284,6 +305,27 @@
     <ClInclude Include="j1Fire.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="j1TransitionManager.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Transitions.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeToColor.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Lines.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Squares.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Wipe.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Color.h">
+      <Filter>Development\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -327,6 +369,9 @@
     </Filter>
     <Filter Include="Development\Modules\Entities\Enemies">
       <UniqueIdentifier>{f2c7492a-a97f-4b48-add3-e384b87be8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Interactions\Transitions">
+      <UniqueIdentifier>{bbb8299d-ddfa-487f-bdd3-4d0a583c20f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

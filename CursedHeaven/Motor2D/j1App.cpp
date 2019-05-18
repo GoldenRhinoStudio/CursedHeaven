@@ -29,6 +29,7 @@
 #include "j1Shop.h"
 #include "j1Entity.h"
 #include "j1Minimap.h"
+#include "j1TransitionManager.h"
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -60,6 +61,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	dialog = new j1DialogSystem();
 	shop = new j1Shop;
 	minimap = new j1Minimap();
+	transitions = new j1TransitionManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -85,6 +87,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(dialog);
 	AddModule(fade);
 	AddModule(minimap);
+	AddModule(transitions);
 
 	// render last to swap buffer
 	AddModule(render);

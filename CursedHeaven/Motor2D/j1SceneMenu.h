@@ -20,7 +20,9 @@ enum SCENE {
 	SCENE1,
 	SCENE2,
 	CREDITS,
-	SCENE_SETTINGS
+	SCENE_SETTINGS,
+	VICTORY,
+	LOSE
 };
 
 class j1SceneMenu : public j1Module

@@ -3,20 +3,27 @@
 
 #include "j1App.h"
 #include "j1Map.h"
+#include "j1Input.h"
 #include "j1Textures.h"
 #include "j1Audio.h"
+#include "j1Collisions.h"
 #include "j1Render.h"
+#include "j1Window.h"
+#include "j1DragoonKnight.h"
+#include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
 #include "j1FadeToBlack.h"
+#include "j1Pathfinding.h"
+#include "j1Gui.h"
 #include "j1SceneMenu.h"
+#include "j1Fonts.h"
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
 #include "j1ChooseCharacter.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
-#include "j1Shop.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -58,6 +65,8 @@ bool j1ChooseCharacter::Start() {
 		info_tex = App->tex->Load("gui/uipack_rpg_sheet_2.png");
 
 		// Loading fonts
+		font = App->font->Load("fonts/Pixeled.ttf", 5);
+		font2 = App->font->Load("fonts/Pixeled.ttf", 10);
 
 		SDL_Rect invisible = { 0,0, SCREEN_WIDTH, SCREEN_HEIGHT };
 		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, invisible, invisible, invisible, NULL, NONE_BUT);
@@ -112,20 +121,20 @@ bool j1ChooseCharacter::Update(float dt) {
 			case HOVERED:
 				(*item)->situation = (*item)->hovered;
 				if ((*item)->bfunction == BLACKMAGE_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 130, 155, App->gui->font2, "Black Mage", App->gui->brown);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 80, 195, App->gui->font1, "A fast wizard that uses his powerful ranged", App->gui->beige);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 96, 210, App->gui->font1, "attacks and deals high area damage", App->gui->beige);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 130, 155, font2, "Black Mage", App->gui->brown);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 80, 195, font, "A fast wizard that uses his powerful ranged", App->gui->beige);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 96, 210, font, "attacks and deals high area damage", App->gui->beige);
 				}
 				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 110, 155, App->gui->font2, "Dragoon Knight", App->gui->brown);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 70, 195, App->gui->font1, "An agile warrior that moves fast acroos the map", App->gui->beige);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 89, 210, App->gui->font1, "and deals great damage with his sword", App->gui->beige);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 110, 155, font2, "Dragoon Knight", App->gui->brown);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 70, 195, font, "An agile warrior that moves fast acroos the map", App->gui->beige);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 89, 210, font, "and deals great damage with his sword", App->gui->beige);
 				}
 				else if ((*item)->bfunction == ROGUE_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, font2, "LOCKED", App->gui->brown);
 				}
 				else if ((*item)->bfunction == TANK_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
+					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, font2, "LOCKED", App->gui->brown);
 				}
 				else if ((*item)->bfunction == NONE_BUT) {
 					for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
@@ -241,12 +250,12 @@ void j1ChooseCharacter::ChangeScene() {
 	App->scene1->active = true;
 	App->scene1->Start();
 	App->particles->Start();
-	App->dialog->active = true;
-	App->dialog->Start();
+	//App->dialog->active = true;
+	//App->dialog->Start();
 	
 	App->entity->active = true;
 	App->entity->CreatePlayer();
 	App->entity->Start();
-	App->shop->Start();
+	
 }
 

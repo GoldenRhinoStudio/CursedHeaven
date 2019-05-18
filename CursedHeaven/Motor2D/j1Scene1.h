@@ -64,10 +64,11 @@ public:
 	j1Timer	startup_time;
 	int time_scene1;
 	bool changingScene = false;
-	bool startDialogue = true;
-	bool finishedDialogue = false;
+	bool startDialog = true;
+	bool finishedDialog = false;
 	bool profile_active = false;
 	bool bossFightOn = false;
+	bool judgeAppears1 = false;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;
@@ -84,6 +85,8 @@ private:
 
 	SDL_Texture* lvl1_tex = nullptr;
 	SDL_Rect rect = { 0,0,400,200};
+
+	_TTF_Font* font = nullptr;
 
 	bool closeSettings = false;
 	bool continueGame = true;

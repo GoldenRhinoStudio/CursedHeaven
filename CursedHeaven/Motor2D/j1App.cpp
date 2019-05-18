@@ -25,8 +25,6 @@
 #include "j1Gui.h"
 #include "j1App.h"
 #include "j1Particles.h"
-#include "j1DialogSystem.h"
-#include "j1Shop.h"
 #include "j1Entity.h"
 #include "j1Minimap.h"
 #include "Brofiler/Brofiler.h"
@@ -55,10 +53,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	fade = new j1FadeToBlack();
 	font = new j1Fonts();
 	gui = new j1Gui();
-	dialog = new j1DialogSystem();
 	particles = new j1Particles();
 	collisions = new j1Collisions();
-	shop = new j1Shop();
 	minimap = new j1Minimap();
 
 	// Ordered for awake / Start / Update
@@ -76,13 +72,11 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(lose);
 	AddModule(victory);
 	AddModule(scene1);
-	AddModule(shop);
 	AddModule(entity);
 	AddModule(particles);	
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);
-	AddModule(dialog);
 	AddModule(fade);
 	AddModule(minimap);
 
@@ -250,10 +244,10 @@ void j1App::FinishUpdate()
 
 	iPoint map_coords = { 0,0 };
 	if (App->entity->currentPlayer != nullptr) {
-		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y);
+		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + (int)App->entity->currentPlayer->collider->rect.h);
 	}
 
-	sprintf_s(title, 256, "Cursed Heaven v0.5 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
+	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
 		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync, map_coords.x, map_coords.y);
 	App->win->SetTitle(title);
 

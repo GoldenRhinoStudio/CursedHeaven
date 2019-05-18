@@ -24,7 +24,7 @@ public:
 
 	bool Start();
 	bool PreUpdate() { return true; };
-	bool Update(float dt, bool do_logic) { return true; };
+	bool Update(float dt, bool do_logic);
 	bool PostUpdate() { return true; };
 	bool CleanUp() { return true; };
 
@@ -32,9 +32,10 @@ public:
 	bool Load(pugi::xml_node&) { return true; };
 	bool Save(pugi::xml_node&) const { return true; };
 
-	LawType RandomLaw();
 
 public:
+
+	SDL_Texture* Jtex = nullptr;
 
 };
 

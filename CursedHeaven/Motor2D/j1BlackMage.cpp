@@ -30,7 +30,7 @@ j1BlackMage::j1BlackMage(int x, int y, ENTITY_TYPES type) : j1Player(x, y, ENTIT
 
 	up.LoadAnimation("up", "mage");
 	down.LoadAnimation("down", "mage");
-	lateral.LoadAnimation("lateral", "mage");	
+	lateral.LoadAnimation("lateral", "mage");
 	diagonal_up.LoadAnimation("diagonalUp", "mage");
 	diagonal_down.LoadAnimation("diagonalDown", "mage");
 	godmode.LoadAnimation("godmode", "mage");
@@ -63,8 +63,8 @@ bool j1BlackMage::Start() {
 	animation = &idle_diagonal_up;
 
 	// Setting player position
-	position.x = 200;
-	position.y = 750;
+	position.x = 180;
+	position.y = 760;
 
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_NONE, App->entity);
@@ -74,10 +74,12 @@ bool j1BlackMage::Start() {
 	hud = new j1Hud();
 	hud->Start();
 
+	dialog = new j1DialogSystem();
+	dialog->Start();
+
 	// Starting ability timers
 	cooldown_Q.Start();
 	cooldown_E.Start();
-	potionTime.Start();
 
 	player_start = true;
 	return true;
@@ -88,7 +90,7 @@ bool j1BlackMage::PreUpdate() {
 
 	BROFILER_CATEGORY("BlackMagePreUpdate", Profiler::Color::Orange)
 
-	return true;
+		return true;
 }
 
 // Call modules on each loop iteration
@@ -99,7 +101,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		// Controls when is finished the dialog
-		if (App->scene1->finishedDialogue == true) {
+		if (App->scene1->finishedDialog) {
 
 			if (!active_Q) {
 				ManagePlayerMovement(direction, dt, do_logic, speed);
@@ -138,7 +140,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 									speed_particle.y = particle_speed.y * sin(180 * DEGTORAD);
 								}
 							}
-							if (animation == &idle_diagonal_up || animation == &diagonal_up){
+							if (animation == &idle_diagonal_up || animation == &diagonal_up) {
 								if (facingRight) {
 									speed_particle.x = particle_speed.x * cos(-45 * DEGTORAD);
 									speed_particle.y = particle_speed.y * sin(-45 * DEGTORAD);
@@ -189,7 +191,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 							else if (animation == &diagonal_down) animation = &attack_diagonal_down;
 						}
 					}
-				}		
+				}
 
 				if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
 				else available_Q = false;
@@ -201,7 +203,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
-					//if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 35;
+					if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 35;
 
 					iPoint explosionPos;
 					iPoint p = { (int)position.x, (int)position.y };
@@ -211,7 +213,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 						else explosionPos = { p.x - 45, p.y - 15 };
 					}
 					else if (animation == &up || animation == &idle_up) explosionPos = { p.x - 13, p.y - 30 };
-					else if (animation == &down || animation == &idle_down)	explosionPos = { p.x - 13, p.y + 4};
+					else if (animation == &down || animation == &idle_down)	explosionPos = { p.x - 13, p.y + 4 };
 					else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
 						if (facingRight) explosionPos = { p.x + 15, p.y - 26 };
 						else explosionPos = { p.x - 40, p.y - 26 };
@@ -243,7 +245,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 					App->audio->PlayFx(App->audio->rage_bm);
 
-					//if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 35;
+					if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 35;
 
 					speed = speed * 2;
 					cooldown_Speed.Start();
@@ -262,8 +264,8 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			}
 
 			// Attack management
-			if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished() 
-				|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished() 
+			if (attack_lateral.Finished() || attack_up.Finished() || attack_down.Finished()
+				|| attack_diagonal_up.Finished() || attack_diagonal_down.Finished()
 				|| i_attack_lateral.Finished() || i_attack_up.Finished() || i_attack_down.Finished()
 				|| i_attack_diagonal_up.Finished() || i_attack_diagonal_down.Finished() || dead == true) {
 
@@ -357,7 +359,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	else if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
 		height = 7.0f;
 
-
 	// We update the camera to follow the player every frame
 	UpdateCameraPosition(dt);
 
@@ -394,9 +395,11 @@ bool j1BlackMage::DrawOrder(float dt) {
 bool j1BlackMage::PostUpdate() {
 
 	BROFILER_CATEGORY("BlackMagePostUpdate", Profiler::Color::Yellow)
+	
+	dialog->Update(0);
 
-		if (App->scene1->finishedDialogue)
-			hud->Update(0);
+	if (App->scene1->finishedDialog)
+		hud->Update(0);
 
 	return true;
 }
@@ -514,7 +517,7 @@ void j1BlackMage::Shot(float x, float y, float dt) {
 	fPoint edge;
 	edge.x = x - (position.x + margin.x) - (App->render->camera.x / (int)App->win->GetScale());
 	edge.y = (position.y + margin.y) - y + (App->render->camera.y / (int)App->win->GetScale());
-	
+
 	// If the map is very big and its not enough accurate, we should use long double for the var angle
 	double angle = -(atan2(edge.y, edge.x));
 

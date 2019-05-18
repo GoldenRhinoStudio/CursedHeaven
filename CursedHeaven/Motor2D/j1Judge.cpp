@@ -3,6 +3,8 @@
 #include "j1Entity.h"
 #include "j1EntityManager.h"
 #include "j1Scene1.h"
+#include "j1Textures.h"
+#include "j1Render.h"
 #include <time.h>
 
 j1Judge::j1Judge(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::NPC) 
@@ -17,35 +19,16 @@ j1Judge::~j1Judge()
 
 bool j1Judge::Start()
 {
-	RandomLaw();
+	Jtex = App->tex->Load("textures/character/judge/Judge.png");
 	return true;
 }
 
-LawType j1Judge::RandomLaw()
+bool j1Judge::Update(float dt, bool do_logic)
 {
-	LawType chosenLaw;
+	SDL_Rect judgeRect = { 42, 2, 22, 33 };
 
-	int law = (rand() % 4) + 1;
+	Draw(&judgeRect, true, 225, 750, 1.0f);
 
-	if (law == 1) {
-		chosenLaw = Q_ABILITY;
-		LOG("q");
-	}
-
-	else if (law == 2) {
-		chosenLaw = E_ABILITY;
-		LOG("e");
-	}
-		
-	else if (law == 3) {
-		chosenLaw = EVERY_ROOM;
-		LOG("room");
-	}
-		
-	else if (law == 4) {
-		chosenLaw = HEALTH;
-		LOG("health");
-	}
-		
-	return chosenLaw;
+	return true;
 }
+

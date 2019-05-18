@@ -158,11 +158,11 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 			entities.push_back(ret); 
 		break;
 
-	case NPC:
+	case JUDGE:
+		ret = new j1Judge(x, y, type);
+
+	case SELLER:
 		ret = new j1Seller(x, y, type);
-		/*if (npc_type == JUDGE) ret = new j1Judge(x, y, type);
-		else if (npc_type == OLDMAN) ret = new j1OldMan(x, y, type);
-		else if (npc_type == MERCHANT) ret = new j1Merchant(x, y, type);*/
 
 		if (ret != nullptr)
 			entities.push_back(ret);
@@ -194,8 +194,6 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 			j1Entity* entity;
 			if (queue[i].type == SLIME)
 				entity = new j1Slime(info.position.x, info.position.y, info.type);
-			else if (queue[i].type == FIRE)
-				entity = new j1Fire(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == MINDFLYER)
 				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == TURRET)
@@ -234,6 +232,7 @@ void j1EntityManager::CreatePlayer()
 	else if (tank != nullptr)  currentPlayer = tank;*/
 
 	currentPlayer->invulCounter.Start();
+	currentPlayer->potionTime.Start();
 }
 
 void j1EntityManager::OnCollision(Collider* c1, Collider* c2)

@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "j1UserInterfaceElement.h"
+
 #include <list>
 
 #define MAX_ENTITIES 1000
@@ -35,11 +36,13 @@ enum ENTITY_TYPES
 	PLAYER,
 	COIN,
 	ITEM,
-	NPC,
 	SLIME,
 	TURRET,
 	FIRE,
 	MINDFLYER,
+	JUDGE,
+	OLDMAN,
+	SELLER,
 	UNKNOWN
 };
 
@@ -49,13 +52,6 @@ enum PLAYER_TYPES
 	MAGE,
 	TANK,
 	ROGUE
-};
-
-enum NPC_TYPES 
-{
-	JUDGE,
-	OLDMAN,
-	SELLER
 };
 
 struct EntityInfo
@@ -89,7 +85,7 @@ public:
 	j1Entity* CreateEntity(ENTITY_TYPES type, int x = 0, int y = 0);
 	
 	void OnCollision(Collider* c1, Collider* c2);
-	void CreatePlayer();
+	void CreatePlayer(); 
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
 
@@ -99,7 +95,7 @@ private:
 
 public:
 	
-	std::list<j1Entity*>	entities;
+	std::list<j1Entity*> entities;
 
 	// Pointers to diferent playable classes
 	j1DragoonKnight*	knight = nullptr;
@@ -113,7 +109,6 @@ public:
 	j1Seller*			seller = nullptr;
 
 	PLAYER_TYPES player_type;
-	NPC_TYPES npc_type = JUDGE;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
@@ -126,7 +121,6 @@ private:
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;
 	float				updateMsCycle = 0.0f;
-
 };
 
 #endif // __J1ENTITYMANAGER_H__

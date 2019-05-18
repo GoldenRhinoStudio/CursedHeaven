@@ -27,15 +27,19 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 public:
-	float life_points;
-	char const *current_points;
+	bool black_mage = false;
+	bool dragoon_knight = false;
 
-	j1Label* potionsLabel = nullptr;
+	float life_points_max, life_points;
+	char const *current_points;
 
 private:
 	SDL_Texture* hud_text = nullptr;
 	SDL_Texture* profile_text = nullptr;
 	SDL_Texture* score = nullptr;
+	SDL_Texture* dialog_tex = nullptr;
+
+	_TTF_Font* font = nullptr;
 
 	std::list<j1Label*> labels_list;
 	std::list<j1Button*> hud_buttons;

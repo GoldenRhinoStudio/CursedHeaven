@@ -10,6 +10,7 @@
 struct SDL_Texture;
 struct Collider;
 class j1Hud;
+class j1DialogSystem;
 
 class j1Player : public j1Entity
 {
@@ -68,16 +69,18 @@ public:
 	iPoint playerSize;
 	iPoint attackSize;
 	iPoint margin;
-
-	Collider* attackCollider = nullptr;
-
+	int offset;
+	
 	int room = 6;
 	uint points = 0;
 	uint score_points = 0;
 	uint playerLife = 0;
 	uint coins = 0;
 
+	Collider* attackCollider = nullptr;
+
 	j1Hud* hud = nullptr;
+	j1DialogSystem* dialog = nullptr;
 
 	// Animations of the player
 	Animation idle_diagonal_up;
@@ -100,7 +103,9 @@ public:
 	int rightAttackSpawnPos;
 	int leftAttackSpawnPos;
 	int knockback = 0;
+
 	float godModeSpeed;
+	float movementSpeed;
 
 	bool player_start = false;
 	bool dead = false;
@@ -108,9 +113,9 @@ public:
 	bool loadedAudios = false;
 	bool changing_room = false;
 	bool receivedDamage = false;
-	bool GodMode = false;
 
 	// Combat
+	bool GodMode = false;
 	bool attacking = false;
 	bool available_Q = false;
 	bool active_Q = false;

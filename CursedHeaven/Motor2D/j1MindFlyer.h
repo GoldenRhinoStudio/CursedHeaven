@@ -10,6 +10,7 @@
 
 #include <vector>
 
+#define DETECTION_RANGE 10
 #define ATTACK_RANGE_MF 15
 
 struct SDL_Texture;

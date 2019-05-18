@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Audio.h"
+#include "j1Particles.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -59,7 +60,6 @@ bool j1Slime::Update(float dt, bool do_logic)
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
-		collider->SetPos(position.x + margin.x, position.y + margin.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
@@ -70,34 +70,36 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
-			if (do_logic) {
-				/*if(path != nullptr)
-				path->clear();*/
 
-				if (App->path->CreatePath(origin, destination) > 0) {
-					path = App->path->GetLastPath();
-					target_found = true;
-					node = 0;
-				}
-				else target_found = false;
-			}
-					
-			if (target_found && path != nullptr) {
-				if (distance <= ATTACK_RANGE_SLIME) {
-					//attacking = true;
-					App->audio->PlayFx(App->audio->slime_attack);
-				}
-				else Move(path, dt);
+			if (App->entity->currentPlayer->dead == false)
+			{
+				if (do_logic) {
+					/*if(path != nullptr)
+					path->clear();*/
 
-				LOG("MOVING");
+					if (App->path->CreatePath(origin, destination) > 0) {
+						path = App->path->GetLastPath();
+						target_found = true;
+						node = 0;
+					}
+					else {
+						target_found = false;
+					}
+				}
+				if (target_found && path != nullptr) {
+					if (distance <= ATTACK_RANGE_SLIME) {
+						App->audio->PlayFx(App->audio->slime_attack);
+					}
+					Move(path, dt);
+				}
+				else if (!target_found && path != nullptr) {
+				}
+				//fix attack
 			}
-			else if (!target_found && path != nullptr)
-				LOG("NOT FOUND");			
-					//fix attack			
 		}
 		else {
-		/*	if (path != nullptr)
-				path->clear();*/
+			/*	if (path != nullptr)
+			path->clear();*/
 			target_found = false;
 		}
 
@@ -106,9 +108,11 @@ bool j1Slime::Update(float dt, bool do_logic)
 			animation = &idle_down;
 			position = initialPosition;
 		}
+
 	}
-	
-	App->map->EntityMovement(this);
+
+	App->map->EntityMovementTest(this);
+	collider->SetPos(position.x, position.y);
 	
 	return true;
 }
@@ -148,6 +152,17 @@ bool j1Slime::PostUpdate() {
 
 void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (col_2->type == COLLIDER_ATTACK) 
+	{
+		for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
+		{
+			if (App->particles->active[i] != nullptr)
+			{
+				delete App->particles->active[i];
+				App->particles->active[i] = nullptr;
+			}
+		}
+	}
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
@@ -251,74 +266,76 @@ void j1Slime::LoadProperties()
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
-	for (uint i = 0; i < path->size(); ++i)
+	/*for (uint i = 0; i < path->size(); ++i)
 	{
 		iPoint pos = App->map->MapToWorld(path->at(i).x, path->at(i).y);
 		App->render->Blit(debug_tex, pos.x, pos.y);
-	}
+	}*/ //blit path
 
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	/*if (App->path->check_nextTile(path, &node, &pos))
-		node++;*/
+	iPoint pos = App->map->WorldToMap((int)collider->rect.x + (int)collider->rect.w/2, (int)collider->rect.y + (int)collider->rect.h);
+
 	direction = App->path->CheckDirection(path, &node);
 
+	if (App->path->check_nextTile(path, &node, &pos,direction)) {
+		node++;
+	}
+
+	fPoint next_position = position;
+
+	
 	if (direction == Movement::DOWN_RIGHT)
 	{
 		animation = &diagonal_down;
-		position.y += (speed * dt) / 2;
-		position.x += speed * dt;
+		next_position.y += (speed * dt) / 2;
+		next_position.x += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::DOWN_LEFT)
 	{
 		animation = &diagonal_down;
-		position.y += (speed * dt) / 2;
-		position.x -= speed * dt;
+		next_position.y += (speed * dt) / 2;
+		next_position.x -= speed * dt;
 		animation->flip = true;
 	}
-
 	else if (direction == Movement::UP_RIGHT)
 	{
 		animation = &diagonal_up;
-		position.y -= (speed * dt) / 2;
-		position.x += speed * dt;
+		next_position.y -= (speed * dt) / 2;
+		next_position.x += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::UP_LEFT)
 	{
 		animation = &diagonal_up;
-		position.y -= (speed * dt) / 2;
-		position.x -= speed * dt;
+		next_position.y -= (speed * dt) / 2;
+		next_position.x -= speed * dt;
 		animation->flip = true;
 	}
-
 	else if (direction == Movement::DOWN)
 	{
 		animation = &down;
-		position.y += speed * dt;
+		next_position.y += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::UP)
 	{
 		animation = &up;
-		position.y -= speed * dt;
+		next_position.y -= speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::RIGHT)
 	{
 		animation = &lateral;
 		animation->flip = false;
-		position.x += speed * dt;
+		next_position.x += speed * dt;
 	}
-
-	else
+	else if (direction == Movement::LEFT)
 	{
 		animation = &lateral;
 		animation->flip = true;
-		position.x -= speed * dt;
+		next_position.x -= speed * dt;
 	}
+
+	if (App->path->IsWalkable(App->map->WorldToMap((int)next_position.x, (int)next_position.y)))
+		position = next_position;
 }

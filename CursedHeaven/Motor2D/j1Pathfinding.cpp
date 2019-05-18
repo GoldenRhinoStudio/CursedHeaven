@@ -3,7 +3,7 @@
 #include "j1App.h"
 #include "j1Pathfinding.h"
 #include "j1Map.h"
-
+#include "j1EntityManager.h"
 #include <algorithm>
 #include "Brofiler/Brofiler.h"
 
@@ -70,7 +70,6 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * nod
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
-		LOG("x:%i y:%i", x_difference, y_difference);
 
 		if (x_difference > 0 && y_difference > 0) return DOWN;
 		else if (x_difference > 0 && y_difference < 0) return RIGHT;
@@ -81,21 +80,20 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * nod
 		else if (x_difference > 0 && y_difference == 0) return DOWN_RIGHT;
 		else if (x_difference == 0 && y_difference > 0)	return DOWN_LEFT;
 	}
-
-	else return NONE;
+	return NONE;
 }
 
-bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, fPoint* position) {
+bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, iPoint* position, Movement direction) {
 
 	if (path->size() > 1 && *cnode != path->size() - 1)
 	{
 		iPoint prevDest = path->at(*cnode);
-		iPoint currentDest = path->at(*cnode + 1);
 
-		bool reachedX = (prevDest.x <= currentDest.x && position->x >= currentDest.x)
-			|| (prevDest.x >= currentDest.x && position->x <= currentDest.x);
-		bool reachedY = (prevDest.y <= currentDest.y && position->y >= currentDest.y)
-			|| (prevDest.y >= currentDest.y && position->y <= currentDest.y);
+
+		bool reachedX = (direction == RIGHT && position->x >= prevDest.x)
+			|| (direction == LEFT && position->x <= prevDest.x || prevDest.x == position->x);
+		bool reachedY = (direction == DOWN && position->y >= prevDest.y)
+			|| (direction == UP && position->y <= prevDest.y || prevDest.y == position->y);
 		return (reachedX & reachedY);
 	}
 	return false;

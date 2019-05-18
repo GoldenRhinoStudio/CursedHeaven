@@ -32,7 +32,7 @@ j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTIT
 	up.LoadAnimation("up", "mindflyer", false);
 	down.LoadAnimation("down", "mindflyer", false);
 
-	// Setting mindflyer position
+	// Setting harpy position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
@@ -166,7 +166,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 bool j1MindFlyer::DrawOrder(float dt) {
 
-	// Drawing the mindflyer
+	// Drawing the harpy
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (position.x - App->entity->currentPlayer->position.x >= 0)
@@ -198,6 +198,18 @@ bool j1MindFlyer::PostUpdate() {
 
 void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (col_2->type == COLLIDER_ATTACK)
+	{
+		for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
+		{
+			if (App->particles->active[i] != nullptr)
+			{
+				delete App->particles->active[i];
+				App->particles->active[i] = nullptr;
+			}
+		}
+	}
+
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
@@ -274,8 +286,8 @@ void j1MindFlyer::LoadProperties()
 
 void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 {
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	if (App->path->check_nextTile(path, &node, &pos))
+	iPoint pos = { collider->rect.x + collider->rect.w/2, collider->rect.y + collider->rect.h};
+	if (App->path->check_nextTile(path, &node, &pos, direction))
 		node++;
 	direction = App->path->CheckDirection(path,&node);
 

@@ -65,10 +65,10 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 bool j1Scene1::Start()
 {
 	if (active)
-	{	
+	{
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("greenmount_v2.tmx"))
+		if (App->map->Load("greenmount.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -128,7 +128,7 @@ bool j1Scene1::Start()
 bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
-	current_points.erase();
+		current_points.erase();
 	return true;
 }
 
@@ -138,10 +138,9 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
-	finishedDialogue = true;
-	
+
 	/*if (startDialogue)
-		App->dialog->StartDialogEvent(App->dialog->dialogA);*/
+	App->dialog->StartDialogEvent(App->dialog->dialogA);*/
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
@@ -253,8 +252,8 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0) {
-			App->render->camera.x = 0;
-			resettingLevel = false;
+		App->render->camera.x = 0;
+		resettingLevel = false;
 		}*/
 	}
 
@@ -264,10 +263,10 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0)
-			ChangeSceneMenu(); 
+			ChangeSceneMenu();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN 
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN
 		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
 
 		lastStatsTime = statsTime.Read();
@@ -300,7 +299,7 @@ bool j1Scene1::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-	
+
 	App->map->Draw();
 	App->entity->DrawEntityOrder(dt);
 	App->render->reOrder();
@@ -334,30 +333,30 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities(int room)
 {
-	App->entity->AddEnemy(13, 83, SLIME);
+	/*App->entity->AddEnemy(13, 83, SLIME);
 	App->entity->AddEnemy(16, 79, SLIME);
 	App->entity->AddEnemy(7, 74, SLIME);
 
 	App->entity->AddEnemy(6, 57, SLIME);
 	App->entity->AddEnemy(15, 54, SLIME);
 	App->entity->AddEnemy(17, 61, SLIME);
-								  
+
 	App->entity->AddEnemy(31, 65, SLIME);
 	App->entity->AddEnemy(28, 65, SLIME);
 	App->entity->AddEnemy(28, 53, SLIME);
-								 
+
 	App->entity->AddEnemy(29, 40, SLIME);
 	App->entity->AddEnemy(33, 41, SLIME);
 	App->entity->AddEnemy(14, 41, SLIME);
-								 
+
 	App->entity->AddEnemy(46, 47, SLIME);
 	App->entity->AddEnemy(43, 39, SLIME);
 	App->entity->AddEnemy(38, 41, SLIME);
-								  
+
 	App->entity->AddEnemy(29, 19, SLIME);
 	App->entity->AddEnemy(28, 22, SLIME);
 	App->entity->AddEnemy(26, 26, SLIME);
-								  
+
 	App->entity->AddEnemy(46, 25, SLIME);
 	App->entity->AddEnemy(45, 32, SLIME);
 	App->entity->AddEnemy(38, 28, SLIME);
@@ -380,8 +379,7 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(85, 60, SLIME);
 	App->entity->AddEnemy(80, 65, SLIME);
 
-	App->entity->AddEnemy(54, 68, MINDFLYER);
-
+	App->entity->AddEnemy(54, 68, MINDFLYER);*/
 }
 
 // Called before quitting
@@ -434,7 +432,7 @@ void j1Scene1::ChangeSceneMenu()
 	App->scene1->active = false;
 	App->menu->active = true;
 	changingScene = false;
-	App->dialog->CleanUp();
+	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();
@@ -448,7 +446,7 @@ void j1Scene1::ChangeSceneMenu()
 void j1Scene1::ChangeSceneDeath() {
 	App->scene1->active = false;
 	App->lose->active = true;
-	App->dialog->CleanUp();
+	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();
@@ -462,7 +460,7 @@ void j1Scene1::ChangeSceneDeath() {
 void j1Scene1::ChangeSceneVictory() {
 	App->scene1->active = false;
 	App->victory->active = true;
-	App->dialog->CleanUp();
+	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();

@@ -2,7 +2,6 @@
 #include "j1App.h"
 #include "j1Textures.h"
 #include "j1UserInterfaceElement.h"
-#include "j1Shop.h"
 #include "j1Label.h"
 #include "j1Scene1.h"
 #include "j1Fonts.h"
@@ -22,22 +21,23 @@ bool j1Hud::Start()
 {
 	hud_text = App->tex->Load("gui/hud.png");
 	profile_text = App->tex->Load("gui/player_profile.png");
+	dialog_tex = App->tex->Load("textures/dialog_cursedheaven.png");
 	life_points = 82;
-	multiplier = 82 / (float)App->entity->currentPlayer->lifePoints;
+	life_points_max = App->entity->currentPlayer->lifePoints;
+	multiplier = 82 / life_points_max;
 
-	// Potions
-	potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0", App->gui->brown);
+	font = App->font->Load("fonts/Pixeled.ttf", 5);
 	
 	return true;
 }
 
 bool j1Hud::Update(float dt)
 {
-	App->gui->UpdateButtonsState(&hud_buttons, App->gui->buttonsScale);
+	/*App->gui->UpdateButtonsState(&hud_buttons, App->gui->buttonsScale);*/
 
 	life_points = App->entity->currentPlayer->lifePoints * multiplier;
 
-	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
+	/*for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 		if ((*item)->visible) {
 			switch ((*item)->state) {
 			case IDLE:
@@ -57,7 +57,7 @@ bool j1Hud::Update(float dt)
 				break;
 			}
 		}
-	}
+	}*/
 
 	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
@@ -89,9 +89,17 @@ bool j1Hud::Update(float dt)
 
 	// Lifebar
 	SDL_Rect lifebar = { 0,225,82,8 };
-	SDL_Rect lifebar_r = { 0,233, life_points, 6 };
+	SDL_Rect lifebar_r = { 0,233,life_points,6 };
 
-	if (App->entity->player_type == MAGE) {
+	//dialog
+	SDL_Rect chart = { 0, 0, 284, 71 };
+
+	if (App->entity->player_type == MAGE)
+		black_mage = true;
+	else if (App->entity->player_type == KNIGHT)
+		dragoon_knight = true;
+
+	if (black_mage) {
 		// Icon profile
 		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
 
@@ -107,8 +115,10 @@ bool j1Hud::Update(float dt)
 			App->render->Blit(hud_text, 15, 400, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 		}
 
+		/*App->render->Blit(dialog_tex, 0, 20, &chart, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);*/
+
 	}
-	else if (App->entity->player_type == KNIGHT) {
+	else if (dragoon_knight) {
 		// Icon profile
 		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, false);
 
@@ -123,30 +133,12 @@ bool j1Hud::Update(float dt)
 		if (!App->entity->currentPlayer->available_E) {
 			App->render->Blit(hud_text, 15, 400, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 		}
-	}
 
-	/*if (App->shop->potions == 0) {
-		delete potionsLabel;
-		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x0", App->gui->brown);
 	}
-	else if (App->shop->potions == 1) {
-		delete potionsLabel;
-		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x1", App->gui->brown);
-	}
-	else if (App->shop->potions == 2) {
-		delete potionsLabel;
-		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x2", App->gui->brown);
-	}
-	else if (App->shop->potions == 3) {
-		delete potionsLabel;
-		potionsLabel = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, 15, 170, App->gui->font3, "x3", App->gui->brown);
-	};*/
-
-	potionsLabel->Draw(0.5, 0, 0, false);
 
 	// Current points of the player (char*)
 	current_points = App->scene1->current_points.c_str();
-	//App->scene1->current_points.erase();
+//	App->scene1->current_points.erase();
 	SDL_Rect temp;
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
@@ -154,29 +146,25 @@ bool j1Hud::Update(float dt)
 	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, false);
 
 	App->tex->UnLoad(score);
-	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, App->gui->font3);
+	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, font);
 
-	App->render->BlitDialog(score, 65, 130, &temp, SDL_FLIP_NONE, 0);
+	App->render->BlitHUD(score, 69, 130, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, false);
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, false);
 
-	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
-		(*item)->Draw(App->gui->buttonsScale);
-	}
-	for (std::list<j1Label*>::iterator item = labels_list.begin(); item != labels_list.end(); ++item) {
-		(*item)->Draw(1.0f, 0, 0, false);
-	}
 
 	if (App->scene1->profile_active) {
-		if (App->entity->player_type == MAGE) {
+		
+		if (black_mage) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, false, 0.3f);
 		}
-		else if (App->entity->player_type == KNIGHT) {
+		else if (dragoon_knight) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, false, 0.3f);
 		}
+
 	}
 
 	return true;
@@ -188,14 +176,14 @@ bool j1Hud::CleanUp()
 	App->tex->UnLoad(profile_text);
 	App->tex->UnLoad(score);
 
-	for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
-		(*item)->CleanUp();
-		hud_buttons.remove(*item);
-	}
-	for (std::list<j1Label*>::iterator item = labels_list.begin(); item != labels_list.end(); ++item) {
+	//for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
+	//	(*item)->CleanUp();
+	//	hud_buttons.remove(*item);
+	//}
+	/*for (std::list<j1Label*>::iterator item = labels_list.begin(); item != labels_list.end(); ++item) {
 		(*item)->CleanUp();
 		labels_list.remove(*item);
-	}
+	}*/
 
 	return true;
 }

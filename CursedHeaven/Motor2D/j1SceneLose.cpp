@@ -62,17 +62,22 @@ bool j1SceneLose::Start()
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 		skeleton_tex = App->tex->Load("textures/SkeletonWalk.png");
 
+		// Loading font
+		font = App->font->Load("fonts/Pixeled.ttf", 5);
+		font2 = App->font->Load("fonts/Pixeled.ttf", 10);
+		font3 = App->font->Load("fonts/Pixeled.ttf", 15);
+
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
 		SDL_Rect clicked = { 797, 12, 151, 38 };
 		App->gui->CreateButton(&deathButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
 		App->gui->CreateButton(&deathButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, GO_TO_MENU);
 
-		App->gui->CreateLabel(&deathLabels, LABEL, 145, 170, App->gui->font1, "Play Again", App->gui->beige);
-		App->gui->CreateLabel(&deathLabels, LABEL, 143, 195, App->gui->font1, "Go to Menu", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
 
-		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, App->gui->font3, "YOU FAILED...", { 153,0,0,255 });
-		App->gui->CreateLabel(&deathLabels, LABEL, 65, 80, App->gui->font2, "HEAVEN WILL BECOME HELL", App->gui->beige);
+		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, font3, "YOU FAILED...", { 153,0,0,255 });
+		App->gui->CreateLabel(&deathLabels, LABEL, 65, 80, font2, "HEAVEN WILL BECOME HELL", App->gui->beige);
 		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
 		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
 
@@ -194,8 +199,9 @@ void j1SceneLose::ChangeScene(SCENE objectiveScene)
 		App->scene1->active = true;
 		App->scene1->Start();
 		App->particles->Start();
-		App->dialog->active = true;
-		App->dialog->Start();
+		App->scene1->finishedDialog = false;
+		//App->dialog->active = true;
+		//App->dialog->Start();
 
 		App->entity->active = true;
 		App->entity->CreatePlayer();

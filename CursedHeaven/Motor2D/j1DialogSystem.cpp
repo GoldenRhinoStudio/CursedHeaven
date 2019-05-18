@@ -69,17 +69,25 @@ bool j1DialogSystem::Update(float dt) {
 
 		App->render->BlitHUD(judge_tex, 225, 750, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
 
+		if (!timerStarted) {
+			dialogTimer.Start();
+			time_passed = dialogTimer.Read();
+			timerStarted = true;
+		}
+
 		if (law1Active == true)
 		{
-			time_passed = timer.ReadSec();
+			if(dialogTimer.Read() >= time_passed + 500)
+			App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
-			if (time_passed >= 2) {
-				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			if (dialogTimer.Read() >= time_passed + 2000) {
 				canSkip = true;
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && canSkip == true) {
-				times += 1;
+				times++;
+				canSkip = false;
+				time_passed = dialogTimer.Read();
 				LOG("times: %d", times);
 			}
 		
@@ -101,17 +109,16 @@ bool j1DialogSystem::Update(float dt) {
 			}
 		}
 		else if (law2Active == true)
-		{
-			
-			time_passed = timer.ReadSec();
-
-			if (time_passed >= 2) {
+		{			
+			if (dialogTimer.Read() >= time_passed + 2000) {
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && canSkip == true) {
-				times += 1;
+				times++;
+				canSkip = false;
+				time_passed = dialogTimer.Read();
 				LOG("times: %d", times);
 			}
 

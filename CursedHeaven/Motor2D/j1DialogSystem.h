@@ -38,7 +38,7 @@ public:
 	SDL_Texture* dialog_tex3 = nullptr;
 
 	std::list<j1Label*> text_list;
-	j1Timer timer;
+	j1Timer dialogTimer;
 	uint time_passed = 0;
 
 	bool law1Active = false;
@@ -47,6 +47,9 @@ public:
 
 	int times = 0;
 	int pivot = 2147483647;
+
+private:
+	bool timerStarted = false;
 };
 
 #endif 

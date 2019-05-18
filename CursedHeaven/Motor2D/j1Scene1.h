@@ -51,7 +51,6 @@ public:
 
 public:
 	j1Box* settings_window = nullptr;
-	fPoint initialScene1Position;
 	bool player_created = false;
 	bool backToMenu = false;
 	bool toLoseScene = false;

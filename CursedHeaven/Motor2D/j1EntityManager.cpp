@@ -32,7 +32,6 @@ j1EntityManager::~j1EntityManager() {}
 
 bool j1EntityManager::Start()
 {
-
 	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
 		(*item)->Start();
@@ -61,6 +60,8 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	LOG("Awaking Entity manager");
 	updateMsCycle = config.attribute("updateMsCycle").as_float();
+	playerSpawnPos.x = config.child("position").attribute("x").as_float();
+	playerSpawnPos.y = config.child("position").attribute("y").as_float();
 
 	return true;
 }
@@ -221,8 +222,9 @@ void j1EntityManager::DestroyEntities()
 
 void j1EntityManager::CreatePlayer()
 {
-	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER);
-	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);
+	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos.x, playerSpawnPos.y);
+	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos.x, playerSpawnPos.y);
+
 	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
 	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);*/
 

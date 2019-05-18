@@ -55,10 +55,6 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 	if (active == false)
 		LOG("Scene1 not active.");
 
-	// Copying the position of the player
-	initialScene1Position.x = 0;
-	initialScene1Position.y = 0;
-
 	return ret;
 }
 
@@ -376,7 +372,7 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(85, 60, SLIME);
 	App->entity->AddEnemy(80, 65, SLIME);
 
-	App->entity->AddEnemy(54, 68, MINDFLYER);
+	App->entity->AddEnemy(53, 68, MINDFLYER);
 }
 
 // Called before quitting

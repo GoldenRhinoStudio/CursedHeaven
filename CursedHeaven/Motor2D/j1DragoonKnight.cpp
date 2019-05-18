@@ -65,9 +65,8 @@ bool j1DragoonKnight::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	// Setting player position
-	position.x = 180;
-	position.y = 770;
+	position.x = -1050;
+	position.y = 750;
 
 	coins = 300;
 

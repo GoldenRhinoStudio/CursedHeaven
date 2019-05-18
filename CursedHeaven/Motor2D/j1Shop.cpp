@@ -312,8 +312,8 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 		if (level > 2 && type != POTION)
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 96, 255, 160);
 		else if (App->entity->currentPlayer->coins < prize || (App->shop->potions == 3 && type == POTION)) {
-
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 255, 0, 0, 160);
+
 		}
 		else {
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
@@ -398,6 +398,9 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 					if (App->shop->potions < 3 && App->scene1->potionCounter < 3) {
 						App->shop->potions++;
 						App->scene1->potionCounter++;
+
+						if(App->shop->potions == 3)
+							description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. potions", App->gui->beige);
 					}
 					break;
 				}

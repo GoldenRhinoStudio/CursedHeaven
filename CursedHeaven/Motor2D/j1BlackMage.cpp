@@ -62,10 +62,6 @@ bool j1BlackMage::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	// Setting player position
-	position.x = 180;
-	position.y = 760;
-
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_NONE, App->entity);
 	else

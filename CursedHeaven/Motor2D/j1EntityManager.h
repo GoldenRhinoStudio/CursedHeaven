@@ -121,6 +121,7 @@ private:
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;
 	float				updateMsCycle = 0.0f;
+	fPoint				playerSpawnPos;
 };
 
 #endif // __J1ENTITYMANAGER_H__

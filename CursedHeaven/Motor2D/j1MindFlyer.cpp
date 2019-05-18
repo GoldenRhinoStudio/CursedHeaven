@@ -50,6 +50,7 @@ bool j1MindFlyer::Start()
 
 	animation = &idle_down;
 	shotTimer.Start();
+	supershotTimer.Start();
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
@@ -90,53 +91,141 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 				}
 				if (target_found && path != nullptr) {
 					if (distance <= ATTACK_RANGE_MF /*&& App->scene1->bossFightOn*/) {
-						if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
+						if ((shotTimer.Read() >= lastTime_Shot + cooldown_Shot) && loopAngle == 320) {
 
 							fPoint speed_particle[8];
-							fPoint particle_speed = { 250,250 };
+							fPoint particle_speed = { 250, 250 };
 							
 							speed_particle[0].x = particle_speed.x * cos(0 * DEGTORAD);
 							speed_particle[0].y = particle_speed.y * sin(0 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[0];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[1].x = particle_speed.x * cos(180 * DEGTORAD);
 							speed_particle[1].y = particle_speed.y * sin(180 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[1];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 														
 							speed_particle[2].x = particle_speed.x * cos(-45 * DEGTORAD);
 							speed_particle[2].y = particle_speed.y * sin(-45 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[2];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[3].x = particle_speed.x * cos(-135 * DEGTORAD);
 							speed_particle[3].y = particle_speed.y * sin(-135 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[3];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 														
 							speed_particle[4].x = particle_speed.x * cos(-315 * DEGTORAD);
 							speed_particle[4].y = particle_speed.y * sin(-315 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[4];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[5].x = particle_speed.x * cos(-225 * DEGTORAD);
 							speed_particle[5].y = particle_speed.y * sin(-225 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[5];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[6].x = particle_speed.x * cos(-90 * DEGTORAD);
 							speed_particle[6].y = particle_speed.y * sin(-90 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[6];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 							speed_particle[7].x = particle_speed.x * cos(-270 * DEGTORAD);
 							speed_particle[7].y = particle_speed.y * sin(-270 * DEGTORAD);
 							App->particles->mageShot.speed = speed_particle[7];
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 							App->audio->PlayFx(App->audio->boss_attack);
 							lastTime_Shot = shotTimer.Read();
+						}
+
+						if (supershotTimer.Read() >= lastTime_Supershot + 10000) {
+
+							if (loopAngle % 5 == 0) {
+
+								fPoint speed_particle[8];
+								fPoint particle_speed = { 200, 200 };
+
+								/*speed_particle[0].x = particle_speed.x * cos((0 + loopAngle) * DEGTORAD);
+								speed_particle[0].y = particle_speed.y * sin((0 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[0];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[1].x = particle_speed.x * cos((180 + loopAngle) * DEGTORAD);
+								speed_particle[1].y = particle_speed.y * sin((180 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[1];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[2].x = particle_speed.x * cos((-45 + loopAngle) * DEGTORAD);
+								speed_particle[2].y = particle_speed.y * sin((-45 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[2];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[3].x = particle_speed.x * cos((-135 + loopAngle) * DEGTORAD);
+								speed_particle[3].y = particle_speed.y * sin((-135 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[3];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[4].x = particle_speed.x * cos((-315 + loopAngle) * DEGTORAD);
+								speed_particle[4].y = particle_speed.y * sin((-315 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[4];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[5].x = particle_speed.x * cos((-225 + loopAngle) * DEGTORAD);
+								speed_particle[5].y = particle_speed.y * sin((-225 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[5];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[6].x = particle_speed.x * cos((-90 + loopAngle) * DEGTORAD);
+								speed_particle[6].y = particle_speed.y * sin((-90 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[6];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[7].x = particle_speed.x * cos((-270 + loopAngle) * DEGTORAD);
+								speed_particle[7].y = particle_speed.y * sin((-270 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[7];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);*/
+
+								speed_particle[0].x = particle_speed.x * cos((0 + loopAngle) * DEGTORAD);
+								speed_particle[0].y = particle_speed.y * sin((0 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[0];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[1].x = particle_speed.x * cos((180 + loopAngle) * DEGTORAD);
+								speed_particle[1].y = particle_speed.y * sin((180 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[1];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[2].x = particle_speed.x * cos((-60 + loopAngle) * DEGTORAD);
+								speed_particle[2].y = particle_speed.y * sin((-60 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[2];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[3].x = particle_speed.x * cos((-120 + loopAngle) * DEGTORAD);
+								speed_particle[3].y = particle_speed.y * sin((-120 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[3];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[4].x = particle_speed.x * cos((-300 + loopAngle) * DEGTORAD);
+								speed_particle[4].y = particle_speed.y * sin((-300 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[4];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[5].x = particle_speed.x * cos((-240 + loopAngle) * DEGTORAD);
+								speed_particle[5].y = particle_speed.y * sin((-240 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[5];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							}
+
+							loopAngle++;
+							int a = loopAngle;
+							int b = a;
+
+							if (loopAngle >= 320 + 360) {
+								loopAngle = 320;
+								lastTime_Supershot = supershotTimer.Read();
+							}
 						}
 					}
 					else {

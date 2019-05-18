@@ -50,9 +50,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Called to change scene
-	void ChangeScene(SCENE objectiveScene);
-
 	// Load and Save
 	bool Load(pugi::xml_node&);
 	//bool Save(pugi::xml_node&) const;

@@ -13,6 +13,7 @@
 #include "j1Scene1.h"
 #include "j1Audio.h"
 #include "j1Particles.h"
+#include <time.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -211,10 +212,21 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += score;
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
+
+			srand(time(NULL));
+			int item = rand() % 10 + 1;
+
+			if (item > 9) {
+				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
+				App->entity->AddItem(position.x + 20, position.y, LIFE);
+				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);
+			}
+			else {
+				App->entity->AddItem(position.x - 10, position.y, COIN);
+			}
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 				if (item._Ptr->_Myval == this) {

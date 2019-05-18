@@ -171,7 +171,7 @@ bool j1SceneCredits::Update(float dt)
 
 	}
 
-	App->render->Blit(license, 50, 50, NULL, SDL_FLIP_NONE, false, 0.24f);
+	App->render->Blit(license, 145, 130, NULL, SDL_FLIP_NONE, false, 0.24f);
 
 
 
@@ -214,13 +214,4 @@ bool j1SceneCredits::CleanUp()
 	if (credits_window != nullptr) credits_window = nullptr;
 
 	return true;
-}
-
-void j1SceneCredits::ChangeScene()
-{
-	this->active = false;
-	backToMenu = false;
-	CleanUp();
-	App->menu->active = true;
-	App->menu->Start();	
 }

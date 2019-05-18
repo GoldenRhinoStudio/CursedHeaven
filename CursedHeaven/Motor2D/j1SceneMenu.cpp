@@ -250,38 +250,5 @@ bool j1SceneMenu::Load(pugi::xml_node& node)
 
 	bool scene_activated = activated.attribute("true").as_bool();
 
-	if ((scene_activated == false) && active)
-		ChangeScene(SCENE1);
-	else
-		ChangeScene(SCENE2);
-
 	return true;
-}
-
-void j1SceneMenu::ChangeScene(SCENE objectiveScene)
-{
-	if (!player_created)
-	{
-		this->active = false;
-		loadGame = false;
-		openSettings = false;
-		openCredits = false;
-		chooseChar = false;
-
-		CleanUp();
-
-		if (objectiveScene == SCENE::CREDITS) {
-			App->credits->active = true;
-			App->credits->Start();
-		}
-		else if (objectiveScene == SCENE::SCENE_SETTINGS) {
-			App->settings->active = true;
-			App->settings->Start();
-		}
-		else if (objectiveScene == SCENE::CHOOSE) {
-				App->choose_character->active = true;
-				App->choose_character->Start();
-				//App->render->camera = { 250, -1080 };
-		}
-	}
 }

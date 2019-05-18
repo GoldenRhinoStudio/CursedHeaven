@@ -18,6 +18,7 @@
 #include "j1Turret.h"
 #include "j1MindFlyer.h"
 #include "j1Map.h"
+#include "Items.h"
 
 #include "j1Player.h"
 
@@ -205,6 +206,17 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 			break;
 		}
 	}
+}
+
+void j1EntityManager::AddItem(int x, int y, ITEM_TYPES itype)
+{
+	j1Entity* ret = nullptr;
+
+	ret = new Items(x, y, ENTITY_TYPES::ITEM, itype);
+
+	if (ret != nullptr)
+		entities.push_back(ret);
+
 }
 
 void j1EntityManager::DestroyEntities()

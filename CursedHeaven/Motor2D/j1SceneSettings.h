@@ -41,9 +41,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Called to change scene
-	void ChangeScene();
-
 public:
 	std::list<j1Label*> settingLabels;
 	std::list<j1Box*> settingBoxes;

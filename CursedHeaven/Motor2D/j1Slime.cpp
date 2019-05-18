@@ -196,7 +196,7 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += 100;
+			App->entity->currentPlayer->score_points += score;
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
@@ -243,8 +243,8 @@ void j1Slime::LoadProperties()
 	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
 
 	speed = slime.attribute("speed").as_float();
-	knockbackSpeed = slime.attribute("knockback").as_float();
 	lifePoints = slime.attribute("life").as_int();
+	score = slime.attribute("score").as_int();
 	App->entity->slime_Damage = slime.child("combat").attribute("damage").as_int();
 
 }

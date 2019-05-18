@@ -53,22 +53,28 @@
   
   <entityManager updateMsCycle="0.1f"/>
   
-  <slime speed="50.0f" life="600">
+  <slime speed="50.0f" life="600" score="100">
 	  <margin x="-10" y="-10"/>
 	  <colliderSize w="35" h="35"/>
-	  <combat damage="20"/>
+	  <combat damage="30"/>
   </slime>  
   
-  <fire speed="50.0f" life="300">
+  <fire speed="50.0f" life="300" score="70">
 	  <margin x="-10" y="-10"/>
 	  <colliderSize w="17" h="25"/>
 	  <combat damage="20"/>
   </fire>  
   
-  <mindflyer speed="100.0f" life="3000">
+  <turret life="200" score="50">
+	  <margin x="-10" y="-10"/>
+	  <colliderSize w="17" h="25"/>
+	  <combat shotTime="2000" damage="30"/>
+  </turret>  
+  
+  <mindflyer speed="100.0f" life="3000" score="2000">
 	  <margin x="-12" y="-10"/>
 	  <colliderSize w="35" h="35"/>
-	  <combat shotTime="1000" damage="30"/>
+	  <combat shotTime="1000" damage="40"/>
   </mindflyer>
 
   <map>

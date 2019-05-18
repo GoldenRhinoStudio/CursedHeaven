@@ -115,6 +115,7 @@
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Textures.cpp" />
+    <ClCompile Include="j1Turret.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="j1Shop.h" />
     <ClInclude Include="j1Slime.h" />
     <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1Turret.h" />
     <ClInclude Include="j1UserInterfaceElement.h" />
     <ClInclude Include="p2Animation.h" />
     <ClInclude Include="j1Audio.h" />

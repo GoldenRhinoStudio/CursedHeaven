@@ -20,7 +20,7 @@ bool j1Seller::Start()
 	sprites = App->tex->Load("textures/character/Rogue/Rogue.png");
 
 	animation = &idle;
-	height = 2;
+	height = 3;
 
 	collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 30, 30 }, COLLIDER_PLAYER, App->entity);
 	return true;

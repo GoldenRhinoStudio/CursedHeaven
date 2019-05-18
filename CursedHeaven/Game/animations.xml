@@ -333,7 +333,14 @@
         <animation x="16" y="0" w="17" h="25"/>
         <animation x="0" y="0" w="17" h="25"/>
 	  </idle>		   
-	</fire>
+	</fire>	
+	
+	<turret>
+      <idle loop="true" speed="7.0f">
+        <animation x="0" y="0" w="14" h="27"/>
+        <animation x="14" y="0" w="14" h="27"/>
+	  </idle>		   
+	</turret>
 	
 	<!-- Bosses -->
 	<mindflyer>

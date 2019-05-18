@@ -15,6 +15,7 @@
 #include "j1Seller.h"
 #include "j1Slime.h"
 #include "j1Fire.h"
+#include "j1Turret.h"
 #include "j1MindFlyer.h"
 #include "j1Map.h"
 
@@ -197,6 +198,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 				entity = new j1Fire(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == MINDFLYER)
 				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == TURRET)
+				entity = new j1Turret(info.position.x, info.position.y, info.type);
 
 			entities.push_back(entity);
 			entity->Start();
@@ -259,7 +262,6 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 
 bool j1EntityManager::Save(pugi::xml_node& data) const
 {
-
 	if (player_type == KNIGHT) knight->Save(data.append_child("player"));
 	else if (player_type == MAGE) mage->Save(data.append_child("player"));
 	/*else if (player_type == TANK) tank->Save(data.append_child("player"));

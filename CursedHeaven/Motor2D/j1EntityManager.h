@@ -37,6 +37,7 @@ enum ENTITY_TYPES
 	ITEM,
 	NPC,
 	SLIME,
+	TURRET,
 	FIRE,
 	MINDFLYER,
 	UNKNOWN
@@ -117,6 +118,7 @@ public:
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
 	int fire_Damage = 0;
+	int turret_Damage = 0;
 
 private:
 	int entity_logic = 0;

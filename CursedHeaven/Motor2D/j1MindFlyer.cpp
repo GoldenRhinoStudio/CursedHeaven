@@ -44,12 +44,12 @@ bool j1MindFlyer::Start()
 	// Textures are loaded
 	LOG("Loading mindflyer texture");
 	sprites = App->tex->Load("textures/enemies/bosses/mindflyer.png");
-	sprites;
 	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();
 
 	animation = &idle_down;
+	shotTimer.Start();
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
@@ -217,7 +217,7 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += 100;
+			App->entity->currentPlayer->score_points += score;
 			App->audio->PlayFx(App->audio->boss_death);
 			dead = true;
 			App->entity->currentPlayer->victory = true;
@@ -267,6 +267,7 @@ void j1MindFlyer::LoadProperties()
 	// Copying combat values
 	speed = mindflyer.attribute("speed").as_int();
 	lifePoints = mindflyer.attribute("life").as_int();
+	score = mindflyer.attribute("score").as_int();
 	cooldown_Shot = mindflyer.child("combat").attribute("shotTime").as_uint();
 	App->entity->mindflyer_Damage = mindflyer.child("combat").attribute("damage").as_int();
 }

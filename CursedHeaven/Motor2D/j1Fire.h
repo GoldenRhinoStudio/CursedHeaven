@@ -66,5 +66,7 @@ public:
 private:
 	Animation idle;
 
+	int score = 0;
+
 };
 #endif // __j1SLIME_H__

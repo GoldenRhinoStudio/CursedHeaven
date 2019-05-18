@@ -158,7 +158,7 @@ void j1Fire::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += 100;
+			App->entity->currentPlayer->score_points += score;
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
@@ -206,6 +206,7 @@ void j1Fire::LoadProperties()
 
 	speed = fire.attribute("speed").as_int();
 	lifePoints = fire.attribute("life").as_int();
+	score = fire.attribute("score").as_int();
 	App->entity->fire_Damage = fire.child("combat").attribute("damage").as_int();
 
 }

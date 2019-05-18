@@ -133,6 +133,9 @@
     <ClCompile Include="j1Minimap.cpp">
       <Filter>Development\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="j1Turret.cpp">
+      <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -281,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="j1Minimap.h">
       <Filter>Development\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Turret.h">
+      <Filter>Development\Modules\Entities\Enemies\Normal enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

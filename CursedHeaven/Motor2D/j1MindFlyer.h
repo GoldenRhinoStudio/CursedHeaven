@@ -82,5 +82,7 @@ private:
 	j1Timer shotTimer;
 	uint lastTime_Shot = 0;
 	uint cooldown_Shot = 0;
+
+	int score = 0;
 };
 #endif // __j1MINDFLYER_H__

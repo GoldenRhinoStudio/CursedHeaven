@@ -340,7 +340,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
 
-
 	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
 		height = 0.0f;
 	else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)

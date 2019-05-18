@@ -227,12 +227,3 @@ bool j1SceneSettings::CleanUp()
 
 	return true;
 }
-
-void j1SceneSettings::ChangeScene()
-{
-	this->active = false;
-	backToMenu = false;
-	CleanUp();
-	App->menu->active = true;
-	App->menu->Start();
-}

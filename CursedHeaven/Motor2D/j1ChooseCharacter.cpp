@@ -227,22 +227,3 @@ bool j1ChooseCharacter::CleanUp() {
 	return true;
 }
 
-void j1ChooseCharacter::ChangeScene() {
-	
-	this->active = false;
-	startGame = false;
-	backToMenu = false;
-
-	CleanUp();
-
-	App->scene1->active = true;
-	App->scene1->Start();
-	App->particles->Start();
-	App->dialog->active = true;
-	App->dialog->Start();
-	
-	App->entity->active = true;
-	App->entity->CreatePlayer();
-	App->entity->Start();	
-}
-

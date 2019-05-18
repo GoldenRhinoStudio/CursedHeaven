@@ -215,12 +215,3 @@ bool j1SceneCredits::CleanUp()
 
 	return true;
 }
-
-void j1SceneCredits::ChangeScene()
-{
-	this->active = false;
-	backToMenu = false;
-	CleanUp();
-	App->menu->active = true;
-	App->menu->Start();	
-}

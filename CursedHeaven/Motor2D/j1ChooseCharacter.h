@@ -37,9 +37,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Called to change scene
-	void ChangeScene();
-
 public:
 
 	j1Box* info_window = nullptr;

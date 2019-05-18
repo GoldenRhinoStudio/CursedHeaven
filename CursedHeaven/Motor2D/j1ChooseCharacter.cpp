@@ -25,6 +25,7 @@
 #include "j1ChooseCharacter.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -145,8 +146,7 @@ bool j1ChooseCharacter::Update(float dt) {
 				if (startup_time.Read() > 2000) {
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == BLACKMAGE_BUT) {
-						startGame = true;
-						App->fade->FadeToBlack();
+						App->transitions->SquaresAppearing(CHOOSE, SCENE1, 3);
 						App->entity->player_type = MAGE;
 						LOG("Black Mage activated");
 					}
@@ -157,8 +157,7 @@ bool j1ChooseCharacter::Update(float dt) {
 						// LOG("Rogue activated");
 					}
 					else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
-						startGame = true;
-						App->fade->FadeToBlack();
+						App->transitions->SquaresAppearing(CHOOSE, SCENE1, 3);
 						App->entity->player_type = KNIGHT;
 						LOG("Dragoon Knight activated");
 					}
@@ -176,14 +175,6 @@ bool j1ChooseCharacter::Update(float dt) {
 				(*item)->situation = (*item)->clicked;
 				break;
 			}
-		}
-	}
-
-	if (App->fade->IsFading() == 0) {
-		if (startGame) {
-			ChangeScene();
-			LOG("Scene1");
-			App->menu->player_created = true;
 		}
 	}
 

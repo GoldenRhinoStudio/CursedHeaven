@@ -17,6 +17,7 @@
 #include "j1Window.h"
 #include "j1ChooseCharacter.h"
 #include "j1SceneSettings.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -107,12 +108,12 @@ bool j1SceneMenu::Update(float dt)
 {
 	BROFILER_CATEGORY("MenuUpdate", Profiler::Color::LightSeaGreen)
 
-	// ---------------------------------------------------------------------------------------------------------------------
-	// USER INTERFACE MANAGEMENT
-	// ---------------------------------------------------------------------------------------------------------------------	
+		// ---------------------------------------------------------------------------------------------------------------------
+		// USER INTERFACE MANAGEMENT
+		// ---------------------------------------------------------------------------------------------------------------------	
 
-	// Updating the state of the UI
-	App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale); 
+		// Updating the state of the UI
+		App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale);
 	App->gui->UpdateSliders(&menuBoxes);
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 
@@ -128,7 +129,7 @@ bool j1SceneMenu::Update(float dt)
 			case HOVERED:
 
 				if (startup_time.Read() > 1900 && times > 1 || times == 1)
-				(*item)->situation = (*item)->hovered;
+					(*item)->situation = (*item)->hovered;
 				break;
 
 
@@ -138,51 +139,32 @@ bool j1SceneMenu::Update(float dt)
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
 						LOG("Choose Character Scene Loading");
-						chooseChar = true;
-						// App->scene1->active = false;
-						App->fade->FadeToBlack();
+						App->transitions->FadingToColor(MENU, CHOOSE);
+
+						App->scene1->finishedDialog = false;
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
-						loadGame = true;
-						App->fade->FadeToBlack();
+						App->transitions->SquaresAppearing(MENU, SCENE1, 3);
 					}
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;
 					}
 					else if ((*item)->bfunction == SETTINGS) {
-						openSettings = true;
-						App->fade->FadeToBlack();
-					}						
+						App->transitions->Wiping(MENU, SCENE_SETTINGS);
+					}
 					else if ((*item)->bfunction == OPEN_CREDITS) {
-						openCredits = true;
-						App->fade->FadeToBlack();
+						App->transitions->Wiping(MENU, CREDITS);
 					}
 				}
-					break;
+				break;
 
 			case CLICKED:
 
 				if (startup_time.Read() > 1900 && times > 1 || times == 1)
-				(*item)->situation = (*item)->clicked;
+					(*item)->situation = (*item)->clicked;
 				break;
 			}
 		}
-	}	
-
-	// Managing scene transitions
-	if (App->fade->IsFading() == 0) {
-		if (chooseChar) {
-			ChangeScene(CHOOSE);
-			App->scene1->finishedDialog = false;
-			//App->choose_character->active = true;
-			//player_created = false;
-		}
-		else if (openCredits)
-			ChangeScene(CREDITS);
-		else if (openSettings)
-			ChangeScene(SCENE_SETTINGS);
-		else if (loadGame)
-			App->LoadGame("save_game.xml");
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------

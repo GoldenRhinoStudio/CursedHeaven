@@ -14,6 +14,7 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -117,8 +118,7 @@ bool j1SceneSettings::Update(float dt)
 		case RELEASED:
 			if (startup_time.Read() > 2000) {
 				(*item)->situation = (*item)->idle;
-				backToMenu = true;
-				App->fade->FadeToBlack();
+				App->transitions->Wiping(SCENE_SETTINGS, MENU);
 			}
 			break;
 
@@ -128,11 +128,6 @@ bool j1SceneSettings::Update(float dt)
 			break;
 		}
 		
-	}
-
-	// Managing scene transitions
-	if (backToMenu && App->fade->IsFading() == 0) {
-		ChangeScene();
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------

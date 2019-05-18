@@ -112,7 +112,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 	}
 
 	App->map->EntityMovementTest(this);
-	collider->SetPos(position.x, position.y);
+	collider->SetPos(position.x + margin.x, position.y + margin.y);
 	
 	return true;
 }

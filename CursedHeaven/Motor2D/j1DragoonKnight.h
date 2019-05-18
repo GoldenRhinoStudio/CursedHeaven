@@ -65,9 +65,6 @@ public:
 	uint lastTime_Rage = 0;
 	uint rageDamage = 0;
 
-private:
-	float playerScale;
-
 	// Sounds
 
 };

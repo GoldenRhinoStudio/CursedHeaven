@@ -377,15 +377,15 @@ bool j1BlackMage::DrawOrder(float dt) {
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down || animation == &i_attack_up || animation == &i_attack_down) {
-			if (animation == &attack_down || animation == &i_attack_down) Draw(r, false, -4);
-			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, false, 0, 2);
-			else Draw(r);
+			if (animation == &attack_down || animation == &i_attack_down) Draw(r, false, -4, 0, playerScale, offset);
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, false, 0, 2, playerScale, offset);
+			else Draw(r, false, 0, 0, playerScale, offset);
 		}
 		else {
-			if (animation == &attack_lateral || animation == &i_attack_lateral) Draw(r, true, -4);
-			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) Draw(r, true, -6);
-			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, true, -6, 2);
-			else Draw(r, true, attackBlittingX, attackBlittingY);
+			if (animation == &attack_lateral || animation == &i_attack_lateral) Draw(r, true, -4, 0, playerScale, offset);
+			else if (animation == &attack_diagonal_up || animation == &i_attack_diagonal_up) Draw(r, true, -6, 0, playerScale, offset);
+			else if (animation == &attack_diagonal_down || animation == &i_attack_diagonal_down) Draw(r, true, -6, 2, playerScale, offset);
+			else Draw(r, true, attackBlittingX, attackBlittingY, playerScale, offset);
 		}
 	}
 	return true;
@@ -480,6 +480,8 @@ void j1BlackMage::LoadPlayerProperties() {
 	playerSize.y = player.child("size").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
+	offset = player.child("margin").attribute("offset").as_int();
+	playerScale = player.attribute("scale").as_float();
 
 	// Copying attack values
 	attackBlittingX = player.child("attack").attribute("blittingX").as_int();

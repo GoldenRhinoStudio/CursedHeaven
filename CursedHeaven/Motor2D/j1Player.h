@@ -106,6 +106,7 @@ public:
 
 	float godModeSpeed;
 	float movementSpeed;
+	float playerScale;
 
 	bool player_start = false;
 	bool dead = false;

@@ -42,7 +42,7 @@ bool Items::Start()
 {
 	LOG("Loading slime texture");
 
-	sprites = App->tex->Load("textures/Collectibles/Collectables/Collectables/CollectablesSheet.png");
+	sprites = App->tex->Load("textures/Collectibles/Enemy_drops.png");
 
 	LoadProperties();
 
@@ -92,19 +92,23 @@ void Items::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (col_2->type == COLLIDER_PLAYER)
 	{
-		collider->to_delete = true;
 		if (itype == COIN) {
+			collider->to_delete = true;
 			App->entity->currentPlayer->score_points += value;
 		}
 		else if (itype == LIFE) {
-			App->entity->currentPlayer->lifePoints += value;
+			if (App->entity->currentPlayer->lifePoints + value <= App->entity->currentPlayer->totalLifePoints) {
+				collider->to_delete = true;
+				App->entity->currentPlayer->lifePoints += value;
+			}
 		}
-
-		for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
-			if (item._Ptr->_Myval == this) {
-				RELEASE(item._Ptr->_Myval);
-				App->entity->entities.remove(item._Ptr->_Myval);
-				break;
+		if (collider->to_delete) {
+			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
+				if (item._Ptr->_Myval == this) {
+					RELEASE(item._Ptr->_Myval);
+					App->entity->entities.remove(item._Ptr->_Myval);
+					break;
+				}
 			}
 		}
 	}

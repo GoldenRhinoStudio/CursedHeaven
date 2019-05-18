@@ -107,7 +107,7 @@
 
   <items>
     <coin value="50" />
-    <heart value="-50" />
+    <heart value="5" />
   </items>
   
   <menu>

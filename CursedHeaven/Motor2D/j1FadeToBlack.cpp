@@ -38,7 +38,13 @@ bool j1FadeToBlack::Start()
 // Update: draw background
 bool j1FadeToBlack::Update(float dt)
 {
-	BROFILER_CATEGORY("FadeToBlackUpdate", Profiler::Color::LightSeaGreen)
+	BROFILER_CATEGORY("FadeToBlackUpdate", Profiler::Color::LightSeaGreen)	
+
+	return true;
+}
+
+bool j1FadeToBlack::PostUpdate() {
+	BROFILER_CATEGORY("FadeToBlackPostUpdate", Profiler::Color::Yellow)
 
 	if (current_step == fade_step::none)
 		return true;

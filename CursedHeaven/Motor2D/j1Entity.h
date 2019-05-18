@@ -6,7 +6,7 @@
 #include "p2Animation.h"
 #include "p2Log.h"
 
-#define DETECTION_RANGE 10
+#define DETECTION_RANGE 15
 
 struct Collider;
 class Animation;

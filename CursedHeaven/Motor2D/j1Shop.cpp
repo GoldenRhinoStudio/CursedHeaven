@@ -76,9 +76,6 @@ void j1Shop::PlaceShop()
 	App->shop->CreateItem(HEART, -1000, 715);
 
 	App->entity->CreateEntity(SELLER, -1050, 705);
-
-	App->shop->CreateItem(POTION, 240, 715);
-	App->shop->CreateItem(HEART, 220, 715);
 }
 
 bool j1Shop::Update(float dt)

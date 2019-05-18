@@ -38,6 +38,7 @@ private:
 	SDL_Texture* profile_text = nullptr;
 	SDL_Texture* score = nullptr;
 	SDL_Texture* dialog_tex = nullptr;
+	SDL_Texture* potion_tex = nullptr;
 
 	std::list<j1Label*> labels_list;
 	std::list<j1Button*> hud_buttons;

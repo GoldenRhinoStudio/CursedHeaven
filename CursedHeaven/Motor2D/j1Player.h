@@ -99,6 +99,7 @@ public:
 	int attackBlittingY;
 	int rightAttackSpawnPos;
 	int leftAttackSpawnPos;
+	int knockback = 0;
 	float godModeSpeed;
 
 	bool player_start = false;

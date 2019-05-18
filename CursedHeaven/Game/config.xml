@@ -33,7 +33,7 @@
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2"/>
-	  <combat basicDamage="150" fireDamage="800" lifePoints="100" resitance="50"/>
+	  <combat basicDamage="150" fireDamage="800" lifePoints="100" resitance="50" knockback="10"/>
 	  <cooldowns Q="10000" E="15000" increasedSpeed="5000" explosion="600" invulTime="1000"/>
 	</blackMage>
 	
@@ -45,7 +45,7 @@
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="21" leftColliderSpawnPos="-15"/>
-	  <combat basicDamage="0" rageDamage="300" dashSpeed="300" lifePoints="200" resitance="100"/>
+	  <combat basicDamage="300" rageDamage="300" dashSpeed="300" lifePoints="200" resitance="100" knockback="15"/>
 	  <cooldowns Q="5000" E="25000" rage="5000" invulTime="1000"/>
 	</dragoonKnight>
 	
@@ -53,10 +53,10 @@
   
   <entityManager updateMsCycle="0.1f"/>
   
-  <slime speed="50.0f" life="600" knockback="300.0f">
+  <slime speed="50.0f" life="600">
 	  <margin x="-10" y="-10"/>
 	  <colliderSize w="35" h="35"/>
-	  <combat damage="0"/>
+	  <combat damage="20"/>
   </slime>  
   
   <fire speed="50.0f" life="300">

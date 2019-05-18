@@ -459,6 +459,7 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	rageDamage = combat.attribute("rageDamage").as_uint();
 	dashSpeed = combat.attribute("dashSpeed").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
+	knockback = combat.attribute("knockback").as_int();
 	totalLifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();

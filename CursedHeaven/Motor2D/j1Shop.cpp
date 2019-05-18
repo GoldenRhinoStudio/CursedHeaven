@@ -8,6 +8,7 @@
 #include "j1Label.h"
 #include "j1Shop.h"
 #include "j1Seller.h"
+#include "j1Scene1.h"
 #include "j1Input.h"
 
 #include "Brofiler/Brofiler.h"
@@ -75,6 +76,8 @@ void j1Shop::PlaceShop()
 	App->shop->CreateItem(HEART, -1000, 715);
 
 	App->entity->CreateEntity(NPC, -1050, 705);
+
+	//App->shop->CreateItem(POTION, 240, 715);
 }
 
 bool j1Shop::Update(float dt)
@@ -259,7 +262,7 @@ bool j1Item::Update(float dt, bool do_logic) {
 			prize = App->shop->hourglass_prize3;
 			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "CDR +3: 150G", App->gui->beige);
 		}
-		else if (App->shop->hourglassLevel  > 2)
+		else if (App->shop->hourglassLevel > 2)
 			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
 
@@ -277,6 +280,9 @@ bool j1Item::Update(float dt, bool do_logic) {
 		else if (App->shop->bookLevel > 2)
 			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
 		break;
+
+	case POTION:
+		if (App->scene1->potionCounter == 3) delete this;
 	}
 
 	// Blitting the item
@@ -291,6 +297,9 @@ bool j1Item::CleanUp() {
 	// Remove all memory leaks
 	LOG("Unloading the player");
 	App->tex->UnLoad(sprites);
+
+	if (collider != nullptr) 
+		collider->to_delete = true;
 
 	return true;
 }
@@ -375,7 +384,10 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 					break;
 
 				case POTION:
-					if (App->shop->potions < 3)	App->shop->potions++;
+					if (App->shop->potions < 3 && App->scene1->potionCounter < 3) {
+						App->shop->potions++;
+						App->scene1->potionCounter++;
+					}
 					break;
 				}
 

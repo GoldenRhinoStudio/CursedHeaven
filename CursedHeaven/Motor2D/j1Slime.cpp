@@ -69,49 +69,22 @@ bool j1Slime::Update(float dt, bool do_logic)
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
-		{			
-			if (knockbackOn)
-			{
-				if ((animation == &lateral || animation == &idle_lateral) && (position.x <= lastPosition.x + 50.0f))
-					position.x -= knockbackSpeed * dt;
-				else if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0 && (position.x >= lastPosition.x - 50.0f))
-					position.x += knockbackSpeed * dt;
-				else if ((animation == &up || animation == &idle_up) && (position.y >= lastPosition.y - 50.0f))
-					position.y += knockbackSpeed * dt;
-				else if ((animation == &down || animation == &idle_down) && (position.y <= lastPosition.y + 50.0f))
-					position.y -= knockbackSpeed * dt;
-				/*else if ((animation == &diagonal_up || animation == &idle_diagonal_up) && (position.x >= lastPosition.x - 60.0f) && (position.y >= lastPosition.y - 30.0f)) {
-					position.x -= knockbackSpeed * dt;
-					position.y -= knockbackSpeed * dt;
-				}
-				else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 60.0f) && (position.y >= lastPosition.y - 30.0f)) {
-					position.x += knockbackSpeed * dt;
-					position.y -= knockbackSpeed * dt;
-				}
-				else if ((animation == &diagonal_down || animation == &idle_diagonal_down) && (position.x >= lastPosition.x - 60.0f) && (position.y <= lastPosition.y + 30.0f)) {
-					position.x -= knockbackSpeed * dt;
-					position.y += knockbackSpeed * dt;
-				}
-				else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 60.0f) && (position.y <= lastPosition.y + 30.0f)) {
-					position.x += knockbackSpeed * dt;
-					position.y += knockbackSpeed * dt;
-				}*/
-				else
-					knockbackOn = false;
-			}
-			else if (do_logic) {
+		{
+			if (do_logic) {
 				/*if(path != nullptr)
-					path->clear();*/
+				path->clear();*/
 
 				if (App->path->CreatePath(origin, destination) > 0) {
 					path = App->path->GetLastPath();
 					target_found = true;
 					node = 0;
 				}
-				else target_found = false;				
+				else target_found = false;
 			}
-			else if (target_found && path != nullptr) {
+					
+			if (target_found && path != nullptr) {
 				if (distance <= ATTACK_RANGE_SLIME) {
+					//attacking = true;
 					App->audio->PlayFx(App->audio->slime_attack);
 				}
 				else Move(path, dt);
@@ -179,15 +152,38 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
 			if (App->entity->player_type == MAGE) col_2->to_delete = true;
-			
-			if (lifePoints > 0) {
-				lastPosition = position;
-				knockbackOn = true;
-			}
-			
+
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->slime_damage);
 			receivedBasicDamage = true;
+
+			if (lifePoints > 0 && attacking == false) {
+
+				if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0)
+				position.x += App->entity->currentPlayer->knockback;
+				else if (animation == &lateral || animation == &idle_lateral)
+					position.x -= App->entity->currentPlayer->knockback;
+				else if (animation == &up || animation == &idle_up)
+					position.y += App->entity->currentPlayer->knockback;
+				else if (animation == &down || animation == &idle_down)
+					position.y -= App->entity->currentPlayer->knockback;
+				else if ((animation == &diagonal_up || animation == &idle_diagonal_up) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y += 7;
+				}
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y += 7;
+				}
+				else if ((animation == &diagonal_down || animation == &idle_diagonal_down) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y -= 7;
+				}
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y -= 7;
+				}
+			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {

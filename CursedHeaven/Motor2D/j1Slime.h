@@ -52,10 +52,7 @@ public:
 	iPoint colliderSize;
 
 	float speed;
-
 	Movement direction;
-	fPoint lastPosition;
-	bool knockbackOn = false;
 
 	std::vector<iPoint>* path;
 	int node = 0;
@@ -80,6 +77,7 @@ private:
 
 	Animation death;
 
+	bool attacking = false;
 	float knockbackSpeed = 0.0f;
 
 };

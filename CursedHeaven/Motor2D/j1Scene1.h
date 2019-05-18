@@ -76,6 +76,8 @@ public:
 	std::string current_points;
 	int score_player = 0;
 
+	uint potionCounter = 0;
+
 private:
 	SDL_Texture* debug_tex = nullptr;
 	SDL_Texture* gui_tex = nullptr;

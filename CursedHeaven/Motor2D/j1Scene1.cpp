@@ -339,28 +339,28 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(7, 74, SLIME);
 
 	App->entity->AddEnemy(6, 57, SLIME);
-	App->entity->AddEnemy(15, 54, FIRE);
-	App->entity->AddEnemy(17, 61, FIRE);
+	App->entity->AddEnemy(15, 54, SLIME);
+	App->entity->AddEnemy(17, 61, SLIME);
 								  
-	App->entity->AddEnemy(31, 65, FIRE);
-	App->entity->AddEnemy(28, 65, FIRE);
-	App->entity->AddEnemy(28, 53, FIRE);
-								  
-	App->entity->AddEnemy(29, 40, FIRE);
-	App->entity->AddEnemy(33, 41, FIRE);
-	App->entity->AddEnemy(14, 41, FIRE);
-								  
-	App->entity->AddEnemy(46, 47, FIRE);
-	App->entity->AddEnemy(43, 39, FIRE);
-	App->entity->AddEnemy(38, 41, FIRE);
+	App->entity->AddEnemy(31, 65, SLIME);
+	App->entity->AddEnemy(28, 65, SLIME);
+	App->entity->AddEnemy(28, 53, SLIME);
 								 
-	App->entity->AddEnemy(29, 19, FIRE);
-	App->entity->AddEnemy(28, 22, FIRE);
-	App->entity->AddEnemy(26, 26, FIRE);
+	App->entity->AddEnemy(29, 40, SLIME);
+	App->entity->AddEnemy(33, 41, SLIME);
+	App->entity->AddEnemy(14, 41, SLIME);
 								 
-	App->entity->AddEnemy(46, 25, FIRE);
-	App->entity->AddEnemy(45, 32, FIRE);
-	App->entity->AddEnemy(38, 28, FIRE);
+	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(43, 39, SLIME);
+	App->entity->AddEnemy(38, 41, SLIME);
+								  
+	App->entity->AddEnemy(29, 19, SLIME);
+	App->entity->AddEnemy(28, 22, SLIME);
+	App->entity->AddEnemy(26, 26, SLIME);
+								  
+	App->entity->AddEnemy(46, 25, SLIME);
+	App->entity->AddEnemy(45, 32, SLIME);
+	App->entity->AddEnemy(38, 28, SLIME);
 
 	App->entity->AddEnemy(23, 4, SLIME);
 	App->entity->AddEnemy(12, 4, SLIME);
@@ -398,6 +398,8 @@ bool j1Scene1::CleanUp()
 	App->gui->CleanUp();
 	App->particles->CleanUp();
 
+	potionCounter = 0;
+
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
 	/*if (App->entity->rogue) App->entity->rogue->CleanUp();
@@ -422,6 +424,7 @@ bool j1Scene1::CleanUp()
 	if (settings_window != nullptr) settings_window = nullptr;
 
 	App->path->CleanUp();
+	App->shop->CleanUp();
 
 	return true;
 }
@@ -436,7 +439,6 @@ void j1Scene1::ChangeSceneMenu()
 	CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
-	App->shop->CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
 	App->render->camera = { 0,0 };
@@ -453,7 +455,6 @@ void j1Scene1::ChangeSceneDeath() {
 	App->entity->CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
-	App->shop->CleanUp();
 	App->render->camera = { 0,0 };
 	toLoseScene = false;
 }
@@ -464,7 +465,6 @@ void j1Scene1::ChangeSceneVictory() {
 	App->dialog->CleanUp();
 
 	CleanUp();
-	App->shop->CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
 	App->entity->active = false;

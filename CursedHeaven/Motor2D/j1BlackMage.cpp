@@ -491,6 +491,7 @@ void j1BlackMage::LoadPlayerProperties() {
 	fireDamage = combat.attribute("fireDamage").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
 	totalLifePoints = combat.attribute("lifePoints").as_int();
+	knockback = combat.attribute("knockback").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	duration_Explosion = cd.attribute("explosion").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();

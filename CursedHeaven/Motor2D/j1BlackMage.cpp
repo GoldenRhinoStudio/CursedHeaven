@@ -90,7 +90,7 @@ bool j1BlackMage::PreUpdate() {
 
 	BROFILER_CATEGORY("BlackMagePreUpdate", Profiler::Color::Orange)
 
-		return true;
+	return true;
 }
 
 // Call modules on each loop iteration

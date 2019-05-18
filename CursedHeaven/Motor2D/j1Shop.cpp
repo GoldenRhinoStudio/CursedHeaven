@@ -77,7 +77,8 @@ void j1Shop::PlaceShop()
 
 	App->entity->CreateEntity(SELLER, -1050, 705);
 
-	//App->shop->CreateItem(POTION, 240, 715);
+	App->shop->CreateItem(POTION, 240, 715);
+	App->shop->CreateItem(HEART, 220, 715);
 }
 
 bool j1Shop::Update(float dt)
@@ -282,12 +283,12 @@ bool j1Item::Update(float dt, bool do_logic) {
 		break;
 
 	case POTION:
-		if (App->scene1->potionCounter == 3) delete this;
+		if (App->scene1->potionCounter == 3) collider->type = COLLIDER_NONE;
 	}
 
 	// Blitting the item
-	if (type == POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
-	else App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
+	if (type == POTION && App->scene1->potionCounter < 3) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
+	else if (type != POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
 
 	return true;
 }

@@ -157,6 +157,7 @@
     <ClCompile Include="j1Seller.cpp">
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClCompile>
+    <ClCompile Include="Items.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -330,6 +331,7 @@
     <ClInclude Include="j1Seller.h">
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClInclude>
+    <ClInclude Include="Items.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -379,6 +381,9 @@
     </Filter>
     <Filter Include="Development\Modules\Entities\NPCs">
       <UniqueIdentifier>{6cf0f290-ba60-49a8-be4e-b7f6cc59b7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\Drops">
+      <UniqueIdentifier>{9956ebf7-624e-4cf2-a44d-dc951ff84c2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

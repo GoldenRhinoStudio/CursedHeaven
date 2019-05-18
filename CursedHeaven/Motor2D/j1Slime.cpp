@@ -211,10 +211,12 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += score;
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
+			App->entity->AddItem(position.x - 4, position.y - 4, COIN);
+			App->entity->AddItem(position.x , position.y, COIN);
+			App->entity->AddItem(position.x + 2, position.y + 4, COIN);
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 				if (item._Ptr->_Myval == this) {

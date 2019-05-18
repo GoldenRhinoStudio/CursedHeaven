@@ -34,7 +34,6 @@ enum DIRECTION {
 enum ENTITY_TYPES
 {
 	PLAYER,
-	COIN,
 	ITEM,
 	SLIME,
 	TURRET,
@@ -52,6 +51,11 @@ enum PLAYER_TYPES
 	MAGE,
 	TANK,
 	ROGUE
+};
+
+enum ITEM_TYPES {
+	COIN,
+	LIFE
 };
 
 struct EntityInfo
@@ -88,10 +92,13 @@ public:
 	void CreatePlayer(); 
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
+	void AddItem(int x, int y, ITEM_TYPES itype);
 
 private:
 
 	void SpawnEnemy(const EntityInfo& info);
+
+
 
 public:
 	

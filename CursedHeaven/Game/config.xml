@@ -104,6 +104,11 @@
       <potion p="30" healing="50"/>
     </prizes>
   </shop>
+
+  <items>
+    <coin value="50" />
+    <heart value="-50" />
+  </items>
   
   <menu>
   </menu>

@@ -60,7 +60,6 @@ bool j1SceneLose::Start()
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
-		skeleton_tex = App->tex->Load("textures/SkeletonWalk.png");
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };

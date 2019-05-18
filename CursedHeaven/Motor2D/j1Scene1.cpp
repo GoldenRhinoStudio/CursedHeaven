@@ -30,6 +30,7 @@
 #include "j1SceneVictory.h"
 #include "j1Shop.h"
 #include "j1Minimap.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -432,7 +433,6 @@ void j1Scene1::ChangeSceneMenu()
 	App->scene1->active = false;
 	App->menu->active = true;
 	changingScene = false;
-	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();

@@ -29,6 +29,7 @@ extern j1Color Black;
 extern j1Color Grey;
 extern j1Color White;
 extern j1Color Red;
+extern j1Color DarkRed;
 extern j1Color Green;
 extern j1Color Blue;
 

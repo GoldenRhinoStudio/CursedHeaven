@@ -124,31 +124,31 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 		else if (scene1 == SCENE::VICTORY) {
 			App->victory->active = false;
 			App->victory->CleanUp();
+			App->victory->backToMenu = false;
+			App->scene1->toVictoryScene = false;
 		}
 		// From Lose
 		else if (scene1 == SCENE::LOSE) {
 			App->lose->active = false;
 			App->lose->CleanUp();
 			App->lose->backToMenu = false;
+			App->scene1->toLoseScene = false;
 		}
 		// From Game
 		else if (scene1 == SCENE::SCENE1) {
-			App->particles->CleanUp();
-
-			App->dialog->active = false;
-			App->dialog->CleanUp();
+			App->scene1->active = false;
+			App->scene1->CleanUp();
+			App->scene1->changingScene = false;
 
 			App->entity->active = false;
 			App->entity->CleanUp();
 			App->entity->DestroyEntities();
 
-			App->scene1->active = false;
-			App->scene1->CleanUp();
-
 		}
 
 		App->menu->active = true;
 		App->menu->Start();
+		App->render->camera = { 0,0 };
 	}
 
 	// From Game

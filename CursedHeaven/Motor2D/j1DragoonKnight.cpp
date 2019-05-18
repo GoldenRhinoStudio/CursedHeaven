@@ -65,9 +65,6 @@ bool j1DragoonKnight::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	position.x = -1050;
-	position.y = 750;
-
 	coins = 300;
 
 	if (GodMode)

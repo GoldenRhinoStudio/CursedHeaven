@@ -8,6 +8,8 @@
 #include "j1Label.h"
 #include "j1Shop.h"
 #include "j1Seller.h"
+#include "j1DragoonKnight.h"
+#include "j1BlackMage.h"
 #include "j1Scene1.h"
 #include "j1Input.h"
 
@@ -65,17 +67,26 @@ bool j1Shop::Start() {
 
 void j1Shop::PlaceShop()
 {
-	// Creating the shop
-	int item1 = (rand() % 6);
-	App->shop->CreateItem(POTION, -1100, 715);
+	// Creating the shop	
+	int item1 = (rand() % 5);
+	App->shop->CreateItem(ITEM_TYPE(item1), -1100, 725);
 
-	int item2 = (rand() % 6);
-	App->shop->CreateItem(HEART, -1050, 745);
+	int item2 = (rand() % 5);
+	if (item2 == item1) item2++;
+	if (item2 > 4) item2 = 0;
+	App->shop->CreateItem(ITEM_TYPE(item2), -1050, 765);
 
-	int item3 = (rand() % 6);
-	App->shop->CreateItem(HEART, -1000, 715);
+	int item3 = (rand() % 5);
+	if (item3 == item1) item3--;
+	if (item3 < 0) item3 = 4;
+	if (item3 == item2) item3++;
+	if (item3 > 4) item3 = 0;
+	if (item3 == item1) item3++;
+	if (item3 > 4) item3 = 0;
+	App->shop->CreateItem(ITEM_TYPE(item3), -1000, 725);
 
-	App->entity->CreateEntity(SELLER, -1050, 705);
+	App->shop->CreateItem(POTION, -1050, 680);
+	App->entity->CreateEntity(SELLER, -1055, 715);
 }
 
 bool j1Shop::Update(float dt)
@@ -172,10 +183,6 @@ bool j1Item::Start() {
 		prize = App->shop->heart_prize1;
 		break;
 
-	case ARMOUR:
-		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Armour +1: 30G", App->gui->beige);
-		break;
-
 	case HOURGLASS:
 		description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "CDR +1: 30G", App->gui->beige);
 		image = { 887, 0, 134, 206 };
@@ -244,9 +251,6 @@ bool j1Item::Update(float dt, bool do_logic) {
 		}
 		else if (App->shop->heartLevel > 2)
 			description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. level", App->gui->beige);
-		break;
-
-	case ARMOUR:
 		break;
 
 	case HOURGLASS:
@@ -329,20 +333,20 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 
 				switch (type) {
 				case BOOTS:
-					if (App->shop->bootsLevel == 0) aux = (uint)(App->entity->currentPlayer->speed * 0.1f);
-					else if (App->shop->bootsLevel == 1) aux = (uint)(App->entity->currentPlayer->speed * 0.15f);
-					else if (App->shop->bootsLevel == 2) aux = (uint)(App->entity->currentPlayer->speed * 0.25f);
+					if (App->shop->bootsLevel == 0) aux = App->entity->currentPlayer->speed * 0.1f;
+					else if (App->shop->bootsLevel == 1) aux = App->entity->currentPlayer->speed * 0.15f;
+					else if (App->shop->bootsLevel == 2) aux = App->entity->currentPlayer->speed * 0.25f;
 
 					App->entity->currentPlayer->speed += aux;
 					App->shop->bootsLevel++;
 					break;
 
 				case SWORD:
-					if (App->shop->swordLevel == 0) aux = (uint)(App->entity->currentPlayer->basicDamage * 0.1f);
-					else if (App->shop->swordLevel == 1) aux = (uint)(App->entity->currentPlayer->basicDamage * 0.15f);
-					else if (App->shop->swordLevel == 2) aux = (uint)(App->entity->currentPlayer->basicDamage * 0.25f);
+					if (App->shop->swordLevel == 0) dmg = App->entity->currentPlayer->basicDamage * 0.1f;
+					else if (App->shop->swordLevel == 1) dmg = App->entity->currentPlayer->basicDamage * 0.15f;
+					else if (App->shop->swordLevel == 2) dmg = App->entity->currentPlayer->basicDamage * 0.25f;
 
-					App->entity->currentPlayer->basicDamage += aux;
+					App->entity->currentPlayer->basicDamage += dmg;
 					App->shop->swordLevel++;
 					break;
 
@@ -352,10 +356,6 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 					else if (App->shop->heartLevel == 2) App->entity->currentPlayer->totalLifePoints += 80;
 
 					App->shop->heartLevel++;
-					break;
-
-				case ARMOUR:
-					//App->entity->currentPlayer->totalLifePoints + 25;
 					break;
 
 				case HOURGLASS:
@@ -378,7 +378,20 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 					break;
 
 				case BOOK:
-					//App->entity->currentPlayer->totalLifePoints + 25;
+					if (App->shop->bookLevel == 0) {
+						if (App->entity->currentPlayer->type == MAGE) App->entity->mage->fireDamage += 100;
+						else if (App->entity->currentPlayer->type == KNIGHT) App->entity->knight->rageDamage += 80;
+					}
+					else if (App->shop->bookLevel == 1) {
+						if (App->entity->currentPlayer->type == MAGE) App->entity->mage->fireDamage += 150;
+						else if (App->entity->currentPlayer->type == KNIGHT) App->entity->knight->rageDamage += 130;
+					}
+					else if (App->shop->bookLevel == 2) {
+						if (App->entity->currentPlayer->type == MAGE) App->entity->mage->fireDamage += 250;
+						else if (App->entity->currentPlayer->type == KNIGHT) App->entity->knight->rageDamage += 200;
+					}
+
+					App->shop->bookLevel++;
 					break;
 
 				case POTION:

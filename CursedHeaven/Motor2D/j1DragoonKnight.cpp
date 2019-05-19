@@ -55,6 +55,7 @@ bool j1DragoonKnight::Start() {
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/character/dragoonknight/Dragoon.png");
 	enraged = App->tex->Load("textures/character/dragoonknight/DragoonRage.png");
+	shieldTex = App->tex->Load("textures/character/shield.png");
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -114,7 +115,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	{
 		if (App->scene1->finishedDialog) {
 			
-			if (!attacking && !active_Q) {
+			if (!attacking) {
 				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 					&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);

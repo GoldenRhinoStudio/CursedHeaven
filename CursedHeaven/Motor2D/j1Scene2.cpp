@@ -351,9 +351,6 @@ void j1Scene2::PlaceEntities(int room) {
 	App->entity->AddEnemy(49, 18, FIRE);
 	App->entity->AddEnemy(42, 18, FIRE);
 	App->entity->AddEnemy(46, 12, FIRE);
-
-	App->entity->AddEnemy(36, 62, EXODUS);
-
 }
 
 bool j1Scene2::CleanUp() {

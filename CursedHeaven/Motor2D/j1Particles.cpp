@@ -220,10 +220,12 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 				if (active[i]->collider == c1) {
 					switch (active[i]->type) {
 					case SWORD_SHOOT:
-						App->entity->currentPlayer->lifePoints -= App->entity->exodus->damage;
+						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
+							App->entity->currentPlayer->lifePoints -= App->entity->exodus->damage;
 						break;
 					case BASIC_SHOOT:
-						App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
+						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
+							App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
 					}
 					ret = false;
 				}

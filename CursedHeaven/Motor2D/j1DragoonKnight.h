@@ -40,6 +40,7 @@ public:
 
 public:
 	SDL_Texture* enraged = nullptr;
+	SDL_Texture* shieldTex = nullptr;
 
 	// Animations of the knight
 	Animation attack_up;

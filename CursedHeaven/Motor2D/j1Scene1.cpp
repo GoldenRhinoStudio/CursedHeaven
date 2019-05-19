@@ -16,6 +16,7 @@
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
@@ -27,7 +28,6 @@
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
 #include "j1SceneLose.h"
-#include "j1SceneVictory.h"
 #include "j1Shop.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
@@ -282,12 +282,11 @@ bool j1Scene1::Update(float dt)
 	}
 
 	if (App->entity->currentPlayer->victory == true) {
-		toVictoryScene = true;
 
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0)
-			ChangeSceneVictory();
+			ChangeScene2();
 	}
 
 	if (backToMenu && App->fade->IsFading() == 0)
@@ -447,19 +446,19 @@ void j1Scene1::ChangeSceneDeath() {
 	App->entity->active = false;
 	App->lose->Start();
 	App->render->camera = { 0,0 }; 
-	App->entity->player_type = NO_PLAYER;
 	toLoseScene = false;
 }
 
-void j1Scene1::ChangeSceneVictory() {
+void j1Scene1::ChangeScene2() {
 	App->scene1->active = false;
-	App->victory->active = true;
+	App->scene2->active = true;
 	App->dialog->CleanUp();
+	App->entity->currentPlayer->victory = false;
 
 	CleanUp();
 	App->entity->active = false;
-	App->victory->Start();
-	App->render->camera = { 0,0 }; 
-	App->entity->player_type = NO_PLAYER;
-	toVictoryScene = false;
+	App->entity->CreatePlayer();
+	App->entity->Start();
+	App->scene2->Start();
+	App->particles->Start();
 }

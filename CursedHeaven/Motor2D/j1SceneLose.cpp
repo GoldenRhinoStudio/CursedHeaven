@@ -187,6 +187,7 @@ void j1SceneLose::ChangeScene(SCENE objectiveScene)
 
 	if (objectiveScene == SCENE::MENU) {
 		App->menu->active = true;
+		App->entity->player_type = NO_PLAYER;
 		App->menu->Start();
 	}
 	else if (objectiveScene == SCENE::SCENE1) {
@@ -194,8 +195,8 @@ void j1SceneLose::ChangeScene(SCENE objectiveScene)
 		App->scene1->Start();
 		App->particles->Start();
 		App->scene1->finishedDialog = false;
-		//App->dialog->active = true;
-		//App->dialog->Start();
+		App->dialog->active = true;
+		App->dialog->Start();
 
 		App->entity->active = true;
 		App->entity->CreatePlayer();

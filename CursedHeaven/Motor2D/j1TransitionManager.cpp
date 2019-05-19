@@ -125,7 +125,6 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->victory->active = false;
 			App->victory->CleanUp();
 			App->victory->backToMenu = false;
-			App->scene1->toVictoryScene = false;
 		}
 		// From Lose
 		else if (scene1 == SCENE::LOSE) {
@@ -143,7 +142,6 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->entity->active = false;
 			App->entity->CleanUp();
 			App->entity->DestroyEntities();
-
 		}
 
 		App->menu->active = true;

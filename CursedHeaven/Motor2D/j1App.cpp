@@ -16,6 +16,7 @@
 #include "j1SceneLose.h"
 #include "j1SceneVictory.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Map.h"
 #include "j1FadeToBlack.h"
 #include "j1Collisions.h"
@@ -50,6 +51,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	lose = new j1SceneLose();
 	victory = new j1SceneVictory();
 	scene1 = new j1Scene1();
+	scene2 = new j1Scene2();
 	map = new j1Map();
 	entity = new j1EntityManager();
 	path = new j1PathFinding();
@@ -78,6 +80,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(lose);
 	AddModule(victory);
 	AddModule(scene1);
+	AddModule(scene2);
 	AddModule(shop);
 	AddModule(entity);
 	AddModule(particles);	

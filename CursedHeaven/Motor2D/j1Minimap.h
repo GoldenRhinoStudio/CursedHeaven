@@ -20,11 +20,8 @@ public:
 	void DrawEntities();
 
 private:
-
-	SDL_Texture* lvl1_tex = nullptr;
 	SDL_Rect rect = { 0,0,691,341 };
 	
 	int minimap_width;
 	int minimap_height;
-
 };

@@ -167,6 +167,17 @@ void j1Turret::OnCollision(Collider * col_1, Collider * col_2)
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
+			
+			int item = rand() % 10 + 1;
+
+			if (item > 7) {
+				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
+				App->entity->AddItem(position.x + 20, position.y, LIFE);
+				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);
+			}
+			else {
+				App->entity->AddItem(position.x - 10, position.y, COIN);
+			}
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 				if (item._Ptr->_Myval == this) {

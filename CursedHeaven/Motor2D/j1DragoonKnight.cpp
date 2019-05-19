@@ -76,8 +76,6 @@ bool j1DragoonKnight::Start() {
 	/*position.x = -715;
 	position.y = 530;*/
 
-	//coins = 100;
-
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
 	else
@@ -141,7 +139,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 						else if (animation == &up || animation == &idle_up) animation = &attack_up;
 						else if (animation == &down || animation == &idle_down)	animation = &attack_down;
 						else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
-							if(facingRight) animation = &attack_diagonal_up_right;
+							if (facingRight) animation = &attack_diagonal_up_right;
 							else animation = &attack_diagonal_up_left;
 						}
 						else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
@@ -149,61 +147,32 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 							else animation = &attack_diagonal_down_left;
 						}
 					}
+				}
 
-					if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
-					else available_Q = false;
+				if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
+				else available_Q = false;
 
-					if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
-					else available_E = false;
+				if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
+				else available_E = false;
 
-					// Ability control
-					if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-						&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
+				// Ability control
+				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
-						App->audio->PlayFx(App->audio->dash);
+					if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;
 
-						if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;				
+					//App->audio->PlayFx(App->audio->rage_dk);
 
-						lastPosition = position;
+					cooldown_Shield.Start();
+					lastTime_Shield = cooldown_Shield.Read();
+					active_Q = true;
+					firstTimeQ = false;
+				}
 
-						if (direction != NONE_) {
-							active_Q = true;
-							firstTimeQ = false;
-						}
-					}
-
-					if (active_Q) {
-
-						if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
-							position.x += dashSpeed * dt;
-						else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
-							position.x -= dashSpeed * dt;
-						else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
-							position.y -= dashSpeed * dt;
-						else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
-							position.y += dashSpeed * dt;
-						else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-							position.x -= dashSpeed * dt;
-							position.y -= dashSpeed * dt;
-						}
-						else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-							position.x += dashSpeed * dt;
-							position.y -= dashSpeed * dt;
-						}
-						else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-							position.x -= dashSpeed * dt;
-							position.y += dashSpeed * dt;
-						}
-						else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-							position.x += dashSpeed * dt;
-							position.y += dashSpeed * dt;
-						}
-						else {
-							cooldown_Q.Start();
-							lastTime_Q = cooldown_Q.Read();
-							active_Q = false;
-						}
-					}
+				if (active_Q && cooldown_Shield.Read() >= lastTime_Shield + duration_Shield) {
+					cooldown_Q.Start();
+					lastTime_Q = cooldown_Q.Read();
+					active_Q = false;
 				}
 
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
@@ -215,7 +184,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();
-					lastTime_Rage =	cooldown_Rage.Read();
+					lastTime_Rage = cooldown_Rage.Read();
 					active_E = true;
 					firstTimeE = false;
 				}
@@ -228,6 +197,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					active_E = false;
 				}
 			}
+
 
 
 			// Attack management
@@ -464,13 +434,13 @@ void j1DragoonKnight::LoadPlayerProperties() {
 
 	basicDamage = combat.attribute("basicDamage").as_int();
 	rageDamage = combat.attribute("rageDamage").as_uint();
-	dashSpeed = combat.attribute("dashSpeed").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
 	knockback = combat.attribute("knockback").as_int();
 	totalLifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	duration_Rage = cd.attribute("rage").as_uint();
+	duration_Shield = cd.attribute("shield").as_uint();
 	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed

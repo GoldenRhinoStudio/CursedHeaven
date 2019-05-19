@@ -128,7 +128,7 @@ void j1Turret::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (App->entity->currentPlayer->receivedDamage == false && col_2->type == COLLIDER_PLAYER) {
 
-		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E) {
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q) {
 			//App->audio->PlayFx(asdfasdfasdfasdfasf)
 		}
 		else {

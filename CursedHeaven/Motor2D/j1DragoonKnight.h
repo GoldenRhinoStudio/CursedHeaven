@@ -55,8 +55,9 @@ public:
 	j1Timer cooldown_Q;
 	uint cooldownTime_Q = 0;
 	uint lastTime_Q = 0;
-	fPoint lastPosition;
-	uint dashSpeed = 0;
+	j1Timer cooldown_Shield;
+	uint duration_Shield = 0;
+	uint lastTime_Shield = 0;
 
 	j1Timer cooldown_E;
 	uint cooldownTime_E = 0;

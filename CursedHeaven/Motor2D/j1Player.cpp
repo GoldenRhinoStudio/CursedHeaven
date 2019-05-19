@@ -208,7 +208,7 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_2->type == COLLIDER_ENEMY || col_2->type == COLLIDER_ENEMY_SHOT)
 	{
-		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E) return;
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q) return;
 
 		if (invulCounter.Read() >= lastTime_invul + invulTime) {
 			receivedDamage = false;

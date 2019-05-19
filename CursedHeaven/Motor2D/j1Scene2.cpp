@@ -303,7 +303,7 @@ void j1Scene2::PlaceEntities(int room) {
 	App->entity->AddEnemy(92, 58, TURRET);
 	App->entity->AddEnemy(84, 55, TURRET);
 
-	/*	App->entity->AddEnemy(77, 78, FIRE);
+		App->entity->AddEnemy(77, 78, FIRE);
 	App->entity->AddEnemy(76, 73, FIRE);
 	App->entity->AddEnemy(72, 66, FIRE);
 
@@ -333,7 +333,9 @@ void j1Scene2::PlaceEntities(int room) {
 	App->entity->AddEnemy(39, 72, TURRET);
 	App->entity->AddEnemy(32, 74, TURRET);
 	App->entity->AddEnemy(40, 84, TURRET);
-	App->entity->AddEnemy(33, 88, SLIME);*/
+	App->entity->AddEnemy(33, 88, SLIME);
+
+	App->entity->AddEnemy(36, 62, EXODUS);
 
 }
 

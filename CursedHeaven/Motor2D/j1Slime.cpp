@@ -180,7 +180,7 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 			App->audio->PlayFx(App->audio->slime_damage);
 			receivedBasicDamage = true;
 
-			if (lifePoints > 0 && attacking == false) {
+			if (lifePoints > 0 && attacking == false && App->entity->player_type == KNIGHT) {
 
 				if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0)
 				position.x += App->entity->currentPlayer->knockback;

@@ -303,7 +303,7 @@ bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
 
-	if(finishedDialog)
+	if (finishedDialog)
 		App->render->Blit(lvl1_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
 
 	return continueGame;

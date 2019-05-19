@@ -15,7 +15,7 @@
 #include "Brofiler/Brofiler.h"
 
 
-Items::Items(int x, int y, ENTITY_TYPES type, DROP_TYPES itype) : j1Entity(x, y, type) 
+Items::Items(int x, int y, ENTITY_TYPES type, ITEM_TYPES itype) : j1Entity(x, y, type) 
 {
 	animation = NULL;
 
@@ -94,7 +94,7 @@ void Items::OnCollision(Collider * col_1, Collider * col_2)
 	{
 		if (itype == COIN) {
 			collider->to_delete = true;
-			App->entity->currentPlayer->coins += value;
+			App->entity->currentPlayer->score_points += value;
 		}
 		else if (itype == LIFE) {
 			if (App->entity->currentPlayer->lifePoints + value <= App->entity->currentPlayer->totalLifePoints) {
@@ -144,7 +144,7 @@ void Items::LoadProperties()
 	value = item.attribute("value").as_int();
 }
 
-const char* Items::ToString(DROP_TYPES item)
+const char* Items::ToString(ITEM_TYPES item)
 {
 	switch (item)
 	{

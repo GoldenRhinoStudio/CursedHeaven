@@ -55,7 +55,7 @@ enum PLAYER_TYPES
 	ROGUE
 };
 
-enum DROP_TYPES {
+enum ITEM_TYPES {
 	COIN,
 	LIFE
 };
@@ -94,12 +94,16 @@ public:
 	void CreatePlayer(); 
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
-	void AddItem(int x, int y, DROP_TYPES itype);
+	void AddItem(int x, int y, ITEM_TYPES itype);
 
 private:
+
 	void SpawnEnemy(const EntityInfo& info);
 
-public:	
+
+
+public:
+	
 	std::list<j1Entity*> entities;
 
 	// Pointers to diferent playable classes
@@ -128,7 +132,6 @@ private:
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;
 	float				updateMsCycle = 0.0f;
-	fPoint				playerSpawnPos;
 };
 
 #endif // __J1ENTITYMANAGER_H__

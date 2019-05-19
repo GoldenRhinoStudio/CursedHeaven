@@ -68,7 +68,8 @@ public:
 	iPoint attackSize;
 	iPoint margin;
 	int offset;
-	
+
+	std::string current_points;
 	int room = 6;
 	uint points = 0;
 	uint score_points = 0;

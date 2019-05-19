@@ -19,7 +19,9 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 
 j1Player::~j1Player() {}
 
+
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
+
 
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 

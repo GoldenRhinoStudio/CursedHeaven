@@ -122,7 +122,7 @@ bool j1Scene2::Start() {
 bool j1Scene2::PreUpdate() {
 
 	BROFILER_CATEGORY("Level2PreUpdate", Profiler::Color::Orange)
-
+	App->entity->currentPlayer->current_points.erase();
 
 	return true;
 }

@@ -4,6 +4,7 @@
 #include "j1UserInterfaceElement.h"
 #include "j1Label.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Fonts.h"
 #include "j1Render.h"
 #include "j1Player.h"
@@ -110,9 +111,10 @@ bool j1Hud::Update(float dt)
 		}
 
 	}
-
+	
 	// Current points of the player (char*)
-	current_points = App->scene1->current_points.c_str();
+	current_points = App->entity->currentPlayer->current_points.c_str();
+
 	//	App->scene1->current_points.erase();
 	SDL_Rect temp;
 	temp.x = temp.y = 0;

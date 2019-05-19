@@ -114,6 +114,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
+		current_points = std::to_string(coins);
 		if (App->scene1->finishedDialog || App->scene2->finishedDialog2) {
 			
 			if (!attacking) {

@@ -162,7 +162,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 						App->audio->PlayFx(App->audio->dash);
 
-						if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 76;				
+						if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;				
 
 						lastPosition = position;
 
@@ -211,7 +211,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 					App->audio->PlayFx(App->audio->rage_dk);
 
-					if (dialog->law == 2) App->entity->currentPlayer->lifePoints -= 76;
+					if (dialog->law == 2) App->entity->currentPlayer->lifePoints -= 38;
 
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();

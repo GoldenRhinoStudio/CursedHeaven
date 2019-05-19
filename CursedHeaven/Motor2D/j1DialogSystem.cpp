@@ -54,6 +54,7 @@ bool j1DialogSystem::Start() {
 
 		law3Active = true;
 		LOG("law3 act");
+
 	}
 
 	return ret;
@@ -65,6 +66,7 @@ bool j1DialogSystem::Update(float dt) {
 	//Rects
 	SDL_Rect chartoption1 = { 277, 0, 221, 54 };
 	SDL_Rect chartoption2 = { 277, 54, 220, 54 };
+	SDL_Rect chartoption3 = { 276, 295, 220, 54 };
 
 	SDL_Rect chart1s1 = { 0, 0, 277, 61 };
 	SDL_Rect chart2s1 = { 0, 61, 276, 61 };
@@ -159,6 +161,39 @@ bool j1DialogSystem::Update(float dt) {
 				App->scene1->finishedDialog = true;
 				App->gamePaused = false;
 				law2Active = false;
+			}
+		}
+		else if (law3Active == true)
+		{
+			if (dialogTimer.Read() >= time_passed + dialogTime) {
+				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				canSkip = true;
+			}
+
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+				&& canSkip && App->scene1->settings_window->visible == false) {
+				times++;
+				canSkip = false;
+				time_passed = dialogTimer.Read();
+				LOG("times: %d", times);
+			}
+
+			if (times == 1) {
+				App->tex->UnLoad(dialog_tex);
+				App->render->BlitHUD(dialog_tex2, 400, 550, &chartoption3, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			}
+
+			if (times == 2) {
+				App->tex->UnLoad(dialog_tex2);
+				App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			}
+
+			if (times == 3) {
+				App->tex->UnLoad(dialog_tex3);
+				times = 0;
+				App->scene1->finishedDialog = true;
+				App->gamePaused = false;
+				law3Active = false;
 			}
 		}
 

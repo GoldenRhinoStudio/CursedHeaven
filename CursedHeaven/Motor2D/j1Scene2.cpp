@@ -285,11 +285,15 @@ bool j1Scene2::Update(float dt) {
 	App->render->reOrder();
 	App->render->OrderBlit(App->render->OrderToRender);
 
+	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q && App->entity->knight != nullptr)
+		App->render->Blit(App->entity->knight->shieldTex, App->entity->currentPlayer->position.x + 2, App->entity->currentPlayer->position.y + 8, NULL, SDL_FLIP_NONE, true, 0.13f);
+
 	return true;
 }
 
 bool j1Scene2::PostUpdate() {
 
+	if(finishedDialog2)
 	App->render->Blit(lvl2_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
 
 	return true;

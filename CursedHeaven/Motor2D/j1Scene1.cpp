@@ -292,7 +292,7 @@ bool j1Scene1::Update(float dt)
 	App->render->reOrder();
 	App->render->OrderBlit(App->render->OrderToRender);
 
-	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q)
+	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q && App->entity->knight != nullptr)
 		App->render->Blit(App->entity->knight->shieldTex, App->entity->currentPlayer->position.x + 2, App->entity->currentPlayer->position.y + 8, NULL, SDL_FLIP_NONE, true, 0.13f);
 
 	return true;
@@ -303,7 +303,7 @@ bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
 
-	if(finishedDialog)
+	if (finishedDialog)
 		App->render->Blit(lvl1_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
 
 	return continueGame;
@@ -420,6 +420,7 @@ void j1Scene1::ChangeSceneMenu()
 	App->scene1->active = false;
 	App->menu->active = true;
 	changingScene = false;
+	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->restartingShop = true;

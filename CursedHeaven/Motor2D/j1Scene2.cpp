@@ -76,6 +76,7 @@ bool j1Scene2::Start() {
 		}
 
 		// The audio is played	
+		App->audio->PlayMusic("audio/music/song027.ogg", 1.0f);
 
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");

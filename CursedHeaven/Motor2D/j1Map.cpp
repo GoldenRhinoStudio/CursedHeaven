@@ -919,9 +919,16 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	direction = entity->direction;
 
 	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
-	int y = entity->collider->rect.y + entity->collider->rect.h;
+	int y = entity->collider->rect.y + entity->collider->rect.h - entity->offset;
 
 	iPoint current_tile = WorldToMap(x, y);
+	current_tile.x -= 1;
+	current_tile.y -= 1;
+	
+	if (direction == UP_ || direction == UP_RIGHT_ || direction == UP_LEFT_)
+		current_tile.y += 1;
+
+
 	iPoint next_tile = { 0,0 };
 
 	uint current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
@@ -942,44 +949,42 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	bool going_up = false;
 	bool going_down = false;
 
-	if (current_gid != 0)
+	switch (direction)
 	{
-		switch (direction)
-		{
-		case UP_:
-			next_gid = up_gid;
-			next_tile = { current_tile.x - 1, current_tile.y - 1 };
-			break;
-		case DOWN_:
-			next_gid = down_gid;
-			next_tile = { current_tile.x + 1, current_tile.y + 1 };
-			break;
-		case RIGHT_:
-			next_gid = right_gid;
-			next_tile = { current_tile.x + 1, current_tile.y - 1 };
-			break;
-		case LEFT_:
-			next_gid = left_gid;
-			next_tile = { current_tile.x - 1, current_tile.y + 1 };
-			break;
-		case UP_RIGHT_:
-			next_gid = up_right_gid;
-			next_tile = { current_tile.x, current_tile.y - 1 };
-			break;
-		case UP_LEFT_:
-			next_gid = up_left_gid;
-			next_tile = { current_tile.x - 1, current_tile.y };
-			break;
-		case DOWN_RIGHT_:
-			next_gid = down_right_gid;
-			next_tile = { current_tile.x + 1, current_tile.y };
-			break;
-		case DOWN_LEFT_:
-			next_gid = down_left_gid;
-			next_tile = { current_tile.x, current_tile.y + 1 };
-			break;
-		}
+	case UP_:
+		next_gid = up_gid;
+		next_tile = { current_tile.x - 1, current_tile.y - 1 };
+		break;
+	case DOWN_:
+		next_gid = down_gid;
+		next_tile = { current_tile.x + 1, current_tile.y + 1 };
+		break;
+	case RIGHT_:
+		next_gid = right_gid;
+		next_tile = { current_tile.x + 1, current_tile.y - 1 };
+		break;
+	case LEFT_:
+		next_gid = left_gid;
+		next_tile = { current_tile.x - 1, current_tile.y + 1 };
+		break;
+	case UP_RIGHT_:
+		next_gid = up_right_gid;
+		next_tile = { current_tile.x, current_tile.y - 1 };
+		break;
+	case UP_LEFT_:
+		next_gid = up_left_gid;
+		next_tile = { current_tile.x - 1, current_tile.y };
+		break;
+	case DOWN_RIGHT_:
+		next_gid = down_right_gid;
+		next_tile = { current_tile.x + 1, current_tile.y };
+		break;
+	case DOWN_LEFT_:
+		next_gid = down_left_gid;
+		next_tile = { current_tile.x, current_tile.y + 1 };
+		break;
 	}
+	
 
 	if (next_gid != 0)
 	{
@@ -1007,42 +1012,7 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 
 		if (going_up)
 		{
-			if (direction == UP_)
-			{
-
-			}
-
-			else if (direction == DOWN_)
-			{
-
-			}
-
-			else if (direction == RIGHT_)
-			{
-				if ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && ((down_right_gid != next_gid) || (down_gid != next_gid)))
-					entity->position.y -= 1;
-
-				else
-				{
-					entity->position.x += 1;
-					entity->position.y += 1;
-				}
-			}
-
-
-			else if (direction == LEFT_)
-			{
-				if ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && ((down_left_gid != next_gid) || (left_gid != next_gid)))
-					entity->position.y -= 1;
-
-				else
-				{
-					entity->position.x -= 1;
-					entity->position.y += 1;
-				}
-			}
-
-			else if (direction == UP_RIGHT_)
+			if (direction == UP_RIGHT_)
 			{
 				entity->position.y -= 1;
 			}
@@ -1065,35 +1035,7 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 
 		else if (going_down)
 		{
-			if (direction == UP_)
-			{
-
-			}
-
-			else if (direction == DOWN_)
-			{
-
-			}
-
-			else if (direction == RIGHT_)
-			{
-				if (((up_right_gid != next_gid && up_right_gid != 0) || (up_gid != next_gid && up_gid != 0)))
-					entity->position.y += 1;
-
-				else
-					entity->position.x += 1;
-			}
-
-			else if (direction == LEFT_)
-			{
-				if ((up_left_gid != next_gid && up_left_gid != 0) || (up_gid != next_gid && up_gid != 0))
-					entity->position.y += 1;
-
-				else
-					entity->position.x -= 1;
-			}
-
-			else if (direction == UP_RIGHT_)
+			if (direction == UP_RIGHT_)
 			{
 				entity->position.x += 1;
 			}

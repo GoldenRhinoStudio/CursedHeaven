@@ -63,8 +63,10 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	LOG("Awaking Entity manager");
 	updateMsCycle = config.attribute("updateMsCycle").as_float();
-	playerSpawnPos.x = config.child("position").attribute("x").as_float();
-	playerSpawnPos.y = config.child("position").attribute("y").as_float();
+	playerSpawnPos1.x = config.child("position1").attribute("x").as_float();
+	playerSpawnPos1.y = config.child("position1").attribute("y").as_float();
+	playerSpawnPos2.x = config.child("position2").attribute("x").as_float();
+	playerSpawnPos2.y = config.child("position2").attribute("y").as_float();
 
 	return true;
 }
@@ -240,17 +242,25 @@ void j1EntityManager::DestroyEntities()
 	}
 }
 
-void j1EntityManager::CreatePlayer()
+void j1EntityManager::CreatePlayer1()
 {
-	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos.x, playerSpawnPos.y);
-	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos.x, playerSpawnPos.y);
-	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
-	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);*/
+	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos1.x, playerSpawnPos1.y);
+	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos1.x, playerSpawnPos1.y);
 
 	if (knight != nullptr) currentPlayer = knight;
 	else if (mage != nullptr) currentPlayer = mage;
-	/*else if (rogue != nullptr)  currentPlayer = rogue;
-	else if (tank != nullptr)  currentPlayer = tank;*/
+
+	currentPlayer->invulCounter.Start();
+	currentPlayer->potionTime.Start();
+}
+
+void j1EntityManager::CreatePlayer2()
+{
+	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos2.x, playerSpawnPos2.y);
+	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos2.x, playerSpawnPos2.y);
+
+	if (knight != nullptr) currentPlayer = knight;
+	else if (mage != nullptr) currentPlayer = mage;
 
 	currentPlayer->invulCounter.Start();
 	currentPlayer->potionTime.Start();

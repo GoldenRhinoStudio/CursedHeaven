@@ -44,6 +44,7 @@ public:
 	int attack_bm, death_bm, damage_bm;
 	int attack_dk, death_dk, damage_dk;
 	int slime_death, boss_death, slime_attack, boss_attack;
+	int coin_sound, heal_sound, potion_sound;
 
 private:
 

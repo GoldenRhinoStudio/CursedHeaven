@@ -11,6 +11,7 @@
 #include "j1DragoonKnight.h"
 #include "j1BlackMage.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Input.h"
 
 #include "Brofiler/Brofiler.h"
@@ -65,9 +66,11 @@ bool j1Shop::Start() {
 	return true;
 }
 
-void j1Shop::PlaceShop()
+void j1Shop::PlaceShopScene1()
 {
 	// Creating the shop	
+	restartingShop = false;
+
 	int item1 = (rand() % 5);
 	App->shop->CreateItem(ITEM_TYPE(item1), -1100, 725);
 
@@ -87,6 +90,32 @@ void j1Shop::PlaceShop()
 
 	App->shop->CreateItem(POTION, -1050, 680);
 	App->entity->CreateEntity(SELLER, -1055, 715);
+}
+
+void j1Shop::PlaceShopScene2()
+{
+	// Creating the shop	
+	restartingShop = false;
+
+	/*int item1 = (rand() % 5);
+	App->shop->CreateItem(ITEM_TYPE(item1), -1100, 725);
+
+	int item2 = (rand() % 5);
+	if (item2 == item1) item2++;
+	if (item2 > 4) item2 = 0;
+	App->shop->CreateItem(ITEM_TYPE(item2), -1050, 765);
+
+	int item3 = (rand() % 5);
+	if (item3 == item1) item3--;
+	if (item3 < 0) item3 = 4;
+	if (item3 == item2) item3++;
+	if (item3 > 4) item3 = 0;
+	if (item3 == item1) item3++;
+	if (item3 > 4) item3 = 0;
+	App->shop->CreateItem(ITEM_TYPE(item3), -1000, 725);
+
+	App->shop->CreateItem(POTION, -1050, 680);
+	App->entity->CreateEntity(SELLER, -1055, 715);*/
 }
 
 bool j1Shop::Update(float dt)
@@ -111,13 +140,15 @@ bool j1Shop::CleanUp()
 		items.remove(*item);
 	}
 
-	potions = 0;
-	bootsLevel = 0;
-	swordLevel = 0;
-	heartLevel = 0;
-	armourLevel = 0;
-	hourglassLevel = 0;
-	bookLevel = 0;
+	if (restartingShop) {
+		potions = 0;
+		bootsLevel = 0;
+		swordLevel = 0;
+		heartLevel = 0;
+		armourLevel = 0;
+		hourglassLevel = 0;
+		bookLevel = 0;
+	}
 
 	return true;
 }
@@ -284,11 +315,11 @@ bool j1Item::Update(float dt, bool do_logic) {
 		break;
 
 	case POTION:
-		if (App->scene1->potionCounter == 3) collider->type = COLLIDER_NONE;
+		if (App->scene1->potionCounter == 3 || App->scene2->potionCounter == 3) collider->type = COLLIDER_NONE;
 	}
 
 	// Blitting the item
-	if (type == POTION && App->scene1->potionCounter < 3) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
+	if (type == POTION && App->scene1->potionCounter < 3 && App->scene2->potionCounter < 3) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
 	else if (type != POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
 
 	return true;
@@ -397,9 +428,11 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 				case POTION:
 					if (App->shop->potions < 3 && App->scene1->potionCounter < 3) {
 						App->shop->potions++;
-						App->scene1->potionCounter++;
 
-						if(App->shop->potions == 3)
+						if (App->scene1->active) App->scene1->potionCounter++;
+						else if (App->scene2->active) App->scene2->potionCounter++;
+
+						if (App->shop->potions == 3)
 							description = App->gui->CreateLabel(&App->shop->itemLabels, LABEL, (int)position.x, (int)position.y, App->gui->font1, "Max. potions", App->gui->beige);
 					}
 					break;

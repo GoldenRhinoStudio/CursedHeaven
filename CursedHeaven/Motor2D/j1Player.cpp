@@ -98,6 +98,7 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				App->shop->potions--;
 				lastPotionTime = potionTime.Read();
 				App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+				App->audio->PlayFx(App->audio->potion_sound);
 			}
 
 			// Direction controls	
@@ -207,6 +208,8 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_2->type == COLLIDER_ENEMY || col_2->type == COLLIDER_ENEMY_SHOT)
 	{
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E) return;
+
 		if (invulCounter.Read() >= lastTime_invul + invulTime) {
 			receivedDamage = false;
 			lastTime_invul = invulCounter.Read();

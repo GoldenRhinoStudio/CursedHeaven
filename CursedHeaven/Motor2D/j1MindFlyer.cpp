@@ -281,6 +281,8 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 			dead = true;
 			App->entity->currentPlayer->victory = true;
 			collider->to_delete = true;
+			
+			App->entity->currentPlayer->coins += 20;
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 				if (item._Ptr->_Myval == this) {

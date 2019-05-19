@@ -95,11 +95,14 @@ void Items::OnCollision(Collider * col_1, Collider * col_2)
 		if (itype == COIN) {
 			collider->to_delete = true;
 			App->entity->currentPlayer->coins += value;
+			App->audio->PlayFx(App->audio->coin_sound);
+			
 		}
 		else if (itype == LIFE) {
 			if (App->entity->currentPlayer->lifePoints + value <= App->entity->currentPlayer->totalLifePoints) {
 				collider->to_delete = true;
 				App->entity->currentPlayer->lifePoints += value;
+				App->audio->PlayFx(App->audio->heal_sound);
 			}
 		}
 		if (collider->to_delete) {

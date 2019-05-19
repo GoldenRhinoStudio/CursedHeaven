@@ -199,7 +199,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
-					if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 35;
+					if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 18;
 
 					iPoint explosionPos;
 					iPoint p = { (int)position.x, (int)position.y };
@@ -241,7 +241,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 					App->audio->PlayFx(App->audio->rage_bm);
 
-					if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 35;
+					if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 18;
 
 					speed = speed * 2;
 					cooldown_Speed.Start();

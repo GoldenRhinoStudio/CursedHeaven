@@ -332,7 +332,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	//App->map->EntityMovementTest(this);
+	App->map->EntityMovementTest(this);
 
 	// Update collider position to player position
 	if (collider != nullptr)

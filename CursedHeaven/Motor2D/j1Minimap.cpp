@@ -6,6 +6,7 @@
 #include "j1Textures.h"
 #include "j1Input.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Map.h"
 #include "j1Entity.h"
 #include "j1EntityManager.h"
@@ -36,7 +37,7 @@ void j1Minimap::DrawEntities()
 {
 	int pos_x, pos_y;
 
-	if (App->scene1->finishedDialog == true) {
+	if (App->scene1->finishedDialog == true && App->scene2->finishedDialog2 == true) {
 		for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 			pos_x = (*item)->position.x * 0.125f;
 			pos_y = (*item)->position.y * 0.125f;

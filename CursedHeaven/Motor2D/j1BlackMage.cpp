@@ -97,8 +97,9 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
+		current_points = std::to_string(coins);
 		// Controls when is finished the dialog
-		if (App->scene1->finishedDialog) {
+		if (App->scene1->finishedDialog || App->scene2->finishedDialog2) {
 
 			if (!active_Q) {
 				ManagePlayerMovement(direction, dt, do_logic, speed);
@@ -392,7 +393,7 @@ bool j1BlackMage::PostUpdate() {
 	
 	dialog->Update(0);
 
-	if (App->scene1->finishedDialog || App->scene2->finishedDialog)
+	if (App->scene1->finishedDialog || App->scene2->finishedDialog2)
 		hud->Update(0);
 
 	return true;

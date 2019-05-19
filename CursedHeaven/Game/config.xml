@@ -46,7 +46,7 @@
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="21" leftColliderSpawnPos="-15"/>
 	  <combat basicDamage="200" rageDamage="200" lifePoints="350" knockback="15"/>
-	  <cooldowns Q="5000" E="15000" rage="5000" shield="2500" invulTime="1000"/>
+	  <cooldowns Q="15000" E="8000" rage="5000" shield="2500" invulTime="1000"/>
 	</dragoonKnight>	
   </player>  
   

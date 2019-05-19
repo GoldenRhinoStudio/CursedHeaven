@@ -41,7 +41,7 @@ public:
 	// Called to change scene
 	void ChangeSceneMenu();
 	void ChangeSceneDeath();
-	void ChangeSceneVictory();
+	void ChangeScene2();
 
 	// Load and Save
 	bool Load(pugi::xml_node&);
@@ -54,7 +54,6 @@ public:
 	bool player_created = false;
 	bool backToMenu = false;
 	bool toLoseScene = false;
-	bool toVictoryScene = false;
 
 	std::list<j1Button*> scene1Buttons;
 	std::list<j1Label*> scene1Labels;

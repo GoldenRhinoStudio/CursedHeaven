@@ -199,7 +199,7 @@ void j1SceneLose::ChangeScene(SCENE objectiveScene)
 		App->dialog->Start();
 
 		App->entity->active = true;
-		App->entity->CreatePlayer();
+		App->entity->CreatePlayer1();
 		App->entity->Start();
 	}
 }

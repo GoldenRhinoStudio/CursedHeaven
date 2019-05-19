@@ -61,8 +61,6 @@ bool j1Scene2::Awake(pugi::xml_node& config) {
 
 bool j1Scene2::Start() {
 
-	//Player pos = {67,41};
-
 	if (active) {
 		App->map->draw_with_quadtrees = true;
 

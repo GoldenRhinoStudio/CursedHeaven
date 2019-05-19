@@ -372,8 +372,6 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(80, 65, SLIME);
 
 	App->entity->AddEnemy(53, 68, MINDFLYER);
-
-	App->entity->AddEnemy(53, 68, EXODUS);
 }
 
 // Called before quitting
@@ -453,12 +451,12 @@ void j1Scene1::ChangeScene2() {
 	App->scene1->active = false;
 	App->scene2->active = true;
 	App->dialog->CleanUp();
-	App->entity->currentPlayer->victory = false;
 
 	CleanUp();
 	App->entity->active = false;
-	App->entity->CreatePlayer();
-	App->entity->Start();
 	App->scene2->Start();
-	App->particles->Start();
+
+	App->entity->active = true;
+	App->entity->CreatePlayer2();
+	App->entity->Start();
 }

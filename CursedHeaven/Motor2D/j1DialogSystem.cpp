@@ -31,7 +31,7 @@ bool j1DialogSystem::Start() {
 	dialog_tex2 = App->tex->Load("textures/dialog_final.png");
 	dialog_tex3 = App->tex->Load("textures/dialog_final.png");
 
-	law = (1 + rand() % 2);
+	law = (1 + rand() % 3);
 
 	if (law == 1) {
 
@@ -43,6 +43,12 @@ bool j1DialogSystem::Start() {
 
 		law2Active = true;
 		LOG("law2 act");
+	}
+
+	else if (law == 3) {
+
+		law3Active = true;
+		LOG("law3 act");
 	}
 
 	return ret;

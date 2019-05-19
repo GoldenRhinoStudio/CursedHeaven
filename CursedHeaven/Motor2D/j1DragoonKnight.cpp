@@ -73,6 +73,9 @@ bool j1DragoonKnight::Start() {
 	/*position.x = -200;
 	position.y = 1200;*/
 
+	/*position.x = -715;
+	position.y = 530;*/
+
 	//coins = 100;
 
 	if (GodMode)

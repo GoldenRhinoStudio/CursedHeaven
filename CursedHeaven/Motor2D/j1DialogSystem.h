@@ -43,6 +43,7 @@ public:
 
 	bool law1Active = false;
 	bool law2Active = false;
+	bool law3Active = false;
 	bool canSkip = false;
 
 	int times = 0;

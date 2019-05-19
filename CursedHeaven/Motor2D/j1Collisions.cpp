@@ -126,7 +126,7 @@ bool j1Collisions::Update(float dt)
 		if (colliders[i] == nullptr) continue;
 
 		if (colliders[i]->type == COLLIDER_PLAYER || colliders[i]->type == COLLIDER_NONE || colliders[i]->type == COLLIDER_ENEMY || colliders[i]->type == COLLIDER_ITEM ||
-			colliders[i]->type == COLLIDER_DROP || colliders[i]->type == COLLIDER_ABILITY)
+			colliders[i]->type == COLLIDER_DROP || colliders[i]->type == COLLIDER_ABILITY || colliders[i]->type == COLLIDER_ENEMY_SHOT || colliders[i]->type ==	COLLIDER_ATTACK)
 		{
 			collider1 = colliders[i];
 

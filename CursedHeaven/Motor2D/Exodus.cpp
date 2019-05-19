@@ -13,6 +13,7 @@
 #include "j1Scene1.h"
 #include "j1Particles.h"
 #include "j1Audio.h"
+#include <time.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -39,7 +40,6 @@ bool Exodus::Start()
 	LoadProperties();
 
 	animation = &idle;
-	shotTimer.Start();
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
@@ -50,15 +50,38 @@ bool Exodus::Update(float dt, bool do_logic)
 {
 	BROFILER_CATEGORY("MindFlyerUpdate", Profiler::Color::LightSeaGreen)
 
+	if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
+	if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
 
+	fPoint center = { position.x + animation->frames->w / 2, position.y + animation->frames->h / 2 };
+	if (shotTimer.Read() > shotTime) {
 
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
-		App->particles->AddParticle(App->particles->sword1, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
-		App->particles->AddParticle(App->particles->sword1, position.x + 80, position.y, dt, COLLIDER_ENEMY_SHOT,0,90);
-		state = 0;
+		srand(time(NULL));
+		attack = rand() % 3;
+
+		switch (attack) {
+		case 0:
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
+			break;
+		case 1:
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 130, center.y + 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 130, center.y + 120, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 130, center.y + 180, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 130, center.y + 240, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
+			break;
+		case 2:
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 135, { (float)(-250 * cos(135 * DEGTORAD)) , (float)(250 * sin(135 * DEGTORAD)) });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y, dt, COLLIDER_ENEMY_SHOT, 0, -135, { (float)(250 * cos(135 * DEGTORAD)) , (float)(250 * sin(135 * DEGTORAD)) });
+			break;
+		};
+		shotTimer.Start();
 	}
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-		state = 1;
+
+
+	
 
 	App->map->EntityMovement(this);
 	return true;
@@ -114,7 +137,10 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 			if (App->entity->player_type == MAGE) col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
-			receivedBasicDamage = true;
+			receivedBasicDamage = true; 
+			if (shotTimer.Read() == 0) {//attack when receive first damage
+				shotTimer.Start();
+			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
@@ -123,7 +149,10 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 				lifePoints -= App->entity->mage->fireDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 
-			receivedAbilityDamage = true;
+			receivedAbilityDamage = true; 
+			if (shotTimer.Read() == 0) {//attack when receive first damage
+				shotTimer.Start();
+			}
 		}
 
 		if (lifePoints <= 0) {
@@ -164,16 +193,18 @@ void Exodus::LoadProperties()
 	config_file.load_file("config.xml");
 	pugi::xml_node config;
 	config = config_file.child("config");
-	pugi::xml_node mindflyer;
-	mindflyer = config.child("mindflyer");
+	pugi::xml_node exodus;
+	exodus = config.child("exodus");
 
 	// Copying the values of the collider
-	margin.x = mindflyer.child("margin").attribute("x").as_int();
-	margin.y = mindflyer.child("margin").attribute("y").as_int();
-	colliderSize.x = mindflyer.child("colliderSize").attribute("w").as_int();
-	colliderSize.y = mindflyer.child("colliderSize").attribute("h").as_int();
+	margin.x = exodus.child("margin").attribute("x").as_int();
+	margin.y = exodus.child("margin").attribute("y").as_int();
+	colliderSize.x = exodus.child("colliderSize").attribute("w").as_int();
+	colliderSize.y = exodus.child("colliderSize").attribute("h").as_int();
 
 	// Copying combat values
-	speed = mindflyer.attribute("speed").as_int();
-	lifePoints = mindflyer.attribute("life").as_int();
+	speed = exodus.attribute("speed").as_int();
+	lifePoints = exodus.attribute("life").as_int();
+	shotTime = exodus.child("combat").attribute("shotTime").as_int();
+	damage = exodus.child("combat").attribute("damage").as_int();
 }

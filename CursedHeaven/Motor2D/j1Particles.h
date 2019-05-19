@@ -37,6 +37,7 @@ struct Particle
 	Particle(const Particle& p);
 	virtual ~Particle();
 	bool Update(float dt);
+	iPoint margin;
 	PARTICLE_TYPE type;
 };
 
@@ -50,6 +51,7 @@ public:
 	bool CleanUp();
 	void OnCollision(Collider* c1, Collider* c2);
 	void AddParticle(const Particle& particle, int x, int y, float dt, COLLIDER_TYPE collider_type = COLLIDER_NONE, Uint32 delay = 0, int rotation = 0);
+	void AddParticleSpeed(const Particle& particle, int x, int y, float dt, COLLIDER_TYPE collider_type = COLLIDER_NONE, Uint32 delay = 0, int rotation = 0, fPoint speed = { 0,0 });
 	Particle* active[MAX_ACTIVE_PARTICLES];
 private:
 	

@@ -221,15 +221,5 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 
 			if (lifePoints <= 0) dead = true;
 		}
-
-		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)
-		{
-			lifePoints -= App->entity->mindflyer_Damage;
-			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
-			else App->audio->PlayFx(App->audio->damage_dk);
-			receivedDamage = true;
-
-			if (lifePoints <= 0) dead = true;
-		}
 	}
 };

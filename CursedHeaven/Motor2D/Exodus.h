@@ -55,6 +55,9 @@ public:
 	j1Timer shotTimer;
 
 	int state = 0;
+	int attack = 0;
+	int damage = 0;
+	int shotTime = 0;
 	bool dead = false;
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;

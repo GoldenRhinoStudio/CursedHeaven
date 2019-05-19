@@ -200,6 +200,8 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == TURRET)
 				entity = new j1Turret(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == FIRE)
+				entity = new j1Fire(info.position.x, info.position.y, info.type);
 
 			entities.push_back(entity);
 			entity->Start();

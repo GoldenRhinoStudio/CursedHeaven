@@ -61,6 +61,8 @@ bool j1Scene2::Awake(pugi::xml_node& config) {
 
 bool j1Scene2::Start() {
 
+	//Player pos = {67,41};
+
 	if (active) {
 		App->map->draw_with_quadtrees = true;
 
@@ -80,6 +82,8 @@ bool j1Scene2::Start() {
 		// TEXTURES
 		debug_tex = App->tex->Load("maps/path2.png");
 		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
+
+		PlaceEntities(6);
 
 	}
 
@@ -123,6 +127,42 @@ bool j1Scene2::Save(pugi::xml_node& node) const {
 }
 
 void j1Scene2::PlaceEntities(int room) {
+
+	App->entity->AddEnemy(92, 58, TURRET);
+	App->entity->AddEnemy(84, 55, TURRET);
+
+
+	App->entity->AddEnemy(77, 78, FIRE);
+	App->entity->AddEnemy(76, 73, FIRE);
+	App->entity->AddEnemy(72, 66, FIRE);
+
+	App->entity->AddEnemy(48, 46, SLIME);
+	App->entity->AddEnemy(52, 46, SLIME);
+	App->entity->AddEnemy(51, 41, FIRE);
+
+	App->entity->AddEnemy(36, 36, TURRET);
+	App->entity->AddEnemy(40, 31, TURRET);
+	App->entity->AddEnemy(35, 38, FIRE);
+
+	App->entity->AddEnemy(22, 12, SLIME);
+	App->entity->AddEnemy(24, 20, SLIME);
+	App->entity->AddEnemy(22, 27, SLIME);
+	App->entity->AddEnemy(26, 32, SLIME);
+
+	App->entity->AddEnemy(34, 44, TURRET);
+	App->entity->AddEnemy(14, 41, FIRE);
+	App->entity->AddEnemy(12, 42, FIRE);
+
+	App->entity->AddEnemy(5, 74, TURRET);
+	App->entity->AddEnemy(14, 83, SLIME);
+	App->entity->AddEnemy(14, 79, SLIME);
+	App->entity->AddEnemy(14, 71, SLIME);
+	App->entity->AddEnemy(10, 75, FIRE);
+
+	App->entity->AddEnemy(39, 72, TURRET);
+	App->entity->AddEnemy(32, 74, TURRET);
+	App->entity->AddEnemy(40, 84, TURRET);
+	App->entity->AddEnemy(33, 88, SLIME);
 
 }
 

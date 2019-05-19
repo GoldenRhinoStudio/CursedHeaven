@@ -97,13 +97,13 @@ void j1Shop::PlaceShopScene2()
 	// Creating the shop	
 	restartingShop = false;
 
-	/*int item1 = (rand() % 5);
-	App->shop->CreateItem(ITEM_TYPE(item1), -1100, 725);
+	int item1 = (rand() % 5);
+	App->shop->CreateItem(ITEM_TYPE(item1), -655, 515);
 
 	int item2 = (rand() % 5);
 	if (item2 == item1) item2++;
 	if (item2 > 4) item2 = 0;
-	App->shop->CreateItem(ITEM_TYPE(item2), -1050, 765);
+	App->shop->CreateItem(ITEM_TYPE(item2), -705, 555);
 
 	int item3 = (rand() % 5);
 	if (item3 == item1) item3--;
@@ -112,10 +112,10 @@ void j1Shop::PlaceShopScene2()
 	if (item3 > 4) item3 = 0;
 	if (item3 == item1) item3++;
 	if (item3 > 4) item3 = 0;
-	App->shop->CreateItem(ITEM_TYPE(item3), -1000, 725);
+	App->shop->CreateItem(ITEM_TYPE(item3), -755, 515);
 
-	App->shop->CreateItem(POTION, -1050, 680);
-	App->entity->CreateEntity(SELLER, -1055, 715);*/
+	App->shop->CreateItem(POTION, -705, 480);
+	App->entity->CreateEntity(SELLER, -710, 505);
 }
 
 bool j1Shop::Update(float dt)

@@ -16,6 +16,7 @@ class j1Tank;
 class j1Player;
 class j1Judge;
 class j1Seller;
+class Exodus;
 
 struct SDL_Texture;
 
@@ -39,6 +40,7 @@ enum ENTITY_TYPES
 	TURRET,
 	FIRE,
 	MINDFLYER,
+	EXODUS,
 	JUDGE,
 	OLDMAN,
 	SELLER,
@@ -114,6 +116,8 @@ public:
 
 	j1Judge*			judge = nullptr;
 	j1Seller*			seller = nullptr;
+
+	Exodus*			exodus = nullptr;
 
 	PLAYER_TYPES player_type;
 

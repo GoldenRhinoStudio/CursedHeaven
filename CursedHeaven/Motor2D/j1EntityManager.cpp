@@ -19,6 +19,7 @@
 #include "j1MindFlyer.h"
 #include "j1Map.h"
 #include "Items.h"
+#include "Exodus.h"
 
 #include "j1Player.h"
 
@@ -199,6 +200,10 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == TURRET)
 				entity = new j1Turret(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == EXODUS) {
+				entity = new Exodus(info.position.x, info.position.y, info.type);
+				exodus = (Exodus*)entity;
+			}
 
 			entities.push_back(entity);
 			entity->Start();

@@ -157,7 +157,12 @@
     <ClCompile Include="j1Seller.cpp">
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClCompile>
-    <ClCompile Include="Items.cpp" />
+    <ClCompile Include="Exodus.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Development\Modules\Entities\Drops</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -331,7 +336,12 @@
     <ClInclude Include="j1Seller.h">
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClInclude>
-    <ClInclude Include="Items.h" />
+    <ClInclude Include="Exodus.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Development\Modules\Entities\Drops</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">

@@ -69,6 +69,14 @@ public:
 		}
 	}
 
+	bool isLastFrame() {
+		return (int)current_frame >= last_frame -1;
+	}
+
+	bool equal(Animation* anim) {
+		return (this == anim);
+	}
+
 	bool Finished()
 	{
 		if (loops > 0) {

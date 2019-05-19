@@ -123,10 +123,8 @@ bool j1Slime::DrawOrder(float dt) {
 	// Drawing the slime
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
-	if (position.x - App->entity->currentPlayer->position.x >= 0)
-		Draw(r, animation->flip, -10, -10);
-	else
-		Draw(r, animation->flip, -10, -10);
+
+	Draw(r, animation->flip, -10, -10);
 	return true;
 }
 

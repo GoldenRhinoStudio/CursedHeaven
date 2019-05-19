@@ -332,7 +332,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	App->map->EntityMovementTest(this);
+	//App->map->EntityMovementTest(this);
 
 	// Update collider position to player position
 	if (collider != nullptr)
@@ -371,9 +371,9 @@ bool j1BlackMage::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			Draw(r);
+			Draw(r,false,0,0,1,offset);
 		else
-			Draw(r, true);
+			Draw(r, true, 0, 0, 1, offset);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down || animation == &i_attack_up || animation == &i_attack_down) {

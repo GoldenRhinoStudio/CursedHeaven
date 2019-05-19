@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Exodus.cpp" />
     <ClCompile Include="FadeToColor.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="j1BlackMage.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="Wipe.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exodus.h" />
     <ClInclude Include="FadeToColor.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="j1BlackMage.h" />
@@ -191,7 +193,9 @@
     <ClInclude Include="Wipe.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\animations.xml" />
+    <Xml Include="..\Game\animations.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Game\config.xml">
       <SubType>Designer</SubType>
     </Xml>

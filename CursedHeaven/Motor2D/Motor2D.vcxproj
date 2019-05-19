@@ -92,6 +92,7 @@
     <ClCompile Include="j1Minimap.cpp" />
     <ClCompile Include="j1Particles.cpp" />
     <ClCompile Include="j1Player.cpp" />
+    <ClCompile Include="j1Scene2.cpp" />
     <ClCompile Include="j1SceneCredits.cpp" />
     <ClCompile Include="j1Entity.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="j1MindFlyer.h" />
     <ClInclude Include="j1Minimap.h" />
     <ClInclude Include="j1Particles.h" />
+    <ClInclude Include="j1Scene2.h" />
     <ClInclude Include="j1SceneCredits.h" />
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />

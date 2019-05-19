@@ -16,6 +16,7 @@
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
@@ -451,14 +452,17 @@ void j1Scene1::ChangeSceneDeath() {
 
 void j1Scene1::ChangeSceneVictory() {
 	App->scene1->active = false;
-	App->victory->active = true;
+	App->scene2->active = true;
 	//App->dialog->CleanUp();
 
 	CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
 	App->entity->active = false;
-	App->victory->Start();
-	App->render->camera = { 0,0 };
+	App->scene2->Start();
 	toVictoryScene = false;
+
+	App->entity->active = true;
+	App->entity->CreatePlayer();
+	App->entity->Start();
 }

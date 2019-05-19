@@ -158,6 +158,9 @@
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClCompile>
     <ClCompile Include="Items.cpp" />
+    <ClCompile Include="j1Scene2.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -332,6 +335,9 @@
       <Filter>Development\Modules\Entities\NPCs</Filter>
     </ClInclude>
     <ClInclude Include="Items.h" />
+    <ClInclude Include="j1Scene2.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">

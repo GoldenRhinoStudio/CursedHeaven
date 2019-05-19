@@ -61,11 +61,9 @@ public:
 	j1Timer	startup_time;
 	int time_scene2;
 	bool changingScene = false;
-	bool startDialog = true;
-	bool finishedDialog = false;
+	bool finishedDialog2 = false;
 	bool profile_active = false;
 	bool bossFightOn = false;
-	bool judgeAppears1 = false;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;

@@ -35,7 +35,7 @@ j1Particles::j1Particles()
 	sword1.anim.LoadAnimation("sword_attack1", "exodus",false);
 	sword1.life = 1000;
 	sword2.anim.LoadAnimation("sword_attack2", "exodus", false);
-	sword2.life = 1000;
+	sword2.life = 1200;
 	sword3.anim.LoadAnimation("sword_attack3", "exodus", false);
 	sword3.life = 1000;
 	sword1.type = sword2.type = sword3.type = SWORD_SHOOT;

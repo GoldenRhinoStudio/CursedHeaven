@@ -395,8 +395,6 @@ bool j1Scene1::CleanUp()
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
-	/*if (App->entity->rogue) App->entity->rogue->CleanUp();
-	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		(*item)->CleanUp();
@@ -462,4 +460,5 @@ void j1Scene1::ChangeScene2() {
 	App->entity->active = true;
 	App->entity->CreatePlayer2();
 	App->entity->Start();
+	App->particles->Start();
 }

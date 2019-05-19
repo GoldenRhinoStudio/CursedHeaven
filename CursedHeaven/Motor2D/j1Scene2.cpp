@@ -344,6 +344,19 @@ void j1Scene2::PlaceEntities(int room) {
 	App->entity->AddEnemy(40, 84, TURRET);
 	App->entity->AddEnemy(33, 88, SLIME);
 
+	App->entity->AddEnemy(83, 12, SLIME);
+	App->entity->AddEnemy(91, 17, SLIME);
+	App->entity->AddEnemy(87, 29, FIRE);
+
+	App->entity->AddEnemy(68, 8, TURRET);
+	App->entity->AddEnemy(63, 10, TURRET);
+	App->entity->AddEnemy(67, 23, TURRET); 
+	App->entity->AddEnemy(71, 22, TURRET);
+
+	App->entity->AddEnemy(51, 25, FIRE);
+	App->entity->AddEnemy(49, 18, FIRE);
+	App->entity->AddEnemy(42, 18, FIRE);
+	App->entity->AddEnemy(46, 12, FIRE);
 }
 
 bool j1Scene2::CleanUp() {

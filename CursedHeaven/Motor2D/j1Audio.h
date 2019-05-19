@@ -47,6 +47,7 @@ public:
 	int coin_sound;
 	int	heal_sound;
 	int	potion_sound;
+	int shield_sound;
 
 private:
 

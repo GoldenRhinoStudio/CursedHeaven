@@ -161,7 +161,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 					if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;
 
-					//App->audio->PlayFx(App->audio->rage_dk);
+					App->audio->PlayFx(App->audio->shield_sound);
 
 					cooldown_Shield.Start();
 					lastTime_Shield = cooldown_Shield.Read();

@@ -461,4 +461,5 @@ void j1Scene1::ChangeScene2() {
 	App->entity->active = true;
 	App->entity->CreatePlayer();
 	App->entity->Start();
+	App->particles->Start();
 }

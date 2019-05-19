@@ -29,7 +29,6 @@ Exodus::Exodus(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::E
 	initialPosition.y = position.y = y;
 }
 
-
 Exodus::~Exodus(){}
 
 bool Exodus::Start()
@@ -90,10 +89,7 @@ bool Exodus::Update(float dt, bool do_logic)
 			break;
 		};
 		shotTimer.Start();
-	}
-
-
-	
+	}	
 
 	App->map->EntityMovement(this);
 	return true;
@@ -131,18 +127,6 @@ bool Exodus::PostUpdate() {
 
 void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 {
-	/*if (col_2->type == COLLIDER_ATTACK)
-	{
-		for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
-		{
-			if (App->particles->active[i] != nullptr)
-			{
-				delete App->particles->active[i];
-				App->particles->active[i] = nullptr;
-			}
-		}
-	}*/
-
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {

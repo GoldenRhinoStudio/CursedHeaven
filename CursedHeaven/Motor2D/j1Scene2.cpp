@@ -415,12 +415,14 @@ void j1Scene2::ChangeSceneDeath() {
 }
 
 void j1Scene2::ChangeSceneVictory() {
-	App->scene1->active = false;
+	App->scene2->active = false;
 	App->victory->active = true;
 	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->CleanUp();
 	App->entity->active = false;
+	App->render->camera = { 0,0 };
+
 	App->victory->Start();
 }

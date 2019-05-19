@@ -73,7 +73,7 @@ bool j1DragoonKnight::Start() {
 	/*position.x = -200;
 	position.y = 1200;*/
 
-	coins = 100;
+	//coins = 100;
 
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);

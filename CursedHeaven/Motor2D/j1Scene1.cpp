@@ -83,6 +83,8 @@ bool j1Scene1::Start()
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
 		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
+		lvl1_tex = App->tex->Load("maps/minimap_lvl1.png");
+		bg = App->tex->Load("maps/Background.png");
 
 		// Creating UI
 		SDL_Rect section = { 9,460,315,402 };
@@ -109,10 +111,8 @@ bool j1Scene1::Start()
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
-		lvl1_tex = App->tex->Load("maps/minimap_lvl1.png");
-
 		PlaceEntities(6);
-		App->shop->PlaceShop();
+		App->shop->PlaceShopScene1();
 
 		startup_time.Start();
 		windowTime.Start();
@@ -125,7 +125,8 @@ bool j1Scene1::Start()
 bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
-		current_points.erase();
+	current_points.erase();
+
 	return true;
 }
 
@@ -136,11 +137,9 @@ bool j1Scene1::Update(float dt)
 
 	time_scene1 = startup_time.ReadSec();
 
-	/*if (startDialogue)
-	App->dialog->StartDialogEvent(App->dialog->dialogA);*/
-
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
+	// ---------------------------------------------------------------------------------------------------------------------
 
 	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
@@ -246,17 +245,6 @@ bool j1Scene1::Update(float dt)
 		App->entity->currentPlayer->victory = true;
 
 	// Managing scene transitions
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN || resettingLevel)
-	{
-		/*resettingLevel = true;
-		App->fade->FadeToBlack();
-
-		if (App->fade->IsFading() == 0) {
-		App->render->camera.x = 0;
-		resettingLevel = false;
-		}*/
-	}
-
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || changingScene) {
 		changingScene = true;
 
@@ -298,7 +286,7 @@ bool j1Scene1::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-
+	App->render->Blit(bg, 0, 0, NULL, SDL_FLIP_NONE, false, 0.7f);
 	App->map->Draw();
 	App->entity->DrawEntityOrder(dt);
 	App->render->reOrder();
@@ -311,6 +299,8 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
+
+	if(finishedDialog)
 		App->render->Blit(lvl1_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
 
 	return continueGame;
@@ -381,9 +371,10 @@ void j1Scene1::PlaceEntities(int room)
 bool j1Scene1::CleanUp()
 {
 	LOG("Freeing scene");
+	App->tex->UnLoad(bg);
+	App->tex->UnLoad(lvl1_tex);
 	App->tex->UnLoad(gui_tex);
 	App->tex->UnLoad(debug_tex);
-	App->tex->UnLoad(lvl1_tex);
 	App->map->CleanUp();
 	App->collisions->CleanUp();
 	App->tex->CleanUp();
@@ -415,7 +406,6 @@ bool j1Scene1::CleanUp()
 	if (settings_window != nullptr) settings_window = nullptr;
 
 	App->path->CleanUp();
-	App->shop->CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
 
@@ -429,6 +419,8 @@ void j1Scene1::ChangeSceneMenu()
 	changingScene = false;
 
 	CleanUp();
+	App->shop->restartingShop = true;
+	App->shop->CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
 	App->render->camera = { 0,0 }; 
@@ -442,6 +434,8 @@ void j1Scene1::ChangeSceneDeath() {
 	App->dialog->CleanUp();
 
 	CleanUp();
+	App->shop->restartingShop = true;
+	App->shop->CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
 	App->render->camera = { 0,0 }; 
@@ -454,9 +448,11 @@ void j1Scene1::ChangeScene2() {
 	App->dialog->CleanUp();
 
 	CleanUp();
+	App->shop->CleanUp();
 	App->entity->active = false;
 	App->scene2->Start();
 
+	App->gui->Start();
 	App->entity->active = true;
 	App->entity->CreatePlayer2();
 	App->entity->Start();

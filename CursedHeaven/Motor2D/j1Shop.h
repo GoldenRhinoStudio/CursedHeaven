@@ -70,8 +70,8 @@ public:
 
 	void OnCollision(Collider* c1, Collider* c2);
 	j1Item* j1Shop::CreateItem(ITEM_TYPE type, int x, int y);
-	void PlaceShop();
-
+	void PlaceShopScene1();
+	void PlaceShopScene2();
 
 public:
 	std::list<j1Item*> items;
@@ -99,6 +99,8 @@ public:
 
 	j1Timer buyingTime;
 	uint lastBuyingTime = 0;
+
+	bool restartingShop = false;
 };
 
 #endif // __J1SHOP_H__

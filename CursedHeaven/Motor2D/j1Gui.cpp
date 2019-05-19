@@ -12,6 +12,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1SceneSettings.h"
 #include "j1Fonts.h"
 
@@ -64,6 +65,7 @@ bool j1Gui::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Gui::Start()
 {
+	// Textures are loaded
 	atlas = App->tex->Load(atlas_file_name.data());
 
 	// Audios are loaded
@@ -102,8 +104,10 @@ bool j1Gui::PostUpdate()
 	if (App->scene1->settings_window != nullptr && App->scene1->settings_window->visible == true)
 		App->scene1->settings_window->Draw(0.4f);
 
+	if (App->scene2->settings_window != nullptr && App->scene2->settings_window->visible == true)
+		App->scene2->settings_window->Draw(0.4f);
+	
 	//-------------------------
-
 	for (std::list<j1Button*>::iterator item = App->scene1->scene1Buttons.begin(); item != App->scene1->scene1Buttons.end(); ++item)
 	{
 		if ((*item)->parent == nullptr) continue;
@@ -131,6 +135,43 @@ bool j1Gui::PostUpdate()
 	}
 
 	for (std::list<j1Box*>::iterator item = App->scene1->scene1Boxes.begin(); item != App->scene1->scene1Boxes.end(); ++item) 
+	{
+		if ((*item)->parent == nullptr) continue;
+
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
+		else
+			(*item)->Draw(App->gui->buttonsScale);
+	}
+
+	//-------------------------
+	for (std::list<j1Button*>::iterator item = App->scene2->scene2Buttons.begin(); item != App->scene2->scene2Buttons.end(); ++item)
+	{
+		if ((*item)->parent == nullptr) continue;
+
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
+		else
+			(*item)->Draw(App->gui->buttonsScale);
+	}
+
+	for (std::list<j1Label*>::iterator item = App->scene2->scene2Labels.begin(); item != App->scene2->scene2Labels.end(); ++item)
+	{
+		if ((*item)->parent == nullptr) continue;
+
+		if ((*item)->parent->visible == false)
+			(*item)->visible = false;
+
+		else
+		{
+			if ((*item)->text != "Settings" && (*item)->text != "Save" && (*item)->text != "Quit")
+				(*item)->Draw(App->gui->buttonsScale);
+			else
+				(*item)->Draw();
+		}
+	}
+
+	for (std::list<j1Box*>::iterator item = App->scene2->scene2Boxes.begin(); item != App->scene2->scene2Boxes.end(); ++item)
 	{
 		if ((*item)->parent == nullptr) continue;
 
@@ -175,6 +216,7 @@ j1Box* j1Gui::CreateBox(std::list<j1Box*>* boxes, UIELEMENT_TYPES type, int x, i
 bool j1Gui::CleanUp()
 {
 	LOG("Freeing GUI"); 
+	App->tex->UnLoad(atlas);
 
 	return true;
 }

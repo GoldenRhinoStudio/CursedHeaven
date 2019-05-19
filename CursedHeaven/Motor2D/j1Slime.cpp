@@ -226,7 +226,7 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 			srand(time(NULL));
 			int item = rand() % 10 + 1;
 
-			if (item > 9) {
+			if (item > 7) {
 				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
 				App->entity->AddItem(position.x + 20, position.y, LIFE);
 				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);

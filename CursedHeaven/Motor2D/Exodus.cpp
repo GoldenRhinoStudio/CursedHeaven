@@ -59,7 +59,7 @@ bool Exodus::Update(float dt, bool do_logic)
 	int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 	LOG("%i", distance);
 	fPoint center = { position.x + animation->frames->w / 2, position.y + animation->frames->h / 2 };
-	if (shotTimer.Read() > shotTime && distance <= EX_DETECTION_RANGE && App->entity->currentPlayer->position.y >= position.y) {
+	if (shotTimer.Read() > shotTime && distance <= EX_DETECTION_RANGE && start_fight) {
 
 		srand(time(NULL));
 		attack = rand() % 3;
@@ -67,26 +67,26 @@ bool Exodus::Update(float dt, bool do_logic)
 		switch (attack) {
 		case 0:
 			App->particles->sword2.life = 1200;
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 180, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,250 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 180, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
 			break;
 		case 1:
 			App->particles->sword2.life = 1500;
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 120, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 180, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 240, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 300, dt, COLLIDER_ENEMY_SHOT, 0, 90, { 250,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 120, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 180, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 240, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 300, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
 			break;
 		case 2:
 			App->particles->sword2.life = 1200;
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 135, { (float)(-250 * cos(135 * DEGTORAD)) , (float)(250 * sin(135 * DEGTORAD)) });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y, dt, COLLIDER_ENEMY_SHOT, 0, -135, { (float)(250 * cos(135 * DEGTORAD)) , (float)(250 * sin(135 * DEGTORAD)) });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 135, { (float)(-speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y, dt, COLLIDER_ENEMY_SHOT, 0, -135, { (float)(speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
 			break;
 		};
 		shotTimer.Start();
@@ -146,24 +146,23 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
-			if (App->entity->player_type == MAGE) col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 			receivedBasicDamage = true; 
-			if (shotTimer.Read() == 0) {//attack when receive first damage
-				shotTimer.Start();
+			if (!start_fight) {//attack when receive first damage
+				//Song
+				start_fight = true;
 			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
-			col_2->to_delete = true;
 			if (App->entity->mage != nullptr)
 				lifePoints -= App->entity->mage->fireDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
-
-			receivedAbilityDamage = true; 
-			if (shotTimer.Read() == 0) {//attack when receive first damage
-				shotTimer.Start();
+			receivedAbilityDamage = true;
+			if (!start_fight) {//attack when receive first damage
+				//Song
+				start_fight = true;
 			}
 		}
 

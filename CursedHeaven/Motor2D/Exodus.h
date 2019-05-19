@@ -63,5 +63,6 @@ public:
 	bool dead = false;
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
+	bool start_fight = false;
 };
 #endif // __j1MINDFLYER_H__

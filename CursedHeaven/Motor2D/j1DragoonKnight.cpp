@@ -54,7 +54,6 @@ bool j1DragoonKnight::Start() {
 	// Textures are loaded
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/character/dragoonknight/Dragoon.png");
-	enraged = App->tex->Load("textures/character/dragoonknight/DragoonRage.png");
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -65,10 +64,11 @@ bool j1DragoonKnight::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	/*position.x = -1050;
-	position.y = 750;*/
-	position.x = 190;
-	position.y = 770;
+	// Setting player position
+	position.x = 180;
+	position.y = 760;
+
+	coins = 300;
 
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
@@ -342,24 +342,24 @@ bool j1DragoonKnight::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			if (animation == &down || animation == &idle_down) Draw(r, false, 0, 3, playerScale, offset, active_E);
-			else Draw(r, false, 0, 0, playerScale, offset, active_E);
+			if (animation == &down || animation == &idle_down) Draw(r, false, 0, 3, playerScale, offset);
+			else Draw(r, false, 0, 0, playerScale, offset);
 		else
-			 Draw(r, true, -7, 0, playerScale, offset, active_E);
+			 Draw(r, true, -7, 0, playerScale, offset);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, playerScale, offset, active_E);
-			else if (animation == &attack_up) Draw(r, false, 0, 0, playerScale, offset, active_E);
-			else if (animation == &attack_down) Draw(r, false, -4, -1, playerScale, offset, active_E);
-			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, playerScale, offset, active_E);
-			else Draw(r, false, 0, attackBlittingY, playerScale, offset, active_E);
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, playerScale, offset);
+			else if (animation == &attack_up) Draw(r, false, 0, 0, playerScale, offset);
+			else if (animation == &attack_down) Draw(r, false, -4, -1, playerScale, offset);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, playerScale, offset);
+			else Draw(r, false, 0, attackBlittingY, playerScale, offset);
 		}
 		else {
-			if (animation == &attack_lateral_left) Draw(r, false, -13, -6, playerScale, offset, active_E);
-			else if (animation == &attack_diagonal_down_left) Draw(r, false, -11, -6, playerScale, offset, active_E);
-			else if (animation == &attack_diagonal_up_left) Draw(r, false, -11, -2, playerScale, offset, active_E);
-			else Draw(r, true, attackBlittingX - 7, attackBlittingY, playerScale, offset, active_E);
+			if (animation == &attack_lateral_left) Draw(r, false, -13, -6, playerScale, offset);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -11, -6, playerScale, offset);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -11, -2, playerScale, offset);
+			else Draw(r, true, attackBlittingX - 7, attackBlittingY, playerScale, offset);
 		}
 	}
 	return true;

@@ -41,7 +41,7 @@ public:
 	// Called to change scene
 	void ChangeSceneMenu();
 	void ChangeSceneDeath();
-	void ChangeScene2();
+	void ChangeSceneVictory();
 
 	// Load and Save
 	bool Load(pugi::xml_node&);
@@ -51,6 +51,7 @@ public:
 
 public:
 	j1Box* settings_window = nullptr;
+	fPoint initialScene1Position;
 	bool player_created = false;
 	bool backToMenu = false;
 	bool toLoseScene = false;

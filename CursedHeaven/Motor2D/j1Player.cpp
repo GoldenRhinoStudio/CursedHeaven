@@ -172,9 +172,10 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 					if (movement)
 						position.y -= (speed * dt) / 2;
 				}
-				else if (movement) {
-					position.y -= speed * dt;
+				else if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE) {
 					direction = DIRECTION::UP_;
+					if (movement)
+						position.y -= speed * dt;
 				}
 			}
 
@@ -187,9 +188,11 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 					if (movement)
 						position.y += (speed * dt) / 2;
 				}
-				else if (movement) {
-					position.y += speed * dt;
+
+				else if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE) {
 					direction = DIRECTION::DOWN_;
+					if (movement)
+						position.y += speed * dt;
 				}
 			}
 		}
@@ -368,13 +371,20 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_1->type == COLLIDER_PLAYER || col_1->type == COLLIDER_NONE)
 	{
-		//If the player collides with death colliders		
-		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E)
-			return;
-
+		//If the player collides with death colliders				
 		if (invulCounter.Read() >= lastTime_invul + invulTime) {
 			receivedDamage = false;
 			lastTime_invul = invulCounter.Read();
+		}
+
+		if (!receivedDamage && col_2->type == COLLIDER_ENEMY)
+		{
+			lifePoints -= App->entity->slime_Damage;
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+			receivedDamage = true;
+
+			if (lifePoints <= 0) dead = true;
 		}
 
 		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)

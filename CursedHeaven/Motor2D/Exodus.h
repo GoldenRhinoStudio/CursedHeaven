@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#define EX_DETECTION_RANGE 20
+
 struct SDL_Texture;
 class Exodus : public j1Entity
 {
@@ -61,5 +63,6 @@ public:
 	bool dead = false;
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
+	bool start_fight = false;
 };
 #endif // __j1MINDFLYER_H__

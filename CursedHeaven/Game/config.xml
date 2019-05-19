@@ -107,7 +107,7 @@
       <sword p1="3" p2="8" p3="15"/>
       <heart p1="3" p2="8" p3="15"/>
       <armour p1="3" p2="8" p3="15"/>
-      <hourglass p1="30" p2="8" p3="15"/>
+      <hourglass p1="3" p2="8" p3="15"/>
       <book p1="3" p2="8" p3="15"/>
       <potion p="3" healing="50"/>
     </prizes>

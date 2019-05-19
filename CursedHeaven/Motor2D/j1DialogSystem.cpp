@@ -82,6 +82,9 @@ bool j1DialogSystem::Update(float dt) {
 	SDL_Rect seller1 = { 277, 169, 279, 63 };
 	SDL_Rect seller2 = { 277, 232, 279, 63 };
 
+	SDL_Rect scene2chart = { 0, 305, 276, 61 };
+	SDL_Rect scene2chart2 = { 0, 366, 276, 61 };
+
 	if (App->scene1->active) {
 
 		// judge sprite
@@ -258,7 +261,7 @@ bool j1DialogSystem::Update(float dt) {
 		if (law1Active == true)
 		{
 			if (dialogTimer2.Read() >= time_passed_2 + dialogTime)
-				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex, 0, 20, &scene2chart, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 			if (dialogTimer2.Read() >= time_passed_2 + dialogTime) {
 				canSkip = true;
@@ -279,7 +282,7 @@ bool j1DialogSystem::Update(float dt) {
 
 			if (times == 2) {
 				App->tex->UnLoad(dialog_tex2);
-				App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex3, 0, 20, &scene2chart2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 
 			if (times == 3) {
@@ -293,7 +296,7 @@ bool j1DialogSystem::Update(float dt) {
 		else if (law2Active == true)
 		{
 			if (dialogTimer2.Read() >= time_passed_2 + dialogTime) {
-				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex, 0, 20, &scene2chart, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}
 
@@ -312,7 +315,7 @@ bool j1DialogSystem::Update(float dt) {
 
 			if (times == 2) {
 				App->tex->UnLoad(dialog_tex2);
-				App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex3, 0, 20, &scene2chart2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 
 			if (times == 3) {
@@ -326,7 +329,7 @@ bool j1DialogSystem::Update(float dt) {
 		else if (law3Active == true)
 		{
 			if (dialogTimer.Read() >= time_passed + dialogTime) {
-				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex, 0, 20, &scene2chart, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}
 
@@ -345,7 +348,7 @@ bool j1DialogSystem::Update(float dt) {
 
 			if (times == 2) {
 				App->tex->UnLoad(dialog_tex2);
-				App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+				App->render->BlitHUD(dialog_tex3, 0, 20, &scene2chart2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 			}
 
 			if (times == 3) {

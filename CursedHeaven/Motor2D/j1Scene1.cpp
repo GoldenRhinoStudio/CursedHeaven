@@ -16,6 +16,7 @@
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
@@ -287,7 +288,7 @@ bool j1Scene1::Update(float dt)
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0)
-			ChangeSceneVictory();
+			ChangeScene2();
 	}
 
 	if (backToMenu && App->fade->IsFading() == 0)
@@ -330,45 +331,44 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities(int room)
 {
-	App->entity->AddEnemy(6, 57, SLIME);
+	App->entity->AddEnemy(6, 57, TURRET);
 	App->entity->AddEnemy(15, 54, SLIME);
 	App->entity->AddEnemy(17, 61, SLIME);
 
-	App->entity->AddEnemy(31, 65, SLIME);
-	App->entity->AddEnemy(28, 65, SLIME);
+	App->entity->AddEnemy(31, 65, FIRE);
+	App->entity->AddEnemy(28, 65, FIRE);
 	App->entity->AddEnemy(28, 53, SLIME);
 
 	App->entity->AddEnemy(29, 40, SLIME);
-	App->entity->AddEnemy(33, 41, SLIME);
-	App->entity->AddEnemy(14, 41, SLIME);
+	App->entity->AddEnemy(14, 41, TURRET);
 
 	App->entity->AddEnemy(46, 47, SLIME);
-	App->entity->AddEnemy(43, 39, SLIME);
+	App->entity->AddEnemy(43, 39, FIRE);
 	App->entity->AddEnemy(38, 41, SLIME);
 
 	App->entity->AddEnemy(29, 19, SLIME);
-	App->entity->AddEnemy(28, 22, SLIME);
+	App->entity->AddEnemy(28, 22, FIRE);
 	App->entity->AddEnemy(26, 26, SLIME);
 
 	App->entity->AddEnemy(46, 25, SLIME);
-	App->entity->AddEnemy(45, 32, SLIME);
+	App->entity->AddEnemy(45, 32, FIRE);
 	App->entity->AddEnemy(38, 28, SLIME);
 
 	App->entity->AddEnemy(23, 4, SLIME);
-	App->entity->AddEnemy(12, 4, SLIME);
+	App->entity->AddEnemy(12, 4, TURRET);
 	App->entity->AddEnemy(17, 13, SLIME);
 
-	App->entity->AddEnemy(49, 4, SLIME);
+	App->entity->AddEnemy(49, 4, TURRET);
 	App->entity->AddEnemy(60, 7, SLIME);
 	App->entity->AddEnemy(59, 11, SLIME);
 	App->entity->AddEnemy(70, 8, SLIME);
 
-	App->entity->AddEnemy(85, 23, SLIME);
-	App->entity->AddEnemy(80, 19, SLIME);
+	App->entity->AddEnemy(85, 23, FIRE);
+	App->entity->AddEnemy(80, 19, FIRE);
 	App->entity->AddEnemy(70, 25, SLIME);
 
-	App->entity->AddEnemy(88, 46, SLIME);
-	App->entity->AddEnemy(80, 42, SLIME);
+	App->entity->AddEnemy(88, 46, FIRE);
+	App->entity->AddEnemy(80, 42, FIRE);
 	App->entity->AddEnemy(85, 60, SLIME);
 	App->entity->AddEnemy(80, 65, SLIME);
 
@@ -438,7 +438,6 @@ void j1Scene1::ChangeSceneMenu()
 void j1Scene1::ChangeSceneDeath() {
 	App->scene1->active = false;
 	App->lose->active = true;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->entity->active = false;
@@ -447,14 +446,18 @@ void j1Scene1::ChangeSceneDeath() {
 	toLoseScene = false;
 }
 
-void j1Scene1::ChangeSceneVictory() {
+void j1Scene1::ChangeScene2() {
 	App->scene1->active = false;
-	App->victory->active = true;
-	App->dialog->CleanUp();
+
+	App->scene2->active = true;
 
 	CleanUp();
 	App->entity->active = false;
-	App->victory->Start();
-	App->render->camera = { 0,0 };
+	App->scene2->Start();
 	toVictoryScene = false;
+
+	App->entity->active = true;
+	App->entity->CreatePlayer();
+	App->entity->Start();
+	App->particles->Start();
 }

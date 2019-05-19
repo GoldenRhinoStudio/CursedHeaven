@@ -45,7 +45,7 @@
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="21" leftColliderSpawnPos="-15"/>
-	  <combat basicDamage="200" rageDamage="200" dashSpeed="300" lifePoints="20000000" resitance="100" knockback="15"/>
+	  <combat basicDamage="200" rageDamage="200" dashSpeed="300" lifePoints="200" resitance="100" knockback="15"/>
 	  <cooldowns Q="5000" E="15000" rage="3000" invulTime="1000"/>
 	</dragoonKnight>	
   </player>  

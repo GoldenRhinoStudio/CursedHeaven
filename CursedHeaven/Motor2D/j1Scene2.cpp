@@ -130,6 +130,12 @@ bool j1Scene2::PreUpdate() {
 bool j1Scene2::Update(float dt) {
 
 	BROFILER_CATEGORY("Level2Update", Profiler::Color::LightSeaGreen)
+	iPoint pos = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w / 2, (int)App->entity->currentPlayer->collider->rect.y + (int)App->entity->currentPlayer->collider->rect.h);
+	if (((pos.x >= 53 && pos.x <= 54 && pos.y == 63) ||
+		(pos.x >= 64 && pos.x <= 65 && pos.y >= 67 && pos.y <= 68)) && !spawn){
+		spawn = true;
+		App->entity->AddEnemy(36, 62, EXODUS);
+	}
 
 	time_scene2 = startup_time.ReadSec();
 
@@ -337,8 +343,6 @@ void j1Scene2::PlaceEntities(int room) {
 	App->entity->AddEnemy(32, 74, TURRET);
 	App->entity->AddEnemy(40, 84, TURRET);
 	App->entity->AddEnemy(33, 88, SLIME);
-
-	App->entity->AddEnemy(36, 62, EXODUS);
 
 }
 

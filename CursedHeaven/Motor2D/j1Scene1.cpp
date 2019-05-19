@@ -373,6 +373,8 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(80, 65, SLIME);
 
 	App->entity->AddEnemy(53, 68, MINDFLYER);
+
+	App->entity->AddEnemy(53, 68, EXODUS);
 }
 
 // Called before quitting

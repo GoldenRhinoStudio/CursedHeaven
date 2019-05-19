@@ -22,10 +22,12 @@ j1Particles::j1Particles()
 	// Mage basic attack
 	mageShot.anim.LoadAnimation("shot", "mage");
 	mageShot.life = 1000;
+	mageShot.type = BASIC_SHOOT;
 
 	// Mage Q
 	explosion.anim.LoadAnimation("explosion", "mage");
 	explosion.life = 570;
+	explosion.type = EXPLOSION;
 
 	//EXODUS Sword1
 	sword1.anim.LoadAnimation("sword_attack1", "exodus",false);
@@ -34,6 +36,9 @@ j1Particles::j1Particles()
 	sword2.life = 100000;
 	sword3.anim.LoadAnimation("sword_attack3", "exodus", false);
 	sword3.life = 100000;
+	sword1.type = SWORD_SHOOT;
+	sword2.type = SWORD_SHOOT;
+	sword3.type = SWORD_SHOOT;
 }
 
 j1Particles::~j1Particles()
@@ -89,8 +94,6 @@ bool j1Particles::Update(float dt)
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
-
 			
 			if (p->fx_played == false)
 			{
@@ -98,7 +101,7 @@ bool j1Particles::Update(float dt)
 				//Play your fx here
 			}
 
-			if (App->entity->exodus != nullptr) {
+			if (p->type == SWORD_SHOOT) {
 				if (p->anim.isLastFrame() && p->state == 0) {
 					Particle* aux = new Particle(sword2);
 					aux->anim.Reset();
@@ -126,6 +129,9 @@ bool j1Particles::Update(float dt)
 					active[i] = nullptr;
 				}
 			}
+
+			App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
+
 		}
 	}
 
@@ -179,7 +185,7 @@ Particle::Particle()
 }
 
 Particle::Particle(const Particle& p) :
-	anim(p.anim), position(p.position), speed(p.speed),
+	anim(p.anim), type(p.type), position(p.position), speed(p.speed),
 	fx(p.fx), born(p.born), life(p.life), tex(p.tex)
 {}
 

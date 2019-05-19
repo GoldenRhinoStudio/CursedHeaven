@@ -13,6 +13,12 @@ struct SDL_Texture;
 struct Collider;
 enum COLLIDER_TYPE;
 
+enum PARTICLE_TYPE {
+	BASIC_SHOOT,
+	EXPLOSION,
+	SWORD_SHOOT
+};
+
 struct Particle
 {
 	SDL_Texture * tex = nullptr;
@@ -30,6 +36,7 @@ struct Particle
 	Particle(const Particle& p);
 	virtual ~Particle();
 	bool Update(float dt);
+	PARTICLE_TYPE type;
 };
 
 class j1Particles : public j1Module

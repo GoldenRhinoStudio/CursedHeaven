@@ -82,7 +82,7 @@ private:
 	SDL_Texture* gui_tex = nullptr;
 	SDL_Texture* bg = nullptr;
 	SDL_Rect rect = { 0,0, 400, 200 };
-
+	bool spawn = false;
 	bool closeSettings = false;
 	bool continueGame = true;
 	bool resettingLevel = false;

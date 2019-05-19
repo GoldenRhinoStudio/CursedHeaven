@@ -293,6 +293,7 @@ bool j1Scene2::Update(float dt) {
 
 bool j1Scene2::PostUpdate() {
 
+	if(finishedDialog2)
 	App->render->Blit(lvl2_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
 
 	return true;

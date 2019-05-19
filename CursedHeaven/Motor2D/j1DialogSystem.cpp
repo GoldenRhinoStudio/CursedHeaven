@@ -71,6 +71,9 @@ bool j1DialogSystem::Update(float dt) {
 
 	SDL_Rect judgeRect = { 42, 2, 22, 33 };
 
+	SDL_Rect seller1 = { 277, 169, 279, 63 };
+	SDL_Rect seller2 = { 277, 232, 279, 63 };
+
 	if (App->scene1->active) {
 
 		// judge sprite
@@ -167,7 +170,7 @@ bool j1DialogSystem::Update(float dt) {
 				}
 
 				if (sellerTimer.Read() >= time_passed_seller + dialogTime)
-					/*App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);*/
+					App->render->BlitHUD(seller_tex1, 0, 20, &seller1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 					if (sellerTimer.Read() >= time_passed_seller + dialogTime) {
 						canSkip = true;
@@ -183,22 +186,16 @@ bool j1DialogSystem::Update(float dt) {
 
 				if (times == 1) {
 
-					/*App->tex->UnLoad(dialog_tex);
-					App->render->BlitHUD(dialog_tex2, 400, 550, &chartoption1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);*/
+					App->tex->UnLoad(seller_tex1);
+					App->render->BlitHUD(seller_tex2, 0, 20, &seller2, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				}
 
 				if (times == 2) {
-					/*App->tex->UnLoad(dialog_tex2);
-					App->render->BlitHUD(dialog_tex3, 0, 20, &chart2s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);*/
-				}
-
-				if (times == 3) {
-					/*App->tex->UnLoad(dialog_tex3);*/
+					App->tex->UnLoad(seller_tex2);
 					times = 0;
 					App->scene1->finishedDialog = true;
 					App->scene1->dialogSellerCanAppear = false;
 					App->gamePaused = false;
-
 				}
 			}
 		}

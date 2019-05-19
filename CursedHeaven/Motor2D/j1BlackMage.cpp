@@ -9,6 +9,7 @@
 #include "j1FadeToBlack.h"
 #include "j1Window.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Audio.h"
 #include "j1Hud.h"
 #include "j1Map.h"
@@ -97,7 +98,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	if (player_start)
 	{
 		// Controls when is finished the dialog
-		if (App->scene1->finishedDialog) {
+		if (App->scene1->finishedDialog || App->scene2->finishedDialog2) {
 
 			if (!active_Q) {
 				ManagePlayerMovement(direction, dt, do_logic, speed);
@@ -391,7 +392,7 @@ bool j1BlackMage::PostUpdate() {
 	
 	dialog->Update(0);
 
-	if (App->scene1->finishedDialog)
+	if (App->scene1->finishedDialog || App->scene2->finishedDialog2)
 		hud->Update(0);
 
 	return true;

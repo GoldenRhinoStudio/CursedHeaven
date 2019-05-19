@@ -242,6 +242,9 @@ bool j1Scene1::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame("save_game.xml");
 
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+		App->entity->currentPlayer->victory = true;
+
 	// Managing scene transitions
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN || resettingLevel)
 	{

@@ -3,6 +3,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -192,6 +193,7 @@ void j1SceneVictory::ChangeScene(SCENE objectiveScene)
 		App->scene1->Start();
 		App->particles->Start();
 		App->scene1->finishedDialog = false;
+		App->scene2->finishedDialog2 = false;
 		//App->dialog->active = true;
 		//App->dialog->Start();
 

@@ -1,6 +1,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -142,6 +143,7 @@ bool j1SceneMenu::Update(float dt)
 						App->transitions->FadingToColor(MENU, CHOOSE);
 
 						App->scene1->finishedDialog = false;
+						App->scene2->finishedDialog2 = false;
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
 						App->transitions->SquaresAppearing(MENU, SCENE1, 3);

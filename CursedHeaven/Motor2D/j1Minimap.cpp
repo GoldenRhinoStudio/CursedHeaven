@@ -37,7 +37,7 @@ void j1Minimap::DrawEntities()
 {
 	int pos_x, pos_y;
 
-	if (App->scene1->finishedDialog == true) {
+	if (App->scene1->active && App->scene1->finishedDialog) {
 		for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 			pos_x = (*item)->position.x * 0.125f;
 			pos_y = (*item)->position.y * 0.125f;
@@ -49,7 +49,7 @@ void j1Minimap::DrawEntities()
 				App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 0, 0, 255, 255, true, false);
 		}
 	}
-	else if (App->scene2->finishedDialog2 == true) {
+	else if (App->scene2->active && App->scene2->finishedDialog2) {
 		for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 			pos_x = (*item)->position.x * 0.125f;
 			pos_y = (*item)->position.y * 0.125f;

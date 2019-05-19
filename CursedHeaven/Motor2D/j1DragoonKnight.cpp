@@ -303,7 +303,8 @@ bool j1DragoonKnight::PostUpdate() {
 
 	dialog->Update(0);
 
-	if (App->scene1->finishedDialog || App->scene2->finishedDialog2)
+	if ((App->scene1->active && App->scene1->finishedDialog)
+		|| (App->scene2->active && App->scene2->finishedDialog2))
 		hud->Update(0);
 
 	return true;

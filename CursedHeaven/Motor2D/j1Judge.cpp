@@ -5,11 +5,10 @@
 #include "j1Scene1.h"
 #include "j1Textures.h"
 #include "j1Render.h"
-#include <time.h>
+
 
 j1Judge::j1Judge(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::JUDGE) 
 {
-	srand(time(NULL));
 }
 
 

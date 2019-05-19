@@ -358,20 +358,66 @@ bool j1Scene2::CleanUp() {
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
 
+	for (std::list<j1Button*>::iterator item = scene2Buttons.begin(); item != scene2Buttons.end(); ++item) {
+		(*item)->CleanUp();
+		scene2Buttons.remove(*item);
+	}
+
+	for (std::list<j1Label*>::iterator item = scene2Labels.begin(); item != scene2Labels.end(); ++item) {
+		(*item)->CleanUp();
+		scene2Labels.remove(*item);
+	}
+
+	for (std::list<j1Box*>::iterator item = scene2Boxes.begin(); item != scene2Boxes.end(); ++item) {
+		(*item)->CleanUp();
+		scene2Boxes.remove(*item);
+	}
+
+	delete settings_window;
+	if (settings_window != nullptr) settings_window = nullptr;
+
 	App->path->CleanUp();
+	App->shop->restartingShop = true;
 	App->shop->CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
 
 	return true;
 }
 
 void j1Scene2::ChangeSceneMenu()
 {
+	App->scene2->active = false;
+	App->menu->active = true;
+	changingScene = false;
+
+	CleanUp();
+	App->entity->active = false;
+	App->menu->Start();
+	App->render->camera = { 0,0 };
+	App->entity->player_type = NO_PLAYER;
+	backToMenu = false;
 }
 
 void j1Scene2::ChangeSceneDeath() {
+	App->scene2->active = false;
+	App->lose->active = true;
+	App->dialog->CleanUp();
 
+	CleanUp();
+	App->entity->active = false;
+	App->lose->Start();
+	App->render->camera = { 0,0 };
+	toLoseScene = false;
 }
 
 void j1Scene2::ChangeSceneVictory() {
+	App->scene1->active = false;
+	App->victory->active = true;
+	App->dialog->CleanUp();
 
+	CleanUp();
+	App->shop->CleanUp();
+	App->entity->active = false;
+	App->victory->Start();
 }

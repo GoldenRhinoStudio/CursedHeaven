@@ -130,7 +130,7 @@ bool j1Particles::Update(float dt)
 				}
 			}
 
-			App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)));
+			App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)),SDL_FLIP_NONE,true,1.0f,App->win->GetScale(),p->rotation);
 
 		}
 	}
@@ -138,7 +138,7 @@ bool j1Particles::Update(float dt)
 	return true;
 }
 
-void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, COLLIDER_TYPE collider_type, Uint32 delay)
+void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, COLLIDER_TYPE collider_type, Uint32 delay, int rotation)
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
@@ -148,6 +148,7 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, 
 			p->born = SDL_GetTicks() + delay;
 			p->position.x = x;
 			p->position.y = y;
+			p->rotation = rotation;
 			p->state = 0;
 			p->anim.Reset();
 			if (collider_type != COLLIDER_NONE) {

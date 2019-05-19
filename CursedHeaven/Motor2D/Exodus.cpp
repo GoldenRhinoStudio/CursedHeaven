@@ -52,8 +52,11 @@ bool Exodus::Update(float dt, bool do_logic)
 
 
 
-	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-		App->particles->AddParticle(App->particles->sword1, position.x, position.y, dt, COLLIDER_ENEMY_SHOT), state = 0;
+	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+		App->particles->AddParticle(App->particles->sword1, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+		App->particles->AddParticle(App->particles->sword1, position.x + 80, position.y, dt, COLLIDER_ENEMY_SHOT,0,90);
+		state = 0;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 		state = 1;
 

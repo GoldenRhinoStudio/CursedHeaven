@@ -15,6 +15,7 @@ enum COLLIDER_TYPE;
 
 struct Particle
 {
+	SDL_Texture * tex = nullptr;
 	int type_particle;
 	Collider* collider = nullptr;
 	Animation anim;
@@ -23,6 +24,7 @@ struct Particle
 	fPoint speed;
 	Uint32 born = 0;
 	Uint32 life = 0;
+	uint32 state = 0;
 	bool fx_played = false;
 	Particle();
 	Particle(const Particle& p);
@@ -44,6 +46,8 @@ public:
 private:
 	
 	SDL_Texture* part_tex = nullptr;
+	SDL_Texture* sword_tex = nullptr;
+	int swordcounter = 0;
 
 public:
 	uint width, height;
@@ -51,6 +55,10 @@ public:
 	// Black Mage particles
 	Particle mageShot;
 	Particle explosion;
+
+	Particle sword1;
+	Particle sword2;
+	Particle sword3;
 
 };
 #endif // __j1PARTICLES_H__ 

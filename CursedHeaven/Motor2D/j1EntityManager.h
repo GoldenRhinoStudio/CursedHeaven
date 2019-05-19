@@ -16,6 +16,7 @@ class j1Tank;
 class j1Player;
 class j1Judge;
 class j1Seller;
+class Exodus;
 
 struct SDL_Texture;
 
@@ -39,6 +40,7 @@ enum ENTITY_TYPES
 	TURRET,
 	FIRE,
 	MINDFLYER,
+	EXODUS,
 	JUDGE,
 	OLDMAN,
 	SELLER,
@@ -96,9 +98,12 @@ public:
 	void AddItem(int x, int y, DROP_TYPES itype);
 
 private:
+
 	void SpawnEnemy(const EntityInfo& info);
 
-public:	
+
+public:
+	
 	std::list<j1Entity*> entities;
 
 	// Pointers to diferent playable classes
@@ -113,6 +118,7 @@ public:
 	j1Seller*			seller = nullptr;
 
 	PLAYER_TYPES player_type = NO_PLAYER;
+	Exodus*			exodus = nullptr;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;

@@ -68,6 +68,7 @@ public:
 	uint lastTime_Speed = 0;
 
 	// Sounds
+
 	uint deathSound;
 	uint playerHurt;
 	uint moveSound;

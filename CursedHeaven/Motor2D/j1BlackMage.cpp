@@ -62,6 +62,10 @@ bool j1BlackMage::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
+	// Setting player position
+	position.x = 180;
+	position.y = 760;
+
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y - 5, playerSize.x, playerSize.y + 5 }, COLLIDER_NONE, App->entity);
 	else
@@ -364,9 +368,9 @@ bool j1BlackMage::DrawOrder(float dt) {
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			Draw(r);
+			Draw(r,false,0,0,1,offset);
 		else
-			Draw(r, true);
+			Draw(r, true, 0, 0, 1, offset);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down || animation == &i_attack_up || animation == &i_attack_down) {

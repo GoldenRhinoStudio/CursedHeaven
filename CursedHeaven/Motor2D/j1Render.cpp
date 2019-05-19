@@ -533,11 +533,13 @@ void j1Render::reOrder() {
 
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
+
 			TileData* img1 = *item;
+
 
 			if (img1->height < img2->height && !img1->behind) {//check
 
-				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + (int)img1->col->rect.h - img1->margin.y);
 				App->map->Tile_WorldMap(pos1, img1->height);
 
 				if (pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1)//top-left
@@ -618,7 +620,7 @@ void j1Render::reOrder() {
 				pos2 = App->map->WorldToMap(img2->x, img2->y);
 				if (img2 != img1) {
 					if (img1->col->CheckCollision(img2->col->rect)){
-						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h + img2->margin.y) {
+						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h) {
 							img1->order = img2->order - 0.2f;
 						}
 					}

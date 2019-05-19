@@ -6,7 +6,6 @@
 #include "j1Scene1.h"
 #include "j1Fonts.h"
 #include "j1Render.h"
-#include "j1Shop.h"
 #include "j1Player.h"
 #include "j1Input.h"
 #include "j1Window.h"
@@ -108,6 +107,7 @@ bool j1Hud::Update(float dt)
 		if (!App->entity->currentPlayer->available_E) {
 			App->render->Blit(hud_text, 15, 500, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 		}
+
 	}
 
 	// Current points of the player (char*)
@@ -117,25 +117,25 @@ bool j1Hud::Update(float dt)
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
 
-	if (App->shop->potions == 0) {
+	if (App->scene1->potionCounter == 0) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 	}
 
-	if (App->shop->potions == 1) {
+	if (App->scene1->potionCounter == 1) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 	}
 
-	if (App->shop->potions == 2) {
+	if (App->scene1->potionCounter == 2) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 	}
 
-	if (App->shop->potions >= 3) {
+	if (App->scene1->potionCounter >= 3) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
@@ -162,6 +162,7 @@ bool j1Hud::Update(float dt)
 			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, false, 0.3f);
 		}
+
 	}
 
 	return true;

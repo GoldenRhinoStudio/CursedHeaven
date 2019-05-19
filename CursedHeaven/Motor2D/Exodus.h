@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#define EX_DETECTION_RANGE 20
+
 struct SDL_Texture;
 class Exodus : public j1Entity
 {

@@ -208,19 +208,11 @@ void j1Player::OnCollision(Collider* col_1, Collider* col_2)
 {
 	if (col_2->type == COLLIDER_ENEMY || col_2->type == COLLIDER_ENEMY_SHOT)
 	{
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E) return;
+
 		if (invulCounter.Read() >= lastTime_invul + invulTime) {
 			receivedDamage = false;
 			lastTime_invul = invulCounter.Read();
-		}
-
-		if (!receivedDamage && col_2->type == COLLIDER_ENEMY)
-		{
-			lifePoints -= App->entity->slime_Damage;
-			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
-			else App->audio->PlayFx(App->audio->damage_dk);
-			receivedDamage = true;
-
-			if (lifePoints <= 0) dead = true;
 		}
 
 		if (!receivedDamage && col_2->type == COLLIDER_ENEMY_SHOT)

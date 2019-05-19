@@ -36,10 +36,14 @@ public:
 	SDL_Texture* dialog_tex = nullptr;
 	SDL_Texture* dialog_tex2 = nullptr;
 	SDL_Texture* dialog_tex3 = nullptr;
+	SDL_Texture* seller_tex1 = nullptr;
+	SDL_Texture* seller_tex2 = nullptr;
 
 	std::list<j1Label*> text_list;
 	j1Timer dialogTimer;
+	j1Timer sellerTimer;
 	uint time_passed = 0;
+	uint time_passed_seller = 0;
 
 	bool law1Active = false;
 	bool law2Active = false;
@@ -50,6 +54,7 @@ public:
 
 private:
 	bool timerStarted = false;
+	bool timerStartedSeller = false;
 	uint dialogTime = 1000;
 };
 

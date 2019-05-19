@@ -152,6 +152,7 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 			if (!start_fight) {//attack when receive first damage
 				//Song
 				start_fight = true;
+				App->audio->PlayMusic("audio/music/song021.ogg", 1.0f);
 			}
 		}
 
@@ -163,6 +164,7 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 			if (!start_fight) {//attack when receive first damage
 				//Song
 				start_fight = true;
+				App->audio->PlayMusic("audio/music/song021.ogg", 1.0f);
 			}
 		}
 

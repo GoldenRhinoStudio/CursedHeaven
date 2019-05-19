@@ -78,7 +78,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(settings);
 	AddModule(choose_character);
 	AddModule(lose);
-	AddModule(victory);
 	AddModule(scene1);
 	AddModule(scene2);
 	AddModule(shop);
@@ -91,6 +90,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(dialog);
 	AddModule(fade);
 	AddModule(transitions);
+	AddModule(victory);
 
 	// render last to swap buffer
 	AddModule(render);

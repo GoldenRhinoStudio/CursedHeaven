@@ -4,7 +4,9 @@
 #include "j1Pathfinding.h"
 #include "j1Map.h"
 #include "j1EntityManager.h"
+
 #include <algorithm>
+
 #include "Brofiler/Brofiler.h"
 
 j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0)
@@ -270,7 +272,7 @@ int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 {
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::Gray)
 
-		int ret = -1;
+	int ret = -1;
 
 	if (!IsWalkable(origin) || !IsWalkable(destination))
 		return ret;

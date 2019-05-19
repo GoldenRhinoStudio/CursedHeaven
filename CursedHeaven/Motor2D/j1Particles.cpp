@@ -12,6 +12,8 @@
 #include "j1Scene1.h"
 #include "Exodus.h"
 
+#include "Brofiler/Brofiler.h"
+
 j1Particles::j1Particles()
 {
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
@@ -71,6 +73,8 @@ bool j1Particles::CleanUp()
 
 bool j1Particles::Update(float dt)
 {
+	BROFILER_CATEGORY("ParticlesUpdate", Profiler::Color::LightSeaGreen)
+
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
 		Particle* p = active[i];
@@ -94,31 +98,33 @@ bool j1Particles::Update(float dt)
 				//Play your fx here
 			}
 
-			if (p->anim.isLastFrame() && p->state == 0) {
-				Particle* aux = new Particle(sword2); 
-				aux->anim.Reset();
-				aux->born = SDL_GetTicks();
-				aux->position.x = p->position.x;
-				aux->position.y = p->position.y;
-				aux->collider = App->collisions->AddCollider(aux->anim.GetCurrentFrame(dt), COLLIDER_ENEMY_SHOT, this);
-				aux->state = App->entity->exodus->state;
-				active[i] = aux;
-				delete p;
-			}
-			else if (p->anim.isLastFrame() && p->state == 1) {
-				Particle* aux = new Particle(sword3);
-				aux->anim.Reset();
-				aux->born = SDL_GetTicks();
-				aux->position.x = p->position.x;
-				aux->position.y = p->position.y;
-				aux->collider = App->collisions->AddCollider(aux->anim.GetCurrentFrame(dt), COLLIDER_ENEMY_SHOT, this);
-				aux->state = 2;
-				active[i] = aux;
-				delete p;
-			}
-			else if (p->anim.isLastFrame() && p->state == 2) {
-				delete p;
-				active[i] = nullptr;
+			if (App->entity->exodus != nullptr) {
+				if (p->anim.isLastFrame() && p->state == 0) {
+					Particle* aux = new Particle(sword2);
+					aux->anim.Reset();
+					aux->born = SDL_GetTicks();
+					aux->position.x = p->position.x;
+					aux->position.y = p->position.y;
+					aux->collider = App->collisions->AddCollider(aux->anim.GetCurrentFrame(dt), COLLIDER_ENEMY_SHOT, this);
+					aux->state = App->entity->exodus->state;
+					active[i] = aux;
+					delete p;
+				}
+				else if (p->anim.isLastFrame() && p->state == 1) {
+					Particle* aux = new Particle(sword3);
+					aux->anim.Reset();
+					aux->born = SDL_GetTicks();
+					aux->position.x = p->position.x;
+					aux->position.y = p->position.y;
+					aux->collider = App->collisions->AddCollider(aux->anim.GetCurrentFrame(dt), COLLIDER_ENEMY_SHOT, this);
+					aux->state = 2;
+					active[i] = aux;
+					delete p;
+				}
+				else if (p->anim.isLastFrame() && p->state == 2) {
+					delete p;
+					active[i] = nullptr;
+				}
 			}
 		}
 	}

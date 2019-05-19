@@ -53,7 +53,7 @@ public:
 	ENTITY_TYPES type;
 	DIRECTION direction;
 
-	bool movement = true;
+	bool movement = false;
 
 	uint current_height = 0;
 

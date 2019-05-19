@@ -8,6 +8,7 @@
 #include "j1Render.h"
 #include "j1Player.h"
 #include "j1Input.h"
+#include "j1Shop.h"
 #include "j1Window.h"
 
 j1Hud::j1Hud() 
@@ -117,25 +118,25 @@ bool j1Hud::Update(float dt)
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
 
-	if (App->scene1->potionCounter == 0) {
+	if (App->shop->potions == 0) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 	}
 
-	if (App->scene1->potionCounter == 1) {
+	if (App->shop->potions == 1) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 	}
 
-	if (App->scene1->potionCounter == 2) {
+	if (App->shop->potions == 2) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 	}
 
-	if (App->scene1->potionCounter >= 3) {
+	if (App->shop->potions >= 3) {
 		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
 		App->render->BlitHUD(potion_tex, 15, 320, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);

@@ -98,6 +98,7 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				App->shop->potions--;
 				lastPotionTime = potionTime.Read();
 				App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+				App->audio->PlayFx(App->audio->potion_sound);
 			}
 
 			// Direction controls	

@@ -103,7 +103,7 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 		App->dialog->Start();
 
 		App->entity->active = true;
-		App->entity->CreatePlayer();
+		App->entity->CreatePlayer1();
 		App->entity->Start();
 	}
 

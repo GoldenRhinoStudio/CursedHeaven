@@ -70,8 +70,8 @@ bool j1DragoonKnight::Start() {
 	/*position.x = 180;
 	position.y = 770;*/
 
-	position.x = -200;
-	position.y = 1200;
+	/*position.x = -200;
+	position.y = 1200;*/
 
 	coins = 100;
 

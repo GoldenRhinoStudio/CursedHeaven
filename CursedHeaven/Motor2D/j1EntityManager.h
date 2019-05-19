@@ -92,7 +92,8 @@ public:
 	j1Entity* CreateEntity(ENTITY_TYPES type, int x = 0, int y = 0);
 	
 	void OnCollision(Collider* c1, Collider* c2);
-	void CreatePlayer(); 
+	void CreatePlayer1();
+	void CreatePlayer2();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
 	void AddItem(int x, int y, DROP_TYPES itype);
@@ -131,7 +132,8 @@ private:
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;
 	float				updateMsCycle = 0.0f;
-	fPoint				playerSpawnPos;
+	fPoint				playerSpawnPos1;
+	fPoint				playerSpawnPos2;
 };
 
 #endif // __J1ENTITYMANAGER_H__

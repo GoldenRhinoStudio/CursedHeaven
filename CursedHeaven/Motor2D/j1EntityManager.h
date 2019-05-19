@@ -53,7 +53,7 @@ enum PLAYER_TYPES
 	ROGUE
 };
 
-enum ITEM_TYPES {
+enum DROP_TYPES {
 	COIN,
 	LIFE
 };
@@ -92,16 +92,12 @@ public:
 	void CreatePlayer(); 
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
-	void AddItem(int x, int y, ITEM_TYPES itype);
+	void AddItem(int x, int y, DROP_TYPES itype);
 
 private:
-
 	void SpawnEnemy(const EntityInfo& info);
 
-
-
-public:
-	
+public:	
 	std::list<j1Entity*> entities;
 
 	// Pointers to diferent playable classes

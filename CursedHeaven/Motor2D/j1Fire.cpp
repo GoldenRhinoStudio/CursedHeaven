@@ -139,6 +139,24 @@ bool j1Fire::PostUpdate() {
 
 void j1Fire::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (App->entity->currentPlayer->receivedDamage == false && col_2->type == COLLIDER_PLAYER) {
+
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E) {
+			//App->audio->PlayFx(asdfasdfasdfasdfasf)
+		}
+		else {
+
+			App->entity->currentPlayer->lifePoints -= App->entity->fire_Damage;
+			App->entity->currentPlayer->receivedDamage = true;
+
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+		}
+
+		if (App->entity->currentPlayer->lifePoints <= 0)
+			App->entity->currentPlayer->dead = true;
+	}
+
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
@@ -158,7 +176,6 @@ void j1Fire::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += score;
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;

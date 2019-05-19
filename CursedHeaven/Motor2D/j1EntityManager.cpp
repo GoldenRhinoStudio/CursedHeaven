@@ -208,7 +208,7 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 	}
 }
 
-void j1EntityManager::AddItem(int x, int y, ITEM_TYPES itype)
+void j1EntityManager::AddItem(int x, int y, DROP_TYPES itype)
 {
 	j1Entity* ret = nullptr;
 

@@ -144,7 +144,7 @@ bool j1Scene1::Update(float dt)
 
 	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
-	score_player = App->entity->currentPlayer->score_points;
+	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
 
 	if (App->scene1->startup_time.Read() > 1700) {
@@ -416,6 +416,8 @@ bool j1Scene1::CleanUp()
 
 	App->path->CleanUp();
 	App->shop->CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
 
 	return true;
 }
@@ -427,8 +429,6 @@ void j1Scene1::ChangeSceneMenu()
 	changingScene = false;
 
 	CleanUp();
-	App->fade->FadeToBlack();
-	App->entity->CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
 	App->render->camera = { 0,0 };
@@ -438,11 +438,9 @@ void j1Scene1::ChangeSceneMenu()
 void j1Scene1::ChangeSceneDeath() {
 	App->scene1->active = false;
 	App->lose->active = true;
-	//App->dialog->CleanUp();
+	App->dialog->CleanUp();
 
 	CleanUp();
-	App->fade->FadeToBlack();
-	App->entity->CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
 	App->render->camera = { 0,0 };
@@ -452,11 +450,9 @@ void j1Scene1::ChangeSceneDeath() {
 void j1Scene1::ChangeSceneVictory() {
 	App->scene1->active = false;
 	App->victory->active = true;
-	//App->dialog->CleanUp();
+	App->dialog->CleanUp();
 
 	CleanUp();
-	App->fade->FadeToBlack();
-	App->entity->CleanUp();
 	App->entity->active = false;
 	App->victory->Start();
 	App->render->camera = { 0,0 };

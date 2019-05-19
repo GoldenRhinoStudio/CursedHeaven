@@ -65,10 +65,10 @@ bool j1DragoonKnight::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	position.x = -1050;
-	position.y = 750;
-
-	coins = 300;
+	/*position.x = -1050;
+	position.y = 750;*/
+	position.x = 190;
+	position.y = 770;
 
 	if (GodMode)
 		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);

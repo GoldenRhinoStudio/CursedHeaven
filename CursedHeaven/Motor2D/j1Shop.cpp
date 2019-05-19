@@ -379,16 +379,16 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 
 				case BOOK:
 					if (App->shop->bookLevel == 0) {
-						if (App->entity->currentPlayer->type == MAGE) App->entity->mage->fireDamage += 100;
-						else if (App->entity->currentPlayer->type == KNIGHT) App->entity->knight->rageDamage += 80;
+						if (App->entity->player_type == MAGE) App->entity->mage->fireDamage += 100;
+						else if (App->entity->player_type == KNIGHT) App->entity->knight->rageDamage += 80;
 					}
 					else if (App->shop->bookLevel == 1) {
-						if (App->entity->currentPlayer->type == MAGE) App->entity->mage->fireDamage += 150;
-						else if (App->entity->currentPlayer->type == KNIGHT) App->entity->knight->rageDamage += 130;
+						if (App->entity->player_type == MAGE) App->entity->mage->fireDamage += 150;
+						else if (App->entity->player_type == KNIGHT) App->entity->knight->rageDamage += 130;
 					}
 					else if (App->shop->bookLevel == 2) {
-						if (App->entity->currentPlayer->type == MAGE) App->entity->mage->fireDamage += 250;
-						else if (App->entity->currentPlayer->type == KNIGHT) App->entity->knight->rageDamage += 200;
+						if (App->entity->player_type == MAGE) App->entity->mage->fireDamage += 250;
+						else if (App->entity->player_type == KNIGHT) App->entity->knight->rageDamage += 200;
 					}
 
 					App->shop->bookLevel++;

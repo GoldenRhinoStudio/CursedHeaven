@@ -153,6 +153,24 @@ bool j1Slime::PostUpdate() {
 
 void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (App->entity->currentPlayer->receivedDamage == false && col_2->type == COLLIDER_PLAYER) {
+		
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_E) {
+			//App->audio->PlayFx(asdfasdfasdfasdfasf)
+		}
+		else{
+
+			App->entity->currentPlayer->lifePoints -= App->entity->slime_Damage;
+			App->entity->currentPlayer->receivedDamage = true;
+
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+		}
+
+		if (App->entity->currentPlayer->lifePoints <= 0) 
+			App->entity->currentPlayer->dead = true;
+	}
+	
 	if (col_2->type == COLLIDER_ATTACK) 
 	{
 		for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
@@ -164,6 +182,7 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 			}
 		}
 	}
+
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {

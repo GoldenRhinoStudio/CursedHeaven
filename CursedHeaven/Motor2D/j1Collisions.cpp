@@ -205,8 +205,8 @@ void j1Collisions::DrawColliders()
 		case COLLIDER_ABILITY:		//Orange
 			App->render->DrawQuad(colliders[i]->rect, 253, 106, 2, alpha);
 			break;
-		case COLLIDER_ITEM:			//Yellow
-			App->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
+		case COLLIDER_ITEM:			//Black
+			App->render->DrawQuad(colliders[i]->rect, 0, 0, 0, alpha);
 			break;
 		}
 	}

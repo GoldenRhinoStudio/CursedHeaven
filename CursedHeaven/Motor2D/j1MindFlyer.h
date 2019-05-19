@@ -84,6 +84,11 @@ private:
 	uint lastTime_Shot = 0;
 	uint cooldown_Shot = 0;
 
+	j1Timer supershotTimer;
+	uint lastTime_Supershot = 0;
+	uint cooldown_Supershot = 0;
+	uint loopAngle = 320;
+
 	int score = 0;
 };
 #endif // __j1MINDFLYER_H__

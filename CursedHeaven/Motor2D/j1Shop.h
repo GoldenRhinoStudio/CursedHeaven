@@ -18,7 +18,6 @@ enum ITEM_TYPE
 	HOURGLASS,
 	BOOK,
 	POTION,
-	ARMOUR,
 	NO_ITEM
 };
 

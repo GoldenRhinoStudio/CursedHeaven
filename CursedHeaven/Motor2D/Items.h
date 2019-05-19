@@ -11,7 +11,7 @@ struct SDL_Texture;
 class Items : public j1Entity
 {
 public:
-	Items(int x, int y, ENTITY_TYPES type, ITEM_TYPES itype);
+	Items(int x, int y, ENTITY_TYPES type, DROP_TYPES itype);
 	virtual ~Items();
 
 	// Called before the first frame
@@ -36,7 +36,7 @@ public:
 
 	void LoadProperties();
 
-	const char * ToString(ITEM_TYPES item);
+	const char * ToString(DROP_TYPES item);
 
 public:
 	fPoint initialPosition;
@@ -45,6 +45,6 @@ public:
 
 private:
 	Animation item;
-	ITEM_TYPES itype;
+	DROP_TYPES itype;
 };
 #endif // __j1SLIME_H__

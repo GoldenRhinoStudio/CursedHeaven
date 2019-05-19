@@ -77,10 +77,10 @@ bool j1DialogSystem::Update(float dt) {
 
 		if (law1Active == true)
 		{
-			if(dialogTimer.Read() >= time_passed + 1000)
-			App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+			if(dialogTimer.Read() >= time_passed + dialogTime/2)
+				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
-			if (dialogTimer.Read() >= time_passed + 2000) {
+			if (dialogTimer.Read() >= time_passed + dialogTime) {
 				canSkip = true;
 			}
 
@@ -110,7 +110,7 @@ bool j1DialogSystem::Update(float dt) {
 		}
 		else if (law2Active == true)
 		{			
-			if (dialogTimer.Read() >= time_passed + 2000) {
+			if (dialogTimer.Read() >= time_passed + dialogTime) {
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}

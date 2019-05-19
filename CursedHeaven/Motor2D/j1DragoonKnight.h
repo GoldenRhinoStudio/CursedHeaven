@@ -39,6 +39,7 @@ public:
 	bool CleanUp();
 
 public:
+	SDL_Texture* enraged = nullptr;
 
 	// Animations of the knight
 	Animation attack_up;

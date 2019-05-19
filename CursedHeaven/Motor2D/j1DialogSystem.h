@@ -50,6 +50,7 @@ public:
 
 private:
 	bool timerStarted = false;
+	uint dialogTime = 1000;
 };
 
 #endif 

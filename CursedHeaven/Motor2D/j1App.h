@@ -111,6 +111,7 @@ public:
 	j1SceneLose*		lose = nullptr;
 	j1SceneVictory*		victory = nullptr;
 	j1Scene1*			scene1 = nullptr;
+	j1Scene2*			scene2 = nullptr;
 	j1Map*				map = nullptr;
 	j1FadeToBlack*		fade = nullptr;
 	j1Collisions*		collisions = nullptr;

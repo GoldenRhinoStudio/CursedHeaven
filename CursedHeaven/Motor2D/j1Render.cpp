@@ -533,9 +533,7 @@ void j1Render::reOrder() {
 
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
-
 			TileData* img1 = *item;
-
 
 			if (img1->height < img2->height && !img1->behind) {//check
 

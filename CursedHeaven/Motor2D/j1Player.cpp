@@ -172,9 +172,10 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 					if (movement)
 						position.y -= (speed * dt) / 2;
 				}
-				else if (movement) {
-					position.y -= speed * dt;
+				else if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE) {
 					direction = DIRECTION::UP_;
+					if (movement)
+						position.y -= speed * dt;
 				}
 			}
 
@@ -187,9 +188,11 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 					if (movement)
 						position.y += (speed * dt) / 2;
 				}
-				else if (movement) {
-					position.y += speed * dt;
+
+				else if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE) {
 					direction = DIRECTION::DOWN_;
+					if (movement)
+						position.y += speed * dt;
 				}
 			}
 		}

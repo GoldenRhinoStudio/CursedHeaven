@@ -54,11 +54,9 @@ public:
 	};
 
 	virtual void LoadPlayerProperties() {};
-	void UpdateCameraPosition(float dt);
 	void ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed);
 	void SetMovementAnimations(DIRECTION& direction, Animation* idle_up, Animation* idle_down, Animation* idle_diagonal_up, Animation* idle_diagonal_down, Animation* idle_lateral,
 		Animation* diagonal_up, Animation* diagonal_down, Animation* lateral, Animation* go_up, Animation* go_down, Animation* death);
-	void ChangeRoom(int x, int y);
 
 public:
 

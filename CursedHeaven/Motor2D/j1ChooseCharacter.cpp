@@ -117,27 +117,29 @@ bool j1ChooseCharacter::Update(float dt) {
 				break;
 
 			case HOVERED:
-				(*item)->situation = (*item)->hovered;
-				if ((*item)->bfunction == BLACKMAGE_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 130, 155, App->gui->font2, "Black Mage", App->gui->brown);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 80, 195, App->gui->font1, "A fast wizard that uses his powerful ranged", App->gui->beige);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 96, 210, App->gui->font1, "attacks and deals high area damage", App->gui->beige);
-				}
-				else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 110, 155, App->gui->font2, "Dragoon Knight", App->gui->brown);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 70, 195, App->gui->font1, "An agile warrior that moves fast acroos the map", App->gui->beige);
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 89, 210, App->gui->font1, "and deals great damage with his sword", App->gui->beige);
-				}
-				else if ((*item)->bfunction == ROGUE_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
-				}
-				else if ((*item)->bfunction == TANK_BUT) {
-					App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
-				}
-				else if ((*item)->bfunction == NONE_BUT) {
-					for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
-						(*item)->CleanUp();
-						chooseCharacterLabels.remove(*item);
+				if (startup_time.Read() > 2000) {
+					(*item)->situation = (*item)->hovered;
+					if ((*item)->bfunction == BLACKMAGE_BUT) {
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 130, 155, App->gui->font2, "Black Mage", App->gui->brown);
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 80, 195, App->gui->font1, "A fast wizard that uses his powerful ranged", App->gui->beige);
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 96, 210, App->gui->font1, "attacks and deals high area damage", App->gui->beige);
+					}
+					else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 110, 155, App->gui->font2, "Dragoon Knight", App->gui->brown);
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 70, 195, App->gui->font1, "An agile warrior that moves fast acroos the map", App->gui->beige);
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 89, 210, App->gui->font1, "and deals great damage with his sword", App->gui->beige);
+					}
+					else if ((*item)->bfunction == ROGUE_BUT) {
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
+					}
+					else if ((*item)->bfunction == TANK_BUT) {
+						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
+					}
+					else if ((*item)->bfunction == NONE_BUT) {
+						for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
+							(*item)->CleanUp();
+							chooseCharacterLabels.remove(*item);
+						}
 					}
 				}
 				break;
@@ -145,7 +147,7 @@ bool j1ChooseCharacter::Update(float dt) {
 			case RELEASED:
 				if (startup_time.Read() > 2000) {
 					(*item)->situation = (*item)->idle;
-					if ((*item)->bfunction == BLACKMAGE_BUT) {
+					if ((*item)->bfunction == BLACKMAGE_BUT && App->entity->player_type == NO_PLAYER) {
 						App->transitions->SquaresAppearing(CHOOSE, SCENE1, 3);
 						App->entity->player_type = MAGE;
 						LOG("Black Mage activated");
@@ -156,7 +158,7 @@ bool j1ChooseCharacter::Update(float dt) {
 						// App->entity->player_type = ROGUE;
 						// LOG("Rogue activated");
 					}
-					else if ((*item)->bfunction == DRAGOONKNIGHT_BUT) {
+					else if ((*item)->bfunction == DRAGOONKNIGHT_BUT && App->entity->player_type == NO_PLAYER) {
 						App->transitions->SquaresAppearing(CHOOSE, SCENE1, 3);
 						App->entity->player_type = KNIGHT;
 						LOG("Dragoon Knight activated");

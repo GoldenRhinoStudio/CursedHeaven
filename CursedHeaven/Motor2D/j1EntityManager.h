@@ -50,7 +50,8 @@ enum PLAYER_TYPES
 	KNIGHT,
 	MAGE,
 	TANK,
-	ROGUE
+	ROGUE,
+	NO_PLAYER
 };
 
 enum DROP_TYPES {
@@ -111,7 +112,7 @@ public:
 	j1Judge*			judge = nullptr;
 	j1Seller*			seller = nullptr;
 
-	PLAYER_TYPES player_type;
+	PLAYER_TYPES player_type = NO_PLAYER;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;

@@ -431,7 +431,8 @@ void j1Scene1::ChangeSceneMenu()
 	CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
-	App->render->camera = { 0,0 };
+	App->render->camera = { 0,0 }; 
+	App->entity->player_type = NO_PLAYER;
 	backToMenu = false;
 }
 
@@ -443,7 +444,8 @@ void j1Scene1::ChangeSceneDeath() {
 	CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
-	App->render->camera = { 0,0 };
+	App->render->camera = { 0,0 }; 
+	App->entity->player_type = NO_PLAYER;
 	toLoseScene = false;
 }
 
@@ -455,6 +457,7 @@ void j1Scene1::ChangeSceneVictory() {
 	CleanUp();
 	App->entity->active = false;
 	App->victory->Start();
-	App->render->camera = { 0,0 };
+	App->render->camera = { 0,0 }; 
+	App->entity->player_type = NO_PLAYER;
 	toVictoryScene = false;
 }

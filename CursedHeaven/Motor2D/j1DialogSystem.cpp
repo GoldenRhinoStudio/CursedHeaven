@@ -9,6 +9,7 @@
 #include "j1Scene1.h"
 #include "j1Entity.h"
 #include "j1Label.h"
+#include "j1Box.h"
 #include "j1Fonts.h"
 #include <time.h>
 
@@ -68,6 +69,7 @@ bool j1DialogSystem::Update(float dt) {
 	if (App->scene1->active) {
 
 		App->render->BlitHUD(judge_tex, 210, 750, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+		if (!App->scene1->finishedDialog) App->gamePaused = true;
 
 		if (!timerStarted) {
 			dialogTimer.Start();
@@ -84,7 +86,8 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && canSkip == true) {
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed = dialogTimer.Read();
@@ -105,6 +108,7 @@ bool j1DialogSystem::Update(float dt) {
 				App->tex->UnLoad(dialog_tex3);
 				times = 0;
 				App->scene1->finishedDialog = true;
+				App->gamePaused = false;
 				law1Active = false;
 			}
 		}
@@ -115,7 +119,8 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) && canSkip == true) {
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) 
+				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed = dialogTimer.Read();
@@ -136,6 +141,7 @@ bool j1DialogSystem::Update(float dt) {
 				App->tex->UnLoad(dialog_tex3);
 				times = 0;
 				App->scene1->finishedDialog = true;
+				App->gamePaused = false;
 				law2Active = false;
 			}
 		}

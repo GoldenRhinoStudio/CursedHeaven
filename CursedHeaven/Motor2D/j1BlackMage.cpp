@@ -355,9 +355,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 	else if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
 		height = 7.0f;
 
-	// We update the camera to follow the player every frame
-	UpdateCameraPosition(dt);
-
 	return true;
 }
 

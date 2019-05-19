@@ -71,7 +71,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
-		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
+		if (distance <= MF_DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
 
 			if (App->entity->currentPlayer->dead == false)
@@ -90,7 +90,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE_MF /*&& App->scene1->bossFightOn*/) {
+					if (distance <= ATTACK_RANGE_MF || spinningShot) {
 						if ((shotTimer.Read() >= lastTime_Shot + cooldown_Shot) && loopAngle == 320) {
 
 							fPoint speed_particle[8];
@@ -142,6 +142,8 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 						if (supershotTimer.Read() >= lastTime_Supershot + 10000) {
 
+							spinningShot = true;
+
 							if (loopAngle % 5 == 0) {
 
 								fPoint speed_particle[8];
@@ -175,11 +177,12 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 							if (loopAngle >= 320 + 360) {
 								loopAngle = 320;
 								lastTime_Supershot = supershotTimer.Read();
+								spinningShot = false;
 							}
 						}
 					}
-					else {
-						//Move(path, dt);
+					else if (loopAngle == 320){
+						Move(path, dt);
 					}
 				}
 			}
@@ -208,10 +211,10 @@ bool j1MindFlyer::DrawOrder(float dt) {
 	// Drawing the harpy
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
-	if (position.x - App->entity->currentPlayer->position.x >= 0)
-		Draw(r, animation->flip, -10, -10, 1.2f);
+	if (position.x > App->entity->currentPlayer->position.x)
+		Draw(r, true, -10, -10, 1.2f);
 	else
-		Draw(r, animation->flip, -10, -10, 1.2f);
+		Draw(r, false, -10, -10, 1.2f);
 	return true;
 }
 
@@ -253,18 +256,6 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 
 		if (App->entity->currentPlayer->lifePoints <= 0)
 			App->entity->currentPlayer->dead = true;
-	}
-	
-	if (col_2->type == COLLIDER_ATTACK)
-	{
-		for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
-		{
-			if (App->particles->active[i] != nullptr)
-			{
-				delete App->particles->active[i];
-				App->particles->active[i] = nullptr;
-			}
-		}
 	}
 
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
@@ -352,7 +343,6 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x += speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::DOWN_LEFT)
@@ -360,7 +350,6 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x -= speed * dt;
-		animation->flip = true;
 	}
 
 	else if (direction == Movement::UP_RIGHT)
@@ -368,7 +357,6 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x += speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::UP_LEFT)
@@ -376,34 +364,29 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x -= speed * dt;
-		animation->flip = true;
 	}
 
 	else if (direction == Movement::DOWN)
 	{
 		animation = &down;
 		position.y += speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::UP)
 	{
 		animation = &up;
 		position.y -= speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::RIGHT)
 	{
 		animation = &lateral;
-		animation->flip = false;
 		position.x += speed * dt;
 	}
 
 	else if (direction == Movement::LEFT)
 	{
 		animation = &lateral;
-		animation->flip = true;
 		position.x -= speed * dt;
 	}
 }

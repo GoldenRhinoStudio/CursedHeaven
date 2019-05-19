@@ -65,10 +65,13 @@ bool j1DragoonKnight::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	position.x = -1050;
-	position.y = 750;
+	/*position.x = -1050;
+	position.y = 750;*/
 	/*position.x = 180;
 	position.y = 770;*/
+
+	position.x = -200;
+	position.y = 1200;
 
 	coins = 100;
 
@@ -314,13 +317,6 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	if (collider != nullptr)
 		collider->SetPos(position.x + margin.x, position.y + margin.y);
 
-	// ---------------------------------------------------------------------------------------------------------------------
-	// DRAWING EVERYTHING ON THE SCREEN
-	// ---------------------------------------------------------------------------------------------------------------------	
-	
-	// We update the camera to follow the player every frame
-	UpdateCameraPosition(dt);
-
 	return true;
 }
 
@@ -338,8 +334,10 @@ bool j1DragoonKnight::PostUpdate() {
 }
 
 bool j1DragoonKnight::DrawOrder(float dt) {
-
-	// Blitting the player
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// DRAWING EVERYTHING ON THE SCREEN
+	// ---------------------------------------------------------------------------------------------------------------------	
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (!attacking) {

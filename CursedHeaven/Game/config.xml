@@ -96,19 +96,19 @@
   
   <shop>
     <prizes>
-      <boots p1="30" p2="80" p3="150"/>
-      <sword p1="30" p2="80" p3="150"/>
-      <heart p1="30" p2="80" p3="150"/>
-      <armour p1="30" p2="80" p3="150"/>
-      <hourglass p1="30" p2="80" p3="150"/>
-      <book p1="30" p2="80" p3="150"/>
-      <potion p="30" healing="50"/>
+      <boots p1="3" p2="8" p3="15"/>
+      <sword p1="3" p2="8" p3="15"/>
+      <heart p1="3" p2="8" p3="15"/>
+      <armour p1="3" p2="8" p3="15"/>
+      <hourglass p1="30" p2="8" p3="15"/>
+      <book p1="3" p2="8" p3="15"/>
+      <potion p="3" healing="50"/>
     </prizes>
   </shop>
 
   <items>
-    <coin value="50" />
-    <heart value="5" />
+    <coin value="1" />
+    <heart value="15" />
   </items>
   
   <menu>

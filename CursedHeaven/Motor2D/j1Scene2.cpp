@@ -285,7 +285,7 @@ bool j1Scene2::Update(float dt) {
 	App->render->reOrder();
 	App->render->OrderBlit(App->render->OrderToRender);
 
-	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q)
+	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q && App->entity->knight != nullptr)
 		App->render->Blit(App->entity->knight->shieldTex, App->entity->currentPlayer->position.x + 2, App->entity->currentPlayer->position.y + 8, NULL, SDL_FLIP_NONE, true, 0.13f);
 
 	return true;

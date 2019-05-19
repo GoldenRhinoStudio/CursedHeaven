@@ -6,6 +6,7 @@
 #include "j1Input.h"
 #include "j1Player.h"
 #include "j1Render.h"
+#include "j1DialogSystem.h"
 #include "j1FadeToBlack.h"
 #include "j1BlackMage.h"
 #include "j1Shop.h"
@@ -97,7 +98,13 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && potionTime.Read() >= lastPotionTime + 500))) {
 				App->shop->potions--;
 				lastPotionTime = potionTime.Read();
-				App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+				
+				if (App->dialog->law == 3) {
+					if (App->entity->player_type == KNIGHT) App->entity->currentPlayer->lifePoints -= 38; 
+					else if (App->entity->player_type == KNIGHT)App->entity->currentPlayer->lifePoints -= 18;
+				}
+				else App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+
 				App->audio->PlayFx(App->audio->potion_sound);
 			}
 

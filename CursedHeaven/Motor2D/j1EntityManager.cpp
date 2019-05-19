@@ -284,8 +284,6 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 
 	if (knight != nullptr) knight->Load(data);
 	else if (mage != nullptr) mage->Load(data);
-	/*else if (rogue != nullptr) rogue->Load(data);
-	else if (tank != nullptr) tank->Load(data);*/
 
 	return true;
 }
@@ -294,8 +292,6 @@ bool j1EntityManager::Save(pugi::xml_node& data) const
 {
 	if (player_type == KNIGHT) knight->Save(data.append_child("player"));
 	else if (player_type == MAGE) mage->Save(data.append_child("player"));
-	/*else if (player_type == TANK) tank->Save(data.append_child("player"));
-	else if (player_type == ROGUE) rogue->Save(data.append_child("player"));*/
 
 	return true;
 }

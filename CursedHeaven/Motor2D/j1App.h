@@ -33,6 +33,9 @@ class j1Fonts;
 class j1Gui;
 class j1Particles;
 class j1DialogSystem;
+class j1Shop;
+class j1Minimap;
+class j1TransitionManager;
 
 class j1App
 {
@@ -108,6 +111,7 @@ public:
 	j1SceneLose*		lose = nullptr;
 	j1SceneVictory*		victory = nullptr;
 	j1Scene1*			scene1 = nullptr;
+	j1Scene2*			scene2 = nullptr;
 	j1Map*				map = nullptr;
 	j1FadeToBlack*		fade = nullptr;
 	j1Collisions*		collisions = nullptr;
@@ -117,6 +121,9 @@ public:
 	j1Gui*				gui = nullptr;
 	j1Particles*		particles = nullptr;
 	j1DialogSystem*		dialog = nullptr;
+	j1Shop*				shop = nullptr;
+	j1Minimap*			minimap = nullptr;
+	j1TransitionManager* transitions = nullptr;
 
 	bool				gamePaused = false;
 

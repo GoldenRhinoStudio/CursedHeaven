@@ -12,9 +12,14 @@
 #include "j1Rogue.h"
 #include "j1Tank.h"
 #include "j1Judge.h"
+#include "j1Seller.h"
 #include "j1Slime.h"
+#include "j1Fire.h"
+#include "j1Turret.h"
 #include "j1MindFlyer.h"
 #include "j1Map.h"
+#include "Items.h"
+#include "Exodus.h"
 
 #include "j1Player.h"
 
@@ -58,6 +63,10 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	LOG("Awaking Entity manager");
 	updateMsCycle = config.attribute("updateMsCycle").as_float();
+	playerSpawnPos1.x = config.child("position1").attribute("x").as_float();
+	playerSpawnPos1.y = config.child("position1").attribute("y").as_float();
+	playerSpawnPos2.x = config.child("position2").attribute("x").as_float();
+	playerSpawnPos2.y = config.child("position2").attribute("y").as_float();
 
 	return true;
 }
@@ -155,10 +164,11 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 			entities.push_back(ret); 
 		break;
 
-	case NPC:
-		if (npc_type == JUDGE) ret = new j1Judge(x, y, type);
-		/*else if (npc_type == OLDMAN) ret = new j1OldMan(x, y, type);
-		else if (npc_type == MERCHANT) ret = new j1Merchant(x, y, type);*/
+	case JUDGE:
+		ret = new j1Judge(x, y, type);
+
+	case SELLER:
+		ret = new j1Seller(x, y, type);
 
 		if (ret != nullptr)
 			entities.push_back(ret);
@@ -192,12 +202,31 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 				entity = new j1Slime(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == MINDFLYER)
 				entity = new j1MindFlyer(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == TURRET)
+				entity = new j1Turret(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == FIRE)
+				entity = new j1Fire(info.position.x, info.position.y, info.type);
+			else if (queue[i].type == EXODUS) {
+				entity = new Exodus(info.position.x, info.position.y, info.type);
+				exodus = (Exodus*)entity;
+			}
 
 			entities.push_back(entity);
 			entity->Start();
 			break;
 		}
 	}
+}
+
+void j1EntityManager::AddItem(int x, int y, DROP_TYPES itype)
+{
+	j1Entity* ret = nullptr;
+
+	ret = new Items(x, y, ENTITY_TYPES::ITEM, itype);
+
+	if (ret != nullptr)
+		entities.push_back(ret);
+
 }
 
 void j1EntityManager::DestroyEntities()
@@ -213,26 +242,28 @@ void j1EntityManager::DestroyEntities()
 	}
 }
 
-void j1EntityManager::CreatePlayer()
+void j1EntityManager::CreatePlayer1()
 {
-	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER);
-	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER);
-	/*else if (player_type == TANK) tank = (j1Tank*)CreateEntity(PLAYER);
-	else if (player_type == ROGUE) rogue = (j1Rogue*)CreateEntity(PLAYER);*/
+	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos1.x, playerSpawnPos1.y);
+	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos1.x, playerSpawnPos1.y);
 
 	if (knight != nullptr) currentPlayer = knight;
 	else if (mage != nullptr) currentPlayer = mage;
-	/*else if (rogue != nullptr)  currentPlayer = rogue;
-	else if (tank != nullptr)  currentPlayer = tank;*/
 
 	currentPlayer->invulCounter.Start();
+	currentPlayer->potionTime.Start();
 }
 
-void j1EntityManager::CreateNPC()
+void j1EntityManager::CreatePlayer2()
 {
-	if (npc_type == JUDGE) judge = (j1Judge*)CreateEntity(NPC);
-	/*else if (npc_type == OLDMAN) oldman = (j1OldMan*)CreateEntity(NPC);
-	else if (npc_type == MERCHANT) rogue = (j1Merchant*)CreateEntity(NPC);*/
+	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos2.x, playerSpawnPos2.y);
+	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos2.x, playerSpawnPos2.y);
+
+	if (knight != nullptr) currentPlayer = knight;
+	else if (mage != nullptr) currentPlayer = mage;
+
+	currentPlayer->invulCounter.Start();
+	currentPlayer->potionTime.Start();
 }
 
 void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
@@ -253,19 +284,14 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 
 	if (knight != nullptr) knight->Load(data);
 	else if (mage != nullptr) mage->Load(data);
-	/*else if (rogue != nullptr) rogue->Load(data);
-	else if (tank != nullptr) tank->Load(data);*/
 
 	return true;
 }
 
 bool j1EntityManager::Save(pugi::xml_node& data) const
 {
-
 	if (player_type == KNIGHT) knight->Save(data.append_child("player"));
 	else if (player_type == MAGE) mage->Save(data.append_child("player"));
-	/*else if (player_type == TANK) tank->Save(data.append_child("player"));
-	else if (player_type == ROGUE) rogue->Save(data.append_child("player"));*/
 
 	return true;
 }

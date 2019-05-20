@@ -13,6 +13,7 @@
 #include "j1Fonts.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -119,8 +120,7 @@ bool j1SceneCredits::Update(float dt)
 				(*item)->situation = (*item)->idle;
 				
 				if ((*item)->bfunction == GO_TO_MENU) {
-					backToMenu = true;
-					App->fade->FadeToBlack();
+					App->transitions->Wiping(CREDITS, MENU);
 				}
 				else if ((*item)->bfunction == LINK && App->fade->IsFading() == 0) {
 					ShellExecuteA(NULL, "open", "https://github.com/GoldenRhinoStudio/CursedHeaven", NULL, NULL, SW_SHOWNORMAL);
@@ -138,10 +138,6 @@ bool j1SceneCredits::Update(float dt)
 		}
 	}
 	
-	if (backToMenu && App->fade->IsFading() == 0) {
-		ChangeScene();
-	}
-
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
@@ -175,7 +171,7 @@ bool j1SceneCredits::Update(float dt)
 
 	}
 
-	App->render->Blit(license, 50, 50, NULL, SDL_FLIP_NONE, 0, 0.24f);
+	App->render->Blit(license, 145, 130, NULL, SDL_FLIP_NONE, false, 0.24f);
 
 
 
@@ -218,13 +214,4 @@ bool j1SceneCredits::CleanUp()
 	if (credits_window != nullptr) credits_window = nullptr;
 
 	return true;
-}
-
-void j1SceneCredits::ChangeScene()
-{
-	this->active = false;
-	backToMenu = false;
-	CleanUp();
-	App->menu->active = true;
-	App->menu->Start();	
 }

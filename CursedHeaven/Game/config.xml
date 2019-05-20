@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.3.</title>
+    <title>Cursed Heaven v0.5</title>
     <organization>UPC</organization>
   </app>
 	
@@ -10,6 +10,8 @@
     <vsync value="true"/>
 	<camera initialX="0" initialY="0"/>
   </renderer>
+  
+  <minimap width="400" height="200"/>
 
   <window>
     <resolution width="1024" height="768" scale="3"/>
@@ -24,43 +26,64 @@
   </file_system>
   
   <player>
-	<blackMage>
-	  <size width="9" height="9"/>
-	  <margin x="6" y="28" colisionMargin="3"/>
+	<blackMage scale="1.0f">
+	  <size width="18" height="13"/>
+	  <margin x="3" y="23" colisionMargin="3" offset="8"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
-	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="20" leftColliderSpawnPos="-16"/>
-	  <combat basicDamage="200" fireDamage="100" lifePoints="100" resitance="50"/>
-	  <cooldowns Q="10000" E="15000" increasedSpeed="5000" explosion="600" invulTime="1000"/>
+	  <attack blittingX="-15" blittingY="-2"/>
+	  <combat basicDamage="150" fireDamage="600" lifePoints="200"/>
+	  <cooldowns Q="5000" E="10000" increasedSpeed="5000" explosion="600" invulTime="700"/>
 	</blackMage>
 	
-	<dragoonKnight>
-	  <size width="18" height="8"/>
-	  <margin x="3" y="28" colisionMargin="3"/>
+	<dragoonKnight scale="0.8f">
+	  <size width="18" height="13"/>
+	  <attackCollider width="18" height="24"/>
+	  <margin x="3" y="23" colisionMargin="3" offset="15"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
-	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="20" leftColliderSpawnPos="-16"/>
-	  <combat basicDamage="150" rageDamage="100" dashSpeed="300" lifePoints="200" resitance="100"/>
-	  <cooldowns Q="5000" E="25000" rage="5000" invulTime="1000"/>
-	</dragoonKnight>
-	
+	  <attack blittingX="-15" blittingY="-2" rightColliderSpawnPos="21" leftColliderSpawnPos="-15"/>
+	  <combat basicDamage="300" rageDamage="300" lifePoints="350" knockback="15"/>
+	  <cooldowns Q="10000" E="7000" rage="5000" shield="2500" invulTime="700"/>
+	</dragoonKnight>	
   </player>  
   
-  <entityManager updateMsCycle="0.1f"/>
+  <entityManager updateMsCycle="0.1f">
+    <position1 x="180" y="770"/>
+    <position2 x="384" y="864"/>
+  </entityManager>	
   
-  <slime speed="50.0f" life="600">
-	  <margin x="10" y="10"/>
+  <slime speed="50.0f" life="600" score="100">
+	  <margin x="-10" y="-10"/>
 	  <colliderSize w="35" h="35"/>
-	  <combat damage="20"/>
+	  <combat damage="30"/>
   </slime>  
   
-  <mindflyer speed="100.0f" life="3000">
-	  <margin x="10" y="10"/>
-	  <colliderSize w="35" h="35"/>
-	  <combat shotTime="1000" damage="30"/>
+  <fire speed="50.0f" life="300" score="70">
+	  <margin x="-10" y="-10"/>
+	  <colliderSize w="17" h="25"/>
+	  <combat damage="20"/>
+  </fire>  
+  
+  <turret life="200" score="50">
+	  <margin x="-10" y="-10"/>
+	  <colliderSize w="17" h="25"/>
+	  <combat shotTime="2000" damage="30"/>
+  </turret>  
+  
+  <mindflyer speed="100.0f" life="3000" score="2000">
+	  <margin x="-12" y="-10"/>
+	  <colliderSize w="32" h="45"/>
+	  <combat shotTime="1000" damage="20"/>
   </mindflyer>
+
+  <exodus speed="400.0f" life="10000" score="2000">
+    <margin x="69" y="0"/>
+    <colliderSize w="50" h="154"/>
+    <combat shotTime="3000" damage="20"/>
+  </exodus>
 
   <map>
 	<blitSpeed backgrounds="0.7f" fog="0.85f" map="1.0f"/>
@@ -78,20 +101,27 @@
 	</colors>
   </gui>
   
+  <shop>
+    <prizes>
+      <boots p1="3" p2="8" p3="15"/>
+      <sword p1="3" p2="8" p3="15"/>
+      <heart p1="3" p2="8" p3="15"/>
+      <armour p1="3" p2="8" p3="15"/>
+      <hourglass p1="3" p2="8" p3="15"/>
+      <book p1="3" p2="8" p3="15"/>
+      <potion p="3" healing="50"/>
+    </prizes>
+  </shop>
+
+  <items>
+    <coin value="1" />
+    <heart value="15" />
+  </items>
+  
   <menu>
   </menu>
   
   <credits>
   </credits>
-  
-  <scene1>
-	<camera cameraLimit="-8570" playerLimit="2374"/>
-	<initialPlayerPosition x="1" y="25"/>
-  </scene1>
-  
-  <scene2>  
-	<initialPlayerPosition x="1" y="56"/>
-	<camera cameraLimit="-8570" playerLimit="2374"/>
-  </scene2>
 
 </config>

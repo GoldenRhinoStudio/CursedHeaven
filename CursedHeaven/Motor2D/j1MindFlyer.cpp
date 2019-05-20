@@ -44,14 +44,15 @@ bool j1MindFlyer::Start()
 	// Textures are loaded
 	LOG("Loading mindflyer texture");
 	sprites = App->tex->Load("textures/enemies/bosses/mindflyer.png");
-	sprites;
 	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();
 
 	animation = &idle_down;
+	shotTimer.Start();
+	supershotTimer.Start();
 
-	collider = App->collisions->AddCollider({ (int)position.x - margin.x, (int)position.y - margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
+	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
 	return true;
 }
@@ -61,7 +62,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 	BROFILER_CATEGORY("MindFlyerUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
-		collider->SetPos(position.x, position.y);
+		collider->SetPos(position.x + margin.x, position.y + margin.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
 
@@ -70,7 +71,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
-		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
+		if (distance <= MF_DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
 
 			if (App->entity->currentPlayer->dead == false)
@@ -89,58 +90,99 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 					}
 				}
 				if (target_found && path != nullptr) {
-					if (distance <= ATTACK_RANGE_MF /*&& App->scene1->bossFightOn*/) {
-						if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
+					if (distance <= ATTACK_RANGE_MF || spinningShot) {
+						if ((shotTimer.Read() >= lastTime_Shot + cooldown_Shot) && loopAngle == 320) {
 
 							fPoint speed_particle[8];
-							fPoint particle_speed = { 250,250 };
+							fPoint particle_speed = { 250, 250 };
 							
 							speed_particle[0].x = particle_speed.x * cos(0 * DEGTORAD);
 							speed_particle[0].y = particle_speed.y * sin(0 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[0];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[0];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[1].x = particle_speed.x * cos(180 * DEGTORAD);
 							speed_particle[1].y = particle_speed.y * sin(180 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[1];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[1];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 														
 							speed_particle[2].x = particle_speed.x * cos(-45 * DEGTORAD);
 							speed_particle[2].y = particle_speed.y * sin(-45 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[2];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[2];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[3].x = particle_speed.x * cos(-135 * DEGTORAD);
 							speed_particle[3].y = particle_speed.y * sin(-135 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[3];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[3];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 														
 							speed_particle[4].x = particle_speed.x * cos(-315 * DEGTORAD);
 							speed_particle[4].y = particle_speed.y * sin(-315 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[4];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[4];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[5].x = particle_speed.x * cos(-225 * DEGTORAD);
 							speed_particle[5].y = particle_speed.y * sin(-225 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[5];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[5];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[6].x = particle_speed.x * cos(-90 * DEGTORAD);
 							speed_particle[6].y = particle_speed.y * sin(-90 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[6];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[6];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 							speed_particle[7].x = particle_speed.x * cos(-270 * DEGTORAD);
 							speed_particle[7].y = particle_speed.y * sin(-270 * DEGTORAD);
-							App->particles->shot_right.speed = speed_particle[7];
-							App->particles->AddParticle(App->particles->shot_right, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mageShot.speed = speed_particle[7];
+							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 							App->audio->PlayFx(App->audio->boss_attack);
 							lastTime_Shot = shotTimer.Read();
 						}
+
+						if (supershotTimer.Read() >= lastTime_Supershot + 10000) {
+
+							spinningShot = true;
+
+							if (loopAngle % 5 == 0) {
+
+								fPoint speed_particle[8];
+								fPoint particle_speed = { 200, 200 };
+
+								speed_particle[0].x = particle_speed.x * cos((0 + loopAngle) * DEGTORAD);
+								speed_particle[0].y = particle_speed.y * sin((0 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[0];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[1].x = particle_speed.x * cos((180 + loopAngle) * DEGTORAD);
+								speed_particle[1].y = particle_speed.y * sin((180 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[1];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+								
+								speed_particle[6].x = particle_speed.x * cos((-90 + loopAngle) * DEGTORAD);
+								speed_particle[6].y = particle_speed.y * sin((-90 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[6];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+
+								speed_particle[7].x = particle_speed.x * cos((-270 + loopAngle) * DEGTORAD);
+								speed_particle[7].y = particle_speed.y * sin((-270 + loopAngle) * DEGTORAD);
+								App->particles->mageShot.speed = speed_particle[7];
+								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							}
+
+							loopAngle++;
+							int a = loopAngle;
+							int b = a;
+
+							if (loopAngle >= 320 + 360) {
+								loopAngle = 320;
+								lastTime_Supershot = supershotTimer.Read();
+								spinningShot = false;
+							}
+						}
 					}
-					else {
-						//Move(path, dt);
+					else if (loopAngle == 320){
+						Move(path, dt);
 					}
 				}
 			}
@@ -169,10 +211,10 @@ bool j1MindFlyer::DrawOrder(float dt) {
 	// Drawing the harpy
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
-	if (position.x - App->entity->currentPlayer->position.x >= 0)
-		Draw(r, animation->flip, -10, -10, 1.2f);
+	if (position.x > App->entity->currentPlayer->position.x)
+		Draw(r, true, -10, -10, 1.2f);
 	else
-		Draw(r, animation->flip, -10, -10, 1.2f);
+		Draw(r, false, -10, -10, 1.2f);
 	return true;
 }
 
@@ -198,6 +240,24 @@ bool j1MindFlyer::PostUpdate() {
 
 void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (App->entity->currentPlayer->receivedDamage == false && col_2->type == COLLIDER_PLAYER) {
+
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q) {
+			//App->audio->PlayFx(asdfasdfasdfasdfasf)
+		}
+		else {
+
+			App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
+			App->entity->currentPlayer->receivedDamage = true;
+
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+		}
+
+		if (App->entity->currentPlayer->lifePoints <= 0)
+			App->entity->currentPlayer->dead = true;
+	}
+
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
@@ -217,11 +277,12 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += 100;
 			App->audio->PlayFx(App->audio->boss_death);
 			dead = true;
 			App->entity->currentPlayer->victory = true;
 			collider->to_delete = true;
+			
+			App->entity->currentPlayer->coins += 20;
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 				if (item._Ptr->_Myval == this) {
@@ -267,14 +328,15 @@ void j1MindFlyer::LoadProperties()
 	// Copying combat values
 	speed = mindflyer.attribute("speed").as_int();
 	lifePoints = mindflyer.attribute("life").as_int();
+	score = mindflyer.attribute("score").as_int();
 	cooldown_Shot = mindflyer.child("combat").attribute("shotTime").as_uint();
 	App->entity->mindflyer_Damage = mindflyer.child("combat").attribute("damage").as_int();
 }
 
 void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 {
-	fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	if (App->path->check_nextTile(path, &node, &pos))
+	iPoint pos = { collider->rect.x + collider->rect.w/2, collider->rect.y + collider->rect.h};
+	if (App->path->check_nextTile(path, &node, &pos, direction))
 		node++;
 	direction = App->path->CheckDirection(path,&node);
 
@@ -283,7 +345,6 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x += speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::DOWN_LEFT)
@@ -291,7 +352,6 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_down;
 		position.y += speed * dt;
 		position.x -= speed * dt;
-		animation->flip = true;
 	}
 
 	else if (direction == Movement::UP_RIGHT)
@@ -299,7 +359,6 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x += speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::UP_LEFT)
@@ -307,34 +366,29 @@ void j1MindFlyer::Move(const std::vector<iPoint>* path, float dt)
 		animation = &diagonal_up;
 		position.y -= speed * dt;
 		position.x -= speed * dt;
-		animation->flip = true;
 	}
 
 	else if (direction == Movement::DOWN)
 	{
 		animation = &down;
 		position.y += speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::UP)
 	{
 		animation = &up;
 		position.y -= speed * dt;
-		animation->flip = false;
 	}
 
 	else if (direction == Movement::RIGHT)
 	{
 		animation = &lateral;
-		animation->flip = false;
 		position.x += speed * dt;
 	}
 
 	else if (direction == Movement::LEFT)
 	{
 		animation = &lateral;
-		animation->flip = true;
 		position.x -= speed * dt;
 	}
 }

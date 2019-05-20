@@ -109,9 +109,6 @@
     <ClCompile Include="j1Slime.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="j1Judge.cpp">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="j1MindFlyer.cpp">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClCompile>
@@ -119,6 +116,54 @@
       <Filter>Development\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1SceneVictory.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Minimap.cpp">
+      <Filter>Development\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Shop.cpp">
+      <Filter>Development\Modules\Interactions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Fire.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1TransitionManager.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Transitions.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeToColor.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Lines.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Squares.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="Wipe.cpp">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Color.cpp">
+      <Filter>Development\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Turret.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Judge.cpp">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Seller.cpp">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClCompile>
+    <ClCompile Include="Exodus.cpp">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Development\Modules\Entities\Drops</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Scene2.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -246,9 +291,6 @@
     <ClInclude Include="j1Slime.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="j1Judge.h">
-      <Filter>Development\Modules\Entities\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="j1MindFlyer.h">
       <Filter>Development\Modules\Entities\Enemies</Filter>
     </ClInclude>
@@ -256,6 +298,54 @@
       <Filter>Development\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="j1SceneVictory.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Minimap.h">
+      <Filter>Development\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Shop.h">
+      <Filter>Development\Modules\Interactions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Fire.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1TransitionManager.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Transitions.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeToColor.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Lines.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Squares.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="Wipe.h">
+      <Filter>Development\Modules\Interactions\Transitions</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Color.h">
+      <Filter>Development\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Turret.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Judge.h">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Seller.h">
+      <Filter>Development\Modules\Entities\NPCs</Filter>
+    </ClInclude>
+    <ClInclude Include="Exodus.h">
+      <Filter>Development\Modules\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Development\Modules\Entities\Drops</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Scene2.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
@@ -301,6 +391,15 @@
     </Filter>
     <Filter Include="Development\Modules\Entities\Enemies">
       <UniqueIdentifier>{f2c7492a-a97f-4b48-add3-e384b87be8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Interactions\Transitions">
+      <UniqueIdentifier>{bbb8299d-ddfa-487f-bdd3-4d0a583c20f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\NPCs">
+      <UniqueIdentifier>{6cf0f290-ba60-49a8-be4e-b7f6cc59b7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\Entities\Drops">
+      <UniqueIdentifier>{9956ebf7-624e-4cf2-a44d-dc951ff84c2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

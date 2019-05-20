@@ -16,6 +16,7 @@
 #include "j1SceneLose.h"
 #include "j1SceneVictory.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Map.h"
 #include "j1FadeToBlack.h"
 #include "j1Collisions.h"
@@ -26,8 +27,10 @@
 #include "j1App.h"
 #include "j1Particles.h"
 #include "j1DialogSystem.h"
+#include "j1Shop.h"
 #include "j1Entity.h"
-
+#include "j1Minimap.h"
+#include "j1TransitionManager.h"
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -48,15 +51,19 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	lose = new j1SceneLose();
 	victory = new j1SceneVictory();
 	scene1 = new j1Scene1();
+	scene2 = new j1Scene2();
 	map = new j1Map();
 	entity = new j1EntityManager();
 	path = new j1PathFinding();
 	fade = new j1FadeToBlack();
 	font = new j1Fonts();
 	gui = new j1Gui();
-	dialog = new j1DialogSystem();
 	particles = new j1Particles();
 	collisions = new j1Collisions();
+	dialog = new j1DialogSystem();
+	shop = new j1Shop;
+	minimap = new j1Minimap();
+	transitions = new j1TransitionManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -71,16 +78,20 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(settings);
 	AddModule(choose_character);
 	AddModule(lose);
-	AddModule(victory);
 	AddModule(scene1);
+	AddModule(scene2);
+	AddModule(shop);
 	AddModule(entity);
-	AddModule(particles);
+	AddModule(particles);	
 	AddModule(collisions);
 	AddModule(font);
 	AddModule(gui);
+	AddModule(minimap);
 	AddModule(dialog);
 	AddModule(fade);
-	
+	AddModule(transitions);
+	AddModule(victory);
+
 	// render last to swap buffer
 	AddModule(render);
 }
@@ -245,10 +256,10 @@ void j1App::FinishUpdate()
 
 	iPoint map_coords = { 0,0 };
 	if (App->entity->currentPlayer != nullptr) {
-		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y);
+		map_coords = App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + (int)App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + (int)App->entity->currentPlayer->collider->rect.h);
 	}
 
-	sprintf_s(title, 256, "Cursed Heaven v0.3 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
+	sprintf_s(title, 256, "Cursed Heaven v0.5 ~ FPS: %d / Av.FPS: %.2f / Last Frame Ms: %02u / Cap %s / VSYNC %s / Tile: %d, %d",
 		frames_on_last_update, avg_fps, last_frame_ms, cap, vsync, map_coords.x, map_coords.y);
 	App->win->SetTitle(title);
 

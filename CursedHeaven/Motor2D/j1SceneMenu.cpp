@@ -1,6 +1,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -17,6 +18,7 @@
 #include "j1Window.h"
 #include "j1ChooseCharacter.h"
 #include "j1SceneSettings.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -107,12 +109,12 @@ bool j1SceneMenu::Update(float dt)
 {
 	BROFILER_CATEGORY("MenuUpdate", Profiler::Color::LightSeaGreen)
 
-	// ---------------------------------------------------------------------------------------------------------------------
-	// USER INTERFACE MANAGEMENT
-	// ---------------------------------------------------------------------------------------------------------------------	
+		// ---------------------------------------------------------------------------------------------------------------------
+		// USER INTERFACE MANAGEMENT
+		// ---------------------------------------------------------------------------------------------------------------------	
 
-	// Updating the state of the UI
-	App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale); 
+		// Updating the state of the UI
+		App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale);
 	App->gui->UpdateSliders(&menuBoxes);
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 
@@ -128,7 +130,7 @@ bool j1SceneMenu::Update(float dt)
 			case HOVERED:
 
 				if (startup_time.Read() > 1900 && times > 1 || times == 1)
-				(*item)->situation = (*item)->hovered;
+					(*item)->situation = (*item)->hovered;
 				break;
 
 
@@ -138,50 +140,33 @@ bool j1SceneMenu::Update(float dt)
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
 						LOG("Choose Character Scene Loading");
-						chooseChar = true;
-						// App->scene1->active = false;
-						App->fade->FadeToBlack();
+						App->transitions->FadingToColor(MENU, CHOOSE);
+
+						App->scene1->finishedDialog = false;
+						App->scene2->finishedDialog2 = false;
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
-						loadGame = true;
-						App->fade->FadeToBlack();
+						App->transitions->SquaresAppearing(MENU, SCENE1, 3);
 					}
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;
 					}
 					else if ((*item)->bfunction == SETTINGS) {
-						openSettings = true;
-						App->fade->FadeToBlack();
-					}						
+						App->transitions->Wiping(MENU, SCENE_SETTINGS);
+					}
 					else if ((*item)->bfunction == OPEN_CREDITS) {
-						openCredits = true;
-						App->fade->FadeToBlack();
+						App->transitions->Wiping(MENU, CREDITS);
 					}
 				}
-					break;
+				break;
 
 			case CLICKED:
 
 				if (startup_time.Read() > 1900 && times > 1 || times == 1)
-				(*item)->situation = (*item)->clicked;
+					(*item)->situation = (*item)->clicked;
 				break;
 			}
 		}
-	}	
-
-	// Managing scene transitions
-	if (App->fade->IsFading() == 0) {
-		if (chooseChar) {
-			ChangeScene(CHOOSE);
-			//App->choose_character->active = true;
-			//player_created = false;
-		}
-		else if (openCredits)
-			ChangeScene(CREDITS);
-		else if (openSettings)
-			ChangeScene(SCENE_SETTINGS);
-		else if (loadGame)
-			App->LoadGame("save_game.xml");
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------
@@ -193,7 +178,7 @@ bool j1SceneMenu::Update(float dt)
 
 	// Blitting the logo
 	SDL_Rect logo = { 854, 92, 801, 166 };
-	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, 1.0f, App->gui->logoScale);
+	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, true, App->gui->logoScale);
 
 	// Blitting the buttons and labels of the menu
 
@@ -267,38 +252,5 @@ bool j1SceneMenu::Load(pugi::xml_node& node)
 
 	bool scene_activated = activated.attribute("true").as_bool();
 
-	if ((scene_activated == false) && active)
-		ChangeScene(SCENE1);
-	else
-		ChangeScene(SCENE2);
-
 	return true;
-}
-
-void j1SceneMenu::ChangeScene(SCENE objectiveScene)
-{
-	if (!player_created)
-	{
-		this->active = false;
-		loadGame = false;
-		openSettings = false;
-		openCredits = false;
-		chooseChar = false;
-
-		CleanUp();
-
-		if (objectiveScene == SCENE::CREDITS) {
-			App->credits->active = true;
-			App->credits->Start();
-		}
-		else if (objectiveScene == SCENE::SCENE_SETTINGS) {
-			App->settings->active = true;
-			App->settings->Start();
-		}
-		else if (objectiveScene == SCENE::CHOOSE) {
-				App->choose_character->active = true;
-				App->choose_character->Start();
-				//App->render->camera = { 250, -1080 };
-		}
-	}
 }

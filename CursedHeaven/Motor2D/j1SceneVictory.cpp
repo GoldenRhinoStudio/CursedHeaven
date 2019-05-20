@@ -3,6 +3,7 @@
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -61,22 +62,17 @@ bool j1SceneVictory::Start()
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
 
-		// Loading font
-		font = App->font->Load("fonts/Pixeled.ttf", 5);
-		font2 = App->font->Load("fonts/Pixeled.ttf", 10);
-		font3 = App->font->Load("fonts/Pixeled.ttf", 15);
-
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
 		SDL_Rect clicked = { 797, 12, 151, 38 };
 		App->gui->CreateButton(&victoryButtons, BUTTON, 130, 100 + 70, idle, hovered, clicked, gui_tex2, PLAY_GAME);
 		App->gui->CreateButton(&victoryButtons, BUTTON, 130, 125 + 70, idle, hovered, clicked, gui_tex2, GO_TO_MENU);
 
-		App->gui->CreateLabel(&victoryLabels, LABEL, 145, 170, font, "Play Again", App->gui->beige);
-		App->gui->CreateLabel(&victoryLabels, LABEL, 143, 195, font, "Go to Menu", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 145, 170, App->gui->font1, "Play Again", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 143, 195, App->gui->font1, "Go to Menu", App->gui->beige);
 
-		App->gui->CreateLabel(&victoryLabels, LABEL, 116, 30, font3, "YOU WIN!", {255,255,102,255});
-		App->gui->CreateLabel(&victoryLabels, LABEL, 86, 80, font2, "HEAVEN IS SAFE NOW", App->gui->beige);
+		App->gui->CreateLabel(&victoryLabels, LABEL, 116, 30, App->gui->font3, "YOU WIN!", {255, 255, 102, 255} );
+		App->gui->CreateLabel(&victoryLabels, LABEL, 86, 80, App->gui->font2, "HEAVEN IS SAFE NOW", App->gui->beige);
 
 		startup_time.Start();
 	}
@@ -196,11 +192,13 @@ void j1SceneVictory::ChangeScene(SCENE objectiveScene)
 		App->scene1->active = true;
 		App->scene1->Start();
 		App->particles->Start();
-		App->dialog->active = true;
-		App->dialog->Start();
+		App->scene1->finishedDialog = false;
+		App->scene2->finishedDialog2 = false;
+		//App->dialog->active = true;
+		//App->dialog->Start();
 
 		App->entity->active = true;
-		App->entity->CreatePlayer();
+		App->entity->CreatePlayer1();
 		App->entity->Start();
 	}
 }

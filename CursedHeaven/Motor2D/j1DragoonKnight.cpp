@@ -12,6 +12,7 @@
 #include "j1Map.h"
 #include "j1Timer.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1Audio.h"
 #include "j1DialogSystem.h"
 
@@ -54,6 +55,8 @@ bool j1DragoonKnight::Start() {
 	// Textures are loaded
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/character/dragoonknight/Dragoon.png");
+	enraged = App->tex->Load("textures/character/dragoonknight/DragoonRage.png");
+	shieldTex = App->tex->Load("textures/character/shield.png");
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -64,19 +67,29 @@ bool j1DragoonKnight::Start() {
 	LoadPlayerProperties();
 	animation = &idle_diagonal_up;
 
-	// Setting player position
-	position.x = 200;
-	position.y = 750;
+	//position.x = -1050;
+	//position.y = 750;
+	/*position.x = 180;
+	position.y = 770;*/
+
+	/*position.x = -200;
+	position.y = 1200;*/
+
+	/*position.x = -715;
+	position.y = 530;*/
 
 	if (GodMode)
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_NONE, App->entity);
 	else
-		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
+		collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y}, COLLIDER_PLAYER, App->entity);
 
-	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+	attackCollider = App->collisions->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y + 5, attackSize.x, attackSize.y}, COLLIDER_NONE, App->entity);
 
 	hud = new j1Hud();
 	hud->Start();
+
+	dialog = new j1DialogSystem();
+	dialog->Start();
 
 	// Starting ability timers
 	cooldown_Q.Start();
@@ -101,9 +114,10 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 	if (player_start)
 	{
-		if (App->scene1->finishedDialogue == true) {
-
-			if (!attacking && !active_Q) {
+		current_points = std::to_string(coins);
+		if (App->scene1->finishedDialog || App->scene2->finishedDialog2) {
+			
+			if (!attacking) {
 				ManagePlayerMovement(direction, dt, do_logic, movementSpeed);
 				SetMovementAnimations(direction, &idle_up, &idle_down, &idle_diagonal_up, &idle_diagonal_down, &idle_lateral,
 					&diagonal_up, &diagonal_down, &lateral, &up, &down, &death);
@@ -128,7 +142,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 						else if (animation == &up || animation == &idle_up) animation = &attack_up;
 						else if (animation == &down || animation == &idle_down)	animation = &attack_down;
 						else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
-							if(facingRight) animation = &attack_diagonal_up_right;
+							if (facingRight) animation = &attack_diagonal_up_right;
 							else animation = &attack_diagonal_up_left;
 						}
 						else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
@@ -136,61 +150,32 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 							else animation = &attack_diagonal_down_left;
 						}
 					}
+				}
 
-					if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
-					else available_Q = false;
+				if ((cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q) || firstTimeQ) available_Q = true;
+				else available_Q = false;
 
-					if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
-					else available_E = false;
+				if ((cooldown_E.Read() >= lastTime_E + cooldownTime_E) || firstTimeE) available_E = true;
+				else available_E = false;
 
-					// Ability control
-					if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
-						&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
+				// Ability control
+				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
-						App->audio->PlayFx(App->audio->dash);
+					if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;
 
-						//if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 76;						
+					App->audio->PlayFx(App->audio->shield_sound);
 
-						lastPosition = position;
+					cooldown_Shield.Start();
+					lastTime_Shield = cooldown_Shield.Read();
+					active_Q = true;
+					firstTimeQ = false;
+				}
 
-						if (direction != NONE_) {
-							active_Q = true;
-							firstTimeQ = false;
-						}
-					}
-
-					if (active_Q) {
-
-						if (direction == RIGHT_ && (position.x <= lastPosition.x + 100.0f))
-							position.x += dashSpeed * dt;
-						else if (direction == LEFT_ && (position.x >= lastPosition.x - 100.0f))
-							position.x -= dashSpeed * dt;
-						else if (direction == UP_ && (position.y >= lastPosition.y - 100.0f))
-							position.y -= dashSpeed * dt;
-						else if (direction == DOWN_ && (position.y <= lastPosition.y + 100.0f))
-							position.y += dashSpeed * dt;
-						else if (direction == UP_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-							position.x -= dashSpeed * dt;
-							position.y -= dashSpeed * dt;
-						}
-						else if (direction == UP_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y >= lastPosition.y - 60.0f)) {
-							position.x += dashSpeed * dt;
-							position.y -= dashSpeed * dt;
-						}
-						else if (direction == DOWN_LEFT_ && (position.x >= lastPosition.x - 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-							position.x -= dashSpeed * dt;
-							position.y += dashSpeed * dt;
-						}
-						else if (direction == DOWN_RIGHT_ && (position.x <= lastPosition.x + 120.0f) && (position.y <= lastPosition.y + 60.0f)) {
-							position.x += dashSpeed * dt;
-							position.y += dashSpeed * dt;
-						}
-						else {
-							cooldown_Q.Start();
-							lastTime_Q = cooldown_Q.Read();
-							active_Q = false;
-						}
-					}
+				if (active_Q && cooldown_Shield.Read() >= lastTime_Shield + duration_Shield) {
+					cooldown_Q.Start();
+					lastTime_Q = cooldown_Q.Read();
+					active_Q = false;
 				}
 
 				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
@@ -198,11 +183,11 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 
 					App->audio->PlayFx(App->audio->rage_dk);
 
-					//if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 76;
+					if (dialog->law == 2) App->entity->currentPlayer->lifePoints -= 38;
 
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();
-					lastTime_Rage =	cooldown_Rage.Read();
+					lastTime_Rage = cooldown_Rage.Read();
 					active_E = true;
 					firstTimeE = false;
 				}
@@ -215,64 +200,67 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					active_E = false;
 				}
 			}
-		}
 
-		// Attack management
-		if (attack_lateral_right.Finished() || attack_lateral_left.Finished() || attack_up.Finished() || attack_down.Finished() || attack_diagonal_up_right.Finished() || attack_diagonal_up_left.Finished()
-			|| attack_diagonal_down_right.Finished() || attack_diagonal_down_left.Finished() || dead == true) {
 
-			attackCollider->type = COLLIDER_NONE;
 
-			attack_lateral_right.Reset();
-			attack_lateral_left.Reset();
-			attack_up.Reset();
-			attack_down.Reset();
-			attack_diagonal_up_right.Reset();
-			attack_diagonal_up_left.Reset();
-			attack_diagonal_down_right.Reset();
-			attack_diagonal_down_left.Reset();
+			// Attack management
+			if (attack_lateral_right.Finished() || attack_lateral_left.Finished() || attack_up.Finished() || attack_down.Finished() || attack_diagonal_up_right.Finished() || attack_diagonal_up_left.Finished()
+				|| attack_diagonal_down_right.Finished() || attack_diagonal_down_left.Finished() || dead == true) {
 
-			if (animation == &attack_lateral_right || animation == &attack_lateral_left) animation = &idle_lateral;
-			else if (animation == &attack_up) animation = &idle_up;
-			else if (animation == &attack_down) animation = &idle_down;
-			else if (animation == &attack_diagonal_up_right || animation == &attack_diagonal_up_left) animation = &idle_diagonal_up;
-			else if (animation == &attack_diagonal_down_right || animation == &attack_diagonal_down_left) animation = &idle_diagonal_down;
+				attackCollider->type = COLLIDER_NONE;
 
-			attacking = false;
-		}
-		else if (attackCollider != nullptr) {
+				attack_lateral_right.Reset();
+				attack_lateral_left.Reset();
+				attack_up.Reset();
+				attack_down.Reset();
+				attack_diagonal_up_right.Reset();
+				attack_diagonal_up_left.Reset();
+				attack_diagonal_down_right.Reset();
+				attack_diagonal_down_left.Reset();
 
-			if (animation == &lateral || animation == &idle_lateral) {
-				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y);
-				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y);
+				if (animation == &attack_lateral_right || animation == &attack_lateral_left) animation = &idle_lateral;
+				else if (animation == &attack_up) animation = &idle_up;
+				else if (animation == &attack_down) animation = &idle_down;
+				else if (animation == &attack_diagonal_up_right || animation == &attack_diagonal_up_left) animation = &idle_diagonal_up;
+				else if (animation == &attack_diagonal_down_right || animation == &attack_diagonal_down_left) animation = &idle_diagonal_down;
+
+				attacking = false;
 			}
-			else if (animation == &up || animation == &idle_up) attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - attackCollider->rect.h);
-			else if (animation == &down || animation == &idle_down)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y + attackCollider->rect.h);
-			else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
-				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h);
-				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h);
-			}
-			else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
-				if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y + attackCollider->rect.h);
-				else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y + attackCollider->rect.h);
-			}
-		}
+			else if (attackCollider != nullptr) {
 
-		// God mode
-		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
-		{
-			GodMode = !GodMode;
+				if (animation == &lateral || animation == &idle_lateral) {
+					if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + 12);
+					else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + 12);
+				}
+				else if (animation == &up || animation == &idle_up)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - attackCollider->rect.h + 5);
+				else if (animation == &down || animation == &idle_down)	attackCollider->SetPos((int)position.x + margin.x, (int)position.y + margin.y - 2);
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+					if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h + 5);
+					else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - attackCollider->rect.h + 5);
+				}
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+					if (facingRight) attackCollider->SetPos((int)position.x + rightAttackSpawnPos, (int)position.y + margin.y - 5);
+					else attackCollider->SetPos((int)position.x + leftAttackSpawnPos, (int)position.y + margin.y - 5);
+				}
+			}
 
-			if (GodMode == true)
+			// God mode
+			if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
 			{
-				collider->type = COLLIDER_NONE;
-				animation = &godmode;
+				GodMode = !GodMode;
 
+				if (GodMode == true)
+				{
+					collider->type = COLLIDER_NONE;
+					animation = &godmode;
+
+				}
+				else if (GodMode == false)
+				{
+					collider->type = COLLIDER_PLAYER;
+				}
 			}
-			else if (GodMode == false)
-			{
-				collider->type = COLLIDER_PLAYER;
-			}
+
 		}
 	}
 	if (dead) {
@@ -299,21 +287,11 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 	}
 
 	// Checking for the heights
-	App->map->EntityMovement(App->entity->knight);
+	App->map->EntityMovementTest(App->entity->knight);
 
 	// Update collider position to player position
 	if (collider != nullptr)
 		collider->SetPos(position.x + margin.x, position.y + margin.y);
-
-	// ---------------------------------------------------------------------------------------------------------------------
-	// DRAWING EVERYTHING ON THE SCREEN
-	// ---------------------------------------------------------------------------------------------------------------------	
-
-	if (App->scene1->finishedDialogue)
-		hud->Update(dt);
-
-	// We update the camera to follow the player every frame
-	//UpdateCameraPosition(dt);
 
 	return true;
 }
@@ -323,36 +301,42 @@ bool j1DragoonKnight::PostUpdate() {
 
 	BROFILER_CATEGORY("DragoonKnightPostUpdate", Profiler::Color::Yellow)
 
-		if (App->scene1->finishedDialogue)
-			hud->Update(0);
+	dialog->Update(0);
 
-		return true;
+	if ((App->scene1->active && App->scene1->finishedDialog)
+		|| (App->scene2->active && App->scene2->finishedDialog2))
+		hud->Update(0);
+
+	return true;
 }
 
 bool j1DragoonKnight::DrawOrder(float dt) {
-
-	// Blitting the player
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// DRAWING EVERYTHING ON THE SCREEN
+	// ---------------------------------------------------------------------------------------------------------------------	
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (!attacking) {
 		if (facingRight || animation == &up || animation == &down || animation == &idle_up || animation == &idle_down)
-			Draw(r, false, 0, 0, 0.8f);
+			if (animation == &down || animation == &idle_down) Draw(r, false, 0, 3, playerScale, offset, active_E);
+			else Draw(r, false, 0, 0, playerScale, offset, active_E);
 		else
-			Draw(r, true, 0, 0, 0.8f);
+			 Draw(r, true, -7, 0, playerScale, offset, active_E);
 	}
 	else {
 		if (facingRight || animation == &attack_up || animation == &attack_down) {
-			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, 0.8f);
-			else if (animation == &attack_up) Draw(r, false, 0, -2, 0.8f);
-			else if (animation == &attack_down) Draw(r, false, -4, -4, 0.8f);
-			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, 0.8f);
-			else Draw(r, false, 0, attackBlittingY, 0.8f);
+			if (animation == &attack_lateral_right) Draw(r, false, 0, -6, playerScale, offset, active_E);
+			else if (animation == &attack_up) Draw(r, false, 0, 0, playerScale, offset, active_E);
+			else if (animation == &attack_down) Draw(r, false, -4, -1, playerScale, offset, active_E);
+			else if (animation == &attack_diagonal_down_right) Draw(r, false, 0, -6, playerScale, offset, active_E);
+			else Draw(r, false, 0, attackBlittingY, playerScale, offset, active_E);
 		}
 		else {
-			if (animation == &attack_lateral_left) Draw(r, false, -6, -6, 0.8f);
-			else if (animation == &attack_diagonal_down_left) Draw(r, false, -4, -6, 0.8f);
-			else if (animation == &attack_diagonal_up_left) Draw(r, false, -4, -2, 0.8f);
-			else Draw(r, true, attackBlittingX, attackBlittingY, 0.8f);
+			if (animation == &attack_lateral_left) Draw(r, false, -13, -6, playerScale, offset, active_E);
+			else if (animation == &attack_diagonal_down_left) Draw(r, false, -11, -6, playerScale, offset, active_E);
+			else if (animation == &attack_diagonal_up_left) Draw(r, false, -11, -2, playerScale, offset, active_E);
+			else Draw(r, true, attackBlittingX - 7, attackBlittingY, playerScale, offset, active_E);
 		}
 	}
 	return true;
@@ -435,8 +419,12 @@ void j1DragoonKnight::LoadPlayerProperties() {
 	// Copying the size of the player
 	playerSize.x = player.child("size").attribute("width").as_int();
 	playerSize.y = player.child("size").attribute("height").as_int();
+	attackSize.x = player.child("attackCollider").attribute("width").as_int();
+	attackSize.y = player.child("attackCollider").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
+	offset = player.child("margin").attribute("offset").as_int();
+	playerScale = player.attribute("scale").as_float();
 
 	// Copying attack values
 	attackBlittingX = player.child("attack").attribute("blittingX").as_int();
@@ -450,11 +438,13 @@ void j1DragoonKnight::LoadPlayerProperties() {
 
 	basicDamage = combat.attribute("basicDamage").as_int();
 	rageDamage = combat.attribute("rageDamage").as_uint();
-	dashSpeed = combat.attribute("dashSpeed").as_int();
 	lifePoints = combat.attribute("lifePoints").as_int();
+	knockback = combat.attribute("knockback").as_int();
+	totalLifePoints = combat.attribute("lifePoints").as_int();
 	cooldownTime_Q = cd.attribute("Q").as_uint();
 	cooldownTime_E = cd.attribute("E").as_uint();
 	duration_Rage = cd.attribute("rage").as_uint();
+	duration_Shield = cd.attribute("shield").as_uint();
 	invulTime = cd.attribute("invulTime").as_uint();
 
 	// Copying values of the speed

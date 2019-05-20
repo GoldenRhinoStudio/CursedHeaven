@@ -2,8 +2,11 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1Pathfinding.h"
+#include "j1Map.h"
+#include "j1EntityManager.h"
 
 #include <algorithm>
+
 #include "Brofiler/Brofiler.h"
 
 j1PathFinding::j1PathFinding() : j1Module(), map(NULL), width(0), height(0)
@@ -63,37 +66,36 @@ Movement j1PathFinding::CheckDirection(const std::vector<iPoint>* path,int * nod
 {
 	if (path->size() > 1 && *node < path->size() - 1)
 	{
-		iPoint tile = path->at(*node);
-		iPoint next_tile = path->at(*node + 1);
+		iPoint tile = { path->at(*node).x, path->at(*node).y };
+		iPoint next_tile = { path->at(*node + 1).x, path->at(*node + 1).y };
+
 
 		int x_difference = next_tile.x - tile.x;
 		int y_difference = next_tile.y - tile.y;
 
-		if (x_difference > 0 && y_difference > 0) return DOWN_RIGHT;
-		else if (x_difference > 0 && y_difference < 0) return UP_RIGHT;
-		else if (x_difference < 0 && y_difference > 0) return DOWN_LEFT;
-		else if (x_difference < 0 && y_difference < 0) return UP_LEFT;
+		if (x_difference > 0 && y_difference > 0) return DOWN;
 		else if (x_difference > 0 && y_difference < 0) return RIGHT;
-		else if (x_difference < 0 && y_difference == 0) return LEFT;
-		else if (x_difference == 0 && y_difference > 0)	return DOWN;
-		else if (x_difference == 0 && y_difference < 0) return UP;
+		else if (x_difference < 0 && y_difference > 0) return LEFT;
+		else if (x_difference < 0 && y_difference < 0) return UP;
+		else if (x_difference == 0 && y_difference < 0) return UP_RIGHT;
+		else if (x_difference < 0 && y_difference == 0) return UP_LEFT;
+		else if (x_difference > 0 && y_difference == 0) return DOWN_RIGHT;
+		else if (x_difference == 0 && y_difference > 0)	return DOWN_LEFT;
 	}
-
-	else return NONE;
+	return NONE;
 }
 
-bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, fPoint* position) {
+bool j1PathFinding::check_nextTile(const std::vector<iPoint>* path, int* cnode, iPoint* position, Movement direction) {
 
-	if (path->size() > 1 && *cnode < path->size() - 1)
+	if (path->size() > 1 && *cnode != path->size() - 1)
 	{
-		int* node = cnode;
-		iPoint prevDest = path->at(*node);
-		iPoint currentDest = path->at(*node + 1);
+		iPoint prevDest = path->at(*cnode);
 
-		bool reachedX = (prevDest.x <= currentDest.x && position->x >= currentDest.x)
-			|| (prevDest.x >= currentDest.x && position->x <= currentDest.x);
-		bool reachedY = (prevDest.y <= currentDest.y && position->y >= currentDest.y)
-			|| (prevDest.y >= currentDest.y && position->y <= currentDest.y);
+
+		bool reachedX = (direction == RIGHT && position->x >= prevDest.x)
+			|| (direction == LEFT && position->x <= prevDest.x || prevDest.x == position->x);
+		bool reachedY = (direction == DOWN && position->y >= prevDest.y)
+			|| (direction == UP && position->y <= prevDest.y || prevDest.y == position->y);
 		return (reachedX & reachedY);
 	}
 	return false;
@@ -270,7 +272,7 @@ int j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 {
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::Gray)
 
-		int ret = -1;
+	int ret = -1;
 
 	if (!IsWalkable(origin) || !IsWalkable(destination))
 		return ret;

@@ -19,6 +19,7 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
+	bool PostUpdate();
 
 	bool FadeToBlack(float time = 2.0f);
 	bool IsFading() const;

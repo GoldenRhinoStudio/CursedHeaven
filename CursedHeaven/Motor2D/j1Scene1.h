@@ -41,7 +41,7 @@ public:
 	// Called to change scene
 	void ChangeSceneMenu();
 	void ChangeSceneDeath();
-	void ChangeSceneVictory();
+	void ChangeScene2();
 
 	// Load and Save
 	bool Load(pugi::xml_node&);
@@ -51,11 +51,9 @@ public:
 
 public:
 	j1Box* settings_window = nullptr;
-	fPoint initialScene1Position;
 	bool player_created = false;
 	bool backToMenu = false;
 	bool toLoseScene = false;
-	bool toVictoryScene = false;
 
 	std::list<j1Button*> scene1Buttons;
 	std::list<j1Label*> scene1Labels;
@@ -64,10 +62,11 @@ public:
 	j1Timer	startup_time;
 	int time_scene1;
 	bool changingScene = false;
-	bool startDialogue = true;
-	bool finishedDialogue = false;
+	bool startDialog = true;
+	bool finishedDialog = false;
 	bool profile_active = false;
 	bool bossFightOn = false;
+	bool dialogSellerCanAppear = true;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;
@@ -76,11 +75,14 @@ public:
 	std::string current_points;
 	int score_player = 0;
 
+	uint potionCounter = 0;
+
 private:
 	SDL_Texture* debug_tex = nullptr;
+	SDL_Texture* lvl1_tex = nullptr;
 	SDL_Texture* gui_tex = nullptr;
-
-	_TTF_Font* font = nullptr;
+	SDL_Texture* bg = nullptr;
+	SDL_Rect rect = { 0, 0, 400, 200};
 
 	bool closeSettings = false;
 	bool continueGame = true;

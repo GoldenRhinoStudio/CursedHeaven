@@ -9,7 +9,6 @@
 
 #include <vector>
 
-#define DETECTION_RANGE 10
 #define ATTACK_RANGE_SLIME 0
 
 struct SDL_Texture;
@@ -53,7 +52,6 @@ public:
 	iPoint colliderSize;
 
 	float speed;
-
 	Movement direction;
 
 	std::vector<iPoint>* path;
@@ -78,6 +76,9 @@ private:
 	Animation down;
 
 	Animation death;
+
+	bool attacking = false;
+	int score = 0;
 
 };
 #endif // __j1SLIME_H__

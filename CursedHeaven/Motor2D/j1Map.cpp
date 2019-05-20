@@ -588,7 +588,10 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 void j1Map::EntityMovement(j1Entity* entity)
 {
 	BROFILER_CATEGORY("EntityMovement", Profiler::Color::Blue)
-	iPoint current_tile = WorldToMap(entity->collider->rect.x, entity->collider->rect.y);
+	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
+	int y = entity->collider->rect.y + entity->collider->rect.h - 5;
+
+	iPoint current_tile = WorldToMap(x, y);
 	iPoint next_tile = { 0,0 };
 
 	uint height0_gid = 0, height1_gid = 0;
@@ -908,19 +911,170 @@ void j1Map::EntityMovement(j1Entity* entity)
 	}
 }
 
+void j1Map::EntityMovementTest(j1Entity* entity) {
+	
+
+	DIRECTION direction;
+
+	direction = entity->direction;
+
+	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
+	int y = entity->collider->rect.y + entity->collider->rect.h - entity->offset;
+
+	iPoint current_tile = WorldToMap(x, y);
+	current_tile.x -= 1;
+	current_tile.y -= 1;
+	
+	if (direction == UP_ || direction == UP_RIGHT_ || direction == UP_LEFT_)
+		current_tile.y += 1;
+
+
+	iPoint next_tile = { 0,0 };
+
+	uint current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+	uint next_gid = 0;
+
+	// tiles of the first layer | height == 0
+	uint up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);
+	uint down_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y + 1);
+	uint down_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y);
+	uint up_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y);
+
+	uint right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
+	uint up_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
+	uint down_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
+	uint left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
+
+
+	bool going_up = false;
+	bool going_down = false;
+
+	switch (direction)
+	{
+	case UP_:
+		next_gid = up_gid;
+		next_tile = { current_tile.x - 1, current_tile.y - 1 };
+		break;
+	case DOWN_:
+		next_gid = down_gid;
+		next_tile = { current_tile.x + 1, current_tile.y + 1 };
+		break;
+	case RIGHT_:
+		next_gid = right_gid;
+		next_tile = { current_tile.x + 1, current_tile.y - 1 };
+		break;
+	case LEFT_:
+		next_gid = left_gid;
+		next_tile = { current_tile.x - 1, current_tile.y + 1 };
+		break;
+	case UP_RIGHT_:
+		next_gid = up_right_gid;
+		next_tile = { current_tile.x, current_tile.y - 1 };
+		break;
+	case UP_LEFT_:
+		next_gid = up_left_gid;
+		next_tile = { current_tile.x - 1, current_tile.y };
+		break;
+	case DOWN_RIGHT_:
+		next_gid = down_right_gid;
+		next_tile = { current_tile.x + 1, current_tile.y };
+		break;
+	case DOWN_LEFT_:
+		next_gid = down_left_gid;
+		next_tile = { current_tile.x, current_tile.y + 1 };
+		break;
+	}
+	
+
+	if (next_gid != 0)
+	{
+		if ((current_gid % 2 - next_gid % 2) != 0)
+		{
+			if (current_gid % 2 == 0)
+				going_up = true;
+			else
+				going_down = true;
+		}
+	}
+
+	if (current_gid % 2 != 1)
+		entity->height = 0;
+	else
+		entity->height = 1;
+
+
+	if (next_gid == 5 || next_gid == 6 || next_gid == 0)
+		entity->movement = false;
+
+	else
+	{
+		entity->movement = true;
+
+		if (going_up)
+		{
+			if (direction == UP_RIGHT_)
+			{
+				entity->position.y -= 1;
+			}
+
+			else if (direction == UP_LEFT_)
+			{
+				entity->position.y -= 1;
+			}
+
+			else if (direction == DOWN_RIGHT_)
+			{
+				entity->position.y += 1;
+			}
+
+			else if (direction == DOWN_LEFT_)
+			{
+				entity->position.y += 1;
+			}
+		}
+
+		else if (going_down)
+		{
+			if (direction == UP_RIGHT_)
+			{
+				entity->position.x += 1;
+			}
+
+			else if (direction == UP_LEFT_)
+			{
+				entity->position.x -= 1;
+			}
+
+			else if (direction == DOWN_RIGHT_)
+			{
+				entity->position.y += 1;
+			}
+
+			else if (direction == DOWN_LEFT_)
+			{
+				entity->position.y += 1;
+			}
+		}
+	}
+
+
+}
+
+
 void j1Map::Tile_WorldMap(iPoint& pos, int height){	
 	int re2 = 0;
-	if (height < 2) {
+	if (height < 2) 
 		re2 = 0;
-	}
+	
 	else if (height < 4 && height >= 2)
 		re2 = 1;
-	else if (height < 6 && height >= 4) {
+	
+	else if (height < 6 && height >= 4) 
 		re2 = 2;
-	}
-	else if (height < 8 && height >= 6) {
+
+	else if (height < 8 && height >= 6)
 		re2 = 3;
-	}
+	
 	pos.x += re2;
 	pos.y += re2;
 }

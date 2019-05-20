@@ -16,11 +16,11 @@
 #include "j1Judge.h"
 #include "j1SceneMenu.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 #include "j1Gui.h"
 #include "j1SceneMenu.h"
-#include "j1Fonts.h"
 #include "j1Label.h"
 #include "j1Button.h"
 #include "j1Box.h"
@@ -28,7 +28,9 @@
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
 #include "j1SceneLose.h"
-#include "j1SceneVictory.h"
+#include "j1Shop.h"
+#include "j1Minimap.h"
+#include "j1TransitionManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -53,22 +55,17 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 	if (active == false)
 		LOG("Scene1 not active.");
 
-	// Copying the position of the player
-	initialScene1Position.x = 0;
-	initialScene1Position.y = 0;
-
 	return ret;
 }
 
 // Called before the first frame
 bool j1Scene1::Start()
 {
-
 	if (active)
-	{	
+	{
 		App->map->draw_with_quadtrees = true;
 		// The map is loaded
-		if (App->map->Load("greenmount_v2.tmx"))
+		if (App->map->Load("greenmount.tmx"))
 		{
 			int w, h;
 			uchar* data = NULL;
@@ -86,9 +83,8 @@ bool j1Scene1::Start()
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
 		gui_tex = App->tex->Load("gui/uipack_rpg_sheet.png");
-
-		// Loading fonts
-		font = App->font->Load("fonts/Pixeled.ttf", 10);
+		lvl1_tex = App->tex->Load("maps/minimap_lvl1.png");
+		bg = App->tex->Load("maps/Background.png");
 
 		// Creating UI
 		SDL_Rect section = { 9,460,315,402 };
@@ -110,12 +106,13 @@ bool j1Scene1::Start()
 
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
-		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, font, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, font, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, font, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, font, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, App->gui->font2, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, App->gui->font2, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		PlaceEntities(6);
+		App->shop->PlaceShopScene1();
 
 		startup_time.Start();
 		windowTime.Start();
@@ -129,6 +126,7 @@ bool j1Scene1::PreUpdate()
 {
 	BROFILER_CATEGORY("Level1PreUpdate", Profiler::Color::Orange)
 	current_points.erase();
+
 	return true;
 }
 
@@ -138,17 +136,14 @@ bool j1Scene1::Update(float dt)
 	BROFILER_CATEGORY("Level1Update", Profiler::Color::LightSeaGreen)
 
 	time_scene1 = startup_time.ReadSec();
-	finishedDialogue = true;
-	
-	/*if (startDialogue)
-		App->dialog->StartDialogEvent(App->dialog->dialogA);*/
 
 	// ---------------------------------------------------------------------------------------------------------------------
 	// USER INTERFACE MANAGEMENT
+	// ---------------------------------------------------------------------------------------------------------------------
 
 	App->gui->UpdateButtonsState(&scene1Buttons, App->gui->buttonsScale);
 	App->gui->UpdateWindow(settings_window, &scene1Buttons, &scene1Labels, &scene1Boxes);
-	score_player = App->entity->currentPlayer->score_points;
+	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
 
 	if (App->scene1->startup_time.Read() > 1700) {
@@ -246,28 +241,20 @@ bool j1Scene1::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame("save_game.xml");
 
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+		App->entity->currentPlayer->victory = true;
+
 	// Managing scene transitions
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN || resettingLevel)
-	{
-		/*resettingLevel = true;
-		App->fade->FadeToBlack();
-
-		if (App->fade->IsFading() == 0) {
-			App->render->camera.x = 0;
-			resettingLevel = false;
-		}*/
-	}
-
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN || changingScene) {
 		changingScene = true;
 
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0)
-			ChangeSceneMenu(); 
+			ChangeSceneMenu();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN 
+	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN
 		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
 
 		lastStatsTime = statsTime.Read();
@@ -286,12 +273,11 @@ bool j1Scene1::Update(float dt)
 	}
 
 	if (App->entity->currentPlayer->victory == true) {
-		toVictoryScene = true;
 
 		App->fade->FadeToBlack();
 
 		if (App->fade->IsFading() == 0)
-			ChangeSceneVictory();
+			ChangeScene2();
 	}
 
 	if (backToMenu && App->fade->IsFading() == 0)
@@ -300,11 +286,14 @@ bool j1Scene1::Update(float dt)
 	// ---------------------------------------------------------------------------------------------------------------------
 	// DRAWING EVERYTHING ON THE SCREEN
 	// ---------------------------------------------------------------------------------------------------------------------	
-	
+	App->render->Blit(bg, 0, 0, NULL, SDL_FLIP_NONE, false, 0.7f);
 	App->map->Draw();
 	App->entity->DrawEntityOrder(dt);
 	App->render->reOrder();
 	App->render->OrderBlit(App->render->OrderToRender);
+
+	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q && App->entity->knight != nullptr)
+		App->render->Blit(App->entity->knight->shieldTex, App->entity->currentPlayer->position.x + 2, App->entity->currentPlayer->position.y + 8, NULL, SDL_FLIP_NONE, true, 0.13f);
 
 	return true;
 }
@@ -313,6 +302,10 @@ bool j1Scene1::Update(float dt)
 bool j1Scene1::PostUpdate()
 {
 	BROFILER_CATEGORY("Level1PostUpdate", Profiler::Color::Yellow)
+
+	if (finishedDialog)
+		App->render->Blit(lvl1_tex, App->win->width - 400, App->win->height - 200, &rect, SDL_FLIP_NONE, false, 0.3333333f);
+
 	return continueGame;
 }
 
@@ -332,10 +325,6 @@ bool j1Scene1::Save(pugi::xml_node& node) const
 
 void j1Scene1::PlaceEntities(int room)
 {
-	App->entity->AddEnemy(13, 83, SLIME);
-	App->entity->AddEnemy(16, 79, SLIME);
-	App->entity->AddEnemy(7, 74, SLIME);
-
 	App->entity->AddEnemy(6, 57, SLIME);
 	App->entity->AddEnemy(15, 54, SLIME);
 	App->entity->AddEnemy(17, 61, SLIME);
@@ -378,16 +367,17 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(85, 60, SLIME);
 	App->entity->AddEnemy(80, 65, SLIME);
 
-	App->entity->AddEnemy(54, 68, MINDFLYER);
+	App->entity->AddEnemy(53, 68, MINDFLYER);
 }
 
 // Called before quitting
 bool j1Scene1::CleanUp()
 {
 	LOG("Freeing scene");
+	App->tex->UnLoad(bg);
+	App->tex->UnLoad(lvl1_tex);
 	App->tex->UnLoad(gui_tex);
 	App->tex->UnLoad(debug_tex);
-
 	App->map->CleanUp();
 	App->collisions->CleanUp();
 	App->tex->CleanUp();
@@ -395,10 +385,10 @@ bool j1Scene1::CleanUp()
 	App->gui->CleanUp();
 	App->particles->CleanUp();
 
+	potionCounter = 0;
+
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
-	/*if (App->entity->rogue) App->entity->rogue->CleanUp();
-	if (App->entity->tank) App->entity->tank->CleanUp();*/
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		(*item)->CleanUp();
@@ -419,6 +409,8 @@ bool j1Scene1::CleanUp()
 	if (settings_window != nullptr) settings_window = nullptr;
 
 	App->path->CleanUp();
+	App->fade->FadeToBlack();
+	App->entity->CleanUp();
 
 	return true;
 }
@@ -431,11 +423,12 @@ void j1Scene1::ChangeSceneMenu()
 	App->dialog->CleanUp();
 
 	CleanUp();
-	App->fade->FadeToBlack();
-	App->entity->CleanUp();
+	App->shop->restartingShop = true;
+	App->shop->CleanUp();
 	App->entity->active = false;
 	App->menu->Start();
-	App->render->camera = { 0,0 };
+	App->render->camera = { 0,0 }; 
+	App->entity->player_type = NO_PLAYER;
 	backToMenu = false;
 }
 
@@ -445,24 +438,27 @@ void j1Scene1::ChangeSceneDeath() {
 	App->dialog->CleanUp();
 
 	CleanUp();
-	App->fade->FadeToBlack();
-	App->entity->CleanUp();
+	App->shop->restartingShop = true;
+	App->shop->CleanUp();
 	App->entity->active = false;
 	App->lose->Start();
-	App->render->camera = { 0,0 };
+	App->render->camera = { 0,0 }; 
 	toLoseScene = false;
 }
 
-void j1Scene1::ChangeSceneVictory() {
+void j1Scene1::ChangeScene2() {
 	App->scene1->active = false;
-	App->victory->active = true;
+	App->scene2->active = true;
 	App->dialog->CleanUp();
 
 	CleanUp();
-	App->fade->FadeToBlack();
-	App->entity->CleanUp();
+	App->shop->CleanUp();
 	App->entity->active = false;
-	App->victory->Start();
-	App->render->camera = { 0,0 };
-	toVictoryScene = false;
+	App->scene2->Start();
+
+	App->gui->Start();
+	App->entity->active = true;
+	App->entity->CreatePlayer2();
+	App->entity->Start();
+	App->particles->Start();
 }

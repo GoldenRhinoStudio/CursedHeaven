@@ -37,9 +37,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Called to change scene
-	void ChangeScene();
-
 public:
 
 	j1Box* info_window = nullptr;
@@ -53,9 +50,6 @@ public:
 	bool backToMenu = false;
 
 private:
-
-	_TTF_Font* font = nullptr;
-	_TTF_Font* font2 = nullptr;
 	SDL_Texture* button_tex = nullptr;
 	SDL_Texture* gui_tex2 = nullptr;
 	SDL_Texture* info_tex = nullptr;

@@ -20,7 +20,9 @@ enum SCENE {
 	SCENE1,
 	SCENE2,
 	CREDITS,
-	SCENE_SETTINGS
+	SCENE_SETTINGS,
+	VICTORY,
+	LOSE
 };
 
 class j1SceneMenu : public j1Module
@@ -47,9 +49,6 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
-
-	// Called to change scene
-	void ChangeScene(SCENE objectiveScene);
 
 	// Load and Save
 	bool Load(pugi::xml_node&);

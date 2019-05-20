@@ -3,6 +3,7 @@
 
 #include "j1Module.h"
 #include "j1UserInterfaceElement.h"
+
 #include <list>
 
 #define MAX_ENTITIES 1000
@@ -14,6 +15,8 @@ class j1Rogue;
 class j1Tank;
 class j1Player;
 class j1Judge;
+class j1Seller;
+class Exodus;
 
 struct SDL_Texture;
 
@@ -32,10 +35,15 @@ enum DIRECTION {
 enum ENTITY_TYPES
 {
 	PLAYER,
-	COIN,
-	NPC,
+	ITEM,
 	SLIME,
+	TURRET,
+	FIRE,
 	MINDFLYER,
+	EXODUS,
+	JUDGE,
+	OLDMAN,
+	SELLER,
 	UNKNOWN
 };
 
@@ -44,14 +52,13 @@ enum PLAYER_TYPES
 	KNIGHT,
 	MAGE,
 	TANK,
-	ROGUE
+	ROGUE,
+	NO_PLAYER
 };
 
-enum NPC_TYPES 
-{
-	JUDGE,
-	OLDMAN,
-	MERCHANT 
+enum DROP_TYPES {
+	COIN,
+	LIFE
 };
 
 struct EntityInfo
@@ -85,18 +92,20 @@ public:
 	j1Entity* CreateEntity(ENTITY_TYPES type, int x = 0, int y = 0);
 	
 	void OnCollision(Collider* c1, Collider* c2);
-	void CreatePlayer();
-	void CreateNPC();
+	void CreatePlayer1();
+	void CreatePlayer2();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
+	void AddItem(int x, int y, DROP_TYPES itype);
 
 private:
 
 	void SpawnEnemy(const EntityInfo& info);
 
+
 public:
 	
-	std::list<j1Entity*>	entities;
+	std::list<j1Entity*> entities;
 
 	// Pointers to diferent playable classes
 	j1DragoonKnight*	knight = nullptr;
@@ -107,12 +116,15 @@ public:
 	j1Player*			currentPlayer = nullptr;
 
 	j1Judge*			judge = nullptr;
+	j1Seller*			seller = nullptr;
 
-	PLAYER_TYPES player_type;
-	NPC_TYPES npc_type = JUDGE;
+	PLAYER_TYPES player_type = NO_PLAYER;
+	Exodus*			exodus = nullptr;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
+	int fire_Damage = 0;
+	int turret_Damage = 0;
 
 private:
 	int entity_logic = 0;
@@ -120,7 +132,8 @@ private:
 	bool				do_logic = false;
 	float				accumulatedTime = 0.0f;
 	float				updateMsCycle = 0.0f;
-
+	fPoint				playerSpawnPos1;
+	fPoint				playerSpawnPos2;
 };
 
 #endif // __J1ENTITYMANAGER_H__

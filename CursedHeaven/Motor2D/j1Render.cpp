@@ -31,7 +31,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 	// load flags
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	if(config.child("vsync").attribute("value").as_bool(true) == true)
+	if (config.child("vsync").attribute("value").as_bool(true) == true)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 		LOG("Using vsync");
@@ -42,7 +42,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 
 	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
 
-	if(renderer == NULL)
+	if (renderer == NULL)
 	{
 		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -53,7 +53,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera.h = App->win->screen_surface->h;
 		camera.x = initialCameraX = 0;
 		camera.y = initialCameraY = 0;
-	}	
+	}
 
 	return ret;
 }
@@ -74,10 +74,10 @@ bool j1Render::PreUpdate()
 	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
 
 
-	while(!map_sprites.empty())
-	{
-		map_sprites.pop_back();
-	}
+		while (!map_sprites.empty())
+		{
+			map_sprites.pop_back();
+		}
 	map_sprites.clear();
 
 	while (!entities_sprites.empty())
@@ -87,7 +87,7 @@ bool j1Render::PreUpdate()
 	entities_sprites.clear();
 
 
-	SDL_RenderClear(renderer); 
+	SDL_RenderClear(renderer);
 	return true;
 }
 
@@ -95,7 +95,7 @@ bool j1Render::Update(float dt)
 {
 	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen)
 
-	j1Player* player = nullptr;
+		j1Player* player = nullptr;
 
 	if (App->entity->knight != nullptr) player = (j1Player*)App->entity->knight;
 	else if (App->entity->mage != nullptr) player = (j1Player*)App->entity->mage;
@@ -103,7 +103,7 @@ bool j1Render::Update(float dt)
 	else if (App->entity->tank != nullptr) (j1Player*)App->entity->tank;*/
 
 	if (player != nullptr) {
-		
+
 		if (!player->changing_room) {
 			camera.x = -player->position.x * (App->win->GetScale()) + App->win->width / 2;
 			camera.y = -player->position.y * (App->win->GetScale()) + App->win->height / 2;
@@ -135,7 +135,7 @@ bool j1Render::PostUpdate()
 {
 	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
 
-	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+		SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
 }
@@ -195,10 +195,9 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float blitScale, double angle, int pivot_x, int pivot_y, bool use_camera) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, bool use_camera, float blitscale, float scale, double angle, SDL_Renderer* renderer,  float speed, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
 	SDL_Rect rect;
 
 	if (use_camera)
@@ -208,15 +207,14 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	}
 	else
 	{
-		rect.x = x * SCREEN_SIZE;
-		rect.y = y * SCREEN_SIZE;
+		rect.x = x;
+		rect.y = y;
 	}
 
 
-	if(section != NULL)
+	if (section != NULL)
 	{
 		rect.w = section->w;
-
 		rect.h = section->h;
 	}
 	else
@@ -224,20 +222,20 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	(int)rect.w *= scale * blitScale;
-	(int)rect.h *= scale * blitScale;
+	rect.w *= scale * blitscale;
+	rect.h *= scale * blitscale;
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
 
-	if(pivot_x != INT_MAX && pivot_y != INT_MAX)
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
 	{
 		pivot.x = pivot_x;
 		pivot.y = pivot_y;
 		p = &pivot;
 	}
 
-	if(SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
 	{
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
@@ -246,6 +244,55 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	return ret;
 }
 
+bool j1Render::BlitMinimap(SDL_Texture* texture, int x, int y, const SDL_Rect* section, bool use_camera, SDL_Renderer* renderer, float scale, float speed, double angle, int pivot_x, int pivot_y) const
+{
+	bool ret = true;
+
+	SDL_Rect rect;
+
+	if (use_camera)
+	{
+		rect.x = (int)(camera.x * speed) + x * scale;
+		rect.y = (int)(camera.y * speed) + y * scale;
+	}
+	else
+	{
+		rect.x = x;
+		rect.y = y;
+	}
+
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
 // Blit to screen
 bool j1Render::BlitDialog(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, float Scale, double angle, int pivot_x, int pivot_y) const
 {
@@ -288,7 +335,6 @@ bool j1Render::BlitDialog(SDL_Texture* texture, int x, int y, const SDL_Rect* se
 	return ret;
 }
 
-
 bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
@@ -298,7 +344,7 @@ bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
 	SDL_Rect rec(rect);
-	if(use_camera)
+	if (use_camera)
 	{
 		rec.x = (int)(camera.x + rect.x * scale);
 		rec.y = (int)(camera.y + rect.y * scale);
@@ -308,7 +354,7 @@ bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 
 	int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
 
-	if(result != 0)
+	if (result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -327,12 +373,12 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 
 	int result = -1;
 
-	if(use_camera)
+	if (use_camera)
 		result = SDL_RenderDrawLine(renderer, camera.x + x1 * scale, camera.y + y1 * scale, camera.x + x2 * scale, camera.y + y2 * scale);
 	else
 		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
 
-	if(result != 0)
+	if (result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -354,7 +400,7 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 
 	float factor = (float)M_PI / 180.0f;
 
-	for(uint i = 0; i < 360; ++i)
+	for (uint i = 0; i < 360; ++i)
 	{
 		points[i].x = (int)(x + radius * cos(i * factor));
 		points[i].y = (int)(y + radius * sin(i * factor));
@@ -362,7 +408,7 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);
 
-	if(result != 0)
+	if (result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -374,7 +420,7 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>& priority) const
 {
 	BROFILER_CATEGORY("OrderBlit", Profiler::Color::Gold)
-	bool ret = true;
+		bool ret = true;
 	while (priority.empty() == false) {
 		TileData* Image = priority.top();
 
@@ -396,8 +442,8 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 		else
 			flag = SDL_FLIP_NONE;
 
-		(int)r.w *= Image->scale * Image->blitScale;
-		(int)r.h *= Image->scale * Image->blitScale;
+		r.w *= Image->scale * Image->blitScale;
+		r.h *= Image->scale * Image->blitScale;
 
 		SDL_Point* point = NULL;
 		SDL_Point img2;
@@ -414,117 +460,170 @@ bool j1Render::OrderBlit(priority_queue<TileData*, vector<TileData*>, Comparer>&
 		priority.pop();
 	}
 	for (int i = 0; i < App->map->Rectvec.size(); i++) {
-	RELEASE(App->map->Rectvec[i]);
+		RELEASE(App->map->Rectvec[i]);
 	}
 
 	App->map->Rectvec.clear();
 	return ret;
 }
 
+bool j1Render::BlitHUD(SDL_Texture * texture, int x, int y, const SDL_Rect * section, SDL_RendererFlip flip, float speed, float blitScale, double angle, int pivot_x, int pivot_y, bool use_camera) const
+{
+	bool ret = true;
+	uint scale = App->win->GetScale();
+	SDL_Rect rect;
+
+	if (use_camera)
+	{
+		rect.x = (int)(camera.x * speed) + x * scale;
+		rect.y = (int)(camera.y * speed) + y * scale;
+	}
+	else
+	{
+		rect.x = x * SCREEN_SIZE;
+		rect.y = y * SCREEN_SIZE;
+	}
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	(int)rect.w *= scale * blitScale;
+	(int)rect.h *= scale * blitScale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+
+	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	{
+		pivot.x = pivot_x;
+		pivot.y = pivot_y;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, flip) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
 void j1Render::reOrder() {
 
 	BROFILER_CATEGORY("Order", Profiler::Color::Green)
-	bool behind = false;
+		bool behind = false;
 	int aux_height = 0;
 	int sum_height = 0;
 	iPoint pos1 = { 0,0 };
-	iPoint pos2 = { 0,0 }; 
-	int order = 0;
+	iPoint pos2 = { 0,0 };
 	for (std::vector<TileData*>::iterator item_map = map_sprites.begin(); item_map != map_sprites.end(); ++item_map)
 	{
 		TileData* img2 = *item_map;
 		pos2 = App->map->WorldToMap(img2->x, img2->y);
-		App->map->Tile_WorldMap(pos2, img2->height);	
-
-		//for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
-		//{
-		//	
-		//	TileData* img1 = *item;
-		//	pos1 = App->map->WorldToMap((int)img1->col->rect.x, (int)img1->col->rect.y);
-		//	App->map->Tile_WorldMap(pos1, img1->height);
-
-
-		//		if (img1->height < img2->height && !img1->behind) {//check
-
-		//			if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2 || pos2.x == pos1.x - 3) && (pos2.y == pos1.y - 1 || pos2.y == pos1.y - 2))//top-left
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if ((pos2.y == pos1.y - 1) && pos2.x == pos1.x)//top
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if ((pos2.y == pos1.y - 1) && (pos2.x == pos1.x + 1))//top-right
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if ((pos2.x == pos1.x - 1 || pos2.x == pos1.x - 2) && pos2.y == pos1.y) //left
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-		//			else if ((pos2.x == pos1.x + 1) && pos2.y == pos1.y)//right
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-		//			else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
-		//			{
-		//				img1->order = img2->order + 0.5f;
-		//			}
-		//			else if (pos2.x == pos1.x && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2))//bottom
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-		//			else if ((pos2.x == pos1.x + 1 || pos2.x == pos1.x + 2 || pos2.x == pos1.x + 3) && (pos2.y == pos1.y + 1 || pos2.y == pos1.y + 2 || pos2.y == pos1.y + 3))//bottom-right
-		//			{
-		//				img1->order = img2->order - 0.5f;
-		//				img1->behind = true;
-		//			}
-
-		//		}
-		//		else if (img1->height >= img2->height && !img1->behind) {
-		//			if ((pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
-		//				(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
-		//				(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
-		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
-		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y) ||//right
-		//				(pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//top-down
-		//				(pos2.x == pos1.x + 2 && pos2.y == pos1.y + 2) ||//down-right
-		//				(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-		//				(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) || //down-left
-		//				(pos2.x == pos1.x && pos2.y == pos1.y)) //current
-		//			{/*
-		//				if (img2->id % 2 != 0)
-		//					img1->order = img2->order + 1.0f;
-		//				else*/
-		//				if(img2->order > img1->order)
-		//					img1->order = img2->order + 0.5f;
-		//			}
-		//		}
-		//}
-		OrderToRender.push(img2);
-		order = img2->order + 1;
-	}
-	if (!entities_sprites.empty()) {
-		TileData* player = entities_sprites.front();
-		player->order = order;
+		App->map->Tile_WorldMap(pos2, img2->height);
 
 		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
 		{
+
 			TileData* img1 = *item;
 
-			if (player != img1) {
-				if (img1->col->rect.y + img1->col->rect.h < player->col->rect.y) {
-					img1->order = player->order - 0.1;
+
+			if (img1->height < img2->height && !img1->behind) {//check
+
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + (int)img1->col->rect.h - img1->margin.y);
+				App->map->Tile_WorldMap(pos1, img1->height);
+
+				if (pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1)//top-left
+				{
+					img1->order = img2->order + 0.5f;
+					
 				}
-				else {
-					img1->order = player->order + 0.1;
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x)//top
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x + 1)//top-right
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if ((pos2.x == pos1.x - 1) && pos2.y == pos1.y) //left
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
+				{
+					img1->behind = true;
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y)//right
+				{
+					img1->order = img2->order - 0.5f;
+					img1->behind = true;
+				}
+				else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
+				{
+					img1->order = img2->order + 0.5f;
+				}
+				else if (pos2.x == pos1.x && pos2.y == pos1.y + 1 )//bottom
+				{
+					img1->order = img2->order - 0.5f;
+					img1->behind = true;
+				}
+				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1)//bottom-right
+				{
+					img1->order = img2->order - 0.5f;
+					img1->behind = true;
+				}
+			}
+			else if (img1->height >= img2->height ) {
+
+				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
+				App->map->Tile_WorldMap(pos1, img1->height);
+
+				if (((pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//down-right
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+					(pos2.x == pos1.x && pos2.y == pos1.y) || //current
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) ||
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+					(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
+					(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
+					(pos2.x == pos1.x + 1 && pos2.y == pos1.y))
+					&& //down-left
+					!img1->behind) {
+					if (img2->order > img1->order)
+						img1->order = img2->order + 0.5f;
+				}
+			}
+		}
+		OrderToRender.push(img2);
+	}
+	if (!entities_sprites.empty()) {
+		TileData* player = entities_sprites.front();
+		for (std::vector<TileData*>::iterator item = entities_sprites.begin(); item != entities_sprites.end(); ++item)
+		{
+			TileData* img1 = *item;
+			pos1 = App->map->WorldToMap(img1->x, img1->y);
+
+			for (std::vector<TileData*>::iterator item2 = entities_sprites.begin(); item2 != entities_sprites.end(); ++item2)
+			{
+				TileData* img2 = *item2;
+				pos2 = App->map->WorldToMap(img2->x, img2->y);
+				if (img2 != img1) {
+					if (img1->col->CheckCollision(img2->col->rect)){
+						if (img1->col->rect.y + img1->col->rect.h < img2->col->rect.y + img2->col->rect.h) {
+							img1->order = img2->order - 0.2f;
+						}
+					}
 				}
 			}
 			OrderToRender.push(img1);

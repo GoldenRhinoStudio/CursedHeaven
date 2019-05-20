@@ -12,6 +12,8 @@
 #include "j1Map.h"
 #include "j1Scene1.h"
 #include "j1Audio.h"
+#include "j1Particles.h"
+#include <time.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -31,7 +33,7 @@ j1Slime::j1Slime(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES:
 	up.LoadAnimation("up", "slime", false);
 	down.LoadAnimation("down", "slime", false);
 
-	// Setting harpy position
+	// Setting slime position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
@@ -42,7 +44,7 @@ bool j1Slime::Start()
 {
 	LOG("Loading slime texture");
 
-	sprites = App->tex->Load("textures/enemies/Slime.png");
+	sprites = App->tex->Load("textures/enemies/Slimes/Slime.png");
 	debug_tex = App->tex->Load("maps/path2.png");
 
 	LoadProperties();
@@ -59,23 +61,22 @@ bool j1Slime::Update(float dt, bool do_logic)
 	BROFILER_CATEGORY("SlimeUpdate", Profiler::Color::LightSeaGreen)
 
 	if (!dead) {
-		collider->SetPos(position.x, position.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
 		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
-		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
-		//fix destination
+		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
+
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
 		if (distance <= DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
-			
+
 			if (App->entity->currentPlayer->dead == false)
 			{
 				if (do_logic) {
 					/*if(path != nullptr)
-						path->clear();*/
+					path->clear();*/
 
 					if (App->path->CreatePath(origin, destination) > 0) {
 						path = App->path->GetLastPath();
@@ -91,12 +92,15 @@ bool j1Slime::Update(float dt, bool do_logic)
 						App->audio->PlayFx(App->audio->slime_attack);
 					}
 					Move(path, dt);
-				}//fix attack
+				}
+				else if (!target_found && path != nullptr) {
+				}
+				//fix attack
 			}
 		}
 		else {
-		/*	if (path != nullptr)
-				path->clear();*/
+			/*	if (path != nullptr)
+			path->clear();*/
 			target_found = false;
 		}
 
@@ -108,16 +112,15 @@ bool j1Slime::Update(float dt, bool do_logic)
 
 	}
 
-	App->map->EntityMovement(this);
-
-
+	App->map->EntityMovementTest(this);
+	collider->SetPos(position.x + margin.x, position.y + margin.y);
 	
 	return true;
 }
 
 bool j1Slime::DrawOrder(float dt) {
 
-	// Drawing the harpy
+	// Drawing the slime
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
 	if (position.x - App->entity->currentPlayer->position.x >= 0)
@@ -150,13 +153,60 @@ bool j1Slime::PostUpdate() {
 
 void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 {
+	if (App->entity->currentPlayer->receivedDamage == false && col_2->type == COLLIDER_PLAYER) {
+		
+		if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q) {
+			//App->audio->PlayFx(asdfasdfasdfasdfasf)
+		}
+		else{
+
+			App->entity->currentPlayer->lifePoints -= App->entity->slime_Damage;
+			App->entity->currentPlayer->receivedDamage = true;
+
+			if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
+			else App->audio->PlayFx(App->audio->damage_dk);
+		}
+
+		if (App->entity->currentPlayer->lifePoints <= 0) 
+			App->entity->currentPlayer->dead = true;
+	}
+
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 		
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
 			if (App->entity->player_type == MAGE) col_2->to_delete = true;
+
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->slime_damage);
 			receivedBasicDamage = true;
+
+			if (lifePoints > 0 && attacking == false && App->entity->player_type == KNIGHT) {
+
+				if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0)
+				position.x += App->entity->currentPlayer->knockback;
+				else if (animation == &lateral || animation == &idle_lateral)
+					position.x -= App->entity->currentPlayer->knockback;
+				else if (animation == &up || animation == &idle_up)
+					position.y += App->entity->currentPlayer->knockback;
+				else if (animation == &down || animation == &idle_down)
+					position.y -= App->entity->currentPlayer->knockback;
+				else if ((animation == &diagonal_up || animation == &idle_diagonal_up) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y += 7;
+				}
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y += 7;
+				}
+				else if ((animation == &diagonal_down || animation == &idle_diagonal_down) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y -= 7;
+				}
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y -= 7;
+				}
+			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
@@ -169,10 +219,21 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 		}
 
 		if (lifePoints <= 0) {
-			App->entity->currentPlayer->score_points += 100;
 			App->audio->PlayFx(App->audio->slime_death);
 			dead = true;
 			collider->to_delete = true;
+
+			srand(time(NULL));
+			int item = rand() % 10 + 1;
+
+			if (item > 7) {
+				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
+				App->entity->AddItem(position.x + 20, position.y, LIFE);
+				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);
+			}
+			else {
+				App->entity->AddItem(position.x - 10, position.y, COIN);
+			}
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
 				if (item._Ptr->_Myval == this) {
@@ -215,78 +276,85 @@ void j1Slime::LoadProperties()
 	colliderSize.x = slime.child("colliderSize").attribute("w").as_int();
 	colliderSize.y = slime.child("colliderSize").attribute("h").as_int();
 
-	speed = slime.attribute("speed").as_int();
+	speed = slime.attribute("speed").as_float();
 	lifePoints = slime.attribute("life").as_int();
+	score = slime.attribute("score").as_int();
 	App->entity->slime_Damage = slime.child("combat").attribute("damage").as_int();
 
 }
 
 void j1Slime::Move(const std::vector<iPoint>* path, float dt)
 {
-	/*fPoint pos = { (float)collider->rect.x, (float)collider->rect.y };
-	if (App->path->check_nextTile(path, &node, &pos))
-		node++;
-*/
-	LOG("Node: %i", node);
+	/*for (uint i = 0; i < path->size(); ++i)
+	{
+		iPoint pos = App->map->MapToWorld(path->at(i).x, path->at(i).y);
+		App->render->Blit(debug_tex, pos.x, pos.y);
+	}*/ //blit path
+
+	iPoint pos = App->map->WorldToMap((int)collider->rect.x + (int)collider->rect.w/2, (int)collider->rect.y + (int)collider->rect.h);
+
 	direction = App->path->CheckDirection(path, &node);
 
+	if (App->path->check_nextTile(path, &node, &pos,direction)) {
+		node++;
+	}
+
+	fPoint next_position = position;
+
+	
 	if (direction == Movement::DOWN_RIGHT)
 	{
 		animation = &diagonal_down;
-		position.y += speed * dt;
-		position.x += speed * dt;
+		next_position.y += (speed * dt) / 2;
+		next_position.x += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::DOWN_LEFT)
 	{
 		animation = &diagonal_down;
-		position.y += speed * dt;
-		position.x -= speed * dt;
+		next_position.y += (speed * dt) / 2;
+		next_position.x -= speed * dt;
 		animation->flip = true;
 	}
-
 	else if (direction == Movement::UP_RIGHT)
 	{
 		animation = &diagonal_up;
-		position.y -= speed * dt;
-		position.x += speed * dt;
+		next_position.y -= (speed * dt) / 2;
+		next_position.x += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::UP_LEFT)
 	{
 		animation = &diagonal_up;
-		position.y -= speed * dt;
-		position.x -= speed * dt;
+		next_position.y -= (speed * dt) / 2;
+		next_position.x -= speed * dt;
 		animation->flip = true;
 	}
-
 	else if (direction == Movement::DOWN)
 	{
 		animation = &down;
-		position.y += speed * dt;
+		next_position.y += speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::UP)
 	{
 		animation = &up;
-		position.y -= speed * dt;
+		next_position.y -= speed * dt;
 		animation->flip = false;
 	}
-
 	else if (direction == Movement::RIGHT)
 	{
 		animation = &lateral;
 		animation->flip = false;
-		position.x += speed * dt;
+		next_position.x += speed * dt;
 	}
-
 	else if (direction == Movement::LEFT)
 	{
 		animation = &lateral;
 		animation->flip = true;
-		position.x -= speed * dt;
+		next_position.x -= speed * dt;
 	}
+
+	if (App->path->IsWalkable(App->map->WorldToMap((int)next_position.x, (int)next_position.y)))
+		position = next_position;
 }

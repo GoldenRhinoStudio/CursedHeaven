@@ -10,8 +10,8 @@
 
 #include <vector>
 
-#define DETECTION_RANGE 10
-#define ATTACK_RANGE_MF 15
+#define MF_DETECTION_RANGE 20
+#define ATTACK_RANGE_MF 5
 
 struct SDL_Texture;
 //struct Collider;
@@ -83,5 +83,18 @@ private:
 	j1Timer shotTimer;
 	uint lastTime_Shot = 0;
 	uint cooldown_Shot = 0;
+
+	j1Timer supershotTimer;
+	uint lastTime_Supershot = 0;
+	uint cooldown_Supershot = 0;
+	uint loopAngle = 320;
+
+	/*j1Timer supershotTimer;
+	uint lastTime_Supershot = 0;
+	uint cooldown_Supershot = 0;
+	uint loopAngle = 320;*/
+
+	int score = 0;
+	bool spinningShot = false;
 };
 #endif // __j1MINDFLYER_H__

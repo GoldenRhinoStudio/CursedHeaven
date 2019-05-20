@@ -64,7 +64,7 @@ public:
 	uchar GetTileAt(const iPoint& pos) const;
 
 	Movement CheckDirection(const std::vector<iPoint>* path, int* node)const;
-	bool check_nextTile(const std::vector<iPoint>* path, int * node, fPoint * position);
+	bool check_nextTile(const std::vector<iPoint>* path, int * node, iPoint * position, Movement direction);
 	Movement CheckDirectionGround(const std::vector<iPoint>* path)const;
 
 public:

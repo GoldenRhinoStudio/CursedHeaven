@@ -1,5 +1,7 @@
 <animations>
+  <!------------------------------>
   <!-- Animations of the player -->
+  <!------------------------------>
   
   <player>    
 	<!-- Knight -->
@@ -246,8 +248,19 @@
 	</mage>
 </player>
   
-  <!-- Animations of the enemies -->
-  <enemies>    
+  <enemies>   
+	<!------------------------------->
+	<!-- Animations other entities -->
+	<!------------------------------->
+	<seller>
+      <idle loop="true" speed="7.0f">
+        <animation x="0" y="71" w="22" h="34"/>
+	  </idle>
+	</seller>
+	
+	<!------------------------------->
+	<!-- Animations of the enemies -->
+	<!------------------------------->
 	<slime>
       <idleD_up loop="true" speed="7.0f">
         <animation x="0" y="37" w="30" h="36"/>
@@ -303,8 +316,33 @@
         <animation x="64" y="143" w="35" h="34"/>
         <animation x="99" y="143" w="35" h="34"/>
       </down>			   
-	</slime>
+      <idle loop="true" speed="7.0f">
+        <animation x="0" y="0" w="17" h="25"/>
+        <animation x="16" y="0" w="17" h="25"/>
+        <animation x="33" y="0" w="17" h="25"/>
+        <animation x="16" y="0" w="17" h="25"/>
+        <animation x="0" y="0" w="17" h="25"/>
+	  </idle>		   
+	</slime>  
 	
+	<fire>
+      <idle loop="true" speed="12.0f">
+        <animation x="0" y="0" w="17" h="25"/>
+        <animation x="16" y="0" w="17" h="25"/>
+        <animation x="33" y="0" w="17" h="25"/>
+        <animation x="16" y="0" w="17" h="25"/>
+        <animation x="0" y="0" w="17" h="25"/>
+	  </idle>		   
+	</fire>	
+	
+	<turret>
+      <idle loop="true" speed="7.0f">
+        <animation x="0" y="0" w="14" h="27"/>
+        <animation x="14" y="0" w="14" h="27"/>
+	  </idle>		   
+	</turret>
+	
+	<!-- Bosses -->
 	<mindflyer>
       <idleD_up loop="true" speed="7.0f">
         <animation x="0" y="105" w="24" h="35"/>
@@ -356,21 +394,132 @@
         <animation x="46" y="70" w="23" h="35"/>
       </down>			   
 	</mindflyer>
-	
-    <coin>
-      <idle loop ="true" speed="10.0f">
-        <animation x="4" y="4" w="16" h="16"/>
-        <animation x="36" y="4" w="16" h="16"/>
-        <animation x="68" y="4" w="16" h="16"/>
-        <animation x="100" y="4" w="16" h="16"/>
-        <animation x="4" y="28" w="16" h="16"/>
-        <animation x="36" y="28" w="16" h="16"/>
-        <animation x="68" y="28" w="16" h="16"/>
-        <animation x="100" y="28" w="16" h="16"/>
-        <animation x="4" y="50" w="16" h="16"/>
-        <animation x="36" y="50" w="16" h="16"/>
-      </idle>
-    </coin>
-  </enemies>
 
+    <exodus>
+      <idle loop="false" speed="0.0f">
+        <animation x="0" y="0" w="191" h="156"/>
+      </idle>
+      
+      <left_hand loop="false" speed="0.0f">
+        <animation x="0" y="0" w="31" h="40"/>
+      </left_hand>
+      
+      <right_hand loop="false" speed="0.0f">
+        <animation x="31" y="156" w="31" h="40"/>
+      </right_hand>
+      
+      <sword_attack1 loop="false" speed="50.0f">
+        <animation x="0" y="52" w="50" h="50"/>
+        <animation x="52" y="52" w="50" h="50"/>
+        <animation x="104" y="0" w="50" h="50"/>
+        <animation x="0" y="104" w="50" h="50"/>
+        <animation x="52" y="104" w="50" h="50"/>
+        <animation x="104" y="52" w="50" h="50"/>
+        <animation x="104" y="104" w="50" h="50"/>
+        <animation x="156" y="0" w="50" h="50"/>
+        <animation x="0" y="156" w="50" h="50"/>
+        <animation x="52" y="156" w="50" h="50"/>
+        <animation x="156" y="52" w="50" h="50"/>
+        <animation x="104" y="156" w="50" h="50"/>
+        <animation x="156" y="104" w="50" h="50"/>
+        <animation x="208" y="0" w="50" h="50"/>
+        <animation x="0" y="208" w="50" h="50"/>
+        <animation x="52" y="208" w="50" h="50"/>
+        <animation x="208" y="52" w="50" h="50"/>
+        <animation x="156" y="156" w="50" h="50"/>
+        <animation x="104" y="208" w="50" h="50"/>
+        <animation x="104" y="208" w="50" h="50"/>
+        <animation x="208" y="104" w="50" h="50"/>
+        <animation x="156" y="208" w="50" h="50"/>
+        <animation x="208" y="156" w="50" h="50"/>
+        <animation x="260" y="0" w="50" h="50"/>
+        <animation x="0" y="260" w="50" h="50"/>
+        <animation x="52" y="260" w="50" h="50"/>
+        <animation x="260" y="52" w="50" h="50"/>
+        <animation x="104" y="260" w="50" h="50"/>
+        <animation x="260" y="104" w="50" h="50"/>
+        <animation x="208" y="208" w="50" h="50"/>
+        <animation x="156" y="260" w="50" h="50"/>
+        <animation x="260" y="156" w="50" h="50"/>
+        <animation x="312" y="0" w="50" h="50"/>
+        <animation x="0" y="312" w="50" h="50"/>
+        <animation x="52" y="312" w="50" h="50"/>
+        <animation x="312" y="52" w="50" h="50"/>
+        <animation x="104" y="312" w="50" h="50"/>
+      </sword_attack1>
+      <sword_attack2 loop="false" speed="1.0f">
+        <animation x="104" y="312" w="50" h="50"/>
+      </sword_attack2>
+      <sword_attack3 loop="false" speed="50.0f">
+        <animation x="312" y="104" w="50" h="50"/>
+        <animation x="208" y="260" w="50" h="50"/>
+        <animation x="260" y="208" w="50" h="50"/>
+        <animation x="156" y="312" w="50" h="50"/>
+        <animation x="312" y="156" w="50" h="50"/>
+        <animation x="364" y="0" w="50" h="50"/>
+        <animation x="0" y="364" w="50" h="50"/>
+        <animation x="52" y="364" w="50" h="50"/>
+        <animation x="260" y="260" w="50" h="50"/>
+        <animation x="364" y="52" w="50" h="50"/>
+        <animation x="208" y="312" w="50" h="50"/>
+        <animation x="312" y="208" w="50" h="50"/>
+        <animation x="104" y="364" w="50" h="50"/>
+        <animation x="364" y="104" w="50" h="50"/>
+        <animation x="156" y="364" w="50" h="50"/>
+        <animation x="364" y="156" w="50" h="50"/>
+        <animation x="260" y="312" w="50" h="50"/>
+        <animation x="312" y="260" w="50" h="50"/>
+        <animation x="416" y="0" w="50" h="50"/>
+        <animation x="0" y="416" w="50" h="50"/>
+        <animation x="52" y="416" w="50" h="50"/>
+        <animation x="208" y="364" w="50" h="50"/>
+        <animation x="364" y="208" w="50" h="50"/>
+        <animation x="416" y="52" w="50" h="50"/>
+        <animation x="104" y="416" w="50" h="50"/>
+        <animation x="416" y="104" w="50" h="50"/>
+        <animation x="312" y="312" w="50" h="50"/>
+        <animation x="156" y="416" w="50" h="50"/>
+        <animation x="416" y="156" w="50" h="50"/>
+        <animation x="260" y="364" w="50" h="50"/>
+        <animation x="364" y="260" w="50" h="50"/>
+        <animation x="208" y="416" w="50" h="50"/>
+        <animation x="416" y="208" w="50" h="50"/>
+        <animation x="312" y="364" w="50" h="50"/>
+        <animation x="364" y="312" w="50" h="50"/>
+        <animation x="260" y="416" w="50" h="50"/>
+        <animation x="416" y="260" w="50" h="50"/>
+        <animation x="364" y="364" w="50" h="50"/>
+        <animation x="312" y="416" w="50" h="50"/>
+      </sword_attack3>
+    </exodus>
+    <items>
+      <coin loop ="true" speed="10.0f">
+        <animation x="0" y="0" w="14" h="13"/>
+        <animation x="16" y="0" w="14" h="13"/>
+        <animation x="32" y="0" w="14" h="13"/>
+        <animation x="48" y="0" w="14" h="13"/>
+        <animation x="0" y="16" w="14" h="13"/>
+        <animation x="16" y="16" w="14" h="13"/>
+        <animation x="32" y="16" w="14" h="13"/>
+        <animation x="48" y="16" w="14" h="13"/>
+      </coin>
+      
+      <heart loop ="true" speed="10.0f">
+        <animation x="0" y="33" w="13" h="13"/>
+        <animation x="16" y="33" w="13" h="13"/>
+        <animation x="33" y="33" w="13" h="13"/>
+        <animation x="49" y="33" w="13" h="13"/>
+        <animation x="66" y="33" w="13" h="13"/>
+        <animation x="83" y="33" w="13" h="13"/>
+        <animation x="0" y="50" w="13" h="13"/>
+        <animation x="16" y="50" w="13" h="13"/>
+        <animation x="33" y="50" w="13" h="13"/>
+        <animation x="49" y="50" w="13" h="13"/>
+        <animation x="66" y="50" w="13" h="13"/>
+        <animation x="83" y="50" w="13" h="13"/>
+      </heart>
+    </items>
+    
+  </enemies>
+  
 </animations>

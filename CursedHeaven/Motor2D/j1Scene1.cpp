@@ -31,6 +31,7 @@
 #include "j1Shop.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -78,7 +79,7 @@ bool j1Scene1::Start()
 		}
 
 		// The audio is played	
-		App->audio->PlayMusic("audio/music/song034.ogg", 1.0f);
+//		App->audio->PlayMusic("audio/music/song034.ogg", 1.0f);
 
 		// Textures are loaded
 		debug_tex = App->tex->Load("maps/path2.png");
@@ -254,7 +255,7 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN
+	if (App->input->GetKey(App->key_config->TABULADOR) == KEY_DOWN
 		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
 
 		lastStatsTime = statsTime.Read();

@@ -43,6 +43,8 @@ public:
 	std::list<j1Box*> key_boxes;
 	std::list<j1Button*> key_buttons;
 
+	j1Timer startup_time;
+
 private:
 
 	bool continueGame = true;

@@ -36,6 +36,7 @@ class j1DialogSystem;
 class j1Shop;
 class j1Minimap;
 class j1TransitionManager;
+class j1SceneKeyConfig;
 
 class j1App
 {
@@ -124,6 +125,7 @@ public:
 	j1Shop*				shop = nullptr;
 	j1Minimap*			minimap = nullptr;
 	j1TransitionManager* transitions = nullptr;
+	j1SceneKeyConfig*	key_config = nullptr;
 
 	bool				gamePaused = false;
 

@@ -47,6 +47,7 @@ enum ButtonFunction {
 	DRAGOONKNIGHT_BUT,
 	ROGUE_BUT,
 	TANK_BUT,
+	KEY_ADJUST,
 	NONE_BUT
 };
 

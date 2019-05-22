@@ -109,6 +109,7 @@
     <ClCompile Include="j1Pathfinding.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
     <ClCompile Include="j1Scene1.cpp" />
+    <ClCompile Include="j1SceneKeyConfig.cpp" />
     <ClCompile Include="j1SceneLose.cpp" />
     <ClCompile Include="j1SceneMenu.cpp" />
     <ClCompile Include="j1Box.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Player.h" />
     <ClInclude Include="j1Scene1.h" />
+    <ClInclude Include="j1SceneKeyConfig.h" />
     <ClInclude Include="j1SceneLose.h" />
     <ClInclude Include="j1SceneMenu.h" />
     <ClInclude Include="j1Box.h" />

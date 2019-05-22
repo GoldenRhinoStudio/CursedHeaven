@@ -166,6 +166,9 @@
     <ClCompile Include="j1Scene2.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1SceneKeyConfig.cpp">
+      <Filter>Development\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -346,6 +349,9 @@
       <Filter>Development\Modules\Entities\Drops</Filter>
     </ClInclude>
     <ClInclude Include="j1Scene2.h">
+      <Filter>Development\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="j1SceneKeyConfig.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -48,7 +48,16 @@ enum ButtonFunction {
 	ROGUE_BUT,
 	TANK_BUT,
 	KEY_ADJUST,
-	NONE_BUT
+	MOVE_UP_BUT,
+	MOVE_DOWN_BUT,
+	MOVE_LEFT_BUT,
+	MOVE_RIGHT_BUT,
+	NORMAL_ATTACK_BUT,
+	ABILITY1_BUT,
+	ABILITY2_BUT,
+	BUY_ITEM_BUT,
+	USE_POTION_BUT,
+	TABULADOR_BUT
 };
 
 // ---------------------------------------------------

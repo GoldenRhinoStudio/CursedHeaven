@@ -14,6 +14,22 @@ class j1Button;
 class j1Label;
 class j1Box;
 
+enum KEY_ACTIONS {
+	
+	NO_ACTION_KEY = 0,
+	MOVE_UP,
+	MOVE_DOWN,
+	MOVE_LEFT,
+	MOVE_RIGHT,
+	NORMAL_ATTACK,
+	ABILITY1,
+	ABILITY2,
+	BUY_ITEM,
+	USE_POTION,
+	TABULADOR
+
+};
+
 class j1SceneKeyConfig : public j1Module {
 
 public:
@@ -44,6 +60,8 @@ public:
 	std::list<j1Button*> key_buttons;
 
 	j1Timer startup_time;
+
+	void ChangeKey(KEY_ACTIONS key_to_change);
 
 private:
 

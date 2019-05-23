@@ -39,17 +39,6 @@ bool j1SceneKeyConfig::Awake(pugi::xml_node &) {
 
 bool j1SceneKeyConfig::Start() {
 
-	MOVE_UP = SDL_SCANCODE_W;
-	MOVE_DOWN = SDL_SCANCODE_S;
-	MOVE_LEFT = SDL_SCANCODE_A;
-	MOVE_RIGHT = SDL_SCANCODE_D;
-	NORMAL_ATTACK = 1;
-	ABILITY1 = SDL_SCANCODE_Q;
-	ABILITY2 = SDL_SCANCODE_E;
-	BUY_ITEM = SDL_SCANCODE_RETURN;
-	USE_POTION = SDL_SCANCODE_R;
-	TABULADOR = SDL_SCANCODE_TAB;
-
 	if (active) {
 
 		App->map->draw_with_quadtrees = false;
@@ -186,24 +175,11 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 {
 	change_key_timer.Start();
 
-	j1KeyState* keyState = 0;
-
 	int new_key;
 
 	while (waiting) {
 
-		if (change_key_timer.ReadSec() > 0.5) {
-
-			for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
-
-				if (App->input->GetKey(i) == KEY_DOWN) {
-
-					App->input->GetKey(i);
-					new_key = i;
-					waiting = false;
-				}
-			}
-		}
+		
 	}
 
 	return key_to_change = new_key;

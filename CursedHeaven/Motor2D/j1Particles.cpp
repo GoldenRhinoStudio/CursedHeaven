@@ -23,7 +23,7 @@ j1Particles::j1Particles()
 
 	// Mage basic attack
 	mageShot.anim.LoadAnimation("shot", "mage");
-	mageShot.life = 1000;
+	mageShot.life = 800;
 	mageShot.type = BASIC_SHOOT;
 
 	// Mage Q
@@ -52,8 +52,8 @@ bool j1Particles::Start()
 	part_tex = App->tex->Load("textures/character/particles.png");
 	sword_tex = App->tex->Load("textures/Effects/Particle effects/wills_magic_pixel_particle_effects/sword_burst/spritesheet.png");
 
-
 	mageShot.tex = part_tex;
+	explosion.tex = part_tex;
 	sword1.tex = sword_tex;
 	sword2.tex = sword_tex;
 	sword3.tex = sword_tex;
@@ -64,8 +64,9 @@ bool j1Particles::Start()
 bool j1Particles::CleanUp()
 {
 	LOG("Unloading particles");
-	App->tex->UnLoad(part_tex);
 	App->tex->UnLoad(sword_tex);
+	App->tex->UnLoad(part_tex);
+
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
 		if (active[i] != nullptr)

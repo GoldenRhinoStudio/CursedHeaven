@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.5</title>
+    <title>Cursed Heaven v1.0</title>
     <organization>UPC</organization>
   </app>
 	
@@ -15,7 +15,7 @@
 
   <window>
     <resolution width="1024" height="768" scale="3"/>
-    <fullscreen value="true"/>
+    <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>

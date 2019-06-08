@@ -69,6 +69,5 @@ public:
 	Particle sword1;
 	Particle sword2;
 	Particle sword3;
-
 };
 #endif // __j1PARTICLES_H__ 

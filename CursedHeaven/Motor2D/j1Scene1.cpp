@@ -386,6 +386,7 @@ bool j1Scene1::CleanUp()
 	App->particles->CleanUp();
 
 	potionCounter = 0;
+	finishedDialog = false;
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
@@ -411,6 +412,8 @@ bool j1Scene1::CleanUp()
 	App->path->CleanUp();
 	App->fade->FadeToBlack();
 	App->entity->CleanUp();
+	App->dialog->active = false;
+	App->dialog->CleanUp();
 
 	return true;
 }
@@ -420,7 +423,6 @@ void j1Scene1::ChangeSceneMenu()
 	App->scene1->active = false;
 	App->menu->active = true;
 	changingScene = false;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->restartingShop = true;
@@ -435,7 +437,6 @@ void j1Scene1::ChangeSceneMenu()
 void j1Scene1::ChangeSceneDeath() {
 	App->scene1->active = false;
 	App->lose->active = true;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->restartingShop = true;
@@ -449,7 +450,6 @@ void j1Scene1::ChangeSceneDeath() {
 void j1Scene1::ChangeScene2() {
 	App->scene1->active = false;
 	App->scene2->active = true;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->CleanUp();

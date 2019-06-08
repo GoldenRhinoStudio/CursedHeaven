@@ -39,27 +39,22 @@ bool j1DialogSystem::Start() {
 	law = (1 + rand() % 3);
 
 	if (law == 1) {
-
 		law1Active = true;
 		LOG("law1 act");
 	}
 
 	else if (law == 2) {
-
 		law2Active = true;
 		LOG("law2 act");
 	}
 
 	else if (law == 3) {
-
 		law3Active = true;
 		LOG("law3 act");
-
 	}
 
 	return ret;
 };
-
 
 bool j1DialogSystem::Update(float dt) {
 
@@ -366,9 +361,11 @@ bool j1DialogSystem::Update(float dt) {
 
 bool j1DialogSystem::CleanUp() {
 
-	App->tex->UnLoad(dialog_tex);
-	App->tex->UnLoad(dialog_tex2);
+	App->tex->UnLoad(seller_tex2);
+	App->tex->UnLoad(seller_tex1);
 	App->tex->UnLoad(dialog_tex3);
+	App->tex->UnLoad(dialog_tex2);
+	App->tex->UnLoad(dialog_tex);
 	App->tex->UnLoad(judge_tex);
 
 	return true;

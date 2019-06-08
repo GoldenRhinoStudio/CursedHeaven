@@ -30,7 +30,6 @@ public:
 	bool CleanUp();
 
 public:
-
 	int law = 0;
 	SDL_Texture* judge_tex = nullptr;
 	SDL_Texture* dialog_tex = nullptr;

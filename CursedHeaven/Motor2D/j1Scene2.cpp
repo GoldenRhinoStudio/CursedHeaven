@@ -378,6 +378,7 @@ bool j1Scene2::CleanUp() {
 	App->particles->CleanUp();
 
 	potionCounter = 0;
+	finishedDialog2 = false;
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();

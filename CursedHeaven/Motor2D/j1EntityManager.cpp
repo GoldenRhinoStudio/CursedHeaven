@@ -258,6 +258,9 @@ void j1EntityManager::CreatePlayer2()
 	if (player_type == KNIGHT) knight = (j1DragoonKnight*)CreateEntity(PLAYER, playerSpawnPos2.x, playerSpawnPos2.y);
 	else if (player_type == MAGE) mage = (j1BlackMage*)CreateEntity(PLAYER, playerSpawnPos2.x, playerSpawnPos2.y);
 
+	if (knight != nullptr) currentPlayer = knight;
+	else if (mage != nullptr) currentPlayer = mage;
+
 	currentPlayer->invulCounter.Start();
 	currentPlayer->potionTime.Start();
 }
@@ -276,7 +279,7 @@ void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 
 bool j1EntityManager::Load(pugi::xml_node& data)
 {
-	//DestroyEntities();
+	DestroyEntities();
 
 	for (pugi::xml_node slime = data.child("slime").child("position"); slime; slime = slime.next_sibling())
 	{
@@ -284,16 +287,28 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 		AddEnemy(pos.x, pos.y, SLIME);
 	}
 
-	for (pugi::xml_node fire = data.child("skeleton").child("position"); fire; fire = fire.next_sibling())
+	for (pugi::xml_node fire = data.child("fire").child("position"); fire; fire = fire.next_sibling())
 	{
 		iPoint pos = { fire.attribute("x").as_int(), fire.attribute("y").as_int() };
-		AddEnemy(pos.x, pos.y, TURRET);
+		AddEnemy(pos.x, pos.y, FIRE);
 	}
 
-	for (pugi::xml_node turret = data.child("skeleton").child("position"); turret; turret = turret.next_sibling())
+	for (pugi::xml_node turret = data.child("turret").child("position"); turret; turret = turret.next_sibling())
 	{
 		iPoint pos = { turret.attribute("x").as_int(), turret.attribute("y").as_int() };
 		AddEnemy(pos.x, pos.y, TURRET);
+	}
+
+	pugi::xml_node mindflyer = data.child("mindflyer");
+	pugi::xml_node exodus = data.child("exodus");
+
+	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	{
+		if (item._Ptr->_Myval->type == MINDFLYER)
+			item._Ptr->_Myval->Load(mindflyer);
+
+		else if (item._Ptr->_Myval->type == EXODUS)
+			item._Ptr->_Myval->Load(exodus);
 	}
 
 	pugi::xml_node type = data.child("playerType");
@@ -324,43 +339,26 @@ bool j1EntityManager::Save(pugi::xml_node& data) const
 	pugi::xml_node slime = data.append_child("slime");
 	pugi::xml_node fire = data.append_child("fire");
 	pugi::xml_node turret = data.append_child("turret");
+	pugi::xml_node mindflyer = data.append_child("mindflyer");
+	pugi::xml_node exodus = data.append_child("exodus");
 
-	/*for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
+	for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != entities.end(); ++item)
 	{
 		if (item._Ptr->_Myval->type == SLIME)
 			item._Ptr->_Myval->Save(slime);
 
-		else if (item._Ptr->_Myval->type == FIRE)
+		if (item._Ptr->_Myval->type == FIRE)
 			item._Ptr->_Myval->Save(fire);
 
 		else if (item._Ptr->_Myval->type == TURRET)
 			item._Ptr->_Myval->Save(turret);
-	}*/
 
-	for (int i = 0; i < MAX_ENTITIES; ++i)
-	{
-		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
-		{
-			if (queue[i].type == SLIME)
-			{
-				pugi::xml_node slime_pos = slime.append_child("position");
-				slime_pos.append_attribute("x") = queue[i].position.x;
-				slime_pos.append_attribute("y") = queue[i].position.y;
-			}
-			else if (queue[i].type == FIRE)
-			{
-				pugi::xml_node fire_pos = fire.append_child("position");
-				fire_pos.append_attribute("x") = queue[i].position.x;
-				fire_pos.append_attribute("y") = queue[i].position.y;
-			}
-			else if (queue[i].type == TURRET)
-			{
-				pugi::xml_node turret_pos = turret.append_child("position");
-				turret_pos.append_attribute("x") = queue[i].position.x;
-				turret_pos.append_attribute("y") = queue[i].position.y;
-			}
-		}
-	}
+		else if (item._Ptr->_Myval->type == MINDFLYER)
+			item._Ptr->_Myval->Save(mindflyer);
+
+		else if (item._Ptr->_Myval->type == EXODUS)
+			item._Ptr->_Myval->Save(exodus);
+	}		
 
 	return true;
 }

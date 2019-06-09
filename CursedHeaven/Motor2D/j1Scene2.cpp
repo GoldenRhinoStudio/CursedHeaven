@@ -414,8 +414,9 @@ bool j1Scene2::CleanUp() {
 	App->path->CleanUp();
 	App->shop->restartingShop = true;
 	App->shop->CleanUp();
-	App->fade->FadeToBlack();
 	App->entity->CleanUp();
+	App->dialog->active = false;
+	App->dialog->CleanUp();
 
 	return true;
 }

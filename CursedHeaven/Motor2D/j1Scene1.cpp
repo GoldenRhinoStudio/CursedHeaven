@@ -421,7 +421,6 @@ bool j1Scene1::CleanUp()
 	if (settings_window != nullptr) settings_window = nullptr;
 
 	App->path->CleanUp();
-	App->fade->FadeToBlack();
 	App->entity->CleanUp();
 	App->dialog->active = false;
 	App->dialog->CleanUp();

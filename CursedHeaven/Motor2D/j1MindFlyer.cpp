@@ -297,6 +297,12 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 
 bool j1MindFlyer::Load(pugi::xml_node & data)
 {
+	if (!dead) {
+		position.x = data.child("position").attribute("x").as_float();
+		position.y = data.child("position").attribute("y").as_float();
+		lifePoints = data.child("position").attribute("life").as_float();
+	}
+
 	return true;
 }
 

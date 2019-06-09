@@ -34,7 +34,6 @@ j1EntityManager::~j1EntityManager() {}
 
 bool j1EntityManager::Start()
 {
-
 	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
 		(*item)->Start();
@@ -277,7 +276,7 @@ void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 
 bool j1EntityManager::Load(pugi::xml_node& data)
 {
-	DestroyEntities();
+	//DestroyEntities();
 
 	for (pugi::xml_node slime = data.child("slime").child("position"); slime; slime = slime.next_sibling())
 	{
@@ -299,9 +298,11 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 
 	pugi::xml_node type = data.child("playerType");
 
-	PLAYER_TYPES p = (PLAYER_TYPES)type.attribute("type").as_uint();
+	player_type = (PLAYER_TYPES)type.attribute("type").as_uint();
 
 	CreatePlayer1();
+	Start();
+
 	if (knight != nullptr) knight->Load(data);
 	else if (mage != nullptr) mage->Load(data);
 

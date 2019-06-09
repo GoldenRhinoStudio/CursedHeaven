@@ -427,8 +427,7 @@ bool j1App::LoadGameNow()
 		{
 			ret = (*item)->Load(root.child((*item)->name.c_str()));
 		}
-
-
+		
 		data.reset();
 		if(ret == true)
 			LOG("...finished loading");

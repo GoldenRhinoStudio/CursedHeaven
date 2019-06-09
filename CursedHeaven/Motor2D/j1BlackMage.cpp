@@ -152,6 +152,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 18;
+					if (lifePoints <= 0) dead = true;
 
 					iPoint explosionPos;
 					iPoint p = { (int)position.x, (int)position.y };
@@ -193,6 +194,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 					App->audio->PlayFx(App->audio->rage_bm);
 
 					if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 18;
+					if (lifePoints <= 0) dead = true;
 
 					speed = speed * 2;
 					cooldown_Speed.Start();
@@ -359,7 +361,7 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 
 	points = data.child("player").child("points").attribute("value").as_uint();
 	score_points = data.child("player").child("scorePoints").attribute("value").as_uint();
-	playerLife = data.child("player").child("life").attribute("value").as_uint();
+	lifePoints = data.child("player").child("life").attribute("value").as_uint();
 	coins = data.child("player").child("coins").attribute("value").as_uint();
 
 	if (GodMode == true)
@@ -388,7 +390,7 @@ bool j1BlackMage::Save(pugi::xml_node& data) const {
 	pugi::xml_node c = data.append_child("coins");
 	p.append_attribute("value") = points;
 	sp.append_attribute("value") = score_points;
-	life.append_attribute("value") = playerLife;
+	life.append_attribute("value") = lifePoints;
 	c.append_attribute("value") = coins;
 
 	pugi::xml_node godmode = data.append_child("godmode");

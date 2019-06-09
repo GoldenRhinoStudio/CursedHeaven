@@ -22,8 +22,6 @@ j1Player::~j1Player() {}
 
 
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
-
-
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 
 		// GodMode controls
@@ -104,6 +102,8 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				if (App->dialog->law == 3) {
 					if (App->entity->player_type == KNIGHT) App->entity->currentPlayer->lifePoints -= 38; 
 					else if (App->entity->player_type == KNIGHT)App->entity->currentPlayer->lifePoints -= 18;
+
+					if (App->entity->currentPlayer->lifePoints <= 0) App->entity->currentPlayer->dead = true;
 				}
 				else App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
 

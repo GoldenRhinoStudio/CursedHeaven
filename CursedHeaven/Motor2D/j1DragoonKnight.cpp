@@ -163,6 +163,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;
+					if (lifePoints <= 0) dead = true;
 
 					App->audio->PlayFx(App->audio->shield_sound);
 
@@ -184,6 +185,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					App->audio->PlayFx(App->audio->rage_dk);
 
 					if (dialog->law == 2) App->entity->currentPlayer->lifePoints -= 38;
+					if (lifePoints <= 0) dead = true;
 
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();
@@ -352,7 +354,7 @@ bool j1DragoonKnight::Load(pugi::xml_node& data) {
 
 	points = data.child("player").child("points").attribute("value").as_uint();
 	score_points = data.child("player").child("scorePoints").attribute("value").as_uint();
-	playerLife = data.child("player").child("life").attribute("value").as_uint();
+	lifePoints = data.child("player").child("life").attribute("value").as_uint();
 	coins = data.child("player").child("coins").attribute("value").as_uint();
 
 	if (GodMode == true)
@@ -379,7 +381,7 @@ bool j1DragoonKnight::Save(pugi::xml_node& data) const {
 	pugi::xml_node c = data.append_child("coins");
 	p.append_attribute("value") = points;
 	sp.append_attribute("value") = score_points;
-	life.append_attribute("value") = playerLife;
+	life.append_attribute("value") = lifePoints;
 	c.append_attribute("value") = coins;
 
 	pugi::xml_node godmode = data.append_child("godmode");

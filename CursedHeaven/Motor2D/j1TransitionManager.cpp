@@ -80,33 +80,44 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 	if (scene2 == SCENE::SCENE1) {
 
 		// From Victory
-		if (scene1 == SCENE::VICTORY) {
-			App->victory->active = false;
-			App->victory->CleanUp();
+		if (scene1 != SCENE::MENU) {
+			if (scene1 == SCENE::VICTORY) {
+				App->victory->active = false;
+				App->victory->CleanUp();
+			}
+			// From Lose
+			else if (scene1 == SCENE::LOSE) {
+				App->lose->active = false;
+				App->lose->CleanUp();
+				App->lose->startGame = false;
+			}
+			// From Choose Character
+			else if (scene1 == SCENE::CHOOSE) {
+				App->choose_character->active = false;
+				App->choose_character->CleanUp();
+			}
+
+			App->scene1->active = true;
+			App->scene1->Start();
+
+			App->particles->Start();
+
+			App->dialog->active = true;
+			App->dialog->Start();
+
+			App->entity->active = true;
+			App->entity->CreatePlayer1();
+			App->entity->Start();
 		}
-		// From Lose
-		else if (scene1 == SCENE::LOSE) {
-			App->lose->active = false;
-			App->lose->CleanUp();
-			App->lose->startGame = false;
+		else {
+
+			App->LoadGame("save_game.xml");
+			App->scene1->active = true;
+			App->scene1->Start();
+			App->particles->Start();
+			App->dialog->active = true;
+			App->dialog->Start();
 		}
-		// From Choose Character
-		else if (scene1 == SCENE::CHOOSE) {
-			App->choose_character->active = false;
-			App->choose_character->CleanUp();
-		}
-
-		App->scene1->active = true;
-		App->scene1->Start();
-
-		App->particles->Start();
-
-		App->dialog->active = true;
-		App->dialog->Start();
-
-		App->entity->active = true;
-		App->entity->CreatePlayer1();
-		App->entity->Start();
 	}
 
 	// To menu

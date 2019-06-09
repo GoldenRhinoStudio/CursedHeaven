@@ -8,16 +8,18 @@
 	<pathfinding />
 	<menu />
 	<credits />
-	<:anonymous />
+	<settings />
 	<choose_character />
 	<lose />
 	<scene1>
 		<activated value="true" />
 		<dialogs dialog="true" sellerDialog="true" />
+		<potions counter="0" />
 	</scene1>
 	<scene2>
 		<activated value="false" />
 		<dialogs dialog="false" />
+		<potions counter="0" />
 	</scene2>
 	<shop>
 		<potions number="0" />
@@ -30,28 +32,28 @@
 	</shop>
 	<entityManager>
 		<player>
-			<position x="71.7200165" y="708.039856" />
+			<position x="627.838928" y="488.800049" />
 			<points value="0" />
 			<scorePoints value="0" />
 			<life value="0" />
-			<coins value="0" />
+			<coins value="8" />
 			<godmode value="false" />
 		</player>
-		<playerType type="1" />
+		<playerType type="0" />
 		<slime />
 		<fire />
 		<turret />
 	</entityManager>
-	<:anonymous />
+	<particles />
 	<collisions />
 	<fonts />
 	<gui />
 	<minimap />
-	<:anonymous />
+	<dialog />
 	<fade />
-	<:anonymous />
+	<transitions />
 	<victory />
 	<renderer>
-		<camera x="296" y="-1740" />
+		<camera x="-1371" y="-1082" />
 	</renderer>
 </game_state>

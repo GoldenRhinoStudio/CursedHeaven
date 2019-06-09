@@ -300,13 +300,23 @@ bool j1Scene2::PostUpdate() {
 }
 
 bool j1Scene2::Load(pugi::xml_node& node) {
+	active = node.child("activated").attribute("value").as_bool();
+	finishedDialog2 = node.child("dialogs").attribute("dialog").as_bool();
+	potionCounter = node.child("potions").attribute("counter").as_uint();
+
 	return true;
 }
 
-bool j1Scene2::Save(pugi::xml_node& node) const {
+bool j1Scene2::Save(pugi::xml_node& node) const 
+{
 	pugi::xml_node activated = node.append_child("activated");
+	activated.append_attribute("value") = active;
 
-	activated.append_attribute("true") = active;
+	pugi::xml_node dialogs = node.append_child("dialogs");
+	dialogs.append_attribute("dialog") = finishedDialog2;
+
+	pugi::xml_node potions = node.append_child("potions");
+	potions.append_attribute("counter") = potionCounter;
 
 	return true;
 }

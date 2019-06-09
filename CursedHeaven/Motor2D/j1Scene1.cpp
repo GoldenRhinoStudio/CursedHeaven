@@ -309,16 +309,26 @@ bool j1Scene1::PostUpdate()
 	return continueGame;
 }
 
-bool j1Scene1::Load(pugi::xml_node& node)
-{
+bool j1Scene1::Load(pugi::xml_node& node) {
+	active = node.child("activated").attribute("value").as_bool();
+	finishedDialog = node.child("dialogs").attribute("dialog").as_bool();
+	ableSellerDialog = node.child("dialogs").attribute("sellerDialog").as_bool();
+	potionCounter = node.child("potions").attribute("counter").as_uint();
+
 	return true;
 }
 
 bool j1Scene1::Save(pugi::xml_node& node) const
 {
 	pugi::xml_node activated = node.append_child("activated");
+	activated.append_attribute("value") = active;
+	
+	pugi::xml_node dialogs = node.append_child("dialogs");
+	dialogs.append_attribute("dialog") = finishedDialog;
+	dialogs.append_attribute("sellerDialog") = ableSellerDialog;
 
-	activated.append_attribute("true") = active;
+	pugi::xml_node potions = node.append_child("potions");
+	potions.append_attribute("counter") = potionCounter;
 
 	return true;
 }
@@ -387,6 +397,7 @@ bool j1Scene1::CleanUp()
 
 	potionCounter = 0;
 	finishedDialog = false;
+	ableSellerDialog = true;
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();

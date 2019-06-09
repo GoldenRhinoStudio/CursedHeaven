@@ -20,7 +20,9 @@
 #include "j1ChooseCharacter.h"
 
 j1TransitionManager::j1TransitionManager()
-{}
+{
+	name.assign("transitions");
+}
 
 j1TransitionManager::~j1TransitionManager()
 {}

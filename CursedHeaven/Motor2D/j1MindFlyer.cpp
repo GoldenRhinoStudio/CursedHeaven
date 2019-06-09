@@ -303,9 +303,9 @@ bool j1MindFlyer::Load(pugi::xml_node & data)
 bool j1MindFlyer::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-
 	pos.append_attribute("x") = position.x;
 	pos.append_attribute("y") = position.y;
+	pos.append_attribute("life") = lifePoints;
 
 	return true;
 }

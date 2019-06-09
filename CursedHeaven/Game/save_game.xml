@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<map />
+	<pathfinding />
+	<menu />
+	<credits />
+	<:anonymous />
+	<choose_character />
+	<lose />
+	<scene1>
+		<activated value="true" />
+		<dialogs dialog="true" sellerDialog="true" />
+	</scene1>
+	<scene2>
+		<activated value="false" />
+		<dialogs dialog="false" />
+	</scene2>
+	<shop>
+		<potions number="0" />
+		<boots level="0" />
+		<sword level="0" />
+		<heart level="0" />
+		<armour level="0" />
+		<hourglass level="0" />
+		<book level="0" />
+	</shop>
+	<entityManager>
+		<player>
+			<position x="71.7200165" y="708.039856" />
+			<points value="0" />
+			<scorePoints value="0" />
+			<life value="0" />
+			<coins value="0" />
+			<godmode value="false" />
+		</player>
+		<playerType type="1" />
+		<slime />
+		<fire />
+		<turret />
+	</entityManager>
+	<:anonymous />
+	<collisions />
+	<fonts />
+	<gui />
+	<minimap />
+	<:anonymous />
+	<fade />
+	<:anonymous />
+	<victory />
+	<renderer>
+		<camera x="296" y="-1740" />
+	</renderer>
+</game_state>

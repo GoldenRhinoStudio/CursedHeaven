@@ -51,8 +51,6 @@ enum PLAYER_TYPES
 {
 	KNIGHT,
 	MAGE,
-	TANK,
-	ROGUE,
 	NO_PLAYER
 };
 

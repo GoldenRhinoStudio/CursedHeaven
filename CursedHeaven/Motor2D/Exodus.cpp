@@ -177,9 +177,9 @@ bool Exodus::Load(pugi::xml_node & data)
 bool Exodus::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-
 	pos.append_attribute("x") = position.x;
 	pos.append_attribute("y") = position.y;
+	pos.append_attribute("life") = lifePoints;
 
 	return true;
 }

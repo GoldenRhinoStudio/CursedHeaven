@@ -19,6 +19,7 @@
 j1DialogSystem::j1DialogSystem()
 {
 	srand(time(NULL));
+	name.assign("dialog");
 }
 
 j1DialogSystem::~j1DialogSystem()
@@ -198,7 +199,7 @@ bool j1DialogSystem::Update(float dt) {
 		// Seller Dialog
 		if ((App->entity->currentPlayer->position.x >= -1064 && App->entity->currentPlayer->position.x <= -984) && (App->entity->currentPlayer->position.y >= 652 && App->entity->currentPlayer->position.y <= 691))
 		{
-			if (App->scene1->dialogSellerCanAppear) {
+			if (App->scene1->ableSellerDialog) {
 
 				App->scene1->finishedDialog = false;
 
@@ -233,7 +234,7 @@ bool j1DialogSystem::Update(float dt) {
 					App->tex->UnLoad(seller_tex2);
 					times = 0;
 					App->scene1->finishedDialog = true;
-					App->scene1->dialogSellerCanAppear = false;
+					App->scene1->ableSellerDialog = false;
 					App->gamePaused = false;
 				}
 			}

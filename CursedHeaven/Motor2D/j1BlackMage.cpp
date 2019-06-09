@@ -357,6 +357,11 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 
 	GodMode = data.child("player").child("godmode").attribute("value").as_bool();
 
+	points = data.child("player").child("points").attribute("value").as_uint();
+	score_points = data.child("player").child("scorePoints").attribute("value").as_uint();
+	playerLife = data.child("player").child("life").attribute("value").as_uint();
+	coins = data.child("player").child("coins").attribute("value").as_uint();
+
 	if (GodMode == true)
 	{
 		collider->type = COLLIDER_NONE;
@@ -367,9 +372,6 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 		collider->type = COLLIDER_PLAYER;
 	}
 
-	if (hud)
-		hud->Load(data);
-
 	return true;
 }
 
@@ -377,18 +379,20 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 bool j1BlackMage::Save(pugi::xml_node& data) const {
 
 	pugi::xml_node pos = data.append_child("position");
-
 	pos.append_attribute("x") = position.x;
 	pos.append_attribute("y") = position.y;
 
+	pugi::xml_node p = data.append_child("points");
+	pugi::xml_node sp = data.append_child("scorePoints");
+	pugi::xml_node life = data.append_child("life");
+	pugi::xml_node c = data.append_child("coins");
+	p.append_attribute("value") = points;
+	sp.append_attribute("value") = score_points;
+	life.append_attribute("value") = playerLife;
+	c.append_attribute("value") = coins;
+
 	pugi::xml_node godmode = data.append_child("godmode");
-
-	pugi::xml_node life = data.append_child("lives");
-
 	godmode.append_attribute("value") = GodMode;
-
-	if (hud)
-		hud->Save(data.append_child("hud"));
 
 	return true;
 }

@@ -67,6 +67,8 @@ public:
 	// Called every frame
 	bool Update(float dt);
 	bool CleanUp();
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
 
 	void OnCollision(Collider* c1, Collider* c2);
 	j1Item* j1Shop::CreateItem(ITEM_TYPE type, int x, int y);

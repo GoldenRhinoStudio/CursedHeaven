@@ -457,4 +457,5 @@ void j1Scene2::ChangeSceneVictory() {
 	App->render->camera = { 0,0 };
 
 	App->victory->Start();
+	App->entity->currentPlayer->victory = false;
 }

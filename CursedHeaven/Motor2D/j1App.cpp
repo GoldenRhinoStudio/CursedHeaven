@@ -401,7 +401,6 @@ void j1App::SaveGame(const char* file) const
 	save_game.assign(file);
 }
 
-
 bool j1App::LoadGameNow()
 {
 	bool ret = false;

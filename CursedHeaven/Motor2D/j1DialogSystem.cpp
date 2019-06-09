@@ -37,23 +37,31 @@ bool j1DialogSystem::Start() {
 	seller_tex1 = App->tex->Load("textures/dialog_final.png");
 	seller_tex2 = App->tex->Load("textures/dialog_final.png");
 
-	law = (1 + rand() % 3);
+	if ((App->scene1->active && App->scene1->finishedDialog == false)
+		|| (App->scene2->active && App->scene2->finishedDialog2 == false)) {
+		law = (1 + rand() % 3);
 
-	if (law == 1) {
-		law1Active = true;
-		LOG("law1 act");
+		if (law == 1) {
+			law1Active = true;
+			LOG("law1 act");
+		}
+
+		else if (law == 2) {
+			law2Active = true;
+			LOG("law2 act");
+		}
+
+		else if (law == 3) {
+			law3Active = true;
+			LOG("law3 act");
+		}
 	}
-
-	else if (law == 2) {
-		law2Active = true;
-		LOG("law2 act");
+	else {
+		law1Active = false;
+		law2Active = false;
+		law3Active = false;
 	}
-
-	else if (law == 3) {
-		law3Active = true;
-		LOG("law3 act");
-	}
-
+	
 	return ret;
 };
 
@@ -94,7 +102,7 @@ bool j1DialogSystem::Update(float dt) {
 		}
 
 		// Judge 1st Dialog
-		if (law1Active == true)
+		if (law1Active)
 		{
 			if(dialogTimer.Read() >= time_passed + dialogTime)
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
@@ -129,7 +137,7 @@ bool j1DialogSystem::Update(float dt) {
 				law1Active = false;
 			}
 		}
-		else if (law2Active == true)
+		else if (law2Active)
 		{			
 			if (dialogTimer.Read() >= time_passed + dialogTime) {
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
@@ -162,7 +170,7 @@ bool j1DialogSystem::Update(float dt) {
 				law2Active = false;
 			}
 		}
-		else if (law3Active == true)
+		else if (law3Active)
 		{
 			if (dialogTimer.Read() >= time_passed + dialogTime) {
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
@@ -356,6 +364,22 @@ bool j1DialogSystem::Update(float dt) {
 			}
 		}
 	}
+
+	return true;
+}
+
+// Load game state
+bool j1DialogSystem::Load(pugi::xml_node& data) {
+	law = data.child("law").attribute("currentLaw").as_int();
+
+	return true;
+}
+
+// Save game state
+bool j1DialogSystem::Save(pugi::xml_node& data) const {
+
+	pugi::xml_node laws = data.append_child("laws");
+	laws.append_attribute("currentLaw") = law;
 
 	return true;
 }

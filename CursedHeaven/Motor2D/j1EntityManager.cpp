@@ -299,6 +299,7 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 	pugi::xml_node type = data.child("playerType");
 
 	player_type = (PLAYER_TYPES)type.attribute("type").as_uint();
+	App->gamePaused = data.child("gamePaused").attribute("value").as_bool();
 
 	CreatePlayer1();
 	Start();
@@ -316,6 +317,9 @@ bool j1EntityManager::Save(pugi::xml_node& data) const
 
 	pugi::xml_node p_type = data.append_child("playerType"); 
 	p_type.append_attribute("type") = (uint)player_type;
+
+	pugi::xml_node pause = data.append_child("gamePaused");
+	pause.append_attribute("value") = App->gamePaused;
 
 	pugi::xml_node slime = data.append_child("slime");
 	pugi::xml_node fire = data.append_child("fire");

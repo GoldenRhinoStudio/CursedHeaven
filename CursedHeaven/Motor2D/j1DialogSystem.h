@@ -29,6 +29,10 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
+	// Load / Save
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
+
 public:
 	int law = 0;
 	SDL_Texture* judge_tex = nullptr;

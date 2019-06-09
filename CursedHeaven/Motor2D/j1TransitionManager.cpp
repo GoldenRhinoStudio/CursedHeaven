@@ -102,8 +102,10 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 
 			App->particles->Start();
 
-			App->dialog->active = true;
-			App->dialog->Start();
+			if (App->dialog->active = false) {
+				App->dialog->active = true;
+				App->dialog->Start();
+			}
 
 			App->entity->active = true;
 			App->entity->CreatePlayer1();
@@ -115,8 +117,11 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->scene1->active = true;
 			App->scene1->Start();
 			App->particles->Start();
-			App->dialog->active = true;
-			App->dialog->Start();
+
+			if (App->dialog->active = false) {
+				App->dialog->active = true;
+				App->dialog->Start();
+			}
 		}
 	}
 

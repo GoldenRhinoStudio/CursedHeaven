@@ -13,7 +13,7 @@
 	<lose />
 	<scene1>
 		<activated value="true" />
-		<dialogs dialog="true" sellerDialog="true" />
+		<dialogs dialog="true" sellerDialog="false" />
 		<potions counter="0" />
 	</scene1>
 	<scene2>
@@ -32,14 +32,15 @@
 	</shop>
 	<entityManager>
 		<player>
-			<position x="627.838928" y="488.800049" />
+			<position x="-791.239502" y="525.00177" />
 			<points value="0" />
 			<scorePoints value="0" />
-			<life value="0" />
-			<coins value="8" />
+			<life value="162" />
+			<coins value="9" />
 			<godmode value="false" />
 		</player>
 		<playerType type="0" />
+		<gamePaused value="false" />
 		<slime />
 		<fire />
 		<turret />
@@ -49,11 +50,13 @@
 	<fonts />
 	<gui />
 	<minimap />
-	<dialog />
+	<dialog>
+		<laws currentLaw="0" />
+	</dialog>
 	<fade />
 	<transitions />
 	<victory />
 	<renderer>
-		<camera x="-1371" y="-1082" />
+		<camera x="2885" y="-1191" />
 	</renderer>
 </game_state>

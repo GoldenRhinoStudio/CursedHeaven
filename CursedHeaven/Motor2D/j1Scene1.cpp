@@ -472,4 +472,6 @@ void j1Scene1::ChangeScene2() {
 	App->entity->CreatePlayer2();
 	App->entity->Start();
 	App->particles->Start();
+
+	App->entity->currentPlayer->victory = false;
 }

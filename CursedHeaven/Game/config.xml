@@ -33,7 +33,7 @@
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2"/>
-	  <combat basicDamage="150" fireDamage="600" lifePoints="9999200"/>
+	  <combat basicDamage="150" fireDamage="600" lifePoints="200"/>
 	  <cooldowns Q="5000" E="10000" increasedSpeed="5000" explosion="600" invulTime="700"/>
 	</blackMage>
 	

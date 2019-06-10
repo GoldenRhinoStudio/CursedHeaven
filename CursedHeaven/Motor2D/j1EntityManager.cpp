@@ -131,7 +131,7 @@ bool j1EntityManager::PostUpdate()
 
 bool j1EntityManager::CleanUp()
 {
-	LOG("Freeing all enemies");
+	LOG("Freeing all entities");
 
 	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{

@@ -437,6 +437,7 @@ bool j1App::LoadGameNow()
 		LOG("Could not parse game state xml file %s. pugi error: %s", load_game.data(), result.description());
 
 	want_to_load = false;
+
 	return ret;
 }
 

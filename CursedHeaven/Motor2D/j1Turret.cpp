@@ -15,7 +15,7 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1Turret::j1Turret(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1Turret::j1Turret(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::TURRET)
 {
 	animation = NULL;
 

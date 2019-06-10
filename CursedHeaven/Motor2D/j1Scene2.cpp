@@ -148,7 +148,10 @@ bool j1Scene2::Update(float dt) {
 	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
 
-	if (App->scene2->startup_time.Read() > 1700) {
+	bool a = App->scene2->active;
+	bool b = a;
+
+	if (App->scene2->active && App->scene2->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
 			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
@@ -301,10 +304,6 @@ bool j1Scene2::PostUpdate() {
 
 bool j1Scene2::Load(pugi::xml_node& node) {
 	active = node.child("activated").attribute("value").as_bool();
-	active = true;
-	bool a = active;
-	bool b = a;
-
 	finishedDialog2 = node.child("dialogs").attribute("dialog").as_bool();
 	potionCounter = node.child("potions").attribute("counter").as_uint();
 

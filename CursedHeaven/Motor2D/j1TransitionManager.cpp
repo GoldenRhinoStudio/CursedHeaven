@@ -81,7 +81,20 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 	if (scene2 == SCENE::SCENE1) {
 
 		// From Victory
-		if (scene1 != SCENE::MENU) {
+		if (scene1 == SCENE::MENU) {
+
+			App->LoadGame("save_game.xml");
+
+			App->scene1->active = true;
+			App->scene1->Start();
+			App->particles->Start();
+
+			if (App->dialog->active == false) {
+				App->dialog->active = true;
+				App->dialog->Start();
+			}
+		}
+		else {
 			if (scene1 == SCENE::VICTORY) {
 				App->victory->active = false;
 				App->victory->CleanUp();
@@ -103,7 +116,7 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 
 			App->particles->Start();
 
-			if (App->dialog->active = false) {
+			if (App->dialog->active == false) {
 				App->dialog->active = true;
 				App->dialog->Start();
 			}
@@ -111,18 +124,6 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->entity->active = true;
 			App->entity->CreatePlayer1();
 			App->entity->Start();
-		}
-		else {
-
-			App->LoadGame("save_game.xml");
-			App->scene1->active = true;
-			App->scene1->Start();
-			App->particles->Start();
-
-			if (App->dialog->active = false) {
-				App->dialog->active = true;
-				App->dialog->Start();
-			}
 		}
 	}
 
@@ -133,11 +134,12 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 		if (scene1 == SCENE::MENU) {
 
 			App->LoadGame("save_game.xml");
+
 			App->scene2->active = true;
 			App->scene2->Start();
 			App->particles->Start();
 
-			if (App->dialog->active = false) {
+			if (App->dialog->active == false) {
 				App->dialog->active = true;
 				App->dialog->Start();
 			}

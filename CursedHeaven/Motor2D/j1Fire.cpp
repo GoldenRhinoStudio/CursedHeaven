@@ -15,7 +15,7 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1Fire::j1Fire(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1Fire::j1Fire(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::FIRE)
 {
 	animation = NULL;
 

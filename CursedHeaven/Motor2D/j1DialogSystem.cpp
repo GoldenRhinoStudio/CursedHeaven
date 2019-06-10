@@ -271,7 +271,7 @@ bool j1DialogSystem::Update(float dt) {
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				&& canSkip/* && App->scene1->settings_window->visible == false*/) {
+				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed_2 = dialogTimer2.Read();
@@ -304,7 +304,7 @@ bool j1DialogSystem::Update(float dt) {
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				&& canSkip /*&& App->scene1->settings_window->visible == false*/) {
+				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed_2 = dialogTimer2.Read();
@@ -337,7 +337,7 @@ bool j1DialogSystem::Update(float dt) {
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				&& canSkip/* && App->scene1->settings_window->visible == false*/) {
+				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed = dialogTimer.Read();

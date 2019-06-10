@@ -88,8 +88,8 @@ bool j1Scene1::Start()
 
 		// Creating UI
 		SDL_Rect section = { 9,460,315,402 };
-		settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
-		settings_window->visible = false;
+		App->scene1->settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
+		App->scene1->settings_window->visible = false;
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
@@ -146,7 +146,7 @@ bool j1Scene1::Update(float dt)
 	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
 
-	if (App->scene1->startup_time.Read() > 1700) {
+	if (App->scene1->active && App->scene1->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
 			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;

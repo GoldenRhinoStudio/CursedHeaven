@@ -16,7 +16,7 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::MINDFLYER)
 {
 	animation = NULL;
 

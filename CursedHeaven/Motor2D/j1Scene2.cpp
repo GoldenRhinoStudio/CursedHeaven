@@ -86,7 +86,7 @@ bool j1Scene2::Start() {
 
 		// Creating UI
 		SDL_Rect section = { 9, 460, 315, 402 };
-		settings_window = App->gui->CreateBox(&scene2Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section,  gui_tex);
+		settings_window = App->gui->CreateBox(&scene2Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
 		settings_window->visible = false;
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
@@ -301,6 +301,10 @@ bool j1Scene2::PostUpdate() {
 
 bool j1Scene2::Load(pugi::xml_node& node) {
 	active = node.child("activated").attribute("value").as_bool();
+	active = true;
+	bool a = active;
+	bool b = a;
+
 	finishedDialog2 = node.child("dialogs").attribute("dialog").as_bool();
 	potionCounter = node.child("potions").attribute("counter").as_uint();
 

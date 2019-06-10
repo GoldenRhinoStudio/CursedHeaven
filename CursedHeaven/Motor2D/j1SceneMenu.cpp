@@ -138,7 +138,9 @@ bool j1SceneMenu::Update(float dt)
 						App->transitions->FadingToColor(MENU, CHOOSE);
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
-						App->transitions->SquaresAppearing(MENU, SCENE1, 3);
+						App->LoadSpecificModule(App->transitions);
+						if (App->transitions->scene1active) App->transitions->SquaresAppearing(MENU, SCENE1, 3);
+						if (App->transitions->scene2active) App->transitions->SquaresAppearing(MENU, SCENE2, 3);
 					}
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;

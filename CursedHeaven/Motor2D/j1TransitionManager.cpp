@@ -12,6 +12,7 @@
 #include "j1DialogSystem.h"
 
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1SceneCredits.h"
 #include "j1SceneLose.h"
 #include "j1SceneMenu.h"
@@ -125,6 +126,24 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 		}
 	}
 
+	// To Game
+	if (scene2 == SCENE::SCENE2) {
+
+		// From Victory
+		if (scene1 == SCENE::MENU) {
+
+			App->LoadGame("save_game.xml");
+			App->scene2->active = true;
+			App->scene2->Start();
+			App->particles->Start();
+
+			if (App->dialog->active = false) {
+				App->dialog->active = true;
+				App->dialog->Start();
+			}
+		}
+	}
+
 	// To menu
 	else if (scene2 == SCENE::MENU) {
 
@@ -211,4 +230,22 @@ void j1TransitionManager::LinesAppearing(SCENE scene_to_remove, SCENE scene_to_a
 
 void j1TransitionManager::SquaresAppearing(SCENE scene_to_remove, SCENE scene_to_appear, int transition, j1Color color, float time) {
 	transitions_list.push_back(new Squares(scene_to_remove, scene_to_appear, transition, color, time));
+}
+
+bool j1TransitionManager::Load(pugi::xml_node& data)
+{
+	scene1active = data.child("scene1").attribute("active").as_bool();
+	scene2active = data.child("scene2").attribute("active").as_bool();
+	
+	return true;
+}
+
+bool j1TransitionManager::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node scene1 = data.append_child("scene1");
+	scene1.append_attribute("active") = App->scene1->active;
+	pugi::xml_node scene2 = data.append_child("scene2");
+	scene2.append_attribute("active") = App->scene2->active;
+
+	return true;
 }

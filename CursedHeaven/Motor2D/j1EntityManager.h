@@ -97,9 +97,7 @@ public:
 	void AddItem(int x, int y, DROP_TYPES itype);
 
 private:
-
 	void SpawnEnemy(const EntityInfo& info);
-
 
 public:
 	

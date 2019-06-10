@@ -39,18 +39,17 @@ bool j1DialogSystem::Start() {
 
 	if ((App->scene1->active && App->scene1->finishedDialog == false)
 		|| (App->scene2->active && App->scene2->finishedDialog2 == false)) {
+		
 		law = (1 + rand() % 3);
 
 		if (law == 1) {
 			law1Active = true;
 			LOG("law1 act");
 		}
-
 		else if (law == 2) {
 			law2Active = true;
 			LOG("law2 act");
 		}
-
 		else if (law == 3) {
 			law3Active = true;
 			LOG("law3 act");

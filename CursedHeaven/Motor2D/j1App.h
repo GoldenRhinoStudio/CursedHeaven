@@ -71,6 +71,7 @@ public:
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
+	bool LoadSpecificModule(j1Module* module);
 
 private:
 

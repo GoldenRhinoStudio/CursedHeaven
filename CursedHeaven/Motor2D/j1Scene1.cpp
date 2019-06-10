@@ -113,6 +113,7 @@ bool j1Scene1::Start()
 
 		PlaceEntities(6);
 		App->shop->PlaceShopScene1();
+		App->entity->CreateEntity(JUDGE, 210, 760);
 
 		startup_time.Start();
 		windowTime.Start();
@@ -337,7 +338,7 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(33, 41, SLIME);
 	App->entity->AddEnemy(14, 41, SLIME);
 
-	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(45, 45, SLIME);
 	App->entity->AddEnemy(43, 39, SLIME);
 	App->entity->AddEnemy(38, 41, SLIME);
 

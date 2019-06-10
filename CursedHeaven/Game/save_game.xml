@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<map />
+	<pathfinding />
+	<menu />
+	<credits />
+	<:anonymous />
+	<choose_character />
+	<lose />
+	<scene1>
+		<activated true="true" />
+	</scene1>
+	<scene2>
+		<activated true="false" />
+	</scene2>
+	<shop />
+	<entityManager>
+		<player>
+			<position x="-960.559998" y="742.480042" />
+			<godmode value="true" />
+			<lives />
+			<hud />
+		</player>
+	</entityManager>
+	<:anonymous />
+	<collisions />
+	<fonts />
+	<gui />
+	<minimap />
+	<:anonymous />
+	<fade />
+	<:anonymous />
+	<victory />
+	<renderer>
+		<camera x="3393" y="-1843" />
+	</renderer>
+</game_state>

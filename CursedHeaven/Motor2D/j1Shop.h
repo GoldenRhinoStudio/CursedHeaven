@@ -34,6 +34,7 @@ public:
 
 	// Called every frame
 	bool Update(float dt, bool do_logic);
+	bool DrawOrder(float dt);
 	void OnCollision(Collider* c1, Collider* c2);
 
 	bool CleanUp();

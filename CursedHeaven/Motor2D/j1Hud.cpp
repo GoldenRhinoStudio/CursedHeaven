@@ -78,38 +78,39 @@ bool j1Hud::Update(float dt)
 	else if (App->entity->player_type == KNIGHT)
 		dragoon_knight = true;
 
-	if (black_mage) {
-		// Icon profile
-		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
+	if (hud_text != nullptr) {
+		if (black_mage) {
+			// Icon profile
+			App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
 
-		// Abilities
-		// Q
-		App->render->Blit(hud_text, 15, 400, &bm_available_q, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_Q) {
-			App->render->Blit(hud_text, 15, 400, &bm_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
+			// Abilities
+			// Q
+			App->render->Blit(hud_text, 15, 400, &bm_available_q, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_Q) {
+				App->render->Blit(hud_text, 15, 400, &bm_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
+			}
+			// E
+			App->render->Blit(hud_text, 15, 500, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_E) {
+				App->render->Blit(hud_text, 15, 500, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
+			}
 		}
-		// E
-		App->render->Blit(hud_text, 15, 500, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_E) {
-			App->render->Blit(hud_text, 15, 500, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
-		}
-	}
-	else if (dragoon_knight) {
-		// Icon profile
-		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, false);
+		else if (dragoon_knight) {
+			// Icon profile
+			App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, false);
 
-		// Abilities
-		// Q
-		App->render->Blit(hud_text, 15, 400, &dk_available_q, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_Q) {
-			App->render->Blit(hud_text, 15, 400, &dk_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
+			// Abilities
+			// Q
+			App->render->Blit(hud_text, 15, 400, &dk_available_q, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_Q) {
+				App->render->Blit(hud_text, 15, 400, &dk_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
+			}
+			// E
+			App->render->Blit(hud_text, 15, 500, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_E) {
+				App->render->Blit(hud_text, 15, 500, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
+			}
 		}
-		// E
-		App->render->Blit(hud_text, 15, 500, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_E) {
-			App->render->Blit(hud_text, 15, 500, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
-		}
-
 	}
 	
 	// Current points of the player (char*)
@@ -120,28 +121,30 @@ bool j1Hud::Update(float dt)
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
 
-	if (App->shop->potions == 0) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-	}
+	if (potion_tex != nullptr) {
+		if (App->shop->potions == 0) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
 
-	if (App->shop->potions == 1) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-	}
+		if (App->shop->potions == 1) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
 
-	if (App->shop->potions == 2) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-	}
+		if (App->shop->potions == 2) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
 
-	if (App->shop->potions >= 3) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		if (App->shop->potions >= 3) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
 	}
 
 	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, false);

@@ -188,6 +188,7 @@ bool j1Item::Start() {
 	// Textures are loaded
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/Collectibles/items.png");
+	height = 2;
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -318,9 +319,16 @@ bool j1Item::Update(float dt, bool do_logic) {
 		if (App->scene1->potionCounter == 3 || App->scene2->potionCounter == 3) collider->type = COLLIDER_NONE;
 	}
 
-	// Blitting the item
-	if (type == POTION && App->scene1->potionCounter < 3 && App->scene2->potionCounter < 3) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
-	else if (type != POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
+	return true;
+}
+
+bool j1Item::DrawOrder(float dt)
+{
+	// Drawing the seller
+	if (type == POTION && App->scene1->potionCounter < 3 && App->scene2->potionCounter < 3)
+		Draw(&image, false, 0,0,0.09f);
+	else if (type != POTION)
+		Draw(&image, false, 0,0,0.1f);
 
 	return true;
 }

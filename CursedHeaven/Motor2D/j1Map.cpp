@@ -1075,8 +1075,8 @@ void j1Map::Tile_WorldMap(iPoint& pos, int height){
 	else if (height < 8 && height >= 6)
 		re2 = 3;
 	
-	pos.x += re2;
-	pos.y += re2;
+	pos.x -= re2;
+	pos.y -= re2;
 }
 
 void j1Map::Entity_WorldMap(iPoint& pos, int height) {

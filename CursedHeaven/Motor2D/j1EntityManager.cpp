@@ -159,21 +159,18 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 		else if (player_type == MAGE) ret = new j1BlackMage(x, y, type);
 		/*else if (player_type == TANK) ret = new j1Tank(x, y, type);
 		else if (player_type == ROGUE) ret = new j1Rogue(x, y, type);*/
-
-		if (ret != nullptr) 
-			entities.push_back(ret); 
 		break;
 
 	case JUDGE:
 		ret = new j1Judge(x, y, type);
-
+		break;
 	case SELLER:
 		ret = new j1Seller(x, y, type);
-
-		if (ret != nullptr)
-			entities.push_back(ret);
 		break;
 	}
+
+	if (ret != nullptr)
+		entities.push_back(ret);
 	return ret;
 }
 
@@ -223,6 +220,7 @@ void j1EntityManager::AddItem(int x, int y, DROP_TYPES itype)
 	j1Entity* ret = nullptr;
 
 	ret = new Items(x, y, ENTITY_TYPES::ITEM, itype);
+	ret->height = 2;
 
 	if (ret != nullptr)
 		entities.push_back(ret);

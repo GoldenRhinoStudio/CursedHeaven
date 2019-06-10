@@ -15,7 +15,7 @@
 
   <window>
     <resolution width="1024" height="768" scale="3"/>
-    <fullscreen value="true"/>
+    <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
@@ -27,13 +27,13 @@
   
   <player>
 	<blackMage scale="1.0f">
-	  <size width="18" height="13"/>
+	  <size width="18" height="10"/>
 	  <margin x="3" y="23" colisionMargin="3" offset="8"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2"/>
-	  <combat basicDamage="150" fireDamage="600" lifePoints="200"/>
+	  <combat basicDamage="150" fireDamage="600" lifePoints="9999200"/>
 	  <cooldowns Q="5000" E="10000" increasedSpeed="5000" explosion="600" invulTime="700"/>
 	</blackMage>
 	

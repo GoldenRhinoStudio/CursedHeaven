@@ -97,7 +97,7 @@ bool j1Fire::Update(float dt, bool do_logic)
 
 		}
 
-	App->map->EntityMovement(this);
+	App->map->EntityMovementTest(this);
 
 
 

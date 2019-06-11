@@ -30,7 +30,7 @@ bool j1DialogSystem::Start() {
 
 	bool ret = true;
 
-	judge_tex = App->tex->Load("textures/character/judge/Judge.png");
+	//judge_tex = App->tex->Load("textures/character/judge/Judge.png");
 	dialog_tex = App->tex->Load("textures/dialog_final.png");
 	dialog_tex2 = App->tex->Load("textures/dialog_final.png");
 	dialog_tex3 = App->tex->Load("textures/dialog_final.png");
@@ -91,7 +91,7 @@ bool j1DialogSystem::Update(float dt) {
 	if (App->scene1->active) {
 
 		// judge sprite
-		App->render->BlitHUD(judge_tex, 210, 760, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+		//App->render->BlitHUD(judge_tex, 210, 760, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
 		if (!App->scene1->finishedDialog) App->gamePaused = true;
 
 		if (!timerStarted) {
@@ -251,7 +251,7 @@ bool j1DialogSystem::Update(float dt) {
 	else if (App->scene2->active) 
 	{
 		// judge sprite
-		App->render->BlitHUD(judge_tex, 410, 850, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+		//App->render->BlitHUD(judge_tex, 410, 850, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
 		if (!App->scene2->finishedDialog2) App->gamePaused = true;
 
 		if (!timerStarted2) {

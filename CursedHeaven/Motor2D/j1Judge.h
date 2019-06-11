@@ -25,6 +25,7 @@ public:
 	bool Start();
 	bool PreUpdate() { return true; };
 	bool Update(float dt, bool do_logic);
+	bool DrawOrder(float dt);
 	bool PostUpdate() { return true; };
 	bool CleanUp() { return true; };
 
@@ -33,9 +34,8 @@ public:
 	bool Save(pugi::xml_node&) const { return true; };
 
 
-public:
-
-	SDL_Texture* Jtex = nullptr;
+private:
+	Animation idle;
 
 };
 

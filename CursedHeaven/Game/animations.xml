@@ -257,6 +257,12 @@
         <animation x="0" y="71" w="22" h="34"/>
 	  </idle>
 	</seller>
+    
+  <judge>
+      <idle loop="true" speed="7.0f">
+        <animation x="42" y="2" w="22" h="33"/>
+	  </idle>
+	</judge>
 	
 	<!------------------------------->
 	<!-- Animations of the enemies -->

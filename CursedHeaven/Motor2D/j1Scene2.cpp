@@ -111,6 +111,7 @@ bool j1Scene2::Start() {
 		
 		PlaceEntities(6);
 		App->shop->PlaceShopScene2();
+		App->entity->CreateEntity(JUDGE, 410, 850);
 
 		startup_time.Start();
 		windowTime.Start();

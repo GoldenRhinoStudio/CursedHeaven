@@ -31,6 +31,7 @@
 #include "j1Entity.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1SceneKeyConfig.h"
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -47,6 +48,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	menu = new j1SceneMenu();
 	credits = new j1SceneCredits();
 	settings = new j1SceneSettings();
+	key_config = new j1SceneKeyConfig();
 	choose_character = new j1ChooseCharacter();
 	lose = new j1SceneLose();
 	victory = new j1SceneVictory();
@@ -76,6 +78,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(menu);
 	AddModule(credits);
 	AddModule(settings);
+	AddModule(key_config);
 	AddModule(choose_character);
 	AddModule(lose);
 	AddModule(scene1);

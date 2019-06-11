@@ -11,6 +11,7 @@
 #include "j1Tank.h"
 #include "j1Rogue.h"
 #include "j1Collisions.h"
+#include "j1Gui.h"
 #include <math.h>
 
 #include "Brofiler/Brofiler.h"
@@ -605,7 +606,7 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 
 	iPoint next_tile = { 0,0 };
 
-	uint current_gid;
+	uint current_gid = 0;
 	uint next_gid = 0;
 
 	// tiles of the first layer | height == 0
@@ -683,13 +684,6 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
 
 
-	iPoint debug = App->map->MapToWorld(current_tile.x, current_tile.y);
-	App->render->DrawLine(debug.x, debug.y + 8, debug.x + 16, debug.y, 255, 0, 0, 255);
-	App->render->DrawLine(debug.x + 16, debug.y, debug.x + 32, debug.y + 8, 255, 0, 0, 255);
-	App->render->DrawLine(debug.x + 32, debug.y + 8, debug.x + 16, debug.y + 16, 255, 0, 0, 255);
-	App->render->DrawLine(debug.x, debug.y + 8, debug.x + 16, debug.y + 16, 255, 0, 0, 255);
-
-
 	switch (direction)
 	{
 	case UP_:
@@ -728,11 +722,21 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 		break;
 	}
 	
-	iPoint debug2 = App->map->MapToWorld(next_tile.x, next_tile.y);
-	App->render->DrawLine(debug2.x, debug2.y + 8, debug2.x + 16, debug2.y, 0, 0, 255, 255);
-	App->render->DrawLine(debug2.x + 16, debug2.y, debug2.x + 32, debug2.y + 8, 0, 0, 255, 255);
-	App->render->DrawLine(debug2.x + 32, debug2.y + 8, debug2.x + 16, debug2.y + 16, 0, 0, 255, 255);
-	App->render->DrawLine(debug2.x, debug2.y + 8, debug2.x + 16, debug2.y + 16, 0, 0, 255, 255);
+	if (App->collisions->debug)
+	{
+		iPoint debug = App->map->MapToWorld(current_tile.x, current_tile.y);
+		App->render->DrawLine(debug.x, debug.y + 8, debug.x + 16, debug.y, 255, 0, 0, 255);
+		App->render->DrawLine(debug.x + 16, debug.y, debug.x + 32, debug.y + 8, 255, 0, 0, 255);
+		App->render->DrawLine(debug.x + 32, debug.y + 8, debug.x + 16, debug.y + 16, 255, 0, 0, 255);
+		App->render->DrawLine(debug.x, debug.y + 8, debug.x + 16, debug.y + 16, 255, 0, 0, 255);
+
+		iPoint debug2 = App->map->MapToWorld(next_tile.x, next_tile.y);
+		App->render->DrawLine(debug2.x, debug2.y + 8, debug2.x + 16, debug2.y, 0, 0, 255, 255);
+		App->render->DrawLine(debug2.x + 16, debug2.y, debug2.x + 32, debug2.y + 8, 0, 0, 255, 255);
+		App->render->DrawLine(debug2.x + 32, debug2.y + 8, debug2.x + 16, debug2.y + 16, 0, 0, 255, 255);
+		App->render->DrawLine(debug2.x, debug2.y + 8, debug2.x + 16, debug2.y + 16, 0, 0, 255, 255);
+	}
+	
 
 	if (current_gid != 0)
 	{

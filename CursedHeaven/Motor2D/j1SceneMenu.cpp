@@ -40,8 +40,8 @@ bool j1SceneMenu::Awake(pugi::xml_node &)
 		ret = false;
 	}
 
-	App->audio->MusicVolume(0);
-	App->audio->FxVolume(0);
+	/*App->audio->MusicVolume(0);
+	App->audio->FxVolume(0);*/
 	return ret;
 }
 
@@ -54,7 +54,7 @@ bool j1SceneMenu::Start()
 		App->map->Load("menu.tmx");
 
 		// The audio is played
-	//	App->audio->PlayMusic("audio/music/song012.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song012.ogg", 1.0f);
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");

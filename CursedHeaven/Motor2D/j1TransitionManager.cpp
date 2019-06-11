@@ -85,14 +85,10 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 
 			App->LoadGame("save_game.xml");
 
+			App->entity->active = true;
 			App->scene1->active = true;
 			App->scene1->Start();
 			App->particles->Start();
-
-			if (App->dialog->active == false) {
-				App->dialog->active = true;
-				App->dialog->Start();
-			}
 		}
 		else {
 			if (scene1 == SCENE::VICTORY) {
@@ -135,14 +131,10 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 
 			App->LoadGame("save_game.xml");
 
+			App->entity->active = true;
 			App->scene2->active = true;
 			App->scene2->Start();
 			App->particles->Start();
-
-			if (App->dialog->active == false) {
-				App->dialog->active = true;
-				App->dialog->Start();
-			}
 		}
 	}
 

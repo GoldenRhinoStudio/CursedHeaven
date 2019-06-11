@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<map />
+	<pathfinding />
+	<menu />
+	<credits />
+	<settings />
+	<choose_character />
+	<lose />
+	<scene1>
+		<activated value="true" />
+		<dialogs dialog="false" sellerDialog="true" />
+		<potions counter="0" />
+	</scene1>
+	<scene2>
+		<activated value="false" />
+		<dialogs dialog="false" />
+		<potions counter="0" />
+	</scene2>
+	<shop>
+		<potions number="0" />
+		<boots level="0" />
+		<sword level="0" />
+		<heart level="0" />
+		<armour level="0" />
+		<hourglass level="0" />
+		<book level="0" />
+	</shop>
+	<entityManager>
+		<player>
+			<position x="180" y="770" />
+			<points value="0" />
+			<scorePoints value="0" />
+			<life value="200" />
+			<coins value="0" />
+			<godmode value="false" />
+		</player>
+		<playerType type="1" />
+		<gamePaused value="true" />
+		<slime>
+			<position x="6" y="57" />
+			<position x="15" y="54" />
+			<position x="17" y="61" />
+			<position x="31" y="65" />
+			<position x="28" y="65" />
+			<position x="28" y="53" />
+			<position x="29" y="40" />
+			<position x="33" y="41" />
+			<position x="14" y="41" />
+			<position x="46" y="47" />
+			<position x="43" y="39" />
+			<position x="38" y="41" />
+			<position x="29" y="19" />
+			<position x="28" y="22" />
+			<position x="26" y="26" />
+			<position x="46" y="25" />
+			<position x="45" y="32" />
+			<position x="38" y="28" />
+			<position x="23" y="4" />
+			<position x="12" y="4" />
+			<position x="17" y="13" />
+			<position x="49" y="4" />
+			<position x="60" y="7" />
+			<position x="59" y="11" />
+			<position x="70" y="8" />
+			<position x="85" y="23" />
+			<position x="80" y="19" />
+			<position x="70" y="25" />
+			<position x="88" y="46" />
+			<position x="80" y="42" />
+			<position x="85" y="60" />
+			<position x="80" y="65" />
+		</slime>
+		<fire />
+		<turret />
+		<mindflyer>
+			<position x="53" y="68" />
+			<stats life="3000" dead="false" />
+		</mindflyer>
+		<exodus />
+	</entityManager>
+	<particles />
+	<collisions />
+	<fonts />
+	<gui />
+	<minimap />
+	<dialog>
+		<laws currentLaw="1" />
+	</dialog>
+	<fade />
+	<transitions>
+		<scene1 active="true" />
+		<scene2 active="false" />
+	</transitions>
+	<victory />
+	<renderer>
+		<camera x="-28" y="-1926" />
+	</renderer>
+</game_state>

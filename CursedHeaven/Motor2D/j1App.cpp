@@ -31,6 +31,8 @@
 #include "j1Entity.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1ParticleManager.h"
+
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -64,6 +66,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	shop = new j1Shop;
 	minimap = new j1Minimap();
 	transitions = new j1TransitionManager();
+	ps_manager = new j1ParticleManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -91,6 +94,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(fade);
 	AddModule(transitions);
 	AddModule(victory);
+	AddModule(ps_manager);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -198,6 +202,19 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 	else
 		ret = config_file.child("config");
 
+	return ret;
+}
+
+pugi::xml_node j1App::LoadParticleSystemConfig(pugi::xml_document& ps_file)
+{
+	pugi::xml_node ret;
+
+	pugi::xml_parse_result result = ps_file.load_file("ps_config");
+
+	if (result == NULL)
+		LOG("Could not load xml file config.xml. pugi error: %s", result.description());
+	else
+		ret = ps_file.child("particlesystem");
 	return ret;
 }
 

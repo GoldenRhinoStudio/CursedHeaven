@@ -31,6 +31,7 @@
 #include "j1Shop.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1ParticleManager.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -255,6 +256,12 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu();
 	}
 
+	//Particles
+
+	
+
+	// -----------------
+
 	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN
 		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
 
@@ -295,6 +302,7 @@ bool j1Scene1::Update(float dt)
 
 	if (App->entity->player_type == KNIGHT && App->entity->currentPlayer->active_Q && App->entity->knight != nullptr)
 		App->render->Blit(App->entity->knight->shieldTex, App->entity->currentPlayer->position.x + 2, App->entity->currentPlayer->position.y + 8, NULL, SDL_FLIP_NONE, true, 0.13f);
+
 
 	return true;
 }

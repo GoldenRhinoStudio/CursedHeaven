@@ -201,6 +201,45 @@ bool j1SceneMenu::Update(float dt)
 		App->render->DrawQuad({ 320, 640, 380, Uint8(49 / App->gui->buttonsScale) }, 255, 0, 0, 255, false, false);
 	}
 
+	if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+	{
+		visibleFire = !visibleFire;
+
+		if (visibleFire == true) {
+			int mx, my;
+			App->input->GetMousePosition(mx, my);
+			fPoint pos = { (float)mx, (float)my };
+
+			mouseFire = App->ps_manager->SpawnEmitter(pos, EMITTER_MOUSE);
+		}
+
+		else if (visibleFire == false)
+		{
+			App->ps_manager->RemoveMouseFire(*mouseFire);
+		}
+	}
+
+	if (mouseFire != nullptr)
+	{
+		int mx, my;
+		App->input->GetMousePosition(mx, my);
+		fPoint pos = { (float)mx, (float)my };
+		mouseFire->UpdatePos(pos);
+	}
+
+	if (App->input->GetMouseButtonDown(3) == KEY_DOWN)
+	{
+		int mx, my;
+		App->input->GetMousePosition(mx, my);
+		fPoint pos = { (float)mx, (float)my };
+		staticFire = App->ps_manager->SpawnEmitter(pos, EMITTER_FIRE);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		App->ps_manager->RemoveEverything();
+	}
+
 	return true;
 }
 

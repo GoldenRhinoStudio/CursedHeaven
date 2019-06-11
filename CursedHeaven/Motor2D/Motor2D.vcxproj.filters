@@ -166,6 +166,18 @@
     <ClCompile Include="j1Scene2.cpp">
       <Filter>Development\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="j1Emitter.cpp">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Particle.cpp">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Pool.cpp">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="j1ParticleManager.cpp">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Textures.h">
@@ -348,6 +360,18 @@
     <ClInclude Include="j1Scene2.h">
       <Filter>Development\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="j1Emitter.h">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Particle.h">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Pool.h">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="j1ParticleManager.h">
+      <Filter>Development\Modules\GraphicUserInterface\Particle System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Programation 2">
@@ -400,6 +424,9 @@
     </Filter>
     <Filter Include="Development\Modules\Entities\Drops">
       <UniqueIdentifier>{9956ebf7-624e-4cf2-a44d-dc951ff84c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Development\Modules\GraphicUserInterface\Particle System">
+      <UniqueIdentifier>{8d774f96-bf3f-4b3c-8563-c2d060d409d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

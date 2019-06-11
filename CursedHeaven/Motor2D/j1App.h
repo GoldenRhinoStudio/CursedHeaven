@@ -36,6 +36,7 @@ class j1DialogSystem;
 class j1Shop;
 class j1Minimap;
 class j1TransitionManager;
+class j1ParticleManager;
 
 class j1App
 {
@@ -72,6 +73,8 @@ public:
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
 	bool LoadSpecificModule(j1Module* module);
+
+	pugi::xml_node LoadParticleSystemConfig(pugi::xml_document& ps_file);
 
 private:
 
@@ -125,6 +128,7 @@ public:
 	j1Shop*				shop = nullptr;
 	j1Minimap*			minimap = nullptr;
 	j1TransitionManager* transitions = nullptr;
+	j1ParticleManager*	ps_manager = nullptr;
 
 	bool				gamePaused = false;
 

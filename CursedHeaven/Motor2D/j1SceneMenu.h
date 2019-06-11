@@ -4,6 +4,9 @@
 #include "j1Module.h"
 #include "j1Render.h"
 #include "j1Timer.h"
+#include "j1Particle.h"
+#include "j1Pool.h"
+#include "j1Emitter.h"
 #include <list>
 #include "p2Point.h"
 #include "p2Animation.h"
@@ -69,6 +72,10 @@ public:
 	bool player_created = false;
 	bool chooseChar = false;
 	bool openSettings = false;
+
+	j1Emitter* mouseFire = nullptr;
+	j1Emitter* staticFire = nullptr;
+	bool visibleFire = false;
 
 private:
 

@@ -4,6 +4,9 @@
 #include "j1Module.h"
 #include "j1Button.h"
 #include "j1Timer.h"
+#include "j1Particle.h"
+#include "j1Pool.h"
+#include "j1Emitter.h"
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
 
@@ -50,6 +53,10 @@ public:
 	void PlaceEntities(int room);
 
 public:
+	j1Emitter* mouseFire = nullptr;
+	j1Emitter* staticFire = nullptr;
+	bool visibleFire = false;
+
 	j1Box* settings_window = nullptr;
 	bool player_created = false;
 	bool backToMenu = false;

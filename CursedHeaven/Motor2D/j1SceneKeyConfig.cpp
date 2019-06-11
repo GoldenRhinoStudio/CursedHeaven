@@ -248,5 +248,8 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 
 	waiting = false;
 	
+	App->input->last_key_pressed = -1;
+	App->input->button_pressed = false;
+
 	return new_key;
 }

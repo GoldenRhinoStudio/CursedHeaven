@@ -110,10 +110,40 @@ bool j1SceneKeyConfig::Update(float dt) {
 					if ((*item)->bfunction == GO_TO_MENU)
 						App->transitions->Wiping(KEY_CHANGES, SCENE_SETTINGS);
 
-					else if ((*item)->bfunction == TABULADOR_BUT) {
+					else if ((*item)->bfunction != GO_TO_MENU) {
 						waiting = true;
-						TABULADOR = ChangeKey(TABULADOR);
 					}
+					else if (((*item)->bfunction) == MOVE_UP_BUT) {
+						last_changed = 1;
+					}
+					else if (((*item)->bfunction) == MOVE_DOWN_BUT) {
+						last_changed = 2;
+					}
+					else if (((*item)->bfunction) == MOVE_LEFT_BUT) {
+						last_changed = 3;
+					}
+					else if (((*item)->bfunction) == MOVE_RIGHT_BUT) {
+						last_changed = 4;
+					}
+					else if (((*item)->bfunction) == NORMAL_ATTACK_BUT) {
+						last_changed = 5;
+					}
+					if (((*item)->bfunction) == TABULADOR_BUT) {
+						last_changed = 6;
+					}
+					else if (((*item)->bfunction) == BUY_ITEM_BUT) {
+						last_changed = 7;
+					}
+					else if (((*item)->bfunction) == USE_POTION_BUT) {
+						last_changed = 8;
+					}
+					else if (((*item)->bfunction) == ABILITY1_BUT) {
+						last_changed = 9;
+					}
+					else if (((*item)->bfunction) == ABILITY2_BUT) {
+						last_changed = 10;
+					}
+
 				}
 			}
 			break;
@@ -123,8 +153,42 @@ bool j1SceneKeyConfig::Update(float dt) {
 				(*item)->situation = (*item)->clicked;
 			break;
 		}
-
+		
+		if (waiting && App->input->button_pressed) {
+			
+			if (last_changed == 1) {
+				MOVE_UP = ChangeKey(MOVE_UP);
+			}
+			else if (last_changed == 2) {
+				MOVE_DOWN = ChangeKey(MOVE_DOWN);
+			}
+			else if (last_changed == 3) {
+				MOVE_LEFT = ChangeKey(MOVE_LEFT);
+			}
+			else if (last_changed == 4) {
+				MOVE_RIGHT = ChangeKey(MOVE_RIGHT);
+			}
+			else if (last_changed == 5) {
+				NORMAL_ATTACK = ChangeKey(NORMAL_ATTACK);
+			}
+			if (last_changed == 6) {
+				TABULADOR = ChangeKey(TABULADOR);
+			}
+			else if (last_changed == 7) {
+				BUY_ITEM = ChangeKey(BUY_ITEM);
+			}
+			else if (last_changed == 8) {
+				USE_POTION = ChangeKey(USE_POTION);
+			}
+			else if (last_changed == 9) {
+				ABILITY1 = ChangeKey(ABILITY1);
+			}
+			else if (last_changed == 10) {
+				ABILITY2 = ChangeKey(ABILITY2);
+			}
+		}
 	}
+		
 
 	App->map->Draw();
 
@@ -173,14 +237,15 @@ bool j1SceneKeyConfig::CleanUp() {
 
 int j1SceneKeyConfig::ChangeKey(int key_to_change)
 {
-	change_key_timer.Start();
-
 	int new_key;
 
-	while (waiting) {
+	if (App->input->last_key_pressed != -1)
+		new_key = App->input->last_key_pressed;
 
-		
-	}
+	else
+		new_key = key_to_change;
 
-	return key_to_change = new_key;
+	waiting = false;
+	
+	return new_key;
 }

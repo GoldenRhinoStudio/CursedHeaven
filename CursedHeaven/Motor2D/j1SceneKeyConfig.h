@@ -58,11 +58,14 @@ public:
 	int USE_POTION = SDL_SCANCODE_R;
 	int TABULADOR = SDL_SCANCODE_TAB;
 
+	int last_changed = -1;
+
+	bool waiting = false;
+
 private:
 
 	bool continueGame = true;
 	SDL_Texture* key_tex = nullptr;
-	bool waiting = false;
 
 	j1Timer change_key_timer;
 };

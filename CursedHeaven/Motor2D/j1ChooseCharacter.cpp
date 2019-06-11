@@ -67,7 +67,7 @@ bool j1ChooseCharacter::Start() {
 		info_tex = App->tex->Load("gui/uipack_rpg_sheet_2.png");
 
 		SDL_Rect invisible = { 0,0, SCREEN_WIDTH, SCREEN_HEIGHT };
-		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, invisible, invisible, invisible, NULL, NO_FUNCTION);
+		App->gui->CreateButton(&chooseCharacterButtons, BUTTON, 2, 40, invisible, invisible, invisible, NULL, NONE_BUT);
 		
 		SDL_Rect name_box = { 9, 12, 1053, 352 };
 		info_window = App->gui->CreateBox(&chooseCharacterBoxes, BOX, 22, 150, name_box, info_tex);
@@ -135,7 +135,7 @@ bool j1ChooseCharacter::Update(float dt) {
 					else if ((*item)->bfunction == TANK_BUT) {
 						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
 					}
-					else if ((*item)->bfunction == NO_FUNCTION) {
+					else if ((*item)->bfunction == NONE_BUT) {
 						for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
 							(*item)->CleanUp();
 							chooseCharacterLabels.remove(*item);

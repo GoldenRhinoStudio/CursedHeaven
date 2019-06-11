@@ -113,7 +113,8 @@ bool j1SceneKeyConfig::Update(float dt) {
 					else if ((*item)->bfunction != GO_TO_MENU) {
 						waiting = true;
 					}
-					else if (((*item)->bfunction) == MOVE_UP_BUT) {
+
+					if (((*item)->bfunction) == MOVE_UP_BUT) {
 						last_changed = 1;
 					}
 					else if (((*item)->bfunction) == MOVE_DOWN_BUT) {

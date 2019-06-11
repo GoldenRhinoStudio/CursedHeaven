@@ -591,8 +591,12 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	DIRECTION direction;
 
 	direction = entity->direction;
+	int x;
+	if (entity->position.x >= 0)
+		x = entity->collider->rect.x;
+	else
+		x = entity->collider->rect.x - entity->collider->rect.w;
 
-	int x = entity->collider->rect.x;
 	int y = entity->collider->rect.y + entity->collider->rect.h;
 
 	iPoint current_tile = WorldToMap(x, y);

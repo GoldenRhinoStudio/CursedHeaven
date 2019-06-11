@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1SceneKeyConfig.h"
 #include "SDL/include/SDL.h"
 
 #include "Brofiler/Brofiler.h"
@@ -89,18 +90,29 @@ bool j1Input::PreUpdate()
 		controller = nullptr;
 	}			
 
+//	button_pressed = false;
+
 	for(int i = 0; i < MAX_KEYS; ++i)
 	{
-		if(keys[i] == 1)
+
+		if (keys[i] == 1)
 		{
-			if(keyboard[i] == KEY_IDLE)
+			if (keyboard[i] == KEY_IDLE) {
+
+				last_key_pressed = i;
+				button_pressed = true;
 				keyboard[i] = KEY_DOWN;
-			else
+			}
+
+			else {
+				last_key_pressed = i;
+				button_pressed = true;
 				keyboard[i] = KEY_REPEAT;
+			}
 		}
 		else
 		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
 				keyboard[i] = KEY_UP;
 			else
 				keyboard[i] = KEY_IDLE;

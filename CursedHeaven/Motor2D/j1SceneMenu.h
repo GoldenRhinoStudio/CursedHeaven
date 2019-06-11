@@ -22,7 +22,8 @@ enum SCENE {
 	CREDITS,
 	SCENE_SETTINGS,
 	VICTORY,
-	LOSE
+	LOSE,
+	KEY_CHANGES
 };
 
 class j1SceneMenu : public j1Module

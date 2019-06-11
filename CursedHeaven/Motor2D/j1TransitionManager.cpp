@@ -19,6 +19,7 @@
 #include "j1SceneSettings.h"
 #include "j1SceneVictory.h"
 #include "j1ChooseCharacter.h"
+#include "j1SceneKeyConfig.h"
 
 j1TransitionManager::j1TransitionManager()
 {
@@ -207,6 +208,24 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->lose->Start();
 			App->render->camera = { 0,0 };
 		}
+	}
+
+	else if (scene1 == SCENE_SETTINGS && scene2 == KEY_CHANGES) {
+		
+		App->settings->active = false;
+		App->settings->CleanUp();
+
+		App->key_config->active = true;
+		App->key_config->Start();
+	}
+
+	else if (scene2 == SCENE_SETTINGS && scene1 == KEY_CHANGES) {
+
+		App->key_config->active = false;
+		App->key_config->CleanUp();
+
+		App->settings->active = true;
+		App->settings->Start();
 	}
 }
 

@@ -36,6 +36,7 @@ class j1DialogSystem;
 class j1Shop;
 class j1Minimap;
 class j1TransitionManager;
+class j1SceneKeyConfig;
 
 class j1App
 {
@@ -71,6 +72,7 @@ public:
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
+	bool LoadSpecificModule(j1Module* module);
 
 private:
 
@@ -124,6 +126,7 @@ public:
 	j1Shop*				shop = nullptr;
 	j1Minimap*			minimap = nullptr;
 	j1TransitionManager* transitions = nullptr;
+	j1SceneKeyConfig*	key_config = nullptr;
 
 	bool				gamePaused = false;
 

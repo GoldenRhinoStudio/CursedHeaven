@@ -20,6 +20,7 @@
 
 j1SceneSettings::j1SceneSettings()
 {
+	name.assign("settings");
 }
 
 j1SceneSettings::~j1SceneSettings() {}
@@ -56,6 +57,8 @@ bool j1SceneSettings::Start()
 		// The audio is played
 		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
 
+		font = App->font->Load("fonts/Pixeled.ttf", 5);
+
 		// Loading textures
 		wind_tex = App->tex->Load("gui/uipack_rpg_sheet_2.png");
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
@@ -67,6 +70,13 @@ bool j1SceneSettings::Start()
 		// Sliders
 		App->gui->CreateBox(&settingBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
 		App->gui->CreateBox(&settingBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)sets_window, App->gui->minimum, App->gui->maximum);
+
+		// Normal button
+		SDL_Rect idle = { 631, 12, 151, 38 };
+		SDL_Rect hovered = { 963, 12, 151, 38 };
+		SDL_Rect clicked = { 797, 12, 151, 38 };
+		App->gui->CreateButton(&settingButtons, BUTTON, 133, 170, idle, hovered, clicked, gui_tex2, KEY_ADJUST,(j1UserInterfaceElement*)sets_window);
+		App->gui->CreateLabel(&settingLabels, LABEL, 142, 169, App->gui->font2, "KEY CONFIG", App->gui->beige, (j1UserInterfaceElement*)sets_window);
 
 		// Go Back Button
 		SDL_Rect idle5 = { 382, 508, 37, 36 };
@@ -118,7 +128,11 @@ bool j1SceneSettings::Update(float dt)
 		case RELEASED:
 			if (startup_time.Read() > 2000) {
 				(*item)->situation = (*item)->idle;
-				App->transitions->Wiping(SCENE_SETTINGS, MENU);
+				if ((*item)->bfunction == GO_TO_MENU)
+					App->transitions->Wiping(SCENE_SETTINGS, MENU);
+
+				else if ((*item)->bfunction == KEY_ADJUST)
+					App->transitions->FadingToColor(SCENE_SETTINGS, KEY_CHANGES, White, 1.0f);
 			}
 			break;
 

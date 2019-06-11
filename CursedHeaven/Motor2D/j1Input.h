@@ -98,6 +98,9 @@ public:
 
 	int gamepadRAxisX = 0;
 	int gamepadRAxisY = 0;
+
+	int last_key_pressed = -1;
+	bool button_pressed = false;
 };
 
 #endif // __j1INPUT_H__

@@ -17,7 +17,9 @@ enum PARTICLE_TYPE {
 	BASIC_SHOOT,
 	EXPLOSION,
 	SWORD_SHOOT,
-	VORTEX
+	VORTEX,
+	MINDFLYER_SHOOT,
+	TURRET_SHOOT
 };
 
 struct Particle
@@ -68,10 +70,14 @@ public:
 	Particle mageShot;
 	Particle explosion;
 
+	Particle turretAttack;
+
+	Particle mindflyerAttack;
+
 	Particle sword1;
 	Particle sword2;
 	Particle sword3;
-	Particle vortex1;
 
+	Particle vortex1;
 };
 #endif // __j1PARTICLES_H__ 

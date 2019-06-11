@@ -58,6 +58,8 @@ private:
 	SDL_Texture* wind_tex = nullptr;
 	SDL_Texture* gui_tex2 = nullptr;
 
+	_TTF_Font* font;
+
 	
 };
 

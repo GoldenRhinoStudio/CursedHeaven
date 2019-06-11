@@ -192,13 +192,3 @@ bool j1Hud::CleanUp()
 
 	return true;
 }
-
-bool j1Hud::Load(pugi::xml_node & data)
-{
-	return true;
-}
-
-bool j1Hud::Save(pugi::xml_node & data) const
-{
-	return true;
-}

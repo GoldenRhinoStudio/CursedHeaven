@@ -18,12 +18,14 @@
 
 j1Particles::j1Particles()
 {
+	name.assign("particles");
+
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 		active[i] = nullptr;
 
 	// Mage basic attack
 	mageShot.anim.LoadAnimation("shot", "mage");
-	mageShot.life = 1000;
+	mageShot.life = 300;
 	mageShot.type = BASIC_SHOOT;
 
 	// Mage Q
@@ -31,8 +33,18 @@ j1Particles::j1Particles()
 	explosion.life = 570;
 	explosion.type = EXPLOSION;
 
-	//EXODUS Sword1
-	sword1.anim.LoadAnimation("sword_attack1", "exodus",false);
+	// Turret attack
+	turretAttack.anim.LoadAnimation("shot", "turret", false);
+	turretAttack.life = 1000;
+	turretAttack.type = TURRET_SHOOT;
+
+	// Mindflyer attack
+	mindflyerAttack.anim.LoadAnimation("shot", "mindflyer", false);
+	mindflyerAttack.life = 1200;
+	mindflyerAttack.type = MINDFLYER_SHOOT;
+
+	// Exodus' swords
+	sword1.anim.LoadAnimation("sword_attack1", "exodus", false);
 	sword1.life = 1000;
 	sword2.anim.LoadAnimation("sword_attack2", "exodus", false);
 	sword2.life = 1200;
@@ -59,8 +71,10 @@ bool j1Particles::Start()
 	sword_tex = App->tex->Load("textures/Effects/Particle effects/wills_magic_pixel_particle_effects/sword_burst/spritesheet.png");
 	vortex_tex = App->tex->Load("textures/Effects/Particle effects/wills_magic_pixel_particle_effects/vortex/spritesheet.png");
 
-
 	mageShot.tex = part_tex;
+	mindflyerAttack.tex = part_tex;
+	turretAttack.tex = part_tex;
+	explosion.tex = part_tex;
 	sword1.tex = sword_tex;
 	sword2.tex = sword_tex;
 	sword3.tex = sword_tex;
@@ -72,8 +86,9 @@ bool j1Particles::Start()
 bool j1Particles::CleanUp()
 {
 	LOG("Unloading particles");
-	App->tex->UnLoad(part_tex);
 	App->tex->UnLoad(sword_tex);
+	App->tex->UnLoad(part_tex);
+
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
 		if (active[i] != nullptr)
@@ -184,7 +199,9 @@ bool j1Particles::Update(float dt)
 				}*/
 			}
 
-			App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)),SDL_FLIP_NONE,true,1.0f,App->win->GetScale(),p->rotation);
+			if(p->type == TURRET_SHOOT) 
+				App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)), SDL_FLIP_NONE, true, 0.7f, App->win->GetScale(), p->rotation);
+			else App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)), SDL_FLIP_NONE, true, 1.0f, App->win->GetScale(),p->rotation);
 
 		}
 	}
@@ -206,7 +223,8 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, 
 			p->state = 0;
 			p->anim.Reset();
 			if (collider_type != COLLIDER_NONE) {
-				p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
+				if (particle.type == TURRET_SHOOT) p->collider = App->collisions->AddCollider({ p->anim.GetCurrentFrame(dt).x, p->anim.GetCurrentFrame(dt).y, 22, 20}, collider_type, this);
+				else p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
 			}
 			Collider* test = p->collider;
 			active[i] = p;
@@ -260,11 +278,14 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 					switch (active[i]->type) {
 					case SWORD_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
-							App->entity->currentPlayer->lifePoints -= App->entity->exodus->damage;
+							App->entity->currentPlayer->lifePoints -= App->entity->exo->damage;
 						break;
-					case BASIC_SHOOT:
+					case MINDFLYER_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
 							App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
+					case TURRET_SHOOT:
+						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
+							App->entity->currentPlayer->lifePoints -= App->entity->turret_Damage;
 					}
 					ret = false;
 				}

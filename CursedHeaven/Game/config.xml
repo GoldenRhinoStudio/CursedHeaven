@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.5</title>
+    <title>Cursed Heaven v1.0</title>
     <organization>UPC</organization>
   </app>
 	
@@ -70,7 +70,7 @@
   <turret life="200" score="50">
 	  <margin x="-10" y="-10"/>
 	  <colliderSize w="17" h="25"/>
-	  <combat shotTime="2000" damage="30"/>
+	  <combat shotTime="2000" damage="15"/>
   </turret>  
   
   <mindflyer speed="100.0f" life="3000" score="2000">

@@ -40,6 +40,8 @@ bool j1SceneMenu::Awake(pugi::xml_node &)
 		ret = false;
 	}
 
+	/*App->audio->MusicVolume(0);
+	App->audio->FxVolume(0);*/
 	return ret;
 }
 
@@ -63,9 +65,6 @@ bool j1SceneMenu::Start()
 		// We will use it to check if there is a save file
 		pugi::xml_document save_game;
 		pugi::xml_parse_result result = save_game.load_file("save_game.xml");
-
-		/*App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);*/
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = {963, 12, 151, 38 };
@@ -93,9 +92,7 @@ bool j1SceneMenu::Start()
 		
 		startup_time.Start();
 		times++;
-
 	}
-
 	return true;
 }
 
@@ -109,12 +106,12 @@ bool j1SceneMenu::Update(float dt)
 {
 	BROFILER_CATEGORY("MenuUpdate", Profiler::Color::LightSeaGreen)
 
-		// ---------------------------------------------------------------------------------------------------------------------
-		// USER INTERFACE MANAGEMENT
-		// ---------------------------------------------------------------------------------------------------------------------	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// USER INTERFACE MANAGEMENT
+	// ---------------------------------------------------------------------------------------------------------------------	
 
-		// Updating the state of the UI
-		App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale);
+	// Updating the state of the UI
+	App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale);
 	App->gui->UpdateSliders(&menuBoxes);
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 
@@ -133,20 +130,20 @@ bool j1SceneMenu::Update(float dt)
 					(*item)->situation = (*item)->hovered;
 				break;
 
-
 			case RELEASED:
-
 				if (startup_time.Read() > 1900 && times > 1 || times == 1) {
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
 						LOG("Choose Character Scene Loading");
 						App->transitions->FadingToColor(MENU, CHOOSE);
-
-						App->scene1->finishedDialog = false;
-						App->scene2->finishedDialog2 = false;
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
-						App->transitions->SquaresAppearing(MENU, SCENE1, 3);
+						App->LoadSpecificModule(App->transitions);
+
+						if (App->transitions->scene1active) 
+							App->transitions->SquaresAppearing(MENU, SCENE1, 3);
+						if (App->transitions->scene2active)
+							App->transitions->SquaresAppearing(MENU, SCENE2, 3);
 					}
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;

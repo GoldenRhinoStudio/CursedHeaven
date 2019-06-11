@@ -23,9 +23,6 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
-	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
-
 public:
 	bool black_mage = false;
 	bool dragoon_knight = false;

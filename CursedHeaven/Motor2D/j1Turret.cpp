@@ -15,7 +15,7 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1Turret::j1Turret(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1Turret::j1Turret(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::TURRET)
 {
 	animation = NULL;
 
@@ -64,8 +64,8 @@ bool j1Turret::Update(float dt, bool do_logic)
 		{
 			if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
 				fPoint margin;
-				margin.x = -5;
-				margin.y = -5;
+				margin.x = -10;
+				margin.y = -10;
 
 				fPoint edge;
 				edge.x = App->entity->currentPlayer->collider->rect.x - (position.x + margin.x);
@@ -79,9 +79,9 @@ bool j1Turret::Update(float dt, bool do_logic)
 
 				speed_particle.x = p_speed.x * cos(angle);
 				speed_particle.y = p_speed.y * sin(angle);
-				App->particles->mageShot.speed = speed_particle;
+				App->particles->turretAttack.speed = speed_particle;
 
-				App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+				App->particles->AddParticle(App->particles->turretAttack, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
 				//App->audio->PlayFx(App->audio->slime_attack);
 				lastTime_Shot = shotTimer.Read();
 			}
@@ -198,9 +198,8 @@ bool j1Turret::Load(pugi::xml_node & data)
 bool j1Turret::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pos.append_attribute("x") = App->map->WorldToMap(position.x, position.y).x;
+	pos.append_attribute("y") = App->map->WorldToMap(position.x, position.y).y;
 
 	return true;
 }

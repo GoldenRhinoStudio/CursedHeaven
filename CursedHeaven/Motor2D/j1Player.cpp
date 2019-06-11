@@ -22,8 +22,6 @@ j1Player::~j1Player() {}
 
 
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
-
-
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 
 		// GodMode controls
@@ -96,6 +94,10 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 		}
 		else {
 
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)
+				direction = DIRECTION::NONE_;
+
 			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_R) == j1KeyState::KEY_DOWN ||
 				(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && potionTime.Read() >= lastPotionTime + 500))) {
 				App->shop->potions--;
@@ -104,6 +106,8 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				if (App->dialog->law == 3) {
 					if (App->entity->player_type == KNIGHT) App->entity->currentPlayer->lifePoints -= 38; 
 					else if (App->entity->player_type == KNIGHT)App->entity->currentPlayer->lifePoints -= 18;
+
+					if (App->entity->currentPlayer->lifePoints <= 0) App->entity->currentPlayer->dead = true;
 				}
 				else App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
 
@@ -156,6 +160,8 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 						position.y += speed * dt;
 				}
 			}
+
+			
 		}
 	}
 }

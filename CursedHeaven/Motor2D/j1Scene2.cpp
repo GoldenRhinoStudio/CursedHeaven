@@ -86,7 +86,7 @@ bool j1Scene2::Start() {
 
 		// Creating UI
 		SDL_Rect section = { 9, 460, 315, 402 };
-		settings_window = App->gui->CreateBox(&scene2Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section,  gui_tex);
+		settings_window = App->gui->CreateBox(&scene2Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
 		settings_window->visible = false;
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
@@ -151,7 +151,10 @@ bool j1Scene2::Update(float dt) {
 	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
 
-	if (App->scene2->startup_time.Read() > 1700) {
+	bool a = App->scene2->active;
+	bool b = a;
+
+	if (App->scene2->active && App->scene2->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
 			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
@@ -303,13 +306,23 @@ bool j1Scene2::PostUpdate() {
 }
 
 bool j1Scene2::Load(pugi::xml_node& node) {
+	active = node.child("activated").attribute("value").as_bool();
+	finishedDialog2 = node.child("dialogs").attribute("dialog").as_bool();
+	potionCounter = node.child("potions").attribute("counter").as_uint();
+
 	return true;
 }
 
-bool j1Scene2::Save(pugi::xml_node& node) const {
+bool j1Scene2::Save(pugi::xml_node& node) const 
+{
 	pugi::xml_node activated = node.append_child("activated");
+	activated.append_attribute("value") = active;
 
-	activated.append_attribute("true") = active;
+	pugi::xml_node dialogs = node.append_child("dialogs");
+	dialogs.append_attribute("dialog") = finishedDialog2;
+
+	pugi::xml_node potions = node.append_child("potions");
+	potions.append_attribute("counter") = potionCounter;
 
 	return true;
 }
@@ -381,6 +394,7 @@ bool j1Scene2::CleanUp() {
 	App->particles->CleanUp();
 
 	potionCounter = 0;
+	finishedDialog2 = false;
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
@@ -406,8 +420,9 @@ bool j1Scene2::CleanUp() {
 	App->path->CleanUp();
 	App->shop->restartingShop = true;
 	App->shop->CleanUp();
-	App->fade->FadeToBlack();
 	App->entity->CleanUp();
+	App->dialog->active = false;
+	App->dialog->CleanUp();
 
 	return true;
 }
@@ -449,4 +464,5 @@ void j1Scene2::ChangeSceneVictory() {
 	App->render->camera = { 0,0 };
 
 	App->victory->Start();
+	App->entity->currentPlayer->victory = false;
 }

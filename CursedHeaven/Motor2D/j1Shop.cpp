@@ -121,9 +121,42 @@ void j1Shop::PlaceShopScene2()
 bool j1Shop::Update(float dt)
 {
 	BROFILER_CATEGORY("ShopUpdate", Profiler::Color::LightSeaGreen)
+	
+	return true;
+}
 
+bool j1Shop::Load(pugi::xml_node& data)
+{
+	potions = data.append_child("potions").attribute("number").as_uint();
+	bootsLevel = data.append_child("boots").attribute("level").as_uint();
+	swordLevel = data.append_child("sword").attribute("level").as_uint();
+	heartLevel = data.append_child("heart").attribute("level").as_uint();
+	armourLevel = data.append_child("armour").attribute("level").as_uint();
+	hourglassLevel = data.append_child("hourglass").attribute("level").as_uint();
+	bookLevel = data.append_child("book").attribute("level").as_uint();
 
-		return true;
+	return true;
+}
+
+bool j1Shop::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node poti = data.append_child("potions");
+	pugi::xml_node boot = data.append_child("boots");
+	pugi::xml_node sword = data.append_child("sword");
+	pugi::xml_node heart = data.append_child("heart");
+	pugi::xml_node arm = data.append_child("armour");
+	pugi::xml_node hour = data.append_child("hourglass");
+	pugi::xml_node book = data.append_child("book");
+
+	poti.append_attribute("number") = potions;
+	boot.append_attribute("level") = bootsLevel;
+	sword.append_attribute("level") = swordLevel;
+	heart.append_attribute("level") = heartLevel;
+	arm.append_attribute("level") = armourLevel;
+	hour.append_attribute("level") = hourglassLevel;
+	book.append_attribute("level") = bookLevel;
+
+	return true;
 }
 
 bool j1Shop::CleanUp()

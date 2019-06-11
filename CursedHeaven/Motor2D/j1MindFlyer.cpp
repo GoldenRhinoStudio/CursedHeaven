@@ -16,7 +16,7 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1MindFlyer::j1MindFlyer(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::MINDFLYER)
 {
 	animation = NULL;
 
@@ -98,43 +98,43 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 							
 							speed_particle[0].x = particle_speed.x * cos(0 * DEGTORAD);
 							speed_particle[0].y = particle_speed.y * sin(0 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[0];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[0];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[1].x = particle_speed.x * cos(180 * DEGTORAD);
 							speed_particle[1].y = particle_speed.y * sin(180 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[1];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[1];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 														
 							speed_particle[2].x = particle_speed.x * cos(-45 * DEGTORAD);
 							speed_particle[2].y = particle_speed.y * sin(-45 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[2];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[2];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[3].x = particle_speed.x * cos(-135 * DEGTORAD);
 							speed_particle[3].y = particle_speed.y * sin(-135 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[3];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[3];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 														
 							speed_particle[4].x = particle_speed.x * cos(-315 * DEGTORAD);
 							speed_particle[4].y = particle_speed.y * sin(-315 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[4];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[4];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[5].x = particle_speed.x * cos(-225 * DEGTORAD);
 							speed_particle[5].y = particle_speed.y * sin(-225 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[5];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[5];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							
 							speed_particle[6].x = particle_speed.x * cos(-90 * DEGTORAD);
 							speed_particle[6].y = particle_speed.y * sin(-90 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[6];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[6];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 							speed_particle[7].x = particle_speed.x * cos(-270 * DEGTORAD);
 							speed_particle[7].y = particle_speed.y * sin(-270 * DEGTORAD);
-							App->particles->mageShot.speed = speed_particle[7];
-							App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+							App->particles->mindflyerAttack.speed = speed_particle[7];
+							App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 							App->audio->PlayFx(App->audio->boss_attack);
 							lastTime_Shot = shotTimer.Read();
@@ -151,23 +151,23 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 								speed_particle[0].x = particle_speed.x * cos((0 + loopAngle) * DEGTORAD);
 								speed_particle[0].y = particle_speed.y * sin((0 + loopAngle) * DEGTORAD);
-								App->particles->mageShot.speed = speed_particle[0];
-								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+								App->particles->mindflyerAttack.speed = speed_particle[0];
+								App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 								speed_particle[1].x = particle_speed.x * cos((180 + loopAngle) * DEGTORAD);
 								speed_particle[1].y = particle_speed.y * sin((180 + loopAngle) * DEGTORAD);
-								App->particles->mageShot.speed = speed_particle[1];
-								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+								App->particles->mindflyerAttack.speed = speed_particle[1];
+								App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 								
 								speed_particle[6].x = particle_speed.x * cos((-90 + loopAngle) * DEGTORAD);
 								speed_particle[6].y = particle_speed.y * sin((-90 + loopAngle) * DEGTORAD);
-								App->particles->mageShot.speed = speed_particle[6];
-								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+								App->particles->mindflyerAttack.speed = speed_particle[6];
+								App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 
 								speed_particle[7].x = particle_speed.x * cos((-270 + loopAngle) * DEGTORAD);
 								speed_particle[7].y = particle_speed.y * sin((-270 + loopAngle) * DEGTORAD);
-								App->particles->mageShot.speed = speed_particle[7];
-								App->particles->AddParticle(App->particles->mageShot, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
+								App->particles->mindflyerAttack.speed = speed_particle[7];
+								App->particles->AddParticle(App->particles->mindflyerAttack, position.x, position.y, dt, COLLIDER_ENEMY_SHOT);
 							}
 
 							loopAngle++;
@@ -201,7 +201,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 	}
 
-	App->map->EntityMovement(this);
+	App->map->EntityMovementTest(this);
 
 	return true;
 }
@@ -297,15 +297,19 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 
 bool j1MindFlyer::Load(pugi::xml_node & data)
 {
+
 	return true;
 }
 
 bool j1MindFlyer::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
+	pos.append_attribute("x") = App->map->WorldToMap(position.x, position.y).x;
+	pos.append_attribute("y") = App->map->WorldToMap(position.x, position.y).y;
 
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pugi::xml_node stats = data.append_child("stats");
+	stats.append_attribute("life") = lifePoints;
+	stats.append_attribute("dead") = dead;
 
 	return true;
 }
@@ -326,8 +330,13 @@ void j1MindFlyer::LoadProperties()
 	colliderSize.y = mindflyer.child("colliderSize").attribute("h").as_int();
 
 	// Copying combat values
+	if (App->entity->loadingMf) {
+		lifePoints = App->entity->mf_lifePoints; 
+		App->entity->loadingMf = false;
+	}else
+		lifePoints = mindflyer.attribute("life").as_int();
+
 	speed = mindflyer.attribute("speed").as_int();
-	lifePoints = mindflyer.attribute("life").as_int();
 	score = mindflyer.attribute("score").as_int();
 	cooldown_Shot = mindflyer.child("combat").attribute("shotTime").as_uint();
 	App->entity->mindflyer_Damage = mindflyer.child("combat").attribute("damage").as_int();

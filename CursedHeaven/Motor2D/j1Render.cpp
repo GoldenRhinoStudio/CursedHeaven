@@ -161,7 +161,6 @@ bool j1Render::Load(pugi::xml_node& data)
 bool j1Render::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node cam = data.append_child("camera");
-
 	cam.append_attribute("x") = camera.x;
 	cam.append_attribute("y") = camera.y;
 

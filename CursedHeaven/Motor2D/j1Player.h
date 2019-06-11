@@ -73,7 +73,6 @@ public:
 	int room = 6;
 	uint points = 0;
 	uint score_points = 0;
-	uint playerLife = 0;
 	uint coins = 0;
 
 	Collider* attackCollider = nullptr;

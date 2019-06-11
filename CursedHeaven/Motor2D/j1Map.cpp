@@ -585,353 +585,27 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 	return ret;
 }
 
-void j1Map::EntityMovement(j1Entity* entity)
-{
-	BROFILER_CATEGORY("EntityMovement", Profiler::Color::Blue)
-	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
-	int y = entity->collider->rect.y + entity->collider->rect.h - 5;
-
-	iPoint current_tile = WorldToMap(x, y);
-	iPoint next_tile = { 0,0 };
-
-	uint height0_gid = 0, height1_gid = 0;
-
-	height1_gid = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y);
-
-	if (height0_gid == 0) {
-		height0_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
-
-	}
-
-	uint current_gid;
-	uint tile_id = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
-	int sum = (tile_id % 2 != 0) ? 1 : 0;
-	if (height1_gid != 0) {		//entity is on the second layer
-		current_gid = height1_gid;
-		entity->height = 2 + sum;
-		entity->current_height = 1;
-	}
-	else {				                //entity is on the first layer
-		current_gid = height0_gid;
-		entity->height = 0 + sum;
-		entity->current_height = 0;
-	}
-
-	// tiles of the first layer | height == 0
-	uint up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);
-	uint down_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y + 1);
-	uint down_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y);
-	uint up_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y);
-
-	uint right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
-	uint up_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
-	uint down_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
-	uint left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
-
-
-	// tiles of the second layer | height == 1
-	uint up_right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y - 1);
-	uint down_left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x, current_tile.y + 1);
-	uint down_right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y);
-	uint up_left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y);
-
-	uint right_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
-	uint up_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
-	uint down_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
-	uint left_gid_1 = App->map->data.layers.begin()._Ptr->_Next->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
-
-
-	bool height0_semiblock = false, height1_semiblock = false;
-	bool height0_next = false, height1_next = false;
-
-	DIRECTION direction;
-
-	direction = entity->direction;
-
-	if (current_gid != 0) {
-		switch (direction)
-		{
-		case UP_:
-			if (up_gid_1 != 0) {
-				next_gid = up_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (up_gid != 0) {
-				next_gid = up_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-
-			next_tile = { current_tile.x - 1, current_tile.y - 1 };
-			break;
-		case DOWN_:
-			if (down_gid_1 != 0) {
-				next_gid = down_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (down_gid != 0) {
-				next_gid = down_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x + 1, current_tile.y + 1 };
-			break;
-		case RIGHT_:
-			if (right_gid_1 != 0) {
-				next_gid = right_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (right_gid != 0) {
-				next_gid = right_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x + 1, current_tile.y - 1 };
-			break;
-		case LEFT_:
-			if (left_gid_1 != 0) {
-				next_gid = left_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (left_gid != 0) {
-				next_gid = left_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x - 1, current_tile.y + 1 };
-			break;
-		case UP_RIGHT_:
-			if (up_right_gid_1 != 0) {
-				next_gid = up_right_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (up_right_gid != 0) {
-				next_gid = up_right_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x, current_tile.y - 1 };
-			break;
-		case UP_LEFT_:
-			if (up_left_gid_1 != 0) {
-				next_gid = up_left_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (up_left_gid != 0) {
-				next_gid = up_left_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x - 1, current_tile.y };
-			break;
-		case DOWN_RIGHT_:
-			if (down_right_gid_1 != 0) {
-				next_gid = down_right_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (down_right_gid != 0) {
-				next_gid = down_right_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x + 1, current_tile.y };
-			break;
-		case DOWN_LEFT_:
-			if (down_left_gid_1 != 0) {
-				next_gid = down_left_gid_1;
-				if (next_gid % 2 == 0)
-					height1_semiblock = true;
-				else
-					height1_semiblock = false;
-				height1_next = true;
-				next_height = 1;
-			}
-			else if (down_left_gid != 0) {
-				next_gid = down_left_gid;
-				if (next_gid % 2 == 0)
-					height0_semiblock = true;
-				else
-					height0_semiblock = false;
-				height0_next = true;
-				next_height = 0;
-			}
-			else
-				next_gid = 0;
-			next_tile = { current_tile.x, current_tile.y + 1 };
-			break;
-		}
-	}
-
-	if (next_gid == 5 || next_gid == 6 || next_gid == 0)
-		entity->movement = false;
-
-	else {
-		entity->movement = true;
-
-		if (((next_gid % 2) - (current_gid % 2)) == 1 || ((next_gid % 2) - (current_gid % 2)) == -1
-			|| ((next_gid % 2) == 0 && (current_gid % 2) == 0) && next_gid != 0 && direction != NONE_ && current_gid != next_gid) {
-
-			if ((current_gid == height0_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
-				(current_gid == height0_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
-				(current_gid == height1_gid && !height1_semiblock && current_gid % 2 == 0 && height1_next)) {
-				if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_
-					&& (((down_left_gid_1 != next_gid && height1_next) || ((left_gid_1 != next_gid && height1_next))))
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 0) && direction == UP_LEFT_)))
-					entity->position.y -= 1;
-				else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_
-					&& (((down_right_gid_1 != next_gid && height1_next)) || ((down_gid_1 != next_gid && height1_next))))
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == 1) && direction == UP_RIGHT_))
-					entity->position.y -= 1;
-				else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_)
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					&& (((down_right_gid_1 == next_gid && height1_next)) || ((right_gid_1 == next_gid && height1_next)))
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 0) && direction == DOWN_RIGHT_)) {
-					entity->position.y += 1;
-					entity->position.x += 1;
-				}
-				else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_)
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == -1) && direction == DOWN_LEFT_)) {
-					entity->position.y += 1;
-					entity->position.x -= 1;
-				}
-			}
-
-			else if ((current_gid == height1_gid && height1_semiblock && current_gid % 2 == 1 && height1_next) ||
-				(current_gid == height1_gid && !height0_semiblock && current_gid % 2 == 0 && height0_next) ||
-				(current_gid == height0_gid && height0_semiblock && current_gid % 2 == 1 && height0_next)) {
-				if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_
-					&& (((up_right_gid_1 != next_gid && height1_next && up_right_gid_1 != 0) || (up_right_gid_1 != next_gid && height0_next && up_right_gid_1 != 0) ||
-						(up_right_gid != next_gid && height0_next && up_right_gid != 0)) || ((up_gid_1 != next_gid && height1_next && up_gid_1 != 0) ||
-							(up_gid_1 != next_gid && height0_next && up_gid_1 != 0) || (up_gid != next_gid && height0_next && up_gid != 0))))
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 0) && direction == DOWN_RIGHT_))
-					entity->position.y += 1;
-				else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_
-					&& (((up_left_gid_1 != next_gid && height1_next && up_left_gid_1 != 0) || (up_left_gid_1 != next_gid && height0_next && up_left_gid_1 != 0) ||
-						(up_left_gid != next_gid && height0_next && up_left_gid != 0)) || ((up_gid_1 != next_gid && height1_next && up_gid_1 != 0) ||
-							(up_gid_1 != next_gid && height0_next && up_gid_1 != 0) || (up_gid != next_gid && height0_next && up_gid != 0))))
-					|| ((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == -1) && direction == DOWN_)
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == -1) && direction == DOWN_LEFT_))
-					entity->position.y += 1;
-				else if (((current_tile.x - next_tile.x == -1) && (current_tile.y - next_tile.y == 1) && direction == RIGHT_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_
-						&& (((up_right_gid_1 == next_gid && height1_next) || (up_right_gid_1 == next_gid && height0_next) ||
-							(up_right_gid == next_gid && height0_next)) || ((right_gid_1 == next_gid && height1_next) ||
-								(right_gid_1 == next_gid && height0_next) || (right_gid == next_gid && height0_next))))
-					|| ((current_tile.x - next_tile.x == 0) && (current_tile.y - next_tile.y == 1) && direction == UP_RIGHT_)) {
-					entity->position.x += 1;
-				}
-				else if (((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == -1) && direction == LEFT_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 1) && direction == UP_)
-					|| ((current_tile.x - next_tile.x == 1) && (current_tile.y - next_tile.y == 0) && direction == UP_LEFT_)) {
-					entity->position.x -= 1;
-				}
-			}
-		}
-	}
-}
-
 void j1Map::EntityMovementTest(j1Entity* entity) {
 	
 
 	DIRECTION direction;
 
 	direction = entity->direction;
+	int x;
+	if (entity->position.x >= 0)
+		x = entity->collider->rect.x;
+	else
+		x = entity->collider->rect.x - entity->collider->rect.w;
 
-	int x = entity->collider->rect.x + entity->collider->rect.w / 2;
-	int y = entity->collider->rect.y + entity->collider->rect.h - entity->offset;
+	int y = entity->collider->rect.y + entity->collider->rect.h;
 
 	iPoint current_tile = WorldToMap(x, y);
 	current_tile.x -= 1;
 	current_tile.y -= 1;
-	
-	if (direction == UP_ || direction == UP_RIGHT_ || direction == UP_LEFT_)
-		current_tile.y += 1;
-
 
 	iPoint next_tile = { 0,0 };
 
-	uint current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+	uint current_gid;
 	uint next_gid = 0;
 
 	// tiles of the first layer | height == 0
@@ -945,9 +619,76 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 	uint down_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
 	uint left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
 
+	if (direction == DOWN_RIGHT_)
+	{
+		if (up_gid == 0 && up_right_gid == 0 && up_left_gid == 0 && right_gid == 0)
+		{
+			current_tile.y += 1;
+			current_tile.x += 1;
+			current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+		}
+	}
 
-	bool going_up = false;
-	bool going_down = false;
+	else if ( direction == DOWN_LEFT_)
+	{
+		if (up_gid == 0 && down_gid != 0 && (App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y)) != 9)
+		{
+			current_tile.y += 1;
+			current_tile.x += 1;
+			current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+		}
+	}
+
+	else if (direction == UP_LEFT_)
+	{
+		if (up_gid == 0 && up_left_gid == 0 && left_gid != 0)
+		{
+			current_tile.y += 1;
+			current_tile.x += 1;
+
+			current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+		}
+		else if (up_gid == 0 && up_left_gid == 0 && left_gid == 0)
+		{
+			current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+		}
+	}
+
+	else if (direction == UP_RIGHT_)
+	{
+		if (up_gid == 0 && up_right_gid == 0 && right_gid != 0)
+		{
+			current_tile.y += 1;
+			current_tile.x += 1;
+			current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+		}
+
+		else if (up_gid == 0 && up_right_gid == 0 && right_gid == 0)
+		{
+			current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+		}
+	}
+
+	else
+		current_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y);
+
+	up_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y - 1);
+	down_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x, current_tile.y + 1);
+	down_right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y);
+	up_left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y);
+
+	right_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y - 1);
+	up_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y - 1);
+	down_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x + 1, current_tile.y + 1);
+	left_gid = App->map->data.layers.begin()._Ptr->_Myval->Get(current_tile.x - 1, current_tile.y + 1);
+
+
+	iPoint debug = App->map->MapToWorld(current_tile.x, current_tile.y);
+	App->render->DrawLine(debug.x, debug.y + 8, debug.x + 16, debug.y, 255, 0, 0, 255);
+	App->render->DrawLine(debug.x + 16, debug.y, debug.x + 32, debug.y + 8, 255, 0, 0, 255);
+	App->render->DrawLine(debug.x + 32, debug.y + 8, debug.x + 16, debug.y + 16, 255, 0, 0, 255);
+	App->render->DrawLine(debug.x, debug.y + 8, debug.x + 16, debug.y + 16, 255, 0, 0, 255);
+
 
 	switch (direction)
 	{
@@ -983,80 +724,37 @@ void j1Map::EntityMovementTest(j1Entity* entity) {
 		next_gid = down_left_gid;
 		next_tile = { current_tile.x, current_tile.y + 1 };
 		break;
+	case NONE_:
+		break;
+	}
+	
+	iPoint debug2 = App->map->MapToWorld(next_tile.x, next_tile.y);
+	App->render->DrawLine(debug2.x, debug2.y + 8, debug2.x + 16, debug2.y, 0, 0, 255, 255);
+	App->render->DrawLine(debug2.x + 16, debug2.y, debug2.x + 32, debug2.y + 8, 0, 0, 255, 255);
+	App->render->DrawLine(debug2.x + 32, debug2.y + 8, debug2.x + 16, debug2.y + 16, 0, 0, 255, 255);
+	App->render->DrawLine(debug2.x, debug2.y + 8, debug2.x + 16, debug2.y + 16, 0, 0, 255, 255);
+
+	if (current_gid != 0)
+	{
+		if (current_gid % 2 != 1)
+			entity->height = 0;
+		else
+			entity->height = 1;
 	}
 	
 
-	if (next_gid != 0)
-	{
-		if ((current_gid % 2 - next_gid % 2) != 0)
-		{
-			if (current_gid % 2 == 0)
-				going_up = true;
-			else
-				going_down = true;
-		}
-	}
-
-	if (current_gid % 2 != 1)
-		entity->height = 0;
-	else
-		entity->height = 1;
-
 
 	if (next_gid == 5 || next_gid == 6 || next_gid == 0)
-		entity->movement = false;
-
-	else
 	{
-		entity->movement = true;
+		if (current_gid != 0 && next_gid == 0 && (direction == UP_RIGHT_ || direction == UP_LEFT_))
+			entity->movement = true;	
 
-		if (going_up)
-		{
-			if (direction == UP_RIGHT_)
-			{
-				entity->position.y -= 1;
-			}
-
-			else if (direction == UP_LEFT_)
-			{
-				entity->position.y -= 1;
-			}
-
-			else if (direction == DOWN_RIGHT_)
-			{
-				entity->position.y += 1;
-			}
-
-			else if (direction == DOWN_LEFT_)
-			{
-				entity->position.y += 1;
-			}
-		}
-
-		else if (going_down)
-		{
-			if (direction == UP_RIGHT_)
-			{
-				entity->position.x += 1;
-			}
-
-			else if (direction == UP_LEFT_)
-			{
-				entity->position.x -= 1;
-			}
-
-			else if (direction == DOWN_RIGHT_)
-			{
-				entity->position.y += 1;
-			}
-
-			else if (direction == DOWN_LEFT_)
-			{
-				entity->position.y += 1;
-			}
-		}
+		else
+			entity->movement = false;			
 	}
 
+	else
+		entity->movement = true;
 
 }
 

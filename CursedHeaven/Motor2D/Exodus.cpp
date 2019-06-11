@@ -90,7 +90,7 @@ bool Exodus::Update(float dt, bool do_logic)
 		shotTimer.Start();
 	}	
 
-	App->map->EntityMovement(this);
+	App->map->EntityMovementTest(this);
 	return true;
 }
 

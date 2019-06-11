@@ -127,7 +127,6 @@ public:
 	iPoint WorldToMap(int x, int y) const;
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
-	void EntityMovement(j1Entity* entity);
 	void EntityMovementTest(j1Entity* entity);
 
 	void Tile_WorldMap(iPoint & pos, int height);

@@ -94,6 +94,10 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 		}
 		else {
 
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)
+				direction = DIRECTION::NONE_;
+
 			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_R) == j1KeyState::KEY_DOWN ||
 				(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && potionTime.Read() >= lastPotionTime + 500))) {
 				App->shop->potions--;
@@ -156,6 +160,8 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 						position.y += speed * dt;
 				}
 			}
+
+			
 		}
 	}
 }

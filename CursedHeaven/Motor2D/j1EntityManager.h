@@ -21,6 +21,7 @@ class Exodus;
 struct SDL_Texture;
 
 enum DIRECTION {
+	NONE_,
 	UP_,
 	DOWN_,
 	RIGHT_,
@@ -28,8 +29,7 @@ enum DIRECTION {
 	UP_RIGHT_,
 	UP_LEFT_,
 	DOWN_RIGHT_,
-	DOWN_LEFT_,
-	NONE_
+	DOWN_LEFT_	
 };
 
 enum ENTITY_TYPES

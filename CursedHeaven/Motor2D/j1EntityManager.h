@@ -110,17 +110,22 @@ public:
 	j1Rogue*			rogue = nullptr;
 
 	j1Player*			currentPlayer = nullptr;
+	PLAYER_TYPES player_type = NO_PLAYER;
 
 	j1Judge*			judge = nullptr;
 	j1Seller*			seller = nullptr;
-
-	PLAYER_TYPES player_type = NO_PLAYER;
-	Exodus*			exodus = nullptr;
+	Exodus*				exo = nullptr;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
 	int fire_Damage = 0;
 	int turret_Damage = 0;
+
+	int mf_lifePoints = 0;
+	bool loadingMf = false;
+	int exo_lifePoints = 0;
+	bool loadingExo = false;
+	bool exoFightOn = false;
 
 private:
 	int entity_logic = 0;

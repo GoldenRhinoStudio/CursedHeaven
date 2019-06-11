@@ -156,8 +156,6 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 	case PLAYER: 
 		if (player_type == KNIGHT) ret = new j1DragoonKnight(x, y, type);
 		else if (player_type == MAGE) ret = new j1BlackMage(x, y, type);
-		/*else if (player_type == TANK) ret = new j1Tank(x, y, type);
-		else if (player_type == ROGUE) ret = new j1Rogue(x, y, type);*/
 
 		if (ret != nullptr) 
 			entities.push_back(ret); 
@@ -207,7 +205,7 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 				entity = new j1Fire(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == EXODUS) {
 				entity = new Exodus(info.position.x, info.position.y, info.type);
-				exodus = (Exodus*)entity;
+				exo = (Exodus*)entity;
 			}
 
 			entities.push_back(entity);
@@ -302,13 +300,23 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 	pugi::xml_node mindflyer = data.child("mindflyer");
 	pugi::xml_node exodus = data.child("exodus");
 
-	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
-	{
-		if (item._Ptr->_Myval->type == MINDFLYER)
-			item._Ptr->_Myval->Load(mindflyer);
+	// Loading Mindflyer
+	bool mf_dead = mindflyer.child("stats").attribute("dead").as_bool(true);
 
-		else if (item._Ptr->_Myval->type == EXODUS)
-			item._Ptr->_Myval->Load(exodus);
+	if (!mf_dead) {
+		App->entity->AddEnemy(mindflyer.child("position").attribute("x").as_float(), mindflyer.child("position").attribute("y").as_float(), MINDFLYER);
+		mf_lifePoints = mindflyer.child("stats").attribute("life").as_int();
+		loadingMf = true;
+	}
+
+	// Loading Exodus
+	bool exo_dead = exodus.child("stats").attribute("dead").as_bool(true);
+
+	if (!exo_dead) {
+		App->entity->AddEnemy(exodus.child("position").attribute("x").as_float(), exodus.child("position").attribute("y").as_float(), EXODUS);
+		exo_lifePoints = exodus.child("stats").attribute("life").as_int();
+		exoFightOn = exodus.child("stats").attribute("fightOn").as_bool();
+		loadingExo = true;
 	}
 
 	pugi::xml_node type = data.child("playerType");

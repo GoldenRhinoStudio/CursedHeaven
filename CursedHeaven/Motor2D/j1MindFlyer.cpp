@@ -297,11 +297,6 @@ void j1MindFlyer::OnCollision(Collider * col_1, Collider * col_2)
 
 bool j1MindFlyer::Load(pugi::xml_node & data)
 {
-	if (!dead) {
-		position.x = data.child("position").attribute("x").as_float();
-		position.y = data.child("position").attribute("y").as_float();
-		lifePoints = data.child("position").attribute("life").as_float();
-	}
 
 	return true;
 }
@@ -309,9 +304,12 @@ bool j1MindFlyer::Load(pugi::xml_node & data)
 bool j1MindFlyer::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
-	pos.append_attribute("life") = lifePoints;
+	pos.append_attribute("x") = App->map->WorldToMap(position.x, position.y).x;
+	pos.append_attribute("y") = App->map->WorldToMap(position.x, position.y).y;
+
+	pugi::xml_node stats = data.append_child("stats");
+	stats.append_attribute("life") = lifePoints;
+	stats.append_attribute("dead") = dead;
 
 	return true;
 }
@@ -332,8 +330,13 @@ void j1MindFlyer::LoadProperties()
 	colliderSize.y = mindflyer.child("colliderSize").attribute("h").as_int();
 
 	// Copying combat values
+	if (App->entity->loadingMf) {
+		lifePoints = App->entity->mf_lifePoints; 
+		App->entity->loadingMf = false;
+	}else
+		lifePoints = mindflyer.attribute("life").as_int();
+
 	speed = mindflyer.attribute("speed").as_int();
-	lifePoints = mindflyer.attribute("life").as_int();
 	score = mindflyer.attribute("score").as_int();
 	cooldown_Shot = mindflyer.child("combat").attribute("shotTime").as_uint();
 	App->entity->mindflyer_Damage = mindflyer.child("combat").attribute("damage").as_int();

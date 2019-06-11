@@ -41,7 +41,6 @@ bool Exodus::Start()
 	animation = &idle;
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
-
 	return true;
 }
 
@@ -171,15 +170,20 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 
 bool Exodus::Load(pugi::xml_node & data)
 {
+
 	return true;
 }
 
 bool Exodus::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
-	pos.append_attribute("life") = lifePoints;
+	pos.append_attribute("x") = App->map->WorldToMap(position.x, position.y).x;
+	pos.append_attribute("y") = App->map->WorldToMap(position.x, position.y).y;
+
+	pugi::xml_node stats = data.append_child("stats");
+	stats.append_attribute("life") = lifePoints;
+	stats.append_attribute("dead") = dead;
+	stats.append_attribute("fightOn") = start_fight;
 
 	return true;
 }
@@ -200,8 +204,15 @@ void Exodus::LoadProperties()
 	colliderSize.y = exodus.child("colliderSize").attribute("h").as_int();
 
 	// Copying combat values
+	if (App->entity->loadingExo) {
+		lifePoints = App->entity->exo_lifePoints;
+		App->entity->loadingExo = false;
+		start_fight = App->entity->exoFightOn;
+	}
+	else
+		lifePoints = exodus.attribute("life").as_int();
+
 	speed = exodus.attribute("speed").as_int();
-	lifePoints = exodus.attribute("life").as_int();
 	shotTime = exodus.child("combat").attribute("shotTime").as_int();
 	damage = exodus.child("combat").attribute("damage").as_int();
 }

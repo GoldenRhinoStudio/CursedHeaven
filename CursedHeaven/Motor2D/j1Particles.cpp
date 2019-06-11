@@ -25,7 +25,7 @@ j1Particles::j1Particles()
 
 	// Mage basic attack
 	mageShot.anim.LoadAnimation("shot", "mage");
-	mageShot.life = 800;
+	mageShot.life = 250;
 	mageShot.type = BASIC_SHOOT;
 
 	// Mage Q
@@ -224,7 +224,7 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 					switch (active[i]->type) {
 					case SWORD_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
-							App->entity->currentPlayer->lifePoints -= App->entity->exodus->damage;
+							App->entity->currentPlayer->lifePoints -= App->entity->exo->damage;
 						break;
 					case BASIC_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)

@@ -40,8 +40,8 @@ bool j1SceneMenu::Awake(pugi::xml_node &)
 		ret = false;
 	}
 
-	App->audio->MusicVolume(0);
-	App->audio->FxVolume(0);
+	/*App->audio->MusicVolume(0);
+	App->audio->FxVolume(0);*/
 	return ret;
 }
 

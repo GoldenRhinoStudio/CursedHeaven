@@ -64,8 +64,8 @@ bool j1Turret::Update(float dt, bool do_logic)
 		{
 			if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
 				fPoint margin;
-				margin.x = -5;
-				margin.y = -5;
+				margin.x = -20;
+				margin.y = -20;
 
 				fPoint edge;
 				edge.x = App->entity->currentPlayer->collider->rect.x - (position.x + margin.x);
@@ -79,9 +79,9 @@ bool j1Turret::Update(float dt, bool do_logic)
 
 				speed_particle.x = p_speed.x * cos(angle);
 				speed_particle.y = p_speed.y * sin(angle);
-				App->particles->mageShot.speed = speed_particle;
+				App->particles->turretAttack.speed = speed_particle;
 
-				App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
+				App->particles->AddParticle(App->particles->turretAttack, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ENEMY_SHOT);
 				//App->audio->PlayFx(App->audio->slime_attack);
 				lastTime_Shot = shotTimer.Read();
 			}

@@ -212,11 +212,11 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 	}
 }
 
-void j1EntityManager::AddItem(int x, int y, DROP_TYPES itype)
+void j1EntityManager::AddItem(int x, int y, ENTITY_TYPES type)
 {
 	j1Entity* ret = nullptr;
 
-	ret = new Items(x, y, ENTITY_TYPES::ITEM, itype);
+	ret = new Items(x, y, type);
 	ret->height = 2;
 
 	if (ret != nullptr)
@@ -295,6 +295,18 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 		AddEnemy(pos.x, pos.y, TURRET);
 	}
 
+	for (pugi::xml_node coin = data.child("coin").child("position"); coin; coin = coin.next_sibling())
+	{
+		iPoint pos = { coin.attribute("x").as_int(), coin.attribute("y").as_int() };
+		AddItem(pos.x, pos.y, COIN);
+	}
+
+	for (pugi::xml_node life = data.child("life").child("position"); life; life = life.next_sibling())
+	{
+		iPoint pos = { life.attribute("x").as_int(), life.attribute("y").as_int() };
+		AddItem(pos.x, pos.y, LIFE);
+	}
+
 	pugi::xml_node mindflyer = data.child("mindflyer");
 	pugi::xml_node exodus = data.child("exodus");
 
@@ -347,23 +359,25 @@ bool j1EntityManager::Save(pugi::xml_node& data) const
 	pugi::xml_node turret = data.append_child("turret");
 	pugi::xml_node mindflyer = data.append_child("mindflyer");
 	pugi::xml_node exodus = data.append_child("exodus");
+	pugi::xml_node life = data.append_child("life");
+	pugi::xml_node coin = data.append_child("coin");
 
 	for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != entities.end(); ++item)
 	{
 		if (item._Ptr->_Myval->type == SLIME)
 			item._Ptr->_Myval->Save(slime);
-
-		if (item._Ptr->_Myval->type == FIRE)
+		else if (item._Ptr->_Myval->type == FIRE)
 			item._Ptr->_Myval->Save(fire);
-
 		else if (item._Ptr->_Myval->type == TURRET)
 			item._Ptr->_Myval->Save(turret);
-
 		else if (item._Ptr->_Myval->type == MINDFLYER)
 			item._Ptr->_Myval->Save(mindflyer);
-
 		else if (item._Ptr->_Myval->type == EXODUS)
 			item._Ptr->_Myval->Save(exodus);
+		else if (item._Ptr->_Myval->type == COIN)
+			item._Ptr->_Myval->Save(coin);
+		else if (item._Ptr->_Myval->type == LIFE)
+			item._Ptr->_Myval->Save(life);		
 	}		
 
 	return true;

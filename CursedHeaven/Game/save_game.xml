@@ -13,7 +13,7 @@
 	<lose />
 	<scene1>
 		<activated value="true" />
-		<dialogs dialog="false" sellerDialog="true" />
+		<dialogs dialog="true" sellerDialog="true" />
 		<potions counter="0" />
 	</scene1>
 	<scene2>
@@ -32,15 +32,15 @@
 	</shop>
 	<entityManager>
 		<player>
-			<position x="180" y="770" />
+			<position x="54.0799751" y="692.280151" />
 			<points value="0" />
 			<scorePoints value="0" />
-			<life value="200" />
+			<life value="350" />
 			<coins value="0" />
 			<godmode value="false" />
 		</player>
-		<playerType type="1" />
-		<gamePaused value="true" />
+		<playerType type="0" />
+		<gamePaused value="false" />
 		<slime>
 			<position x="6" y="57" />
 			<position x="15" y="54" />
@@ -51,9 +51,6 @@
 			<position x="29" y="40" />
 			<position x="33" y="41" />
 			<position x="14" y="41" />
-			<position x="46" y="47" />
-			<position x="43" y="39" />
-			<position x="38" y="41" />
 			<position x="29" y="19" />
 			<position x="28" y="22" />
 			<position x="26" y="26" />
@@ -82,6 +79,17 @@
 			<stats life="3000" dead="false" />
 		</mindflyer>
 		<exodus />
+		<life>
+			<position x="-5" y="702" />
+			<position x="5" y="707" />
+			<position x="-5" y="712" />
+			<position x="4" y="677" />
+			<position x="14" y="682" />
+			<position x="4" y="687" />
+		</life>
+		<coin>
+			<position x="13" y="692" />
+		</coin>
 	</entityManager>
 	<particles />
 	<collisions />
@@ -89,7 +97,7 @@
 	<gui />
 	<minimap />
 	<dialog>
-		<laws currentLaw="1" />
+		<laws currentLaw="0" />
 	</dialog>
 	<fade />
 	<transitions>
@@ -98,6 +106,6 @@
 	</transitions>
 	<victory />
 	<renderer>
-		<camera x="-28" y="-1926" />
+		<camera x="349" y="-1692" />
 	</renderer>
 </game_state>

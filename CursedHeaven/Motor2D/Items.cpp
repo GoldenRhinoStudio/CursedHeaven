@@ -15,11 +15,11 @@
 #include "Brofiler/Brofiler.h"
 
 
-Items::Items(int x, int y, ENTITY_TYPES type, DROP_TYPES itype) : j1Entity(x, y, type) 
+Items::Items(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, type) 
 {
 	animation = NULL;
 
-	switch (itype) {
+	switch (type) {
 	case(COIN):
 		item.LoadAnimation("coin", "items", false);
 		break;
@@ -28,7 +28,7 @@ Items::Items(int x, int y, ENTITY_TYPES type, DROP_TYPES itype) : j1Entity(x, y,
 		break;
 	}
 
-	this->itype = itype;
+	this->type = type;
 
 	// Setting position
 	initialPosition.x = position.x = x;
@@ -92,13 +92,13 @@ void Items::OnCollision(Collider * col_1, Collider * col_2)
 {
 	if (col_2->type == COLLIDER_PLAYER)
 	{
-		if (itype == COIN) {
+		if (type == COIN) {
 			collider->to_delete = true;
 			App->entity->currentPlayer->coins += value;
 			App->audio->PlayFx(App->audio->coin_sound);
 			
 		}
-		else if (itype == LIFE) {
+		else if (type == LIFE) {
 			if (App->entity->currentPlayer->lifePoints + value <= App->entity->currentPlayer->totalLifePoints) {
 				collider->to_delete = true;
 				App->entity->currentPlayer->lifePoints += value;
@@ -141,13 +141,13 @@ void Items::LoadProperties()
 	pugi::xml_node items;
 	items = config.child("items");
 	pugi::xml_node item;
-	item = items.child(ToString(itype));
+	item = items.child(ToString(type));
 
 	// Copying the values of the item
 	value = item.attribute("value").as_int();
 }
 
-const char* Items::ToString(DROP_TYPES item)
+const char* Items::ToString(ENTITY_TYPES item)
 {
 	switch (item)
 	{

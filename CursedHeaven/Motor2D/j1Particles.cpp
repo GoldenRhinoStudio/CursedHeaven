@@ -40,7 +40,7 @@ j1Particles::j1Particles()
 
 	// Mindflyer attack
 	mindflyerAttack.anim.LoadAnimation("shot", "mindflyer", false);
-	mindflyerAttack.life = 1500;
+	mindflyerAttack.life = 1200;
 	mindflyerAttack.type = MINDFLYER_SHOOT;
 
 	// Exodus' swords
@@ -160,7 +160,9 @@ bool j1Particles::Update(float dt)
 				}
 			}
 
-			App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)),SDL_FLIP_NONE,true,1.0f,App->win->GetScale(),p->rotation);
+			if(p->type == TURRET_SHOOT) 
+				App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)), SDL_FLIP_NONE, true, 0.7f, App->win->GetScale(), p->rotation);
+			else App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)), SDL_FLIP_NONE, true, 1.0f, App->win->GetScale(),p->rotation);
 
 		}
 	}
@@ -182,7 +184,8 @@ void j1Particles::AddParticle(const Particle& particle, int x, int y, float dt, 
 			p->state = 0;
 			p->anim.Reset();
 			if (collider_type != COLLIDER_NONE) {
-				p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
+				if (particle.type == TURRET_SHOOT) p->collider = App->collisions->AddCollider({ p->anim.GetCurrentFrame(dt).x, p->anim.GetCurrentFrame(dt).y, 22, 20}, collider_type, this);
+				else p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
 			}
 			Collider* test = p->collider;
 			active[i] = p;
@@ -243,7 +246,7 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 							App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
 					case TURRET_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
-							App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
+							App->entity->currentPlayer->lifePoints -= App->entity->turret_Damage;
 					}
 					ret = false;
 				}

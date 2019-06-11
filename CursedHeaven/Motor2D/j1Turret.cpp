@@ -64,8 +64,8 @@ bool j1Turret::Update(float dt, bool do_logic)
 		{
 			if (shotTimer.Read() >= lastTime_Shot + cooldown_Shot) {
 				fPoint margin;
-				margin.x = -20;
-				margin.y = -20;
+				margin.x = -10;
+				margin.y = -10;
 
 				fPoint edge;
 				edge.x = App->entity->currentPlayer->collider->rect.x - (position.x + margin.x);

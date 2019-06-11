@@ -322,6 +322,7 @@
         <animation x="64" y="143" w="35" h="34"/>
         <animation x="99" y="143" w="35" h="34"/>
       </down>			   
+	  
       <idle loop="true" speed="7.0f">
         <animation x="0" y="0" w="17" h="25"/>
         <animation x="16" y="0" w="17" h="25"/>
@@ -345,7 +346,12 @@
       <idle loop="true" speed="7.0f">
         <animation x="0" y="0" w="14" h="27"/>
         <animation x="14" y="0" w="14" h="27"/>
-	  </idle>		   
+	  </idle>		 
+
+	  <shot loop="true" speed="7.0f">
+        <animation x="370" y="26" w="32" h="28"/>
+        <animation x="416" y="26" w="32" h="28"/>
+	  </shot>
 	</turret>
 	
 	<!-- Bosses -->
@@ -399,6 +405,15 @@
         <animation x="23" y="70" w="23" h="35"/>
         <animation x="46" y="70" w="23" h="35"/>
       </down>			   
+	  
+	  <shot loop="true" speed="10.0f">
+        <animation x="379" y="8" w="14" h="12"/>
+        <animation x="396" y="8" w="14" h="12"/>
+        <animation x="413" y="8" w="14" h="12"/>
+        <animation x="396" y="8" w="14" h="12"/>
+        <animation x="379" y="8" w="14" h="12"/>
+	  </shot>
+	  
 	</mindflyer>
 
     <exodus>

@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.5</title>
+    <title>Cursed Heaven v1.0</title>
     <organization>UPC</organization>
   </app>
 	
@@ -80,8 +80,8 @@
   </mindflyer>
 
   <exodus speed="400.0f" life="10000" score="2000">
-    <margin x="69" y="0"/>
-    <colliderSize w="50" h="154"/>
+    <margin x="69" y="20"/>
+    <colliderSize w="50" h="134"/>
     <combat shotTime="3000" damage="20"/>
   </exodus>
 

@@ -34,7 +34,6 @@ j1EntityManager::~j1EntityManager() {}
 
 bool j1EntityManager::Start()
 {
-
 	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
 		(*item)->Start();
@@ -132,7 +131,7 @@ bool j1EntityManager::PostUpdate()
 
 bool j1EntityManager::CleanUp()
 {
-	LOG("Freeing all enemies");
+	LOG("Freeing all entities");
 
 	for (std::list<j1Entity*>::iterator item = entities.begin(); item != entities.end(); ++item)
 	{
@@ -157,8 +156,6 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 	case PLAYER: 
 		if (player_type == KNIGHT) ret = new j1DragoonKnight(x, y, type);
 		else if (player_type == MAGE) ret = new j1BlackMage(x, y, type);
-		/*else if (player_type == TANK) ret = new j1Tank(x, y, type);
-		else if (player_type == ROGUE) ret = new j1Rogue(x, y, type);*/
 		break;
 
 	case JUDGE:
@@ -205,7 +202,7 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 				entity = new j1Fire(info.position.x, info.position.y, info.type);
 			else if (queue[i].type == EXODUS) {
 				entity = new Exodus(info.position.x, info.position.y, info.type);
-				exodus = (Exodus*)entity;
+				exo = (Exodus*)entity;
 			}
 
 			entities.push_back(entity);
@@ -280,6 +277,54 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 {
 	DestroyEntities();
 
+	for (pugi::xml_node slime = data.child("slime").child("position"); slime; slime = slime.next_sibling())
+	{
+		iPoint pos = { slime.attribute("x").as_int(), slime.attribute("y").as_int() };
+		AddEnemy(pos.x, pos.y, SLIME);
+	}
+
+	for (pugi::xml_node fire = data.child("fire").child("position"); fire; fire = fire.next_sibling())
+	{
+		iPoint pos = { fire.attribute("x").as_int(), fire.attribute("y").as_int() };
+		AddEnemy(pos.x, pos.y, FIRE);
+	}
+
+	for (pugi::xml_node turret = data.child("turret").child("position"); turret; turret = turret.next_sibling())
+	{
+		iPoint pos = { turret.attribute("x").as_int(), turret.attribute("y").as_int() };
+		AddEnemy(pos.x, pos.y, TURRET);
+	}
+
+	pugi::xml_node mindflyer = data.child("mindflyer");
+	pugi::xml_node exodus = data.child("exodus");
+
+	// Loading Mindflyer
+	bool mf_dead = mindflyer.child("stats").attribute("dead").as_bool(true);
+
+	if (!mf_dead) {
+		App->entity->AddEnemy(mindflyer.child("position").attribute("x").as_float(), mindflyer.child("position").attribute("y").as_float(), MINDFLYER);
+		mf_lifePoints = mindflyer.child("stats").attribute("life").as_int();
+		loadingMf = true;
+	}
+
+	// Loading Exodus
+	bool exo_dead = exodus.child("stats").attribute("dead").as_bool(true);
+
+	if (!exo_dead) {
+		App->entity->AddEnemy(exodus.child("position").attribute("x").as_float(), exodus.child("position").attribute("y").as_float(), EXODUS);
+		exo_lifePoints = exodus.child("stats").attribute("life").as_int();
+		exoFightOn = exodus.child("stats").attribute("fightOn").as_bool();
+		loadingExo = true;
+	}
+
+	pugi::xml_node type = data.child("playerType");
+
+	player_type = (PLAYER_TYPES)type.attribute("type").as_uint();
+	App->gamePaused = data.child("gamePaused").attribute("value").as_bool();
+
+	CreatePlayer1();
+	Start();
+
 	if (knight != nullptr) knight->Load(data);
 	else if (mage != nullptr) mage->Load(data);
 
@@ -290,6 +335,36 @@ bool j1EntityManager::Save(pugi::xml_node& data) const
 {
 	if (player_type == KNIGHT) knight->Save(data.append_child("player"));
 	else if (player_type == MAGE) mage->Save(data.append_child("player"));
+
+	pugi::xml_node p_type = data.append_child("playerType"); 
+	p_type.append_attribute("type") = (uint)player_type;
+
+	pugi::xml_node pause = data.append_child("gamePaused");
+	pause.append_attribute("value") = App->gamePaused;
+
+	pugi::xml_node slime = data.append_child("slime");
+	pugi::xml_node fire = data.append_child("fire");
+	pugi::xml_node turret = data.append_child("turret");
+	pugi::xml_node mindflyer = data.append_child("mindflyer");
+	pugi::xml_node exodus = data.append_child("exodus");
+
+	for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != entities.end(); ++item)
+	{
+		if (item._Ptr->_Myval->type == SLIME)
+			item._Ptr->_Myval->Save(slime);
+
+		if (item._Ptr->_Myval->type == FIRE)
+			item._Ptr->_Myval->Save(fire);
+
+		else if (item._Ptr->_Myval->type == TURRET)
+			item._Ptr->_Myval->Save(turret);
+
+		else if (item._Ptr->_Myval->type == MINDFLYER)
+			item._Ptr->_Myval->Save(mindflyer);
+
+		else if (item._Ptr->_Myval->type == EXODUS)
+			item._Ptr->_Myval->Save(exodus);
+	}		
 
 	return true;
 }

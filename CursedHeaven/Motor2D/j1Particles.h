@@ -16,7 +16,9 @@ enum COLLIDER_TYPE;
 enum PARTICLE_TYPE {
 	BASIC_SHOOT,
 	EXPLOSION,
-	SWORD_SHOOT
+	SWORD_SHOOT,
+	MINDFLYER_SHOOT,
+	TURRET_SHOOT
 };
 
 struct Particle
@@ -66,9 +68,12 @@ public:
 	Particle mageShot;
 	Particle explosion;
 
+	Particle turretAttack;
+
+	Particle mindflyerAttack;
+
 	Particle sword1;
 	Particle sword2;
 	Particle sword3;
-
 };
 #endif // __j1PARTICLES_H__ 

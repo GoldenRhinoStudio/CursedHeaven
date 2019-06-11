@@ -20,6 +20,7 @@
 
 j1SceneSettings::j1SceneSettings()
 {
+	name.assign("settings");
 }
 
 j1SceneSettings::~j1SceneSettings() {}

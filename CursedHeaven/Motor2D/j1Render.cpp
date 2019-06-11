@@ -591,7 +591,7 @@ void j1Render::reOrder() {
 					LOG("BR");
 				}
 			}
-			else if (img1->height >= img2->height ) {
+			else if (img1->height >= img2->height && !img1->behind) {
 
 				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
 				//App->map->Tile_WorldMap(pos1, img1->height);

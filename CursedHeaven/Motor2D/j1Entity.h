@@ -47,7 +47,7 @@ public:
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
-	virtual void Draw(SDL_Rect* r, bool flip = false, int x = 0, int y = 0, float scale = 1.0f, int offset = 0, bool rage = false);
+	virtual void Draw(SDL_Rect* r, bool flip = false, int x = 0, int y = 0, float scale = 1.0f, int offset = 0, bool rage = false, bool behind = false);
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 
 	ENTITY_TYPES type;

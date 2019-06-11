@@ -16,7 +16,8 @@ enum COLLIDER_TYPE;
 enum PARTICLE_TYPE {
 	BASIC_SHOOT,
 	EXPLOSION,
-	SWORD_SHOOT
+	SWORD_SHOOT,
+	VORTEX
 };
 
 struct Particle
@@ -57,6 +58,7 @@ private:
 	
 	SDL_Texture* part_tex = nullptr;
 	SDL_Texture* sword_tex = nullptr;
+	SDL_Texture* vortex_tex = nullptr;
 	int swordcounter = 0;
 
 public:
@@ -69,6 +71,7 @@ public:
 	Particle sword1;
 	Particle sword2;
 	Particle sword3;
+	Particle vortex1;
 
 };
 #endif // __j1PARTICLES_H__ 

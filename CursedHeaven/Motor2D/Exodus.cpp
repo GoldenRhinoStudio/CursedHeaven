@@ -42,6 +42,8 @@ bool Exodus::Start()
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
+	height = 1;
+
 	return true;
 }
 
@@ -52,19 +54,15 @@ bool Exodus::Update(float dt, bool do_logic)
 	if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 	if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
 
-	iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
-	iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->position.x + App->entity->currentPlayer->playerSize.x + 1, (int)App->entity->currentPlayer->position.y + App->entity->currentPlayer->playerSize.y) };
-
-	int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
-	LOG("%i", distance);
-	fPoint center = { position.x + animation->frames->w / 2, position.y + animation->frames->h / 2 };
-	if (shotTimer.Read() > shotTime && distance <= EX_DETECTION_RANGE && start_fight) {
+	fPoint center = App->entity->currentPlayer->position;
+	if (shotTimer.Read() > shotTime) {
 
 		srand(time(NULL));
-		attack = rand() % 3;
-
+		attack = rand() % 4;
+		attack = 3;
 		switch (attack) {
 		case 0:
+			shotTime = 3000;
 			App->particles->sword2.life = 1200;
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 180, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
@@ -74,6 +72,7 @@ bool Exodus::Update(float dt, bool do_logic)
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
 			break;
 		case 1:
+			shotTime = 3000;
 			App->particles->sword2.life = 1500;
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
@@ -83,15 +82,29 @@ bool Exodus::Update(float dt, bool do_logic)
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 300, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
 			break;
 		case 2:
+			shotTime = 3000;
 			App->particles->sword2.life = 1200;
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 135, { (float)(-speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
 			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y, dt, COLLIDER_ENEMY_SHOT, 0, -135, { (float)(speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
+			break;
+		case 3:
+			shotTime = 8000;
+			App->particles->vortex1.life = 10000;
+			/*App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 0, 135, { 0,0 });
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 0, 45, { 0,0 });
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 0, 270, { 0,0 });
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 2000, 135, { 0,0 });*/
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_ENEMY_SHOT, 2000, 45, { 0,0 });/*
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 2000, 270, { 0,0 });
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 4000, 135, { 0,0 });
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 4000, 45, { 0,0 });
+			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 4000, 270, { 0,0 });*/
 			break;
 		};
 		shotTimer.Start();
 	}	
 
-	App->map->EntityMovement(this);
+	//App->map->EntityMovement(this);
 	return true;
 }
 
@@ -100,7 +113,7 @@ bool Exodus::DrawOrder(float dt) {
 	// Drawing the harpy
 	SDL_Rect* r = &animation->GetCurrentFrame(dt);
 
-	Draw(r);
+	Draw(r,false,0,0,1.0f,0,false,true);
 
 	return true;
 }
@@ -133,11 +146,6 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 			receivedBasicDamage = true; 
-			if (!start_fight) {//attack when receive first damage
-				//Song
-				start_fight = true;
-				App->audio->PlayMusic("audio/music/song021.ogg", 1.0f);
-			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
@@ -145,11 +153,6 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 				lifePoints -= App->entity->mage->fireDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 			receivedAbilityDamage = true;
-			if (!start_fight) {//attack when receive first damage
-				//Song
-				start_fight = true;
-				App->audio->PlayMusic("audio/music/song021.ogg", 1.0f);
-			}
 		}
 
 		if (lifePoints <= 0) {

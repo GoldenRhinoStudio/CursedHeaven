@@ -109,12 +109,13 @@ bool j1Scene2::Start() {
 		App->gui->CreateLabel(&scene2Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene2Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		
-		PlaceEntities(6);
+		//PlaceEntities(6);
 		App->shop->PlaceShopScene2();
 		App->entity->CreateEntity(JUDGE, 410, 850);
 
 		startup_time.Start();
 		windowTime.Start();
+		spawn = false;
 	}
 
 	return true;
@@ -135,7 +136,8 @@ bool j1Scene2::Update(float dt) {
 	if (((pos.x >= 53 && pos.x <= 54 && pos.y == 63) ||
 		(pos.x >= 64 && pos.x <= 65 && pos.y >= 67 && pos.y <= 68)) && !spawn){
 		spawn = true;
-		App->entity->AddEnemy(36, 62, EXODUS);
+		App->entity->AddEnemy(38, 64, EXODUS);
+		App->audio->PlayMusic("audio/music/song021.ogg", 1.0f);
 	}
 
 	time_scene2 = startup_time.ReadSec();

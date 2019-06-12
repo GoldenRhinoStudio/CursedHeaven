@@ -7,7 +7,7 @@
 #include "j1Collisions.h"
 #include "p2Log.h"
 
-#define MAX_ACTIVE_PARTICLES 100
+#define MAX_ACTIVE_PARTICLES 300
 
 struct SDL_Texture;
 struct Collider;

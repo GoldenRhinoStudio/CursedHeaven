@@ -42,6 +42,7 @@ public:
 
 	void LoadProperties();
 	void Move(const std::vector<iPoint>* path, float dt);
+	void AddVortex(fPoint center, float dt, uint32 delay);
 
 public:
 	fPoint initialPosition;
@@ -55,6 +56,7 @@ public:
 	Animation idle;
 
 	j1Timer shotTimer;
+	SDL_Texture* hud_tex;
 
 	int state = 0;
 	int attack = 0;
@@ -64,5 +66,7 @@ public:
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
 	bool start_fight = false;
+	int life_points = 0;
+	float multiplier = 0;
 };
 #endif // __j1MINDFLYER_H__

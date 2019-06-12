@@ -158,6 +158,8 @@ bool j1Hud::Update(float dt)
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, false);
 
 
+
+
 	if (App->scene1->profile_active) {
 		
 		if (black_mage) {

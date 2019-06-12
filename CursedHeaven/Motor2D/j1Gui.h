@@ -124,6 +124,7 @@ public:
 	SDL_Color beige;
 	SDL_Color brown;
 	SDL_Color grey;
+	SDL_Color white;
 
 	// Sounds
 	uint hoverSound;

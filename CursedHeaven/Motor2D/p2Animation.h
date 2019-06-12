@@ -69,6 +69,10 @@ public:
 		}
 	}
 
+	float Getframe_pos() {
+		return current_frame;
+	}
+
 	bool isLastFrame() {
 		return (int)current_frame >= last_frame -1;
 	}

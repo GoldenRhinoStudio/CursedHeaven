@@ -55,7 +55,7 @@ j1Particles::j1Particles()
 
 	// EXODUS Vortex
 	vortex1.anim.LoadAnimation("vortex1", "exodus",false);
-	vortex1.life = 10000;
+	vortex1.life = 2000;
 	vortex1.type = VORTEX;
 
 }
@@ -118,7 +118,6 @@ bool j1Particles::Update(float dt)
 		}
 		else if (SDL_GetTicks() >= p->born)
 		{
-			
 			if (p->fx_played == false)
 			{
 				p->fx_played = true;
@@ -166,7 +165,7 @@ bool j1Particles::Update(float dt)
 					active[i] = nullptr;
 				}
 			}
-			else if (p->type == VORTEX) {
+			if (p->type == VORTEX) {
 				/*if (p->anim.isLastFrame() && p->state == 0) {
 					Particle* aux = new Particle(vortex1);
 					aux->anim.Reset();
@@ -198,7 +197,6 @@ bool j1Particles::Update(float dt)
 					active[i] = nullptr;
 				}*/
 			}
-
 			if(p->type == TURRET_SHOOT) 
 				App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)), SDL_FLIP_NONE, true, 0.7f, App->win->GetScale(), p->rotation);
 			else App->render->Blit(p->tex, p->position.x, p->position.y, &(p->anim.GetCurrentFrame(dt)), SDL_FLIP_NONE, true, 1.0f, App->win->GetScale(),p->rotation);
@@ -256,10 +254,10 @@ void j1Particles::AddParticleSpeed(const Particle& particle, int x, int y, float
 					else {
 						p->collider = App->collisions->AddCollider({ 0,0,50,24 }, collider_type, this);
 					}
-				}else
+				}
+				else
 					p->collider = App->collisions->AddCollider(p->anim.GetCurrentFrame(dt), collider_type, this);
 			}
-			Collider* test = p->collider;
 			active[i] = p;
 			break;
 		}
@@ -268,6 +266,7 @@ void j1Particles::AddParticleSpeed(const Particle& particle, int x, int y, float
 
 void j1Particles::OnCollision(Collider* c1, Collider* c2)
 {
+	bool destroy = false;
 	if (c2->type == COLLIDER_PLAYER)
 	{
 		int ret = true;
@@ -279,30 +278,49 @@ void j1Particles::OnCollision(Collider* c1, Collider* c2)
 					case SWORD_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
 							App->entity->currentPlayer->lifePoints -= App->entity->exo->damage;
+						destroy = true;
 						break;
 					case MINDFLYER_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
 							App->entity->currentPlayer->lifePoints -= App->entity->mindflyer_Damage;
+						destroy = true;
+						break;
 					case TURRET_SHOOT:
 						if (App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q)
 							App->entity->currentPlayer->lifePoints -= App->entity->turret_Damage;
+						destroy = true;
+						break;
+					case VORTEX:
+						if ((App->entity->player_type != KNIGHT || !App->entity->currentPlayer->active_Q) && SDL_GetTicks() >= active[i]->born + 500) {
+							App->entity->currentPlayer->lifePoints -= 1;
+							if (App->entity->player_type == MAGE)
+								App->audio->PlayFx(App->audio->damage_bm);
+							else
+								App->audio->PlayFx(App->audio->damage_dk);
+							App->entity->currentPlayer->receivedDamage = true;
+						}
+						break;
 					}
 					ret = false;
 				}
 			}
 		}
+		if (destroy) {
+			if (App->entity->player_type == MAGE)
+				App->audio->PlayFx(App->audio->damage_bm);
+			else
+				App->audio->PlayFx(App->audio->damage_dk);
 
-		if (App->entity->player_type == MAGE) App->audio->PlayFx(App->audio->damage_bm);
-		else App->audio->PlayFx(App->audio->damage_dk);
-		App->entity->currentPlayer->receivedDamage = true;
-
+			App->entity->currentPlayer->receivedDamage = true;
+		}
+		
 		if (App->entity->currentPlayer->lifePoints <= 0) App->entity->currentPlayer->dead = true;
 	}
 
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{
 		// Always destroy particles that collide
-		if (active[i] != nullptr && active[i]->collider == c1)
+		if (active[i] != nullptr && active[i]->collider == c1 && destroy)
 		{
 			//AddParticle(...) ---> If we want to print an explosion when hitting an enemy
 			delete active[i];
@@ -342,8 +360,11 @@ bool Particle::Update(float dt)
 			state = 2;
 		}
 		else {
-			if ((SDL_GetTicks() - born) > life)
-				ret = false;
+			uint32 time = SDL_GetTicks();
+			if (time >= born) {
+				if (((int)time - (int)born) > life)
+					ret = false;
+			}
 		}
 	}
 

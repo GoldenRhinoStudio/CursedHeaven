@@ -14,6 +14,7 @@
 #include "j1Particles.h"
 #include "j1Audio.h"
 #include <time.h>
+#include "j1Fonts.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -35,6 +36,7 @@ bool Exodus::Start()
 {
 	// Textures are loaded
 	sprites = App->tex->Load("textures/enemies/bosses/FinalBoss.png");
+	hud_tex = App->tex->Load("gui/hud.png");
 
 	LoadProperties();
 
@@ -43,12 +45,17 @@ bool Exodus::Start()
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
 	height = 1;
+
+	multiplier = 163 / (float)lifePoints;
+
 	return true;
 }
 
 bool Exodus::Update(float dt, bool do_logic)
 {
 	BROFILER_CATEGORY("MindFlyerUpdate", Profiler::Color::LightSeaGreen)
+
+	life_points = lifePoints * multiplier;
 
 	if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
 	if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false;
@@ -58,52 +65,75 @@ bool Exodus::Update(float dt, bool do_logic)
 
 		srand(time(NULL));
 		attack = rand() % 4;
-		attack = 3;
 		switch (attack) {
 		case 0:
 			shotTime = 3000;
 			App->particles->sword2.life = 1200;
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 180, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 120, center.y - 50, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 180, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 60, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 120, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 180, { 0,speed });
 			break;
 		case 1:
 			shotTime = 3000;
 			App->particles->sword2.life = 1500;
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 120, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 180, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 240, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 230, center.y + 300, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 150, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 150, center.y - 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 150, center.y , dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 150, center.y + 60, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 150, center.y + 120, dt, COLLIDER_ENEMY_SHOT, 0, 90, { speed,0 });
 			break;
 		case 2:
 			shotTime = 3000;
 			App->particles->sword2.life = 1200;
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y, dt, COLLIDER_ENEMY_SHOT, 0, 135, { (float)(-speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
-			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y, dt, COLLIDER_ENEMY_SHOT, 0, -135, { (float)(speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x - 120, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, 135, { (float)(-speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
+			App->particles->AddParticleSpeed(App->particles->sword1, center.x + 60, center.y - 120, dt, COLLIDER_ENEMY_SHOT, 0, -135, { (float)(speed * cos(135 * DEGTORAD)) , (float)(speed * sin(135 * DEGTORAD)) });
 			break;
 		case 3:
-			shotTime = 8000;
-			App->particles->vortex1.life = 10000;
-			/*App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 0, 135, { 0,0 });
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 0, 45, { 0,0 });
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 0, 270, { 0,0 });
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 2000, 135, { 0,0 });*/
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_ENEMY_SHOT, 2000, 45, { 0,0 });/*
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 2000, 270, { 0,0 });
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 4000, 135, { 0,0 });
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 4000, 45, { 0,0 });
-			App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y - 100, dt, COLLIDER_NONE, 4000, 270, { 0,0 });*/
+			shotTime = 9000;
+			AddVortex({ center.x - 100,center.y }, dt,0);
+			AddVortex({ center.x - 50,center.y }, dt, 0);
+			AddVortex({ center.x, center.y }, dt, 0);
+			AddVortex({ center.x + 50,center.y }, dt, 0);
+			AddVortex({ center.x + 100,center.y }, dt, 0);
+			AddVortex({ center.x, center.y - 100 }, dt, 0);
+			AddVortex({ center.x, center.y - 50}, dt, 0);
+			AddVortex({ center.x, center.y + 50}, dt, 0);
+			AddVortex({ center.x, center.y + 100}, dt, 0);
+
+			AddVortex({ center.x - 100,center.y }, dt, 2100);
+			AddVortex({ center.x - 50,center.y - 50}, dt, 2100);
+			AddVortex({ center.x ,center.y - 100}, dt, 2100);
+			AddVortex({ center.x + 50 ,center.y - 50 }, dt, 2100);
+			AddVortex({ center.x + 100 ,center.y }, dt, 2100);
+			AddVortex({ center.x + 50 ,center.y + 50 }, dt, 2100);
+			AddVortex({ center.x ,center.y + 100 }, dt, 2100);
+			AddVortex({ center.x - 50,center.y + 50 }, dt, 2100);
+
+
 			break;
 		};
 		shotTimer.Start();
 	}	
 
 	return true;
+}
+
+void Exodus::AddVortex(fPoint center, float dt, uint32 delay) {
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 0 + delay, 90, { 0,0 });
+	//App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 0 + delay, 45, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 0 + delay, 270, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 250 + delay, 90, { 0,0 });
+	//App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 250 + delay, 45, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 250 + delay, 270, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 500 + delay, 90, { 0,0 });
+	//App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 500 + delay, 45, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_ENEMY_SHOT, 500 + delay, 270, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 750 + delay, 90, { 0,0 });
+	//App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 750 + delay, 45, { 0,0 });
+	App->particles->AddParticleSpeed(App->particles->vortex1, center.x, center.y, dt, COLLIDER_NONE, 750 + delay, 270, { 0,0 });
 }
 
 bool Exodus::DrawOrder(float dt) {
@@ -133,6 +163,22 @@ bool Exodus::CleanUp()
 }
 
 bool Exodus::PostUpdate() {
+	// Lifebar
+	SDL_Rect lifebar = { 0,239,163,8 };
+	SDL_Rect lifebar_r = { 0,247,life_points,6 };
+
+	App->render->Blit(hud_tex, App->win->width / 4, App->win->height - 50, &lifebar, SDL_FLIP_NONE, false);
+	App->render->Blit(hud_tex, App->win->width / 4 + 3, App->win->height - 47, &lifebar_r, SDL_FLIP_NONE, false);
+
+
+	SDL_Rect temp;
+	temp.x = temp.y = 0;
+	temp.w = temp.h = 10;
+	SDL_Texture* title = App->font->Print("EXODUS", temp.w, temp.h, 0, App->gui->white, App->gui->font1);
+
+	App->render->BlitHUD(title, App->win->width / 4, App->win->height - 90, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, INT_MAX, INT_MAX,false);
+
+	App->tex->UnLoad(title);
 	return true;
 }
 

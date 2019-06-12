@@ -58,7 +58,7 @@ bool j1SceneSettings::Start()
 		App->map->Load("menu.tmx");
 
 		// The audio is played
-		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song011.ogg", 1.0f);
 
 		font = App->font->Load("fonts/Pixeled.ttf", 5);
 

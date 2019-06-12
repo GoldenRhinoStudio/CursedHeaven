@@ -122,8 +122,8 @@ bool j1Video::Awake(pugi::xml_node&)
 
 bool j1Video::Start()
 {
-	App->win->scale = 1;
-	PlayVideo("textures/intro.mp4");
+	//App->win->scale = 1;
+	//PlayVideo("textures/intro.mp4");
 	return true;
 }
 

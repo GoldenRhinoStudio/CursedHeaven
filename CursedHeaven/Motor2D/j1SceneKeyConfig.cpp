@@ -189,6 +189,8 @@ bool j1SceneKeyConfig::Update(float dt) {
 			else if (last_changed == 10) {
 				ABILITY2 = ChangeKey(ABILITY2);
 			}
+
+			App->audio->PlayFx(App->audio->change_key_sound);
 		}
 	}
 		

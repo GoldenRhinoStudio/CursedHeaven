@@ -78,6 +78,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	potion_sound = LoadFx("audio/fx/potion.wav");
 	heal_sound = LoadFx("audio/fx/heal.wav");
 	shield_sound = LoadFx("audio/fx/Shield.wav");
+	change_key_sound = LoadFx("audio/fx/ControlChange.wav");
 
 	return ret;
 }

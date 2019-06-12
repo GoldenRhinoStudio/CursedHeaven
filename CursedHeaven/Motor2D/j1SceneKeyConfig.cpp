@@ -313,7 +313,7 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 		letter = "   D";
 		strcpy(text4, button);
 		strcat(text4, letter);
-		key_label->text = text5;
+		key_label->text = text4;
 		break;
 	case 8:
 		letter = "   E";

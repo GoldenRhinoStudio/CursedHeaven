@@ -14,7 +14,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1TransitionManager.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneCredits::j1SceneCredits()
@@ -28,6 +28,9 @@ bool j1SceneCredits::Awake(pugi::xml_node &)
 {
 	LOG("Loading Credits");
 	bool ret = true;
+
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;
@@ -53,7 +56,7 @@ bool j1SceneCredits::Start()
 		App->map->Load("menu.tmx");
 
 		// The audio is played
-		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song011.ogg", 1.0f);
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");

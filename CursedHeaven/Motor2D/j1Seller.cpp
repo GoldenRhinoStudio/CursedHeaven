@@ -4,6 +4,7 @@
 #include "j1Textures.h"
 #include "j1Collisions.h"
 #include "j1EntityManager.h"
+#include "j1Entity.h"
 #include <time.h>
 
 j1Seller::j1Seller(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SELLER) {
@@ -19,10 +20,10 @@ bool j1Seller::Start()
 	LOG("Loading seller texture");
 	sprites = App->tex->Load("textures/character/Rogue/Rogue.png");
 
-	collider = App->collisions->AddCollider({ (int)position.x, (int)position.y, 0, 0 }, COLLIDER_NONE, App->entity);
+	collider = App->collisions->AddCollider({ (int)position.x , (int)position.y+ 20, 20,15}, COLLIDER_NONE, App->entity);
 
 	animation = &idle;
-	height = 3;
+	height = 2;
 
 	return true;
 }

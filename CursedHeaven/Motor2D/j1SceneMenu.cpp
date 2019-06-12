@@ -19,6 +19,7 @@
 #include "j1ChooseCharacter.h"
 #include "j1SceneSettings.h"
 #include "j1TransitionManager.h"
+#include "j1Video.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -31,8 +32,12 @@ j1SceneMenu::~j1SceneMenu() {}
 
 bool j1SceneMenu::Awake(pugi::xml_node &)
 {
+
 	LOG("Loading Menu");
 	bool ret = true;
+
+	if (App->video->active)
+		active = false;
 
 	if (App->menu->active == false)
 	{
@@ -40,6 +45,8 @@ bool j1SceneMenu::Awake(pugi::xml_node &)
 		ret = false;
 	}
 
+	/*App->audio->MusicVolume(0);
+	App->audio->FxVolume(0);*/
 	return ret;
 }
 
@@ -47,6 +54,7 @@ bool j1SceneMenu::Start()
 {	
 	if (active)
 	{
+		
 		// The map is loaded
 		App->map->draw_with_quadtrees = false;
 		App->map->Load("menu.tmx");
@@ -56,6 +64,7 @@ bool j1SceneMenu::Start()
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
+		logo_tex = App->tex->Load("gui/CursedHeavenLogo.png");
 		
 		// Loading fonts
 		font = App->font->Load("fonts/Pixeled.ttf", 5);
@@ -63,9 +72,6 @@ bool j1SceneMenu::Start()
 		// We will use it to check if there is a save file
 		pugi::xml_document save_game;
 		pugi::xml_parse_result result = save_game.load_file("save_game.xml");
-
-		/*App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider1X, App->gui->slider1Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);
-		App->gui->CreateBox(&menuBoxes, BOX, App->gui->lastSlider2X, App->gui->slider2Y, { 388, 455, 28, 42 }, gui_tex2, (j1UserInterfaceElement*)settings_window, App->gui->minimum, App->gui->maximum);*/
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = {963, 12, 151, 38 };
@@ -95,7 +101,6 @@ bool j1SceneMenu::Start()
 		times++;
 
 	}
-
 	return true;
 }
 
@@ -109,12 +114,12 @@ bool j1SceneMenu::Update(float dt)
 {
 	BROFILER_CATEGORY("MenuUpdate", Profiler::Color::LightSeaGreen)
 
-		// ---------------------------------------------------------------------------------------------------------------------
-		// USER INTERFACE MANAGEMENT
-		// ---------------------------------------------------------------------------------------------------------------------	
+	// ---------------------------------------------------------------------------------------------------------------------
+	// USER INTERFACE MANAGEMENT
+	// ---------------------------------------------------------------------------------------------------------------------	
 
-		// Updating the state of the UI
-		App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale);
+	// Updating the state of the UI
+	App->gui->UpdateButtonsState(&menuButtons, App->gui->buttonsScale);
 	App->gui->UpdateSliders(&menuBoxes);
 	App->gui->UpdateWindow(settings_window, &menuButtons, &menuLabels, &menuBoxes);
 
@@ -133,20 +138,20 @@ bool j1SceneMenu::Update(float dt)
 					(*item)->situation = (*item)->hovered;
 				break;
 
-
 			case RELEASED:
-
 				if (startup_time.Read() > 1900 && times > 1 || times == 1) {
 					(*item)->situation = (*item)->idle;
 					if ((*item)->bfunction == PLAY_GAME) {
 						LOG("Choose Character Scene Loading");
 						App->transitions->FadingToColor(MENU, CHOOSE);
-
-						App->scene1->finishedDialog = false;
-						App->scene2->finishedDialog2 = false;
 					}
 					else if ((*item)->bfunction == LOAD_GAME) {
-						App->transitions->SquaresAppearing(MENU, SCENE1, 3);
+						App->LoadSpecificModule(App->transitions);
+
+						if (App->transitions->scene1active) 
+							App->transitions->SquaresAppearing(MENU, SCENE1, 3);
+						if (App->transitions->scene2active)
+							App->transitions->SquaresAppearing(MENU, SCENE2, 3);
 					}
 					else if ((*item)->bfunction == CLOSE_GAME) {
 						continueGame = false;
@@ -177,8 +182,8 @@ bool j1SceneMenu::Update(float dt)
 	App->map->Draw();
 
 	// Blitting the logo
-	SDL_Rect logo = { 854, 92, 801, 166 };
-	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, true, App->gui->logoScale);
+	SDL_Rect logo = { 93, 44, 926, 272 };
+	App->render->Blit(logo_tex, 27, 20, &logo, SDL_FLIP_NONE, true, 0.30f);
 
 	// Blitting the buttons and labels of the menu
 
@@ -214,6 +219,7 @@ bool j1SceneMenu::PostUpdate()
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		continueGame = false;
 
+
 	return continueGame;
 }
 
@@ -221,7 +227,7 @@ bool j1SceneMenu::CleanUp()
 {
 	LOG("Freeing all textures");
 	App->tex->UnLoad(gui_tex2);
-	
+
 	App->map->CleanUp();
 	App->tex->CleanUp();
 

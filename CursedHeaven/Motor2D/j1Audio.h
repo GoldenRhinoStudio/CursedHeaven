@@ -30,6 +30,8 @@ public:
 	// Load a WAV in memory
 	unsigned int LoadFx(const char* path);
 
+	void UnloadFx();
+
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
@@ -48,6 +50,7 @@ public:
 	int	heal_sound;
 	int	potion_sound;
 	int shield_sound;
+	int change_key_sound;
 
 private:
 

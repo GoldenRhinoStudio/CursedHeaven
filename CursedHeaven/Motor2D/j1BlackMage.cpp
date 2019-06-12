@@ -16,6 +16,7 @@
 #include "j1Timer.h"
 #include "j1Particles.h"
 #include "j1DialogSystem.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -114,7 +115,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
 				if (!attacking) {
 					// Attack control
-					if (App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)
+					if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 					{
 						attacking = true;
 
@@ -122,56 +123,6 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 							iPoint mouse_pos;
 							App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 							Shot(mouse_pos.x, mouse_pos.y, dt);
-						}
-
-						if (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN) {
-							fPoint speed_particle;
-							fPoint particle_speed = { 250,250 };
-
-							if (animation == &idle_lateral || animation == &lateral) {
-								if (facingRight) {
-									speed_particle.x = particle_speed.x * cos(0 * DEGTORAD);
-									speed_particle.y = particle_speed.y * sin(0 * DEGTORAD);
-								}
-								else {
-									speed_particle.x = particle_speed.x * cos(180 * DEGTORAD);
-									speed_particle.y = particle_speed.y * sin(180 * DEGTORAD);
-								}
-							}
-							if (animation == &idle_diagonal_up || animation == &diagonal_up) {
-								if (facingRight) {
-									speed_particle.x = particle_speed.x * cos(-45 * DEGTORAD);
-									speed_particle.y = particle_speed.y * sin(-45 * DEGTORAD);
-								}
-								else {
-									speed_particle.x = particle_speed.x * cos(-135 * DEGTORAD);
-									speed_particle.y = particle_speed.y * sin(-135 * DEGTORAD);
-								}
-							}
-							if (animation == &idle_diagonal_down || animation == &diagonal_down) {
-								if (facingRight) {
-									speed_particle.x = particle_speed.x * cos(-315 * DEGTORAD);
-									speed_particle.y = particle_speed.y * sin(-315 * DEGTORAD);
-								}
-								else {
-
-									speed_particle.x = particle_speed.x * cos(-225 * DEGTORAD);
-									speed_particle.y = particle_speed.y * sin(-225 * DEGTORAD);
-								}
-							}
-							if (animation == &idle_up || animation == &up) {
-								speed_particle.x = particle_speed.x * cos(-90 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(-90 * DEGTORAD);
-							}
-							if (animation == &idle_down || animation == &down) {
-								speed_particle.x = particle_speed.x * cos(-270 * DEGTORAD);
-								speed_particle.y = particle_speed.y * sin(-270 * DEGTORAD);
-							}
-
-							App->particles->mageShot.speed = speed_particle;
-							App->particles->mageShot.life = 500;
-
-							App->particles->AddParticle(App->particles->mageShot, position.x + margin.x, position.y + margin.y, dt, COLLIDER_ATTACK);
 						}
 
 						if (direction == NONE_) {
@@ -198,10 +149,11 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				else available_E = false;
 
 				// Fire explosion
-				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY1) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 18;
+					if (lifePoints <= 0) dead = true;
 
 					iPoint explosionPos;
 					iPoint p = { (int)position.x, (int)position.y };
@@ -231,19 +183,19 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				}
 
 				if (active_Q && cooldown_Explosion.Read() >= lastTime_Explosion + duration_Explosion) {
-
 					cooldown_Q.Start();
 					lastTime_Q = cooldown_Q.Read();
 					active_Q = false;
 				}
 
 				// Extra speed
-				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY2) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 					App->audio->PlayFx(App->audio->rage_bm);
 
 					if (App->dialog->law == 2) App->entity->currentPlayer->lifePoints -= 18;
+					if (lifePoints <= 0) dead = true;
 
 					speed = speed * 2;
 					cooldown_Speed.Start();
@@ -408,6 +360,11 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 
 	GodMode = data.child("player").child("godmode").attribute("value").as_bool();
 
+	points = data.child("player").child("points").attribute("value").as_uint();
+	score_points = data.child("player").child("scorePoints").attribute("value").as_uint();
+	lifePoints = data.child("player").child("life").attribute("value").as_uint();
+	coins = data.child("player").child("coins").attribute("value").as_uint();
+
 	if (GodMode == true)
 	{
 		collider->type = COLLIDER_NONE;
@@ -418,9 +375,6 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 		collider->type = COLLIDER_PLAYER;
 	}
 
-	if (hud)
-		hud->Load(data);
-
 	return true;
 }
 
@@ -428,18 +382,20 @@ bool j1BlackMage::Load(pugi::xml_node& data) {
 bool j1BlackMage::Save(pugi::xml_node& data) const {
 
 	pugi::xml_node pos = data.append_child("position");
-
 	pos.append_attribute("x") = position.x;
 	pos.append_attribute("y") = position.y;
 
+	pugi::xml_node p = data.append_child("points");
+	pugi::xml_node sp = data.append_child("scorePoints");
+	pugi::xml_node life = data.append_child("life");
+	pugi::xml_node c = data.append_child("coins");
+	p.append_attribute("value") = points;
+	sp.append_attribute("value") = score_points;
+	life.append_attribute("value") = lifePoints;
+	c.append_attribute("value") = coins;
+
 	pugi::xml_node godmode = data.append_child("godmode");
-
-	pugi::xml_node life = data.append_child("lives");
-
 	godmode.append_attribute("value") = GodMode;
-
-	if (hud)
-		hud->Save(data.append_child("hud"));
 
 	return true;
 }

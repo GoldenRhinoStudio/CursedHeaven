@@ -3,7 +3,7 @@
 
 #include "SDL/include/SDL_rect.h"
 #include <string>
-#define MAX_FRAMES 100
+#define MAX_FRAMES 200
 
 class Animation
 {
@@ -67,6 +67,10 @@ public:
 			}
 			return frames[(int)current_frame];
 		}
+	}
+
+	float Getframe_pos() {
+		return current_frame;
 	}
 
 	bool isLastFrame() {

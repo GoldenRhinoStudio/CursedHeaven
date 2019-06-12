@@ -31,6 +31,8 @@
 #include "j1Shop.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1SceneKeyConfig.h"
+#include "j1Video.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -48,6 +50,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene 1");
 	bool ret = true;
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;
@@ -88,12 +92,16 @@ bool j1Scene1::Start()
 
 		// Creating UI
 		SDL_Rect section = { 9,460,315,402 };
-		settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
-		settings_window->visible = false;
+		App->scene1->settings_window = App->gui->CreateBox(&scene1Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
+		App->scene1->settings_window->visible = false;
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
 		SDL_Rect clicked = { 797, 14, 151, 37 };
+
+		SDL_Rect idle2 = { 1181, 12, 99, 38 };
+		SDL_Rect hovered2 = { 1386, 12, 99, 38 };
+		SDL_Rect clicked2 = { 1283, 12, 99, 38 };
 
 		SDL_Rect slider_r = { 860,334,180,5 };
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 65, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
@@ -102,17 +110,20 @@ bool j1Scene1::Start()
 		App->gui->CreateBox(&scene1Boxes, BOX, 50, 55, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 		App->gui->CreateBox(&scene1Boxes, BOX, 50, 90, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 20, idle, hovered, clicked, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 10, 20, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 70, 20, idle2, hovered2, clicked2, gui_tex, SAVE_GAME, (j1UserInterfaceElement*)settings_window);
 
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
 		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, App->gui->font2, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, App->gui->font2, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 20, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 83, 22, App->gui->font2, "SAVE", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		PlaceEntities(6);
 		App->shop->PlaceShopScene1();
+		App->entity->CreateEntity(JUDGE, 210, 760);
 
 		startup_time.Start();
 		windowTime.Start();
@@ -146,7 +157,7 @@ bool j1Scene1::Update(float dt)
 	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
 
-	if (App->scene1->startup_time.Read() > 1700) {
+	if (App->scene1->active && App->scene1->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
 			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
@@ -189,6 +200,13 @@ bool j1Scene1::Update(float dt)
 
 	App->gui->UpdateSliders(&scene1Boxes);
 
+	// Save
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
+		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
+
 	// Button actions
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		switch ((*item)->state)
@@ -219,7 +237,8 @@ bool j1Scene1::Update(float dt)
 				App->fade->FadeToBlack();
 			}
 			else if ((*item)->bfunction == SAVE_GAME) {
-				App->SaveGame("save_game.xml");
+				mustSave = true;
+				closeSettings = true;
 			}
 			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
@@ -231,15 +250,6 @@ bool j1Scene1::Update(float dt)
 			break;
 		}
 	}
-
-	// Load and Save
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-	{
-		App->LoadGame("save_game.xml");
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		App->SaveGame("save_game.xml");
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		App->entity->currentPlayer->victory = true;
@@ -254,7 +264,7 @@ bool j1Scene1::Update(float dt)
 			ChangeSceneMenu();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN
+	if (App->input->GetKey(App->key_config->TABULADOR) == KEY_DOWN
 		|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_BACK) == KEY_DOWN && statsTime.Read() >= lastStatsTime + 200)) {
 
 		lastStatsTime = statsTime.Read();
@@ -309,16 +319,26 @@ bool j1Scene1::PostUpdate()
 	return continueGame;
 }
 
-bool j1Scene1::Load(pugi::xml_node& node)
-{
+bool j1Scene1::Load(pugi::xml_node& node) {
+	active = node.child("activated").attribute("value").as_bool();
+	finishedDialog = node.child("dialogs").attribute("dialog").as_bool();
+	ableSellerDialog = node.child("dialogs").attribute("sellerDialog").as_bool();
+	potionCounter = node.child("potions").attribute("counter").as_uint();
+
 	return true;
 }
 
 bool j1Scene1::Save(pugi::xml_node& node) const
 {
 	pugi::xml_node activated = node.append_child("activated");
+	activated.append_attribute("value") = active;
+	
+	pugi::xml_node dialogs = node.append_child("dialogs");
+	dialogs.append_attribute("dialog") = finishedDialog;
+	dialogs.append_attribute("sellerDialog") = ableSellerDialog;
 
-	activated.append_attribute("true") = active;
+	pugi::xml_node potions = node.append_child("potions");
+	potions.append_attribute("counter") = potionCounter;
 
 	return true;
 }
@@ -337,7 +357,7 @@ void j1Scene1::PlaceEntities(int room)
 	App->entity->AddEnemy(33, 41, SLIME);
 	App->entity->AddEnemy(14, 41, SLIME);
 
-	App->entity->AddEnemy(46, 47, SLIME);
+	App->entity->AddEnemy(45, 45, SLIME);
 	App->entity->AddEnemy(43, 39, SLIME);
 	App->entity->AddEnemy(38, 41, SLIME);
 
@@ -386,6 +406,8 @@ bool j1Scene1::CleanUp()
 	App->particles->CleanUp();
 
 	potionCounter = 0;
+	finishedDialog = false;
+	ableSellerDialog = true;
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
@@ -409,8 +431,9 @@ bool j1Scene1::CleanUp()
 	if (settings_window != nullptr) settings_window = nullptr;
 
 	App->path->CleanUp();
-	App->fade->FadeToBlack();
 	App->entity->CleanUp();
+	App->dialog->active = false;
+	App->dialog->CleanUp();
 
 	return true;
 }
@@ -420,7 +443,6 @@ void j1Scene1::ChangeSceneMenu()
 	App->scene1->active = false;
 	App->menu->active = true;
 	changingScene = false;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->restartingShop = true;
@@ -435,7 +457,6 @@ void j1Scene1::ChangeSceneMenu()
 void j1Scene1::ChangeSceneDeath() {
 	App->scene1->active = false;
 	App->lose->active = true;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->restartingShop = true;
@@ -449,7 +470,6 @@ void j1Scene1::ChangeSceneDeath() {
 void j1Scene1::ChangeScene2() {
 	App->scene1->active = false;
 	App->scene2->active = true;
-	App->dialog->CleanUp();
 
 	CleanUp();
 	App->shop->CleanUp();
@@ -461,4 +481,6 @@ void j1Scene1::ChangeScene2() {
 	App->entity->CreatePlayer2();
 	App->entity->Start();
 	App->particles->Start();
+
+	App->entity->currentPlayer->victory = false;
 }

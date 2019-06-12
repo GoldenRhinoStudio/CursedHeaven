@@ -65,7 +65,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 		if (!App->entity->currentPlayer->active_Q) receivedAbilityDamage = false; 
 		
 		iPoint origin = { App->map->WorldToMap((int)position.x + colliderSize.x / 2, (int)position.y + colliderSize.y) };
-		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x + App->entity->currentPlayer->collider->rect.w/2, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h) };
+		iPoint destination = { App->map->WorldToMap((int)App->entity->currentPlayer->collider->rect.x, (int)App->entity->currentPlayer->collider->rect.y + App->entity->currentPlayer->collider->rect.h/2) };
 
 		int distance = (int)sqrt(pow(destination.x - origin.x, 2) + pow(destination.y - origin.y, 2));
 
@@ -94,6 +94,7 @@ bool j1Slime::Update(float dt, bool do_logic)
 					Move(path, dt);
 				}
 				else if (!target_found && path != nullptr) {
+
 				}
 				//fix attack
 			}
@@ -207,6 +208,32 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 					position.y -= 7;
 				}
 			}
+			else if (lifePoints > 0 && attacking == false && App->entity->player_type == MAGE) {
+				if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0)
+					position.x += App->entity->currentPlayer->knockback;
+				else if (animation == &lateral || animation == &idle_lateral)
+					position.x -= App->entity->currentPlayer->knockback;
+				else if (animation == &up || animation == &idle_up)
+					position.y += App->entity->currentPlayer->knockback;
+				else if (animation == &down || animation == &idle_down)
+					position.y -= App->entity->currentPlayer->knockback;
+				else if ((animation == &diagonal_up || animation == &idle_diagonal_up) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y += 5;
+				}
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y += 5;
+				}
+				else if ((animation == &diagonal_down || animation == &idle_diagonal_down) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y -= 5;
+				}
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y -= 5;
+				}
+			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
@@ -227,12 +254,12 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 			int item = rand() % 10 + 1;
 
 			if (item > 7) {
-				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
-				App->entity->AddItem(position.x + 20, position.y, LIFE);
-				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);
+				App->entity->AddItem(position.x - 5, position.y - 5, LIFE);
+				App->entity->AddItem(position.x + 5, position.y, LIFE);
+				App->entity->AddItem(position.x - 5, position.y + 5, LIFE);
 			}
 			else {
-				App->entity->AddItem(position.x - 10, position.y, COIN);
+				App->entity->AddItem(position.x - 5, position.y, COIN);
 			}
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
@@ -254,9 +281,8 @@ bool j1Slime::Load(pugi::xml_node & data)
 bool j1Slime::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pos.append_attribute("x") = App->map->WorldToMap(position.x, position.y).x;
+	pos.append_attribute("y") = App->map->WorldToMap(position.x, position.y).y;
 
 	return true;
 }

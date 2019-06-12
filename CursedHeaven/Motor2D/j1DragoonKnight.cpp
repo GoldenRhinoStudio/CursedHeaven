@@ -15,6 +15,7 @@
 #include "j1Scene2.h"
 #include "j1Audio.h"
 #include "j1DialogSystem.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -159,10 +160,11 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				else available_E = false;
 
 				// Ability control
-				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY1) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;
+					if (lifePoints <= 0) dead = true;
 
 					App->audio->PlayFx(App->audio->shield_sound);
 
@@ -178,12 +180,13 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					active_Q = false;
 				}
 
-				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY2) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 					App->audio->PlayFx(App->audio->rage_dk);
 
 					if (dialog->law == 2) App->entity->currentPlayer->lifePoints -= 38;
+					if (lifePoints <= 0) dead = true;
 
 					basicDamage += rageDamage;
 					cooldown_Rage.Start();
@@ -350,18 +353,18 @@ bool j1DragoonKnight::Load(pugi::xml_node& data) {
 
 	GodMode = data.child("player").child("godmode").attribute("value").as_bool();
 
+	points = data.child("player").child("points").attribute("value").as_uint();
+	score_points = data.child("player").child("scorePoints").attribute("value").as_uint();
+	lifePoints = data.child("player").child("life").attribute("value").as_uint();
+	coins = data.child("player").child("coins").attribute("value").as_uint();
+
 	if (GodMode == true)
 	{
 		collider->type = COLLIDER_NONE;
 		animation = &godmode;
 	}
 	else if (GodMode == false)
-	{
 		collider->type = COLLIDER_PLAYER;
-	}
-
-	if (hud)
-		hud->Load(data);
 
 	return true;
 }
@@ -370,18 +373,20 @@ bool j1DragoonKnight::Load(pugi::xml_node& data) {
 bool j1DragoonKnight::Save(pugi::xml_node& data) const {
 
 	pugi::xml_node pos = data.append_child("position");
-
 	pos.append_attribute("x") = position.x;
 	pos.append_attribute("y") = position.y;
+	
+	pugi::xml_node p = data.append_child("points");
+	pugi::xml_node sp = data.append_child("scorePoints");
+	pugi::xml_node life = data.append_child("life");
+	pugi::xml_node c = data.append_child("coins");
+	p.append_attribute("value") = points;
+	sp.append_attribute("value") = score_points;
+	life.append_attribute("value") = lifePoints;
+	c.append_attribute("value") = coins;
 
 	pugi::xml_node godmode = data.append_child("godmode");
-
-	pugi::xml_node life = data.append_child("lives");
-
 	godmode.append_attribute("value") = GodMode;
-
-	if (hud)
-		hud->Save(data.append_child("hud"));
 
 	return true;
 }

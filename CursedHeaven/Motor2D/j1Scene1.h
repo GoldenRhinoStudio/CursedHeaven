@@ -62,11 +62,10 @@ public:
 	j1Timer	startup_time;
 	int time_scene1;
 	bool changingScene = false;
-	bool startDialog = true;
 	bool finishedDialog = false;
 	bool profile_active = false;
 	bool bossFightOn = false;
-	bool dialogSellerCanAppear = true;
+	bool ableSellerDialog = true;
 
 	j1Timer windowTime;
 	uint lastWindowTime = 0;
@@ -87,6 +86,7 @@ private:
 	bool closeSettings = false;
 	bool continueGame = true;
 	bool resettingLevel = false;	
+	bool mustSave = false;
 };
 
 #endif // __j1SCENE1_H__

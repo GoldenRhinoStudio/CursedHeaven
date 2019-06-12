@@ -21,6 +21,7 @@ class Exodus;
 struct SDL_Texture;
 
 enum DIRECTION {
+	NONE_,
 	UP_,
 	DOWN_,
 	RIGHT_,
@@ -28,13 +29,14 @@ enum DIRECTION {
 	UP_RIGHT_,
 	UP_LEFT_,
 	DOWN_RIGHT_,
-	DOWN_LEFT_,
-	NONE_
+	DOWN_LEFT_	
 };
 
 enum ENTITY_TYPES
 {
 	PLAYER,
+	COIN,
+	LIFE,
 	ITEM,
 	SLIME,
 	TURRET,
@@ -51,14 +53,7 @@ enum PLAYER_TYPES
 {
 	KNIGHT,
 	MAGE,
-	TANK,
-	ROGUE,
 	NO_PLAYER
-};
-
-enum DROP_TYPES {
-	COIN,
-	LIFE
 };
 
 struct EntityInfo
@@ -96,12 +91,10 @@ public:
 	void CreatePlayer2();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();
-	void AddItem(int x, int y, DROP_TYPES itype);
+	void AddItem(int x, int y, ENTITY_TYPES itype);
 
 private:
-
 	void SpawnEnemy(const EntityInfo& info);
-
 
 public:
 	
@@ -114,17 +107,21 @@ public:
 	j1Rogue*			rogue = nullptr;
 
 	j1Player*			currentPlayer = nullptr;
+	PLAYER_TYPES player_type = NO_PLAYER;
 
 	j1Judge*			judge = nullptr;
 	j1Seller*			seller = nullptr;
-
-	PLAYER_TYPES player_type = NO_PLAYER;
-	Exodus*			exodus = nullptr;
+	Exodus*				exo = nullptr;
 
 	int mindflyer_Damage = 0;
 	int slime_Damage = 0;
 	int fire_Damage = 0;
 	int turret_Damage = 0;
+
+	int mf_lifePoints = 0;
+	bool loadingMf = false;
+	int exo_lifePoints = 0;
+	bool loadingExo = false;
 
 private:
 	int entity_logic = 0;

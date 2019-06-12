@@ -2,8 +2,7 @@
 #include "j1SceneLose.h"
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
-#include "j1Scene1.h"
-#include "j1Scene2.h"
+#include "j1ChooseCharacter.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -19,7 +18,7 @@
 #include "j1Window.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneVictory::j1SceneVictory()
@@ -34,6 +33,9 @@ bool j1SceneVictory::Awake(pugi::xml_node &)
 {
 	LOG("Loading Credits");
 	bool ret = true;
+
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;
@@ -57,7 +59,7 @@ bool j1SceneVictory::Start()
 		App->map->draw_with_quadtrees = false;
 
 		// The audio is played
-		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song028.ogg", 1.0f);
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
@@ -124,7 +126,7 @@ bool j1SceneVictory::Update(float dt)
 	// Managing scene transitions
 	if (App->fade->IsFading() == 0) {
 		if (startGame) {
-			ChangeScene(SCENE1);
+			ChangeScene(CHOOSE);
 		}
 		else if (backToMenu)
 			ChangeScene(MENU);
@@ -182,23 +184,15 @@ void j1SceneVictory::ChangeScene(SCENE objectiveScene)
 	this->active = false;
 	backToMenu = false;
 	startGame = false;
+	App->entity->player_type = NO_PLAYER;
 	CleanUp();
 
 	if (objectiveScene == SCENE::MENU) {
 		App->menu->active = true;
 		App->menu->Start();
 	}
-	else if (objectiveScene == SCENE::SCENE1) {
-		App->scene1->active = true;
-		App->scene1->Start();
-		App->particles->Start();
-		App->scene1->finishedDialog = false;
-		App->scene2->finishedDialog2 = false;
-		//App->dialog->active = true;
-		//App->dialog->Start();
-
-		App->entity->active = true;
-		App->entity->CreatePlayer1();
-		App->entity->Start();
+	else if (objectiveScene == SCENE::CHOOSE) {
+		App->choose_character->active = true;
+		App->choose_character->Start();
 	}
 }

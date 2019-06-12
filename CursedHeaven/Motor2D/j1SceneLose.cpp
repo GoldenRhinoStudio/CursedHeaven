@@ -2,7 +2,7 @@
 #include "j1SceneVictory.h"
 #include "j1SceneMenu.h"
 #include "j1SceneCredits.h"
-#include "j1Scene1.h"
+#include "j1ChooseCharacter.h"
 #include "j1App.h"
 #include "p2Log.h"
 #include "j1Textures.h"
@@ -18,7 +18,7 @@
 #include "j1Window.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneLose ::j1SceneLose()
@@ -33,6 +33,9 @@ bool j1SceneLose::Awake(pugi::xml_node &)
 {
 	LOG("Loading Credits");
 	bool ret = true;
+
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;
@@ -56,7 +59,7 @@ bool j1SceneLose::Start()
 		App->map->draw_with_quadtrees = false;
 
 		// The audio is played
-		App->audio->PlayMusic("audio/music/credits_music.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song010.ogg", 1.0f);
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
@@ -72,8 +75,6 @@ bool j1SceneLose::Start()
 
 		App->gui->CreateLabel(&deathLabels, LABEL, 95, 30, App->gui->font3, "YOU FAILED...", { 153, 0, 0, 255 } );
 		App->gui->CreateLabel(&deathLabels, LABEL, 65, 80, App->gui->font2, "HEAVEN WILL BECOME HELL", App->gui->beige);
-		/*App->gui->CreateLabel(&deathLabels, LABEL, 40, 70, font2, "All these heavens will disappear because of this terrible curse", App->gui->beige);
-		App->gui->CreateLabel(&deathLabels, LABEL, 70, 90, font2, "You were the last hope", App->gui->beige);*/
 
 		startup_time.Start();
 	}
@@ -125,7 +126,7 @@ bool j1SceneLose::Update(float dt)
 	// Managing scene transitions
 	if (App->fade->IsFading() == 0) {
 		if (startGame) {
-			ChangeScene(SCENE1);
+			ChangeScene(CHOOSE);
 		}
 		else if (backToMenu)
 			ChangeScene(MENU);
@@ -154,8 +155,8 @@ bool j1SceneLose::PostUpdate()
 {
 	BROFILER_CATEGORY("CreditsPostUpdate", Profiler::Color::Yellow)
 
-		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-			continueGame = false;
+	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		continueGame = false;
 
 	return continueGame;
 }
@@ -183,23 +184,15 @@ void j1SceneLose::ChangeScene(SCENE objectiveScene)
 	this->active = false;
 	backToMenu = false;
 	startGame = false;
+	App->entity->player_type = NO_PLAYER;
 	CleanUp();
 
 	if (objectiveScene == SCENE::MENU) {
 		App->menu->active = true;
-		App->entity->player_type = NO_PLAYER;
 		App->menu->Start();
 	}
-	else if (objectiveScene == SCENE::SCENE1) {
-		App->scene1->active = true;
-		App->scene1->Start();
-		App->particles->Start();
-		App->scene1->finishedDialog = false;
-		App->dialog->active = true;
-		App->dialog->Start();
-
-		App->entity->active = true;
-		App->entity->CreatePlayer1();
-		App->entity->Start();
+	else if (objectiveScene == SCENE::CHOOSE) {
+		App->choose_character->active = true;
+		App->choose_character->Start();
 	}
 }

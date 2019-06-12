@@ -14,6 +14,8 @@ j1Label::~j1Label() {}
 
 void j1Label::Draw(float scale, int x, int y, bool use_camera)
 {
+	App->tex->UnLoad(sprites);
+	sprites = App->font->Print(text, temp.w, temp.h, 0, color, font);
 	if (!use_camera)
 		App->render->Blit(sprites, (int)position.x + x, (int)position.y + y, NULL, SDL_FLIP_NONE, false, scale);
 	else

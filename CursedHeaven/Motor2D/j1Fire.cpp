@@ -15,7 +15,7 @@
 
 #include "Brofiler/Brofiler.h"
 
-j1Fire::j1Fire(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SLIME)
+j1Fire::j1Fire(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::FIRE)
 {
 	animation = NULL;
 
@@ -97,7 +97,7 @@ bool j1Fire::Update(float dt, bool do_logic)
 
 		}
 
-	App->map->EntityMovement(this);
+	App->map->EntityMovementTest(this);
 
 
 
@@ -183,12 +183,12 @@ void j1Fire::OnCollision(Collider * col_1, Collider * col_2)
 			int item = rand() % 10 + 1;
 
 			if (item > 7) {
-				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
-				App->entity->AddItem(position.x + 20, position.y, LIFE);
-				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);
+				App->entity->AddItem(position.x - 5, position.y - 5, LIFE);
+				App->entity->AddItem(position.x + 5, position.y, LIFE);
+				App->entity->AddItem(position.x - 5, position.y + 5, LIFE);
 			}
 			else {
-				App->entity->AddItem(position.x - 10, position.y, COIN);
+				App->entity->AddItem(position.x - 5, position.y, COIN);
 			}
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {
@@ -210,9 +210,8 @@ bool j1Fire::Load(pugi::xml_node & data)
 bool j1Fire::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
-
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pos.append_attribute("x") = App->map->WorldToMap(position.x, position.y).x;
+	pos.append_attribute("y") = App->map->WorldToMap(position.x, position.y).y;
 
 	return true;
 }

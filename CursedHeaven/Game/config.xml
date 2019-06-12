@@ -2,7 +2,7 @@
 
 <config>
   <app framerate_cap="60">
-    <title>Cursed Heaven v0.5</title>
+    <title>Cursed Heaven v1.0</title>
     <organization>UPC</organization>
   </app>
 	
@@ -15,7 +15,7 @@
 
   <window>
     <resolution width="1024" height="768" scale="3"/>
-    <fullscreen value="true"/>
+    <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
@@ -27,13 +27,13 @@
   
   <player>
 	<blackMage scale="1.0f">
-	  <size width="18" height="13"/>
+	  <size width="18" height="10"/>
 	  <margin x="3" y="23" colisionMargin="3" offset="8"/>
 	  <speed>
 	    <movement horizontal="80.0f" godmode="80.0f"/>
 	  </speed>
 	  <attack blittingX="-15" blittingY="-2"/>
-	  <combat basicDamage="150" fireDamage="600" lifePoints="200"/>
+	  <combat basicDamage="150" fireDamage="600" lifePoints="200" knockback="9"/>
 	  <cooldowns Q="5000" E="10000" increasedSpeed="5000" explosion="600" invulTime="700"/>
 	</blackMage>
 	
@@ -70,7 +70,7 @@
   <turret life="200" score="50">
 	  <margin x="-10" y="-10"/>
 	  <colliderSize w="17" h="25"/>
-	  <combat shotTime="2000" damage="30"/>
+	  <combat shotTime="2000" damage="15"/>
   </turret>  
   
   <mindflyer speed="100.0f" life="3000" score="2000">
@@ -81,7 +81,7 @@
 
   <exodus speed="400.0f" life="10000" score="2000">
     <margin x="69" y="0"/>
-    <colliderSize w="50" h="154"/>
+    <colliderSize w="50" h="100"/>
     <combat shotTime="3000" damage="20"/>
   </exodus>
 
@@ -98,6 +98,7 @@
 		<beige r="245" g="245" b="220"/>
 		<brown r="73" g="31" b="10"/>
 		<grey r="134" g="136" b="138"/>
+    <white r="255" g="255" b="255"/>
 	</colors>
   </gui>
   

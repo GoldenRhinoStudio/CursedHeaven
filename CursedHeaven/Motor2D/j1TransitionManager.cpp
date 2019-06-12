@@ -12,15 +12,21 @@
 #include "j1DialogSystem.h"
 
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1SceneCredits.h"
 #include "j1SceneLose.h"
 #include "j1SceneMenu.h"
 #include "j1SceneSettings.h"
 #include "j1SceneVictory.h"
 #include "j1ChooseCharacter.h"
+#include "j1SceneKeyConfig.h"
+#include "j1Video.h"
+#include "j1Fonts.h"
 
 j1TransitionManager::j1TransitionManager()
-{}
+{
+	name.assign("transitions");
+}
 
 j1TransitionManager::~j1TransitionManager()
 {}
@@ -78,33 +84,61 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 	if (scene2 == SCENE::SCENE1) {
 
 		// From Victory
-		if (scene1 == SCENE::VICTORY) {
-			App->victory->active = false;
-			App->victory->CleanUp();
+		if (scene1 == SCENE::MENU) {
+
+			App->LoadGame("save_game.xml");
+
+			App->entity->active = true;
+			App->scene1->active = true;
+			App->scene1->Start();
+			App->particles->Start();
 		}
-		// From Lose
-		else if (scene1 == SCENE::LOSE) {
-			App->lose->active = false;
-			App->lose->CleanUp();
-			App->lose->startGame = false;
+		else {
+			if (scene1 == SCENE::VICTORY) {
+				App->victory->active = false;
+				App->victory->CleanUp();
+			}
+			// From Lose
+			else if (scene1 == SCENE::LOSE) {
+				App->lose->active = false;
+				App->lose->CleanUp();
+				App->lose->startGame = false;
+			}
+			// From Choose Character
+			else if (scene1 == SCENE::CHOOSE) {
+				App->choose_character->active = false;
+				App->choose_character->CleanUp();
+			}
+
+			App->scene1->active = true;
+			App->scene1->Start();
+
+			App->particles->Start();
+
+			if (App->dialog->active == false) {
+				App->dialog->active = true;
+				App->dialog->Start();
+			}
+
+			App->entity->active = true;
+			App->entity->CreatePlayer1();
+			App->entity->Start();
 		}
-		// From Choose Character
-		else if (scene1 == SCENE::CHOOSE) {
-			App->choose_character->active = false;
-			App->choose_character->CleanUp();
+	}
+
+	// To Game
+	if (scene2 == SCENE::SCENE2) {
+
+		// From Victory
+		if (scene1 == SCENE::MENU) {
+
+			App->LoadGame("save_game.xml");
+
+			App->entity->active = true;
+			App->scene2->active = true;
+			App->scene2->Start();
+			App->particles->Start();
 		}
-
-		App->scene1->active = true;
-		App->scene1->Start();
-
-		App->particles->Start();
-
-		App->dialog->active = true;
-		App->dialog->Start();
-
-		App->entity->active = true;
-		App->entity->CreatePlayer1();
-		App->entity->Start();
 	}
 
 	// To menu
@@ -143,6 +177,11 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->entity->CleanUp();
 			App->entity->DestroyEntities();
 		}
+		// From Video
+		else if (scene1 == SCENE::VIDEO) {
+			App->video->active = false;
+
+		}
 
 		App->menu->active = true;
 		App->menu->Start();
@@ -177,6 +216,24 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->render->camera = { 0,0 };
 		}
 	}
+
+	else if (scene1 == SCENE_SETTINGS && scene2 == KEY_CHANGES) {
+		
+		App->settings->active = false;
+		App->settings->CleanUp();
+
+		App->key_config->active = true;
+		App->key_config->Start();
+	}
+
+	else if (scene2 == SCENE_SETTINGS && scene1 == KEY_CHANGES) {
+
+		App->key_config->active = false;
+		App->key_config->CleanUp();
+
+		App->settings->active = true;
+		App->settings->Start();
+	}
 }
 
 void j1TransitionManager::FadingToColor(SCENE scene_to_remove, SCENE scene_to_appear, j1Color color, float time) {
@@ -193,4 +250,22 @@ void j1TransitionManager::LinesAppearing(SCENE scene_to_remove, SCENE scene_to_a
 
 void j1TransitionManager::SquaresAppearing(SCENE scene_to_remove, SCENE scene_to_appear, int transition, j1Color color, float time) {
 	transitions_list.push_back(new Squares(scene_to_remove, scene_to_appear, transition, color, time));
+}
+
+bool j1TransitionManager::Load(pugi::xml_node& data)
+{
+	scene1active = data.child("scene1").attribute("active").as_bool();
+	scene2active = data.child("scene2").attribute("active").as_bool();
+	
+	return true;
+}
+
+bool j1TransitionManager::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node scene1 = data.append_child("scene1");
+	scene1.append_attribute("active") = App->scene1->active;
+	pugi::xml_node scene2 = data.append_child("scene2");
+	scene2.append_attribute("active") = App->scene2->active;
+
+	return true;
 }

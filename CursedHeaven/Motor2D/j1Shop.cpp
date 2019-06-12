@@ -13,6 +13,7 @@
 #include "j1Scene1.h"
 #include "j1Scene2.h"
 #include "j1Input.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 #include <time.h>
@@ -121,9 +122,42 @@ void j1Shop::PlaceShopScene2()
 bool j1Shop::Update(float dt)
 {
 	BROFILER_CATEGORY("ShopUpdate", Profiler::Color::LightSeaGreen)
+	
+	return true;
+}
 
+bool j1Shop::Load(pugi::xml_node& data)
+{
+	potions = data.child("potions").attribute("number").as_uint();
+	bootsLevel = data.child("boots").attribute("level").as_uint();
+	swordLevel = data.child("sword").attribute("level").as_uint();
+	heartLevel = data.child("heart").attribute("level").as_uint();
+	armourLevel = data.child("armour").attribute("level").as_uint();
+	hourglassLevel = data.child("hourglass").attribute("level").as_uint();
+	bookLevel = data.child("book").attribute("level").as_uint();
 
-		return true;
+	return true;
+}
+
+bool j1Shop::Save(pugi::xml_node& data) const
+{
+	pugi::xml_node poti = data.append_child("potions");
+	pugi::xml_node boot = data.append_child("boots");
+	pugi::xml_node sword = data.append_child("sword");
+	pugi::xml_node heart = data.append_child("heart");
+	pugi::xml_node arm = data.append_child("armour");
+	pugi::xml_node hour = data.append_child("hourglass");
+	pugi::xml_node book = data.append_child("book");
+
+	poti.append_attribute("number") = potions;
+	boot.append_attribute("level") = bootsLevel;
+	sword.append_attribute("level") = swordLevel;
+	heart.append_attribute("level") = heartLevel;
+	arm.append_attribute("level") = armourLevel;
+	hour.append_attribute("level") = hourglassLevel;
+	book.append_attribute("level") = bookLevel;
+
+	return true;
 }
 
 bool j1Shop::CleanUp()
@@ -188,6 +222,7 @@ bool j1Item::Start() {
 	// Textures are loaded
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/Collectibles/items.png");
+	height = 2;
 
 	// Audios are loaded
 	LOG("Loading player audios");
@@ -318,9 +353,16 @@ bool j1Item::Update(float dt, bool do_logic) {
 		if (App->scene1->potionCounter == 3 || App->scene2->potionCounter == 3) collider->type = COLLIDER_NONE;
 	}
 
-	// Blitting the item
-	if (type == POTION && App->scene1->potionCounter < 3 && App->scene2->potionCounter < 3) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.09f);
-	else if (type != POTION) App->render->Blit(sprites, position.x, position.y, &image, SDL_FLIP_NONE, 1.0f, 0.1f);
+	return true;
+}
+
+bool j1Item::DrawOrder(float dt)
+{
+	// Drawing the seller
+	if (type == POTION && App->scene1->potionCounter < 3 && App->scene2->potionCounter < 3)
+		Draw(&image, false, 0,0,0.09f);
+	else if (type != POTION)
+		Draw(&image, false, 0,0,0.1f);
 
 	return true;
 }
@@ -349,7 +391,7 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 		else {
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
 
-			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN
+			if (App->input->GetKey(App->key_config->BUY_ITEM) == KEY_DOWN
 				|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN
 					&& (App->shop->buyingTime.Read() >= App->shop->lastBuyingTime + 500))) {
 

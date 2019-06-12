@@ -32,6 +32,7 @@
 #include "j1Shop.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1Video.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -46,6 +47,9 @@ bool j1Scene2::Awake(pugi::xml_node& config) {
 	LOG("Loading Scene 2");
 
 	bool ret = true;
+
+	if (App->video->active)
+		active = false;
 
 	if (App->menu->active)
 		active = false;
@@ -76,6 +80,7 @@ bool j1Scene2::Start() {
 		}
 
 		// The audio is played	
+		
 		App->audio->PlayMusic("audio/music/song027.ogg", 1.0f);
 
 		// Textures are loaded
@@ -86,12 +91,16 @@ bool j1Scene2::Start() {
 
 		// Creating UI
 		SDL_Rect section = { 9, 460, 315, 402 };
-		settings_window = App->gui->CreateBox(&scene2Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section,  gui_tex);
+		settings_window = App->gui->CreateBox(&scene2Boxes, BOX, App->gui->settingsPosition.x, App->gui->settingsPosition.y, section, gui_tex);
 		settings_window->visible = false;
 
 		SDL_Rect idle = { 631, 12, 151, 38 };
 		SDL_Rect hovered = { 963, 12, 151, 38 };
 		SDL_Rect clicked = { 797, 14, 151, 37 };
+
+		SDL_Rect idle2 = { 1181, 12, 99, 38 };
+		SDL_Rect hovered2 = { 1386, 12, 99, 38 };
+		SDL_Rect clicked2 = { 1283, 12, 99, 38 };
 
 		SDL_Rect slider_r = { 860,334,180,5 };
 		App->gui->CreateButton(&scene2Buttons, BUTTON, 20, 65, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
@@ -100,20 +109,24 @@ bool j1Scene2::Start() {
 		App->gui->CreateBox(&scene2Boxes, BOX, 50, 55, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 		App->gui->CreateBox(&scene2Boxes, BOX, 50, 90, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 
-		App->gui->CreateButton(&scene2Buttons, BUTTON, 30, 20, idle, hovered, clicked, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene2Buttons, BUTTON, 10, 20, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene2Buttons, BUTTON, 70, 20, idle2, hovered2, clicked2, gui_tex, SAVE_GAME, (j1UserInterfaceElement*)settings_window);
 
 		App->gui->CreateButton(&scene2Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
 		App->gui->CreateLabel(&scene2Labels, LABEL, 25, 40, App->gui->font2, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene2Labels, LABEL, 25, 75, App->gui->font2, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene2Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene2Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene2Labels, LABEL, 20, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene2Labels, LABEL, 83, 22, App->gui->font2, "SAVE", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		
 		PlaceEntities(6);
 		App->shop->PlaceShopScene2();
+		App->entity->CreateEntity(JUDGE, 410, 850);
 
 		startup_time.Start();
 		windowTime.Start();
+		spawn = false;
 	}
 
 	return true;
@@ -134,7 +147,8 @@ bool j1Scene2::Update(float dt) {
 	if (((pos.x >= 53 && pos.x <= 54 && pos.y == 63) ||
 		(pos.x >= 64 && pos.x <= 65 && pos.y >= 67 && pos.y <= 68)) && !spawn){
 		spawn = true;
-		App->entity->AddEnemy(36, 62, EXODUS);
+		App->entity->AddEnemy(38, 64, EXODUS);
+		App->audio->PlayMusic("audio/music/song021.ogg", 0.0f);
 	}
 
 	time_scene2 = startup_time.ReadSec();
@@ -147,8 +161,8 @@ bool j1Scene2::Update(float dt) {
 	App->gui->UpdateWindow(settings_window, &scene2Buttons, &scene2Labels, &scene2Boxes);
 	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
-
-	if (App->scene2->startup_time.Read() > 1700) {
+	
+	if (App->scene2->active && App->scene2->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
 			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
 			settings_window->visible = !settings_window->visible;
@@ -191,6 +205,13 @@ bool j1Scene2::Update(float dt) {
 
 	App->gui->UpdateSliders(&scene2Boxes);
 
+	// Save
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
+		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
+
 	// Button actions
 	for (std::list<j1Button*>::iterator item = scene2Buttons.begin(); item != scene2Buttons.end(); ++item) {
 		switch ((*item)->state)
@@ -221,7 +242,8 @@ bool j1Scene2::Update(float dt) {
 				App->fade->FadeToBlack();
 			}
 			else if ((*item)->bfunction == SAVE_GAME) {
-				App->SaveGame("save_game.xml");
+				mustSave = true;
+				closeSettings = true;
 			}
 			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
@@ -233,15 +255,6 @@ bool j1Scene2::Update(float dt) {
 			break;
 		}
 	}
-
-	// Load and Save
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-	{
-		App->LoadGame("save_game.xml");
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		App->SaveGame("save_game.xml");
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		App->entity->currentPlayer->victory = true;
@@ -300,13 +313,27 @@ bool j1Scene2::PostUpdate() {
 }
 
 bool j1Scene2::Load(pugi::xml_node& node) {
+	active = node.child("activated").attribute("value").as_bool();
+	finishedDialog2 = node.child("dialogs").attribute("dialog").as_bool();
+	potionCounter = node.child("potions").attribute("counter").as_uint();
+	spawn = node.child("exodus").attribute("spawned").as_bool();
+
 	return true;
 }
 
-bool j1Scene2::Save(pugi::xml_node& node) const {
+bool j1Scene2::Save(pugi::xml_node& node) const 
+{
 	pugi::xml_node activated = node.append_child("activated");
+	activated.append_attribute("value") = active;
 
-	activated.append_attribute("true") = active;
+	pugi::xml_node dialogs = node.append_child("dialogs");
+	dialogs.append_attribute("dialog") = finishedDialog2;
+
+	pugi::xml_node potions = node.append_child("potions");
+	potions.append_attribute("counter") = potionCounter;
+
+	pugi::xml_node exodus = node.append_child("exodus");
+	exodus.append_attribute("spawned") = spawn;
 
 	return true;
 }
@@ -378,6 +405,7 @@ bool j1Scene2::CleanUp() {
 	App->particles->CleanUp();
 
 	potionCounter = 0;
+	finishedDialog2 = false;
 
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
@@ -403,8 +431,9 @@ bool j1Scene2::CleanUp() {
 	App->path->CleanUp();
 	App->shop->restartingShop = true;
 	App->shop->CleanUp();
-	App->fade->FadeToBlack();
 	App->entity->CleanUp();
+	App->dialog->active = false;
+	App->dialog->CleanUp();
 
 	return true;
 }
@@ -446,4 +475,5 @@ void j1Scene2::ChangeSceneVictory() {
 	App->render->camera = { 0,0 };
 
 	App->victory->Start();
+	App->entity->currentPlayer->victory = false;
 }

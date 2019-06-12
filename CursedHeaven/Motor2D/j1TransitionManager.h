@@ -18,6 +18,10 @@ public:
 	virtual bool PostUpdate();
 	virtual bool CleanUp();
 
+	// Save and Load
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
+
 	void FadingToColor(SCENE scene_to_remove, SCENE scene_to_appear, j1Color color = Black, float time = 1.0f);
 	void Wiping(SCENE scene_to_remove, SCENE scene_to_appear, j1Color color = Black, float time = 0.5f);
 	void LinesAppearing(SCENE scene_to_remove, SCENE scene_to_appear, j1Color color = Black, float time = 2.0f);
@@ -28,11 +32,12 @@ public:
 	void SwitchScenes(SCENE scene1, SCENE scene2);
 
 public:
-
 	bool transition;
 
-private:
+	bool scene1active = false;
+	bool scene2active = false;
 
+private:
 	std::list<j1Transitions*> transitions_list;
 	SDL_Rect screen;
 

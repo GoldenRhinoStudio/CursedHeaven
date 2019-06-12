@@ -11,6 +11,7 @@
 #include "j1Input.h"
 #include "j1Shop.h"
 #include "j1Window.h"
+#include "j1Shop.h"
 
 j1Hud::j1Hud() 
 {
@@ -25,6 +26,7 @@ bool j1Hud::Start()
 	profile_text = App->tex->Load("gui/player_profile.png");
 	dialog_tex = App->tex->Load("textures/dialog_cursedheaven.png");
 	potion_tex = App->tex->Load("gui/potion.png");
+	frames_tex = App->tex->Load("gui/UIFrames.png");
 	life_points = 82;
 	life_points_max = App->entity->currentPlayer->lifePoints;
 	multiplier = 82 / life_points_max;
@@ -39,6 +41,12 @@ bool j1Hud::Update(float dt)
 	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
 	SDL_Rect bm_profile = { 42,0,43,42 };
+
+	SDL_Rect upgrade = { 561,587,28,28 };
+
+	SDL_Rect profile_frame = { 0, 0, 403, 190 };
+	SDL_Rect potion_frame = { 0, 200, 104, 186 };
+	SDL_Rect frame = { 228, 196, 399, 200 };
 
 	// Tab clicked
 	SDL_Rect blackMage = { 0,568,190,366 };
@@ -78,38 +86,45 @@ bool j1Hud::Update(float dt)
 	else if (App->entity->player_type == KNIGHT)
 		dragoon_knight = true;
 
-	if (black_mage) {
-		// Icon profile
-		App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
-
-		// Abilities
-		// Q
-		App->render->Blit(hud_text, 15, 400, &bm_available_q, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_Q) {
-			App->render->Blit(hud_text, 15, 400, &bm_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
-		}
-		// E
-		App->render->Blit(hud_text, 15, 500, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_E) {
-			App->render->Blit(hud_text, 15, 500, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
-		}
+	if (frames_tex != nullptr) {
+		App->render->Blit(frames_tex, -10, -13, &profile_frame, SDL_FLIP_NONE, false, 0.35f);
+		App->render->Blit(frames_tex, -10, 190, &potion_frame, SDL_FLIP_NONE, false, 0.35f);
+		App->render->Blit(frames_tex, 620, 565, &frame, SDL_FLIP_NONE, false, 0.35f);
 	}
-	else if (dragoon_knight) {
-		// Icon profile
-		App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, false);
 
-		// Abilities
-		// Q
-		App->render->Blit(hud_text, 15, 400, &dk_available_q, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_Q) {
-			App->render->Blit(hud_text, 15, 400, &dk_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
-		}
-		// E
-		App->render->Blit(hud_text, 15, 500, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
-		if (!App->entity->currentPlayer->available_E) {
-			App->render->Blit(hud_text, 15, 500, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
-		}
+	if (hud_text != nullptr) {
+		if (black_mage) {
+			// Icon profile
+			App->render->Blit(hud_text, 11, 6, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
 
+			// Abilities
+			// Q
+			App->render->Blit(hud_text, 15, 400, &bm_available_q, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_Q) {
+				App->render->Blit(hud_text, 15, 400, &bm_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
+			}
+			// E
+			App->render->Blit(hud_text, 15, 465, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_E) {
+				App->render->Blit(hud_text, 15, 465, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
+			}
+		}
+		else if (dragoon_knight) {
+			// Icon profile
+			App->render->Blit(hud_text, 11, 6, &dk_profile, SDL_FLIP_NONE, false);
+
+			// Abilities
+			// Q
+			App->render->Blit(hud_text, 15, 400, &dk_available_q, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_Q) {
+				App->render->Blit(hud_text, 15, 400, &dk_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
+			}
+			// E
+			App->render->Blit(hud_text, 15, 465, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
+			if (!App->entity->currentPlayer->available_E) {
+				App->render->Blit(hud_text, 15, 465, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
+			}
+		}
 	}
 	
 	// Current points of the player (char*)
@@ -120,50 +135,135 @@ bool j1Hud::Update(float dt)
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
 
-	if (App->shop->potions == 0) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+	if (potion_tex != nullptr) {
+		if (App->shop->potions == 0) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
+
+		if (App->shop->potions == 1) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
+
+		if (App->shop->potions == 2) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
+
+		if (App->shop->potions >= 3) {
+			App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+			App->render->BlitHUD(potion_tex, 15, 320, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
+		}
 	}
 
-	if (App->shop->potions == 1) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-	}
-
-	if (App->shop->potions == 2) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion_none, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-	}
-
-	if (App->shop->potions >= 3) {
-		App->render->BlitHUD(potion_tex, 15, 200, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 260, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-		App->render->BlitHUD(potion_tex, 15, 320, &potion1, SDL_FLIP_NONE, 1.0f, 0.2f, 0.0, pivot, pivot, false);
-	}
-
-	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, false);
+	App->render->Blit(hud_text, 16, 140, &coins_r, SDL_FLIP_NONE, false);
 
 	App->tex->UnLoad(score);
 	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, App->gui->font1);
 
-	App->render->BlitHUD(score, 69, 130, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->BlitHUD(score, 69, 135, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, false);
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, false);
-
 
 	if (App->scene1->profile_active) {
 		
 		if (black_mage) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, false, 0.3f);
+			
+			//HEART
+			if (App->shop->heartLevel == 1 || App->shop->heartLevel >= 2)
+				App->render->Blit(profile_text, 520, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+				
+			else if (App->shop->heartLevel == 1)
+				App->render->Blit(profile_text, 553, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SWORD
+			if (App->shop->swordLevel == 1 || App->shop->swordLevel >= 2)
+				App->render->Blit(profile_text, 520, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->swordLevel == 1)
+				App->render->Blit(profile_text, 553, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SHIELD
+			if (App->shop->bookLevel == 1 || App->shop->bookLevel >= 2)
+				App->render->Blit(profile_text, 520, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bookLevel == 1)
+				App->render->Blit(profile_text, 553, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SPEED
+			if (App->shop->bootsLevel == 1 || App->shop->bootsLevel >= 2)
+				App->render->Blit(profile_text, 731, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bootsLevel == 1)
+				App->render->Blit(profile_text, 764, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+			
+			//ABILITY1
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//ABILITY2
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
 		}
 		else if (dragoon_knight) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, false, 0.3f);
+
+			//HEART
+			if (App->shop->heartLevel == 1 || App->shop->heartLevel >= 2)
+				App->render->Blit(profile_text, 520, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->heartLevel == 1)
+				App->render->Blit(profile_text, 553, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SWORD
+			if (App->shop->swordLevel == 1 || App->shop->swordLevel >= 2)
+				App->render->Blit(profile_text, 520, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->swordLevel == 1)
+				App->render->Blit(profile_text, 553, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SHIELD
+			if (App->shop->bookLevel == 1 || App->shop->bookLevel >= 2)
+				App->render->Blit(profile_text, 520, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bookLevel == 1)
+				App->render->Blit(profile_text, 553, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SPEED
+			if (App->shop->bootsLevel == 1 || App->shop->bootsLevel >= 2)
+				App->render->Blit(profile_text, 731, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bootsLevel == 1)
+				App->render->Blit(profile_text, 764, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//ABILITY1
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//ABILITY2
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
 		}
 
 	}
@@ -173,10 +273,12 @@ bool j1Hud::Update(float dt)
 
 bool j1Hud::CleanUp()
 {
-	App->tex->UnLoad(hud_text);
-	App->tex->UnLoad(profile_text);
-	App->tex->UnLoad(score);
+	App->tex->UnLoad(frames_tex);
 	App->tex->UnLoad(potion_tex);
+	App->tex->UnLoad(dialog_tex);
+	App->tex->UnLoad(profile_text);
+	App->tex->UnLoad(hud_text);
+	App->tex->UnLoad(score);
 
 	//for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 	//	(*item)->CleanUp();
@@ -187,15 +289,5 @@ bool j1Hud::CleanUp()
 		labels_list.remove(*item);
 	}*/
 
-	return true;
-}
-
-bool j1Hud::Load(pugi::xml_node & data)
-{
-	return true;
-}
-
-bool j1Hud::Save(pugi::xml_node & data) const
-{
 	return true;
 }

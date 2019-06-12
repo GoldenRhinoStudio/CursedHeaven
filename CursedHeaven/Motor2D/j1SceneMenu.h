@@ -22,7 +22,9 @@ enum SCENE {
 	CREDITS,
 	SCENE_SETTINGS,
 	VICTORY,
-	LOSE
+	LOSE,
+	VIDEO,
+	KEY_CHANGES
 };
 
 class j1SceneMenu : public j1Module
@@ -73,6 +75,7 @@ public:
 private:
 
 	SDL_Texture* gui_tex2 = nullptr;
+	SDL_Texture* logo_tex = nullptr;
 
 	_TTF_Font* font = nullptr;
 

@@ -58,6 +58,7 @@ bool j1Gui::Awake(pugi::xml_node& config)
 	beige = { Uint8(colors.child("beige").attribute("r").as_uint()), Uint8(colors.child("beige").attribute("g").as_uint()), Uint8(colors.child("beige").attribute("b").as_uint()), a};
 	brown = { Uint8(colors.child("brown").attribute("r").as_uint()), Uint8(colors.child("brown").attribute("g").as_uint()), Uint8(colors.child("brown").attribute("b").as_uint()), a};
 	grey = { Uint8(colors.child("grey").attribute("r").as_uint()), Uint8(colors.child("grey").attribute("g").as_uint()), Uint8(colors.child("grey").attribute("b").as_uint()), a};
+	white = { Uint8(colors.child("white").attribute("r").as_uint()), Uint8(colors.child("white").attribute("g").as_uint()), Uint8(colors.child("white").attribute("b").as_uint()), a };
 
 	return ret;
 }	

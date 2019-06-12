@@ -15,6 +15,7 @@
 #include "j1Scene1.h"
 #include "j1Window.h"
 #include "j1Audio.h"
+#include "j1SceneKeyConfig.h"
 
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER) {}
 
@@ -22,20 +23,18 @@ j1Player::~j1Player() {}
 
 
 void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logic, float speed) {
-
-
 	if (!changing_room && !App->gamePaused && !App->scene1->profile_active && !dead) {
 
 		// GodMode controls
 		if (GodMode) {
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
+			if (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT && (App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_IDLE))
 			{
 				position.x += godModeSpeed * dt;
 				facingRight = true;
 				direction = DIRECTION::RIGHT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT && App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_REPEAT)
 			{
 				position.x += godModeSpeed * dt;
 				position.y -= (godModeSpeed / 2) * dt;
@@ -43,7 +42,7 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				direction = DIRECTION::UP_RIGHT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT && App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_REPEAT)
 			{
 				position.x += godModeSpeed * dt;
 				position.y += (godModeSpeed / 2) * dt;
@@ -51,14 +50,14 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				direction = DIRECTION::DOWN_RIGHT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE))
+			if (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_REPEAT && (App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_IDLE))
 			{
 				position.x -= godModeSpeed * dt;
 				facingRight = false;
 				direction = DIRECTION::LEFT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_REPEAT && App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_REPEAT)
 			{
 				position.x -= godModeSpeed * dt;
 				position.y -= (godModeSpeed / 2) * dt;
@@ -66,7 +65,7 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				direction = DIRECTION::UP_LEFT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_REPEAT && App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_REPEAT)
 			{
 				position.x -= godModeSpeed * dt;
 				position.y += (godModeSpeed / 2) * dt;
@@ -74,29 +73,32 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				direction = DIRECTION::DOWN_LEFT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+			if (App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_REPEAT && (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_IDLE))
 			{
 				position.y -= godModeSpeed * dt;
 				direction = DIRECTION::UP_;
 			}
 
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE))
+			if (App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_REPEAT && (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_IDLE))
 			{
 				position.y += godModeSpeed * dt;
 				direction = DIRECTION::DOWN_;
 			}
 
 			// Idle
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-				&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+			if (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_IDLE
 				&& attacking == false) {
 				direction = DIRECTION::NONE_;
 			}
 		}
 		else {
-
-			if (App->shop->potions > 0 && (App->input->GetKey(SDL_SCANCODE_R) == j1KeyState::KEY_DOWN ||
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
+				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE)
+				direction = DIRECTION::NONE_;
+			
+			if (App->shop->potions > 0 && (App->input->GetKey(App->key_config->USE_POTION) == j1KeyState::KEY_DOWN ||
 				(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_X) == KEY_DOWN && potionTime.Read() >= lastPotionTime + 500))) {
 				App->shop->potions--;
 				lastPotionTime = potionTime.Read();
@@ -104,58 +106,63 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 				if (App->dialog->law == 3) {
 					if (App->entity->player_type == KNIGHT) App->entity->currentPlayer->lifePoints -= 38; 
 					else if (App->entity->player_type == KNIGHT)App->entity->currentPlayer->lifePoints -= 18;
+
+					if (App->entity->currentPlayer->lifePoints <= 0) App->entity->currentPlayer->dead = true;
 				}
-				else App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+				else 
+					App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
 
 				App->audio->PlayFx(App->audio->potion_sound);
 			}
 
 			// Direction controls	
-			if ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
+			if ((App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
 				if (movement)
 					position.x += speed * dt;
 				facingRight = true;
 				direction = DIRECTION::RIGHT_;
 			}
 
-			if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)) {
+			if ((App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)) {
 				if (movement)
 					position.x -= speed * dt;
 				facingRight = false;
 				direction = DIRECTION::LEFT_;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY < -6400) {
-				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)
-					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
+			if (App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY < -6400) {
+				if ((App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)
+					|| (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
 
-					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::UP_RIGHT_;
+					if (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::UP_RIGHT_;
 					else direction = DIRECTION::UP_LEFT_;
 					if (movement)
 						position.y -= (speed * dt) / 2;
 				}
-				else if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE) {
+				else if (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_IDLE) {
 					direction = DIRECTION::UP_;
 					if (movement)
 						position.y -= speed * dt;
 				}
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY > 6400) {
-				if ((App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)
-					|| (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
+			if (App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisY > 6400) {
+				if ((App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX < -6400)
+					|| (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400)) {
 
-					if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::DOWN_RIGHT_;
+					if (App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_REPEAT || App->input->gamepadLAxisX > 6400) direction = DIRECTION::DOWN_RIGHT_;
 					else direction = DIRECTION::DOWN_LEFT_;
 					if (movement)
 						position.y += (speed * dt) / 2;
 				}
-				else if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE) {
+				else if (App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_IDLE && App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_IDLE) {
 					direction = DIRECTION::DOWN_;
 					if (movement)
 						position.y += speed * dt;
 				}
 			}
+
+			
 		}
 	}
 }
@@ -177,10 +184,10 @@ void j1Player::SetMovementAnimations(DIRECTION& direction, Animation* idle_up, A
 		animation->flip = false;
 
 	if ((App->entity->mage != nullptr && App->entity->mage->active_Q)
-		|| ((App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
-			&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
-			&& App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_IDLE
-			&& App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_IDLE)
+		|| ((App->input->GetKey(App->key_config->MOVE_RIGHT) == j1KeyState::KEY_IDLE
+			&& App->input->GetKey(App->key_config->MOVE_LEFT) == j1KeyState::KEY_IDLE
+			&& App->input->GetKey(App->key_config->MOVE_UP) == j1KeyState::KEY_IDLE
+			&& App->input->GetKey(App->key_config->MOVE_DOWN) == j1KeyState::KEY_IDLE)
 			&& (App->input->gamepadLAxisY < 6400 && App->input->gamepadLAxisY > -6400
 				&& App->input->gamepadLAxisX < 6400 && App->input->gamepadLAxisX > -6400))) {
 

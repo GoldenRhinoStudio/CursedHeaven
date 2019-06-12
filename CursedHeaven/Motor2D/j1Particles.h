@@ -7,7 +7,7 @@
 #include "j1Collisions.h"
 #include "p2Log.h"
 
-#define MAX_ACTIVE_PARTICLES 100
+#define MAX_ACTIVE_PARTICLES 300
 
 struct SDL_Texture;
 struct Collider;
@@ -16,7 +16,10 @@ enum COLLIDER_TYPE;
 enum PARTICLE_TYPE {
 	BASIC_SHOOT,
 	EXPLOSION,
-	SWORD_SHOOT
+	SWORD_SHOOT,
+	VORTEX,
+	MINDFLYER_SHOOT,
+	TURRET_SHOOT
 };
 
 struct Particle
@@ -57,6 +60,7 @@ private:
 	
 	SDL_Texture* part_tex = nullptr;
 	SDL_Texture* sword_tex = nullptr;
+	SDL_Texture* vortex_tex = nullptr;
 	int swordcounter = 0;
 
 public:
@@ -66,9 +70,14 @@ public:
 	Particle mageShot;
 	Particle explosion;
 
+	Particle turretAttack;
+
+	Particle mindflyerAttack;
+
 	Particle sword1;
 	Particle sword2;
 	Particle sword3;
 
+	Particle vortex1;
 };
 #endif // __j1PARTICLES_H__ 

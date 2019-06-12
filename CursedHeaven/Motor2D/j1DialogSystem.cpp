@@ -14,11 +14,13 @@
 #include "j1Fonts.h"
 #include "j1DragoonKnight.h"
 #include "j1BlackMage.h"
+#include "j1SceneKeyConfig.h"
 #include <time.h>
 
 j1DialogSystem::j1DialogSystem()
 {
 	srand(time(NULL));
+	name.assign("dialog");
 }
 
 j1DialogSystem::~j1DialogSystem()
@@ -29,37 +31,39 @@ bool j1DialogSystem::Start() {
 
 	bool ret = true;
 
-	judge_tex = App->tex->Load("textures/character/judge/Judge.png");
+	//judge_tex = App->tex->Load("textures/character/judge/Judge.png");
 	dialog_tex = App->tex->Load("textures/dialog_final.png");
 	dialog_tex2 = App->tex->Load("textures/dialog_final.png");
 	dialog_tex3 = App->tex->Load("textures/dialog_final.png");
 	seller_tex1 = App->tex->Load("textures/dialog_final.png");
 	seller_tex2 = App->tex->Load("textures/dialog_final.png");
 
-	law = (1 + rand() % 3);
+	if ((App->scene1->active && App->scene1->finishedDialog == false)
+		|| (App->scene2->active && App->scene2->finishedDialog2 == false)) {
+		
+		law = (1 + rand() % 3);
 
-	if (law == 1) {
-
-		law1Active = true;
-		LOG("law1 act");
+		if (law == 1) {
+			law1Active = true;
+			LOG("law1 act");
+		}
+		else if (law == 2) {
+			law2Active = true;
+			LOG("law2 act");
+		}
+		else if (law == 3) {
+			law3Active = true;
+			LOG("law3 act");
+		}
 	}
-
-	else if (law == 2) {
-
-		law2Active = true;
-		LOG("law2 act");
+	else {
+		law1Active = false;
+		law2Active = false;
+		law3Active = false;
 	}
-
-	else if (law == 3) {
-
-		law3Active = true;
-		LOG("law3 act");
-
-	}
-
+	
 	return ret;
 };
-
 
 bool j1DialogSystem::Update(float dt) {
 
@@ -88,7 +92,7 @@ bool j1DialogSystem::Update(float dt) {
 	if (App->scene1->active) {
 
 		// judge sprite
-		App->render->BlitHUD(judge_tex, 210, 760, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+		//App->render->BlitHUD(judge_tex, 210, 760, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
 		if (!App->scene1->finishedDialog) App->gamePaused = true;
 
 		if (!timerStarted) {
@@ -98,7 +102,7 @@ bool j1DialogSystem::Update(float dt) {
 		}
 
 		// Judge 1st Dialog
-		if (law1Active == true)
+		if (law1Active)
 		{
 			if(dialogTimer.Read() >= time_passed + dialogTime)
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
@@ -107,7 +111,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN  || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -133,14 +137,14 @@ bool j1DialogSystem::Update(float dt) {
 				law1Active = false;
 			}
 		}
-		else if (law2Active == true)
+		else if (law2Active)
 		{			
 			if (dialogTimer.Read() >= time_passed + dialogTime) {
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) 
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -166,7 +170,7 @@ bool j1DialogSystem::Update(float dt) {
 				law2Active = false;
 			}
 		}
-		else if (law3Active == true)
+		else if (law3Active)
 		{
 			if (dialogTimer.Read() >= time_passed + dialogTime) {
 				App->render->BlitHUD(dialog_tex, 0, 20, &chart1s1, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
@@ -203,7 +207,7 @@ bool j1DialogSystem::Update(float dt) {
 		// Seller Dialog
 		if ((App->entity->currentPlayer->position.x >= -1064 && App->entity->currentPlayer->position.x <= -984) && (App->entity->currentPlayer->position.y >= 652 && App->entity->currentPlayer->position.y <= 691))
 		{
-			if (App->scene1->dialogSellerCanAppear) {
+			if (App->scene1->ableSellerDialog) {
 
 				App->scene1->finishedDialog = false;
 
@@ -238,7 +242,7 @@ bool j1DialogSystem::Update(float dt) {
 					App->tex->UnLoad(seller_tex2);
 					times = 0;
 					App->scene1->finishedDialog = true;
-					App->scene1->dialogSellerCanAppear = false;
+					App->scene1->ableSellerDialog = false;
 					App->gamePaused = false;
 				}
 			}
@@ -248,7 +252,7 @@ bool j1DialogSystem::Update(float dt) {
 	else if (App->scene2->active) 
 	{
 		// judge sprite
-		App->render->BlitHUD(judge_tex, 410, 850, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
+		//App->render->BlitHUD(judge_tex, 410, 850, &judgeRect, SDL_FLIP_HORIZONTAL, 1.0f, 1.0f, 0.0, pivot, pivot, true);
 		if (!App->scene2->finishedDialog2) App->gamePaused = true;
 
 		if (!timerStarted2) {
@@ -268,7 +272,7 @@ bool j1DialogSystem::Update(float dt) {
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				&& canSkip/* && App->scene1->settings_window->visible == false*/) {
+				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed_2 = dialogTimer2.Read();
@@ -301,7 +305,7 @@ bool j1DialogSystem::Update(float dt) {
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				&& canSkip /*&& App->scene1->settings_window->visible == false*/) {
+				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed_2 = dialogTimer2.Read();
@@ -334,7 +338,7 @@ bool j1DialogSystem::Update(float dt) {
 			}
 
 			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				&& canSkip/* && App->scene1->settings_window->visible == false*/) {
+				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
 				time_passed = dialogTimer.Read();
@@ -364,11 +368,29 @@ bool j1DialogSystem::Update(float dt) {
 	return true;
 }
 
+// Load game state
+bool j1DialogSystem::Load(pugi::xml_node& data) {
+	law = data.child("law").attribute("currentLaw").as_int();
+
+	return true;
+}
+
+// Save game state
+bool j1DialogSystem::Save(pugi::xml_node& data) const {
+
+	pugi::xml_node laws = data.append_child("laws");
+	laws.append_attribute("currentLaw") = law;
+
+	return true;
+}
+
 bool j1DialogSystem::CleanUp() {
 
-	App->tex->UnLoad(dialog_tex);
-	App->tex->UnLoad(dialog_tex2);
+	App->tex->UnLoad(seller_tex2);
+	App->tex->UnLoad(seller_tex1);
 	App->tex->UnLoad(dialog_tex3);
+	App->tex->UnLoad(dialog_tex2);
+	App->tex->UnLoad(dialog_tex);
 	App->tex->UnLoad(judge_tex);
 
 	return true;

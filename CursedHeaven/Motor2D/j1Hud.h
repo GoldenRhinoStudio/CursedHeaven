@@ -23,9 +23,6 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
 
-	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
-
 public:
 	bool black_mage = false;
 	bool dragoon_knight = false;
@@ -39,6 +36,7 @@ private:
 	SDL_Texture* score = nullptr;
 	SDL_Texture* dialog_tex = nullptr;
 	SDL_Texture* potion_tex = nullptr;
+	SDL_Texture* frames_tex = nullptr;
 
 	std::list<j1Label*> labels_list;
 	std::list<j1Button*> hud_buttons;

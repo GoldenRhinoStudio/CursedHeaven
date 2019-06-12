@@ -6,13 +6,15 @@
 j1Entity::j1Entity(int x, int y, ENTITY_TYPES type) : position(x,y), type(type)
 {}
 
-void j1Entity::Draw(SDL_Rect* r, bool flip, int x, int y, float scale, int offset, bool rage)
+void j1Entity::Draw(SDL_Rect* r, bool flip, int x, int y, float scale, int offset, bool rage, bool behind)
 {
 	if (rage) {
 		TileData* img = new TileData(0, position.x + x, position.y + y, 0, height, App->entity->knight->enraged, r, flip, collider, scale);
 
 		if (type == PLAYER)
 			img->margin.y = offset; //pillar del xml
+
+		img->behind = behind;
 
 		App->render->entities_sprites.push_back(img);
 	}
@@ -21,6 +23,8 @@ void j1Entity::Draw(SDL_Rect* r, bool flip, int x, int y, float scale, int offse
 
 		if (type == PLAYER)
 			img->margin.y = offset; //pillar del xml
+
+		img->behind = behind;
 
 		App->render->entities_sprites.push_back(img);
 	}

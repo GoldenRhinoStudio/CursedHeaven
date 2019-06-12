@@ -78,6 +78,7 @@ bool j1Audio::Awake(pugi::xml_node& config)
 	potion_sound = LoadFx("audio/fx/potion.wav");
 	heal_sound = LoadFx("audio/fx/heal.wav");
 	shield_sound = LoadFx("audio/fx/Shield.wav");
+	change_key_sound = LoadFx("audio/fx/ControlChange.wav");
 
 	return ret;
 }
@@ -129,7 +130,7 @@ bool j1Audio::PlayMusic(const char* path, float fade_time)
 		}
 
 		// this call blocks until fade out is done
-		Mix_FreeMusic(music);
+		//Mix_FreeMusic(music);
 	}
 
 	music = Mix_LoadMUS(path);
@@ -185,6 +186,16 @@ unsigned int j1Audio::LoadFx(const char* path)
 	}
 
 	return ret;
+}
+
+void j1Audio::UnloadFx() {
+	std::list<Mix_Chunk*>::iterator* item;
+
+	for (std::list<Mix_Chunk*>::iterator item = fx.begin(); item != fx.end(); ++item)
+	{
+		Mix_FreeChunk(*item);
+	}
+	fx.clear();
 }
 
 // Play WAV

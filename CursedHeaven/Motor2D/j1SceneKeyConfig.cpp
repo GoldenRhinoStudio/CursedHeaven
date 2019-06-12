@@ -16,7 +16,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1TransitionManager.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneKeyConfig::j1SceneKeyConfig()
@@ -29,7 +29,7 @@ bool j1SceneKeyConfig::Awake(pugi::xml_node &) {
 	LOG("Loading Key Config");
 
 	bool ret = true;
-
+	if (App->video->active) active = false;
 	if (App->menu->active) active = false;
 
 	if (!active) LOG("Key Config Scene not active.");

@@ -32,6 +32,7 @@
 #include "j1Shop.h"
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
+#include "j1Video.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -46,6 +47,9 @@ bool j1Scene2::Awake(pugi::xml_node& config) {
 	LOG("Loading Scene 2");
 
 	bool ret = true;
+
+	if (App->video->active)
+		active = false;
 
 	if (App->menu->active)
 		active = false;
@@ -76,6 +80,7 @@ bool j1Scene2::Start() {
 		}
 
 		// The audio is played	
+		
 		App->audio->PlayMusic("audio/music/song027.ogg", 1.0f);
 
 		// Textures are loaded
@@ -109,7 +114,7 @@ bool j1Scene2::Start() {
 		App->gui->CreateLabel(&scene2Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene2Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		
-		//PlaceEntities(6);
+		PlaceEntities(6);
 		App->shop->PlaceShopScene2();
 		App->entity->CreateEntity(JUDGE, 410, 850);
 

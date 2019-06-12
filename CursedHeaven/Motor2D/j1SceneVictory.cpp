@@ -18,7 +18,7 @@
 #include "j1Window.h"
 #include "j1DialogSystem.h"
 #include "j1Particles.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneVictory::j1SceneVictory()
@@ -33,6 +33,9 @@ bool j1SceneVictory::Awake(pugi::xml_node &)
 {
 	LOG("Loading Credits");
 	bool ret = true;
+
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;

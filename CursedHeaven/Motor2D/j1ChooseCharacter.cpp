@@ -27,7 +27,6 @@
 #include "j1Particles.h"
 #include "j1TransitionManager.h"
 #include "j1Video.h"
-
 #include "Brofiler/Brofiler.h"
 
 j1ChooseCharacter::j1ChooseCharacter() : j1Module() {
@@ -40,7 +39,8 @@ j1ChooseCharacter::~j1ChooseCharacter()
 bool j1ChooseCharacter::Awake(pugi::xml_node& config) {
 	LOG("Loading Choose Character Scene");
 	bool ret = true;
-
+	if (App->video->active)
+		active = false;
 	if (App->menu->active)
 		active = false;
 	else if (!App->menu->active && !App->scene1->active)

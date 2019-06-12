@@ -32,6 +32,7 @@
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
 #include "j1SceneKeyConfig.h"
+#include "j1Video.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -49,6 +50,8 @@ bool j1Scene1::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene 1");
 	bool ret = true;
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;

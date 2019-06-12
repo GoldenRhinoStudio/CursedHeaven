@@ -47,6 +47,7 @@ void j1Minimap::DrawEntities()
 
 			else if ((*item)->type == ENTITY_TYPES::SLIME)
 				App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 0, 0, 255, 255, true, false);
+
 		}
 	}
 	else if (App->scene2->active && App->scene2->finishedDialog2) {
@@ -57,7 +58,7 @@ void j1Minimap::DrawEntities()
 			if ((*item)->type == ENTITY_TYPES::PLAYER)
 				App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 255, 0, 0, 255, true, false);
 
-			else if ((*item)->type == ENTITY_TYPES::SLIME)
+			else if ((*item)->type == ENTITY_TYPES::SLIME || (*item)->type == ENTITY_TYPES::FIRE || (*item)->type == ENTITY_TYPES::TURRET)
 				App->render->DrawQuad({ pos_x + (int)App->win->width / 2 + 310, pos_y + (int)App->win->height / 2 + 185, 4, 4 }, 0, 0, 255, 255, true, false);
 		}
 	}

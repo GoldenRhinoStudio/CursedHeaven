@@ -14,7 +14,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1TransitionManager.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneCredits::j1SceneCredits()
@@ -28,6 +28,9 @@ bool j1SceneCredits::Awake(pugi::xml_node &)
 {
 	LOG("Loading Credits");
 	bool ret = true;
+
+	if (App->video->active == true)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;

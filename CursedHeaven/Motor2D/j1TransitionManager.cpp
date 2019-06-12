@@ -20,6 +20,8 @@
 #include "j1SceneVictory.h"
 #include "j1ChooseCharacter.h"
 #include "j1SceneKeyConfig.h"
+#include "j1Video.h"
+#include "j1Fonts.h"
 
 j1TransitionManager::j1TransitionManager()
 {
@@ -174,6 +176,11 @@ void j1TransitionManager::SwitchScenes(SCENE scene1, SCENE scene2) {
 			App->entity->active = false;
 			App->entity->CleanUp();
 			App->entity->DestroyEntities();
+		}
+		// From Video
+		else if (scene1 == SCENE::VIDEO) {
+			App->video->active = false;
+
 		}
 
 		App->menu->active = true;

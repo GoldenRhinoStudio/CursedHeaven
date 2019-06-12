@@ -32,8 +32,12 @@ j1SceneMenu::~j1SceneMenu() {}
 
 bool j1SceneMenu::Awake(pugi::xml_node &)
 {
+
 	LOG("Loading Menu");
 	bool ret = true;
+
+	if (App->video->active)
+		active = false;
 
 	if (App->menu->active == false)
 	{
@@ -50,6 +54,7 @@ bool j1SceneMenu::Start()
 {	
 	if (active)
 	{
+		
 		// The map is loaded
 		App->map->draw_with_quadtrees = false;
 		App->map->Load("menu.tmx");
@@ -93,6 +98,7 @@ bool j1SceneMenu::Start()
 		
 		startup_time.Start();
 		times++;
+
 	}
 	return true;
 }
@@ -211,6 +217,7 @@ bool j1SceneMenu::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		continueGame = false;
+
 
 	return continueGame;
 }

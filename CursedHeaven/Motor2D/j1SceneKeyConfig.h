@@ -58,11 +58,24 @@ public:
 	int USE_POTION = SDL_SCANCODE_R;
 	int TABULADOR = SDL_SCANCODE_TAB;
 
+	char text[100];
+
 	int last_changed = -1;
 
 	bool waiting = false;
 
 private:
+
+	j1Label* up;
+	j1Label* down;
+	j1Label* right;
+	j1Label* left;
+	j1Label* stats;
+	j1Label* attack;
+	j1Label* ability1;
+	j1Label* ability2;
+	j1Label* item;
+	j1Label* potion;
 
 	bool continueGame = true;
 	SDL_Texture* key_tex = nullptr;

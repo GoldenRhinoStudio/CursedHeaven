@@ -37,6 +37,7 @@ class j1Shop;
 class j1Minimap;
 class j1TransitionManager;
 class j1SceneKeyConfig;
+class j1Video;
 
 class j1App
 {
@@ -127,6 +128,7 @@ public:
 	j1Minimap*			minimap = nullptr;
 	j1TransitionManager* transitions = nullptr;
 	j1SceneKeyConfig*	key_config = nullptr;
+	j1Video*			video = nullptr;
 
 	bool				gamePaused = false;
 

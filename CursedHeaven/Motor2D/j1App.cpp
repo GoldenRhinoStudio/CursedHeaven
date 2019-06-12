@@ -32,6 +32,8 @@
 #include "j1Minimap.h"
 #include "j1TransitionManager.h"
 #include "j1SceneKeyConfig.h"
+#include "j1Video.h"
+
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -65,6 +67,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	dialog = new j1DialogSystem();
 	shop = new j1Shop;
 	minimap = new j1Minimap();
+	video = new j1Video();
 	transitions = new j1TransitionManager();
 
 	// Ordered for awake / Start / Update
@@ -94,6 +97,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(fade);
 	AddModule(transitions);
 	AddModule(victory);
+	AddModule(video);
+
 
 	// render last to swap buffer
 	AddModule(render);

@@ -22,7 +22,9 @@
 #include "Brofiler/Brofiler.h"
 
 j1SceneKeyConfig::j1SceneKeyConfig()
-{}
+{
+	name.assign("key_config");
+}
 
 j1SceneKeyConfig::~j1SceneKeyConfig()
 {}

@@ -106,9 +106,9 @@ int ReadThread(void *param) {
 }
 
 
-
 j1Video::j1Video()
 {
+	name = "video";
 }
 
 

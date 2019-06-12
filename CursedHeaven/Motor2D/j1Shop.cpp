@@ -128,13 +128,13 @@ bool j1Shop::Update(float dt)
 
 bool j1Shop::Load(pugi::xml_node& data)
 {
-	potions = data.append_child("potions").attribute("number").as_uint();
-	bootsLevel = data.append_child("boots").attribute("level").as_uint();
-	swordLevel = data.append_child("sword").attribute("level").as_uint();
-	heartLevel = data.append_child("heart").attribute("level").as_uint();
-	armourLevel = data.append_child("armour").attribute("level").as_uint();
-	hourglassLevel = data.append_child("hourglass").attribute("level").as_uint();
-	bookLevel = data.append_child("book").attribute("level").as_uint();
+	potions = data.child("potions").attribute("number").as_uint();
+	bootsLevel = data.child("boots").attribute("level").as_uint();
+	swordLevel = data.child("sword").attribute("level").as_uint();
+	heartLevel = data.child("heart").attribute("level").as_uint();
+	armourLevel = data.child("armour").attribute("level").as_uint();
+	hourglassLevel = data.child("hourglass").attribute("level").as_uint();
+	bookLevel = data.child("book").attribute("level").as_uint();
 
 	return true;
 }

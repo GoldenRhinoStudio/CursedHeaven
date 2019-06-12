@@ -65,54 +65,22 @@ bool j1SceneKeyConfig::Start() {
 		App->gui->CreateButton(&key_buttons, BUTTON, 60, 180, idle, hovered, clicked, key_tex, MOVE_LEFT_BUT);
 		App->gui->CreateButton(&key_buttons, BUTTON, 60, 220, idle, hovered, clicked, key_tex, TABULADOR_BUT);
 
-		up = App->gui->CreateLabel(&key_labels, LABEL, 60 + 18, 60 + 1, App->gui->font1, "MOVE UP", App->gui->beige);
-		down = App->gui->CreateLabel(&key_labels, LABEL, 60 + 14, 100 + 1, App->gui->font1, "MOVE DOWN", App->gui->beige);
-		right = App->gui->CreateLabel(&key_labels, LABEL, 60 + 13, 140 + 1, App->gui->font1, "MOVE RIGHT", App->gui->beige);
-		left = App->gui->CreateLabel(&key_labels, LABEL, 60 + 14, 180 + 1, App->gui->font1, "MOVE LEFT", App->gui->beige);
-		stats = App->gui->CreateLabel(&key_labels, LABEL, 60 + 11, 220 + 1, App->gui->font1, "SHOW STATS", App->gui->beige);
+		up = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 60 + 1, App->gui->font1, "MOVE UP   W", App->gui->beige);
+		down = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 100 + 1, App->gui->font1, "MOVE DOWN   S", App->gui->beige);
+		right = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 140 + 1, App->gui->font1, "MOVE RIGHT   D", App->gui->beige);
+		left = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 180 + 1, App->gui->font1, "MOVE LEFT   A", App->gui->beige);
+		stats = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 220 + 1, App->gui->font1, "STATS   TAB", App->gui->beige);
 
-		App->gui->CreateButton(&key_buttons, BUTTON, 200, 60, idle, hovered, clicked, key_tex, NORMAL_ATTACK_BUT);
-		App->gui->CreateButton(&key_buttons, BUTTON, 200, 100, idle, hovered, clicked, key_tex, ABILITY1_BUT);
-		App->gui->CreateButton(&key_buttons, BUTTON, 200, 140, idle, hovered, clicked, key_tex, ABILITY2_BUT);
-		App->gui->CreateButton(&key_buttons, BUTTON, 200, 180, idle, hovered, clicked, key_tex, BUY_ITEM_BUT);
-		App->gui->CreateButton(&key_buttons, BUTTON, 200, 220, idle, hovered, clicked, key_tex, USE_POTION_BUT);
+		App->gui->CreateButton(&key_buttons, BUTTON, 200, 60, idle, hovered, clicked, key_tex, ABILITY1_BUT);
+		App->gui->CreateButton(&key_buttons, BUTTON, 200, 100, idle, hovered, clicked, key_tex, ABILITY2_BUT);
+		App->gui->CreateButton(&key_buttons, BUTTON, 200, 140, idle, hovered, clicked, key_tex, BUY_ITEM_BUT);
+		App->gui->CreateButton(&key_buttons, BUTTON, 200, 180, idle, hovered, clicked, key_tex, USE_POTION_BUT);
 
-		attack = App->gui->CreateLabel(&key_labels, LABEL, 200 + 19, 60 + 1, App->gui->font1, "ATTACK", App->gui->beige);
-		ability1 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 17, 100 + 1, App->gui->font1, "ABILITY 1", App->gui->beige);
-		ability2 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 17, 140 + 1, App->gui->font1, "ABILITY 2", App->gui->beige);
-		item = App->gui->CreateLabel(&key_labels, LABEL, 200 + 16, 180 + 1, App->gui->font1, "BUY ITEM", App->gui->beige);
-		potion = App->gui->CreateLabel(&key_labels, LABEL, 200 + 14, 220 + 1, App->gui->font1, "USE POTION", App->gui->beige);
+		ability1 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 60 + 1, App->gui->font1, "ABILITY 1   Q", App->gui->beige);
+		ability2 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 100 + 1, App->gui->font1, "ABILITY 2   E", App->gui->beige);
+		item = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 140 + 1, App->gui->font1, "BUY ITEM   ENTER", App->gui->beige);
+		potion = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 180 + 1, App->gui->font1, "USE POTION   R", App->gui->beige);
 
-		/*
-		j1Label* Q = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "Q", App->gui->beige);
-		j1Label* W = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "W", App->gui->beige);
-		j1Label* E = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "E", App->gui->beige);
-		j1Label* R = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "R", App->gui->beige);
-		j1Label* T = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "T", App->gui->beige);
-		j1Label* Y = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "Y", App->gui->beige);
-		j1Label* U = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "U", App->gui->beige);
-		j1Label* I = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "I", App->gui->beige);
-		j1Label* O = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "O", App->gui->beige);
-		j1Label* P = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "P", App->gui->beige);
-		j1Label* A = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "A", App->gui->beige);
-		j1Label* S = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "S", App->gui->beige);
-		j1Label* D = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "D", App->gui->beige);
-		j1Label* F = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "F", App->gui->beige);
-		j1Label* G = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "G", App->gui->beige);
-		j1Label* H = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "H", App->gui->beige);
-		j1Label* J = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "J", App->gui->beige);
-		j1Label* K = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "K", App->gui->beige);
-		j1Label* L = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "L", App->gui->beige);
-		j1Label* Ñ = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "Ñ", App->gui->beige);
-		j1Label* Ç = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "Ç", App->gui->beige);
-		j1Label* Z = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "Z", App->gui->beige);
-		j1Label* X = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "X", App->gui->beige);
-		j1Label* C = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "C", App->gui->beige);
-		j1Label* V = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "V", App->gui->beige);
-		j1Label* B = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "B", App->gui->beige);
-		j1Label* N = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "N", App->gui->beige);
-		j1Label* M = App->gui->CreateLabel(&key_labels, LABEL, 0, 0, App->gui->font1, "M", App->gui->beige);
-		*/
 	}
 	return true;
 }
@@ -159,10 +127,7 @@ bool j1SceneKeyConfig::Update(float dt) {
 					else if (((*item)->bfunction) == MOVE_RIGHT_BUT) {
 						last_changed = 4;
 					}
-					else if (((*item)->bfunction) == NORMAL_ATTACK_BUT) {
-						last_changed = 5;
-					}
-					if (((*item)->bfunction) == TABULADOR_BUT) {
+					else if (((*item)->bfunction) == TABULADOR_BUT) {
 						last_changed = 6;
 					}
 					else if (((*item)->bfunction) == BUY_ITEM_BUT) {
@@ -201,9 +166,6 @@ bool j1SceneKeyConfig::Update(float dt) {
 			}
 			else if (last_changed == 4) {
 				MOVE_RIGHT = ChangeKey(MOVE_RIGHT);
-			}
-			else if (last_changed == 5) {
-				NORMAL_ATTACK = ChangeKey(NORMAL_ATTACK);
 			}
 			if (last_changed == 6) {
 				TABULADOR = ChangeKey(TABULADOR);
@@ -275,47 +237,42 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 	j1Label* key_label = nullptr;
 	char* button = nullptr;
 
-	//&key_labels, LABEL, 60 + 18, 60 + 1, App->gui->font1, "MOVE UP", App->gui->beige
 	switch (last_changed)
 	{
 	case 1:
-		//key_label = new j1Label(&key_labels, LABEL, 60 + 18, 60 + 1, App->gui->font1, "MOVE UP", App->gui->beige);
+		key_label = up;
 		button = "MOVE UP";
 		break;
 	case 2:
-		*key_label = *down;
+		key_label = down;
 		button = "MOVE DOWN";
 		break;
 	case 3:
-		*key_label = *left;
+		key_label = left;
 		button = "MOVE LEFT";
 		break;
 	case 4: 
-		*key_label = *right;
+		key_label = right;
 		button = "MOVE RIGHT";
 		break;
-	case 5:
-		*key_label = *attack;
-		button = "ATTACK";
-		break;
 	case 6:
-		*key_label = *stats;
+		key_label = stats;
 		button = "SHOW STATS";
 		break;
 	case 7:
-		*key_label = *item;
+		key_label = item;
 		button = "BUY ITEM";
 		break;
 	case 8: 
-		*key_label = *potion;
+		key_label = potion;
 		button = "USE POTION";
 		break;
 	case 9:
-		*key_label = *ability1;
+		key_label = ability1;
 		button = "ABILITY 1";
 		break;
 	case 10:
-		*key_label = *ability2;
+		key_label = ability2;
 		button = "ABILITY 2";
 		break;
 	}
@@ -340,11 +297,200 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 		break;
 	case 5:
 		letter = "   B";
-		strcpy(text, button);
-		strcat(text, letter);
-		key_label->text = text;
+		strcpy(text2, button);
+		strcat(text2, letter);
+		key_label->text = text2;
+		break;
+	case 6:
+		letter = "   C";
+		strcpy(text3, button);
+		strcat(text3, letter);
+		key_label->text = text3;
+		break;
+	case 7:
+		letter = "   D";
+		strcpy(text4, button);
+		strcat(text4, letter);
+		key_label->text = text5;
+		break;
+	case 8:
+		letter = "   E";
+		strcpy(text5, button);
+		strcat(text5, letter);
+		key_label->text = text5;
+		break;
+	case 9:
+		letter = "   F";
+		strcpy(text6, button);
+		strcat(text6, letter);
+		key_label->text = text6;
+		break;
+	case 10:
+		letter = "   G";
+		strcpy(text7, button);
+		strcat(text7, letter);
+		key_label->text = text7;
+		break;
+	case 11:
+		letter = "   H";
+		strcpy(text8, button);
+		strcat(text8, letter);
+		key_label->text = text8;
+		break;
+	case 12:
+		letter = "   I";
+		strcpy(text9, button);
+		strcat(text9, letter);
+		key_label->text = text9;
+		break;
+	case 13:
+		letter = "   J";
+		strcpy(text10, button);
+		strcat(text10, letter);
+		key_label->text = text10;
+		break;
+	case 14:
+		letter = "   K";
+		strcpy(text11, button);
+		strcat(text11, letter);
+		key_label->text = text11;
+		break;
+	case 15:
+		letter = "   L";
+		strcpy(text12, button);
+		strcat(text12, letter);
+		key_label->text = text12;
+		break;
+	case 16:
+		letter = "   M";
+		strcpy(text13, button);
+		strcat(text13, letter);
+		key_label->text = text13;
+		break;
+	case 17:
+		letter = "   N";
+		strcpy(text14, button);
+		strcat(text14, letter);
+		key_label->text = text14;
+		break;
+	case 18:
+		letter = "   O";
+		strcpy(text15, button);
+		strcat(text15, letter);
+		key_label->text = text15;
+		break;
+	case 19:
+		letter = "   P";
+		strcpy(text16, button);
+		strcat(text16, letter);
+		key_label->text = text16;
+		break;
+	case 20:
+		letter = "   Q";
+		strcpy(text17, button);
+		strcat(text17, letter);
+		key_label->text = text17;
+		break;
+	case 21:
+		letter = "   R";
+		strcpy(text18, button);
+		strcat(text18, letter);
+		key_label->text = text18;
+		break;
+	case 22:
+		letter = "   S";
+		strcpy(text19, button);
+		strcat(text19, letter);
+		key_label->text = text19;
+		break;
+	case 23:
+		letter = "   T";
+		strcpy(text20, button);
+		strcat(text20, letter);
+		key_label->text = text20;
+		break;
+	case 24:
+		letter = "   U";
+		strcpy(text21, button);
+		strcat(text21, letter);
+		key_label->text = text21;
+		break;
+	case 25:
+		letter = "   V";
+		strcpy(text22, button);
+		strcat(text22, letter);
+		key_label->text = text22;
+		break;
+	case 26:
+		letter = "   W";
+		strcpy(text23, button);
+		strcat(text23, letter);
+		key_label->text = text23;
+		break;
+	case 27:
+		letter = "   X";
+		strcpy(text24, button);
+		strcat(text24, letter);
+		key_label->text = text24;
+		break;
+	case 28:
+		letter = "   Y";
+		strcpy(text25, button);
+		strcat(text25, letter);
+		key_label->text = text25;
+		break;
+	case 29:
+		letter = "   Z";
+		strcpy(text26, button);
+		strcat(text26, letter);
+		key_label->text = text26;
+		break;
+	case 51:
+		letter = "   Ñ";
+		strcpy(text27, button);
+		strcat(text27, letter);
+		key_label->text = text27;
+		break;
+	case 49:
+		letter = "   Ç";
+		strcpy(text28, button);
+		strcat(text28, letter);
+		key_label->text = text28;
+		break;
+	case 43:
+		letter = "   TAB";
+		strcpy(text29, button);
+		strcat(text29, letter);
+		key_label->text = text29;
+		break;
+	case 40:
+		letter = "   ENTER";
+		strcpy(text30, button);
+		strcat(text30, letter);
+		key_label->text = text30;
+		break;
+	case 44:
+		letter = "   SPACE";
+		strcpy(text31, button);
+		strcat(text31, letter);
+		key_label->text = text31;
+		break;
+	case 225:
+		letter = "   SHIFT";
+		strcpy(text32, button);
+		strcat(text32, letter);
+		key_label->text = text32;
+		break;
+	
+	case 224:
+		letter = "   CTRL";
+		strcpy(text33, button);
+		strcat(text33, letter);
+		key_label->text = text33;
 		break;
 	}
+
+
 	waiting = false;
 
 

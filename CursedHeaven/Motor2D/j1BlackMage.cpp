@@ -115,11 +115,11 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
 				if (!attacking) {
 					// Attack control
-					if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK))
+					if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
 					{
 						attacking = true;
 
-						if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK)) {
+						if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
 							iPoint mouse_pos;
 							App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 							Shot(mouse_pos.x, mouse_pos.y, dt);

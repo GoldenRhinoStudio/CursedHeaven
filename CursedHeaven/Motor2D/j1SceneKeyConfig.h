@@ -51,14 +51,49 @@ public:
 	int MOVE_DOWN = SDL_SCANCODE_S;
 	int MOVE_LEFT = SDL_SCANCODE_A;
 	int MOVE_RIGHT = SDL_SCANCODE_D;
-	int NORMAL_ATTACK = 1;
 	int ABILITY1 = SDL_SCANCODE_Q;
 	int ABILITY2 = SDL_SCANCODE_E;
 	int BUY_ITEM = SDL_SCANCODE_RETURN;
 	int USE_POTION = SDL_SCANCODE_R;
 	int TABULADOR = SDL_SCANCODE_TAB;
 
-	char text[100];
+	char text[20];
+	char text2[20];
+	char text3[20];
+	char text4[20];
+	char text5[20];
+	char text6[20];
+	char text7[20];
+	char text8[20];
+	char text9[20];
+	char text10[20];
+	char text11[20];
+	char text12[20];
+	char text13[20];
+	char text14[20];
+	char text15[20];
+	char text16[20];
+	char text17[20];
+	char text18[20];
+	char text19[20];
+	char text20[20];
+	char text21[20];
+	char text22[20];
+	char text23[20];
+	char text24[20];
+	char text25[20];
+	char text26[20];
+	char text27[20];
+	char text28[20];
+	char text29[20];
+	char text30[20];
+	char text31[20];
+	char text32[20];
+	char text33[20];
+
+
+
+
 
 	int last_changed = -1;
 
@@ -71,7 +106,6 @@ private:
 	j1Label* right;
 	j1Label* left;
 	j1Label* stats;
-	j1Label* attack;
 	j1Label* ability1;
 	j1Label* ability2;
 	j1Label* item;

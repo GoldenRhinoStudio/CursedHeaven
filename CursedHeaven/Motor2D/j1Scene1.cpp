@@ -200,6 +200,13 @@ bool j1Scene1::Update(float dt)
 
 	App->gui->UpdateSliders(&scene1Boxes);
 
+	// Save
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
+		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
+
 	// Button actions
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		switch ((*item)->state)
@@ -242,17 +249,6 @@ bool j1Scene1::Update(float dt)
 			(*item)->situation = (*item)->clicked;
 			break;
 		}
-	}
-
-	// Load and Save
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-	{
-		App->LoadGame("save_game.xml");
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
-		App->SaveGame("save_game.xml");
-		mustSave = false;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)

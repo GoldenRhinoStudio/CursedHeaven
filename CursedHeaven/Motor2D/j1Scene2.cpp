@@ -161,10 +161,7 @@ bool j1Scene2::Update(float dt) {
 	App->gui->UpdateWindow(settings_window, &scene2Buttons, &scene2Labels, &scene2Boxes);
 	score_player = App->entity->currentPlayer->coins;
 	current_points = std::to_string(score_player);
-
-	bool a = App->scene2->active;
-	bool b = a;
-
+	
 	if (App->scene2->active && App->scene2->startup_time.Read() > 1700) {
 		if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || closeSettings ||
 			(SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_START) == KEY_DOWN && windowTime.Read() >= lastWindowTime + 200)) {
@@ -208,6 +205,13 @@ bool j1Scene2::Update(float dt) {
 
 	App->gui->UpdateSliders(&scene2Boxes);
 
+	// Save
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
+		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
+
 	// Button actions
 	for (std::list<j1Button*>::iterator item = scene2Buttons.begin(); item != scene2Buttons.end(); ++item) {
 		switch ((*item)->state)
@@ -250,17 +254,6 @@ bool j1Scene2::Update(float dt) {
 			(*item)->situation = (*item)->clicked;
 			break;
 		}
-	}
-
-	// Load and Save
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-	{
-		App->LoadGame("save_game.xml");
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
-		App->SaveGame("save_game.xml");
-		mustSave = false;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)

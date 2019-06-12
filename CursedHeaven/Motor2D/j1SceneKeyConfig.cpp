@@ -112,6 +112,8 @@ bool j1SceneKeyConfig::Update(float dt) {
 
 					else if ((*item)->bfunction != GO_TO_MENU) {
 						waiting = true;
+						App->input->last_key_pressed = -1;
+						App->input->button_pressed = false;
 					}
 
 					if (((*item)->bfunction) == MOVE_UP_BUT) {
@@ -247,6 +249,6 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 		new_key = key_to_change;
 
 	waiting = false;
-	
+
 	return new_key;
 }

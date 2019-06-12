@@ -16,6 +16,7 @@
 #include "j1Timer.h"
 #include "j1Particles.h"
 #include "j1DialogSystem.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -114,11 +115,11 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 			if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
 				if (!attacking) {
 					// Attack control
-					if (App->input->GetMouseButtonDown(1) == KEY_DOWN)
+					if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK))
 					{
 						attacking = true;
 
-						if (App->input->GetMouseButtonDown(1) == KEY_DOWN) {
+						if (App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK)) {
 							iPoint mouse_pos;
 							App->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 							Shot(mouse_pos.x, mouse_pos.y, dt);
@@ -148,7 +149,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				else available_E = false;
 
 				// Fire explosion
-				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY1) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					if (App->dialog->law == 1) App->entity->currentPlayer->lifePoints -= 18;
@@ -188,7 +189,7 @@ bool j1BlackMage::Update(float dt, bool do_logic) {
 				}
 
 				// Extra speed
-				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY2) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 					App->audio->PlayFx(App->audio->rage_bm);

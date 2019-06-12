@@ -13,6 +13,7 @@
 #include "j1Scene1.h"
 #include "j1Scene2.h"
 #include "j1Input.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 #include <time.h>
@@ -390,7 +391,7 @@ void j1Item::OnCollision(Collider* c1, Collider* c2) {
 		else {
 			App->render->DrawQuad({ (int)position.x - 15, (int)position.y, 50, 10 }, 0, 0, 0, 160);
 
-			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN
+			if (App->input->GetKey(App->key_config->BUY_ITEM) == KEY_DOWN
 				|| (SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN
 					&& (App->shop->buyingTime.Read() >= App->shop->lastBuyingTime + 500))) {
 

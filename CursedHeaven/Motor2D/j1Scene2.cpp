@@ -114,7 +114,7 @@ bool j1Scene2::Start() {
 		App->gui->CreateLabel(&scene2Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene2Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 		
-		//PlaceEntities(6);
+		PlaceEntities(6);
 		App->shop->PlaceShopScene2();
 		App->entity->CreateEntity(JUDGE, 410, 850);
 

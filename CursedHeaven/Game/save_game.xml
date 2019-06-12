@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<map />
+	<pathfinding />
+	<menu />
+	<credits />
+	<settings />
+	<:anonymous />
+	<choose_character />
+	<lose />
+	<scene1>
+		<activated value="false" />
+		<dialogs dialog="false" sellerDialog="true" />
+		<potions counter="0" />
+	</scene1>
+	<scene2>
+		<activated value="true" />
+		<dialogs dialog="true" />
+		<potions counter="1" />
+		<exodus spawned="false" />
+	</scene2>
+	<shop>
+		<potions number="1" />
+		<boots level="0" />
+		<sword level="0" />
+		<heart level="1" />
+		<armour level="0" />
+		<hourglass level="1" />
+		<book level="0" />
+	</shop>
+	<entityManager>
+		<player>
+			<position x="-632.397095" y="520.641052" />
+			<points value="0" />
+			<scorePoints value="0" />
+			<life value="305" />
+			<coins value="2" />
+			<godmode value="false" />
+		</player>
+		<playerType type="0" />
+		<gamePaused value="false" />
+		<slime>
+			<position x="33" y="88" />
+			<position x="83" y="12" />
+			<position x="91" y="17" />
+		</slime>
+		<fire>
+			<position x="77" y="78" />
+			<position x="76" y="73" />
+			<position x="72" y="66" />
+			<position x="35" y="38" />
+			<position x="87" y="29" />
+			<position x="51" y="25" />
+			<position x="49" y="18" />
+			<position x="42" y="18" />
+			<position x="46" y="12" />
+		</fire>
+		<turret>
+			<position x="92" y="58" />
+			<position x="84" y="55" />
+			<position x="36" y="36" />
+			<position x="40" y="31" />
+			<position x="39" y="72" />
+			<position x="32" y="74" />
+			<position x="40" y="84" />
+			<position x="68" y="8" />
+			<position x="63" y="10" />
+			<position x="67" y="23" />
+			<position x="71" y="22" />
+		</turret>
+		<mindflyer />
+		<exodus />
+		<life />
+		<coin />
+	</entityManager>
+	<particles />
+	<collisions />
+	<fonts />
+	<gui />
+	<minimap />
+	<dialog>
+		<laws currentLaw="0" />
+	</dialog>
+	<fade />
+	<transitions>
+		<scene1 active="false" />
+		<scene2 active="true" />
+	</transitions>
+	<victory />
+	<video />
+	<renderer>
+		<camera x="2409" y="-1177" />
+	</renderer>
+</game_state>

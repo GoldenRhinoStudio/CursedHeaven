@@ -27,7 +27,7 @@ public:
 	bool Update(float dt, bool do_logic);
 	bool DrawOrder(float dt);
 	bool PostUpdate() { return true; };
-	bool CleanUp() { return true; };
+	bool CleanUp();
 
 	// Load / Save
 	bool Load(pugi::xml_node&) { return true; };

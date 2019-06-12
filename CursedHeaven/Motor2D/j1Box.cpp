@@ -21,6 +21,6 @@ bool j1Box::CleanUp()
 {
 	LOG("Unloading button textures");
 	App->tex->UnLoad(sprites);
-
+	sprites = nullptr;
 	return true;
 }

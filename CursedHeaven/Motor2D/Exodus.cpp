@@ -148,16 +148,19 @@ bool Exodus::DrawOrder(float dt) {
 
 bool Exodus::CleanUp()
 {
-	LOG("Unloading mindflyer");
+	LOG("Unloading exodus");
 	App->tex->UnLoad(sprites);
+	App->tex->UnLoad(hud_tex);
+	App->tex->UnLoad(debug_tex);
+
+	sprites = nullptr;
+	hud_tex = nullptr;
+	
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	/*if (path != nullptr) {
-		path->clear();
-		RELEASE(path);
-		target_found = false;
-	}*/
+	animation = nullptr;
+
 
 	return true;
 }

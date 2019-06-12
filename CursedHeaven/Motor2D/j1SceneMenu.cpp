@@ -226,27 +226,35 @@ bool j1SceneMenu::CleanUp()
 {
 	LOG("Freeing all textures");
 	App->tex->UnLoad(gui_tex2);
-
+	font = nullptr;
 	App->map->CleanUp();
 	App->tex->CleanUp();
 
 	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		menuButtons.remove(*item);
 	}
 
 	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		menuLabels.remove(*item);
 	}
 
 	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		menuBoxes.remove(*item);
 	}
 
+	menuButtons.clear();
+	menuLabels.clear();
+	menuBoxes.clear();
+
 	delete settings_window;
-	if(settings_window != nullptr) settings_window = nullptr;
+	if(settings_window != nullptr) 
+		settings_window = nullptr;
 
 	return true;
 }

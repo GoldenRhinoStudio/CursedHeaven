@@ -393,6 +393,11 @@ bool j1Scene1::CleanUp()
 	App->tex->UnLoad(lvl1_tex);
 	App->tex->UnLoad(gui_tex);
 	App->tex->UnLoad(debug_tex);
+	bg = nullptr;
+	lvl1_tex = nullptr;
+	gui_tex = nullptr;
+	debug_tex = nullptr;
+
 	App->map->CleanUp();
 	App->collisions->CleanUp();
 	App->tex->CleanUp();
@@ -409,20 +414,25 @@ bool j1Scene1::CleanUp()
 
 	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		scene1Buttons.remove(*item);
 	}
+	scene1Buttons.clear();
 
 	for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		scene1Labels.remove(*item);
 	}
+	scene1Labels.clear();
 
 	for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		scene1Boxes.remove(*item);
 	}
+	scene1Boxes.clear();
 
-	delete settings_window;
 	if (settings_window != nullptr) settings_window = nullptr;
 
 	App->path->CleanUp();

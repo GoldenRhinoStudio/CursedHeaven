@@ -24,6 +24,9 @@ bool j1Label::CleanUp()
 {
 	LOG("Unloading label textures");
 	App->tex->UnLoad(sprites);
+	sprites = nullptr;
+	font = nullptr;
+	text = nullptr;
 
 	return true;
 }

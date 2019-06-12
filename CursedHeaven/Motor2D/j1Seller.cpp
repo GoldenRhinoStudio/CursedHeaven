@@ -45,7 +45,18 @@ bool j1Seller::Update(float dt, bool do_logic) {
 
 bool j1Seller::CleanUp()
 {
-	LOG("Loading seller texture");
+	LOG("Unloading Seller");
 	App->tex->UnLoad(sprites);
+	App->tex->UnLoad(debug_tex);
+
+	sprites = nullptr;
+	debug_tex = nullptr;
+
+	if (collider != nullptr)
+		collider->to_delete = true;
+
+	animation = nullptr;
+
+
 	return true;
 }

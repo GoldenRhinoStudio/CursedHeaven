@@ -71,6 +71,7 @@ bool Items::CleanUp()
 {
 	LOG("Unloading slime");
 	App->tex->UnLoad(sprites);
+	sprites = nullptr;
 	if (collider != nullptr)
 		collider->to_delete = true;
 

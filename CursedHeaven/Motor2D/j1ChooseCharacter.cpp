@@ -141,8 +141,10 @@ bool j1ChooseCharacter::Update(float dt) {
 					else if ((*item)->bfunction == NONE_BUT) {
 						for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
 							(*item)->CleanUp();
+							delete (*item);
 							chooseCharacterLabels.remove(*item);
 						}
+						chooseCharacterLabels.clear();
 					}
 				}
 				break;
@@ -219,18 +221,25 @@ bool j1ChooseCharacter::CleanUp() {
 
 	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		chooseCharacterButtons.remove(*item);
 	}
 
 	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		chooseCharacterLabels.remove(*item);
 	}
 
 	for (std::list<j1Box*>::iterator item = chooseCharacterBoxes.begin(); item != chooseCharacterBoxes.end(); ++item) {
 		(*item)->CleanUp();
+		delete (*item);
 		chooseCharacterBoxes.remove(*item);
 	}
+
+	chooseCharacterButtons.clear();
+	chooseCharacterLabels.clear();
+	chooseCharacterBoxes.clear();
 
 	return true;
 }

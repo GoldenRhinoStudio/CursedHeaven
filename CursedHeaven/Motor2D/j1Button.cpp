@@ -11,10 +11,12 @@ j1Button::~j1Button() {}
 
 void j1Button::Draw(float scale, int x, int y, bool use_camera)
 {
-	if (!use_camera)
-		App->render->Blit(sprites, (int)position.x + x, (int)position.y + y, &situation, SDL_FLIP_NONE, false, scale);
-	else
-		App->render->Blit(sprites, (int)position.x + x, (int)position.y + y, &situation, SDL_FLIP_NONE, true, scale);
+	if (sprites != nullptr) {
+		if (!use_camera)
+			App->render->Blit(sprites, (int)position.x + x, (int)position.y + y, &situation, SDL_FLIP_NONE, false, scale);
+		else
+			App->render->Blit(sprites, (int)position.x + x, (int)position.y + y, &situation, SDL_FLIP_NONE, true, scale);
+	}
 }
 
 bool j1Button::CleanUp()

@@ -543,51 +543,42 @@ void j1Render::reOrder() {
 				if (pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1)//top-left
 				{
 					img1->order = img2->order + 0.5f;
-					LOG("TL");
 				}
 				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x)//top
 				{
 					img1->order = img2->order + 0.5f;
-					LOG("T");
 				}
 				else if (pos2.y == pos1.y - 1 && pos2.x == pos1.x + 1)//top-right
 				{
 					img1->order = img2->order + 0.5f;
-					LOG("TR");
 				}
 				else if ((pos2.x == pos1.x - 1) && pos2.y == pos1.y) //left
 				{
 					img1->order = img2->order + 0.5f;
-					LOG("L");
 				}
 				else if (pos2.y == pos1.y && pos2.x == pos1.x)//current
 				{
 					img1->behind = true;
 					img1->order = img2->order - 0.5f; 
-					LOG("C");
 				}
 				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y)//right
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true; 
-					LOG("R");
 				}
 				else if (pos2.y == pos1.y + 1 && pos2.x == pos1.x - 1)//bottom-left
 				{
 					img1->order = img2->order + 0.5f;
-					LOG("BL");
 				}
 				else if (pos2.x == pos1.x && pos2.y == pos1.y + 1 )//bottom
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
-					LOG("B");
 				}
 				else if (pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1)//bottom-right
 				{
 					img1->order = img2->order - 0.5f;
 					img1->behind = true;
-					LOG("BR");
 				}
 			}
 			else if (img1->height >= img2->height && !img1->behind) {

@@ -88,6 +88,7 @@ bool j1Particles::CleanUp()
 	LOG("Unloading particles");
 	App->tex->UnLoad(sword_tex);
 	App->tex->UnLoad(part_tex);
+	App->tex->UnLoad(vortex_tex);
 
 	for (uint i = 0; i < MAX_ACTIVE_PARTICLES; ++i)
 	{

@@ -135,14 +135,21 @@ bool j1Slime::CleanUp()
 {
 	LOG("Unloading slime");
 	App->tex->UnLoad(sprites);
+	App->tex->UnLoad(debug_tex);
+
+	sprites = nullptr;
+	debug_tex = nullptr;
+
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	/*if (path != nullptr) {
+	animation = nullptr;
+
+	if (path != nullptr) {
 		path->clear();
 		RELEASE(path);
 		target_found = false;
-	}*/
+	}
 
 	return true;
 }

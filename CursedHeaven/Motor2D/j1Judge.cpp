@@ -47,3 +47,21 @@ bool j1Judge::DrawOrder(float dt)
 
 	return true;
 }
+
+bool j1Judge::CleanUp()
+{
+	LOG("Unloading Judge");
+	App->tex->UnLoad(sprites);
+	App->tex->UnLoad(debug_tex);
+
+	sprites = nullptr;
+	debug_tex = nullptr;
+
+	if (collider != nullptr)
+		collider->to_delete = true;
+
+	animation = nullptr;
+
+
+	return true;
+}

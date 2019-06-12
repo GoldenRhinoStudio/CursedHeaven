@@ -99,5 +99,6 @@ private:
 	bool start_battle = false;
 	float multiplier = 0;
 	int life_points = 0;
+	SDL_Texture* hud_tex;
 };
 #endif // __j1MINDFLYER_H__

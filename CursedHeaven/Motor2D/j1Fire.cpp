@@ -118,16 +118,23 @@ bool j1Fire::DrawOrder(float dt) {
 
 bool j1Fire::CleanUp()
 {
-	LOG("Unloading slime");
+	LOG("Unloading fire");
 	App->tex->UnLoad(sprites);
+	App->tex->UnLoad(debug_tex);
+
+	debug_tex = nullptr;
+	sprites = nullptr;
+
 	if (collider != nullptr)
 		collider->to_delete = true;
 
-	/*if (path != nullptr) {
-	path->clear();
-	RELEASE(path);
-	target_found = false;
-	}*/
+	animation = nullptr;
+
+	if (path != nullptr) {
+		path->clear();
+		RELEASE(path);
+		target_found = false;
+	}
 
 	return true;
 }

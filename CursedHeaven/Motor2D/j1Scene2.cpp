@@ -238,7 +238,8 @@ bool j1Scene2::Update(float dt) {
 				App->fade->FadeToBlack();
 			}
 			else if ((*item)->bfunction == SAVE_GAME) {
-				App->SaveGame("save_game.xml");
+				mustSave = true;
+				closeSettings = true;
 			}
 			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
@@ -257,8 +258,10 @@ bool j1Scene2::Update(float dt) {
 		App->LoadGame("save_game.xml");
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
 		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		App->entity->currentPlayer->victory = true;
@@ -320,6 +323,7 @@ bool j1Scene2::Load(pugi::xml_node& node) {
 	active = node.child("activated").attribute("value").as_bool();
 	finishedDialog2 = node.child("dialogs").attribute("dialog").as_bool();
 	potionCounter = node.child("potions").attribute("counter").as_uint();
+	spawn = node.child("exodus").attribute("spawned").as_bool();
 
 	return true;
 }
@@ -334,6 +338,9 @@ bool j1Scene2::Save(pugi::xml_node& node) const
 
 	pugi::xml_node potions = node.append_child("potions");
 	potions.append_attribute("counter") = potionCounter;
+
+	pugi::xml_node exodus = node.append_child("exodus");
+	exodus.append_attribute("spawned") = spawn;
 
 	return true;
 }

@@ -230,7 +230,8 @@ bool j1Scene1::Update(float dt)
 				App->fade->FadeToBlack();
 			}
 			else if ((*item)->bfunction == SAVE_GAME) {
-				App->SaveGame("save_game.xml");
+				mustSave = true;
+				closeSettings = true;
 			}
 			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
@@ -249,8 +250,10 @@ bool j1Scene1::Update(float dt)
 		App->LoadGame("save_game.xml");
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
 		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		App->entity->currentPlayer->victory = true;

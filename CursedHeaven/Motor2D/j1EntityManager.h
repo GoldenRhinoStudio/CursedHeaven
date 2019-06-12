@@ -122,7 +122,6 @@ public:
 	bool loadingMf = false;
 	int exo_lifePoints = 0;
 	bool loadingExo = false;
-	bool exoFightOn = false;
 
 private:
 	int entity_logic = 0;

@@ -86,6 +86,7 @@ private:
 	bool closeSettings = false;
 	bool continueGame = true;
 	bool resettingLevel = false;	
+	bool mustSave = false;
 };
 
 #endif // __j1SCENE1_H__

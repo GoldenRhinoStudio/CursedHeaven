@@ -100,5 +100,6 @@ private:
 	float multiplier = 0;
 	int life_points = 0;
 	SDL_Texture* hud_tex;
+	int maxlife = 0;
 };
 #endif // __j1MINDFLYER_H__

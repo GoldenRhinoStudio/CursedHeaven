@@ -215,6 +215,32 @@ void j1Slime::OnCollision(Collider * col_1, Collider * col_2)
 					position.y -= 7;
 				}
 			}
+			else if (lifePoints > 0 && attacking == false && App->entity->player_type == MAGE) {
+				if ((animation == &lateral || animation == &idle_lateral) && position.x - App->entity->currentPlayer->position.x >= 0)
+					position.x += App->entity->currentPlayer->knockback;
+				else if (animation == &lateral || animation == &idle_lateral)
+					position.x -= App->entity->currentPlayer->knockback;
+				else if (animation == &up || animation == &idle_up)
+					position.y += App->entity->currentPlayer->knockback;
+				else if (animation == &down || animation == &idle_down)
+					position.y -= App->entity->currentPlayer->knockback;
+				else if ((animation == &diagonal_up || animation == &idle_diagonal_up) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y += 5;
+				}
+				else if (animation == &diagonal_up || animation == &idle_diagonal_up) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y += 5;
+				}
+				else if ((animation == &diagonal_down || animation == &idle_diagonal_down) && position.x - App->entity->currentPlayer->position.x >= 0) {
+					position.x += App->entity->currentPlayer->knockback;
+					position.y -= 5;
+				}
+				else if (animation == &diagonal_down || animation == &idle_diagonal_down) {
+					position.x -= App->entity->currentPlayer->knockback;
+					position.y -= 5;
+				}
+			}
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {

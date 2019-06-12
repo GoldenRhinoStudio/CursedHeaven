@@ -99,6 +99,10 @@ bool j1Scene1::Start()
 		SDL_Rect hovered = { 963, 12, 151, 38 };
 		SDL_Rect clicked = { 797, 14, 151, 37 };
 
+		SDL_Rect idle2 = { 1181, 12, 99, 38 };
+		SDL_Rect hovered2 = { 1386, 12, 99, 38 };
+		SDL_Rect clicked2 = { 1283, 12, 99, 38 };
+
 		SDL_Rect slider_r = { 860,334,180,5 };
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 65, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 20, 100, slider_r, slider_r, slider_r, gui_tex, NO_FUNCTION, (j1UserInterfaceElement*)settings_window);
@@ -106,14 +110,16 @@ bool j1Scene1::Start()
 		App->gui->CreateBox(&scene1Boxes, BOX, 50, 55, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 		App->gui->CreateBox(&scene1Boxes, BOX, 50, 90, { 388, 455, 28, 42 }, gui_tex, (j1UserInterfaceElement*)settings_window, 20, 92);
 
-		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 20, idle, hovered, clicked, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 10, 20, idle2, hovered2, clicked2, gui_tex, CLOSE_SETTINGS, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateButton(&scene1Buttons, BUTTON, 70, 20, idle2, hovered2, clicked2, gui_tex, SAVE_GAME, (j1UserInterfaceElement*)settings_window);
 
 		App->gui->CreateButton(&scene1Buttons, BUTTON, 30, 120, idle, hovered, clicked, gui_tex, GO_TO_MENU, (j1UserInterfaceElement*)settings_window);
 
 		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 40, App->gui->font2, "SOUND", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 25, 75, App->gui->font2, "MUSIC", App->gui->brown, (j1UserInterfaceElement*)settings_window);
 		App->gui->CreateLabel(&scene1Labels, LABEL, 48, 122, App->gui->font2, "MAIN MENU", App->gui->beige, (j1UserInterfaceElement*)settings_window);
-		App->gui->CreateLabel(&scene1Labels, LABEL, 50, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 20, 22, App->gui->font2, "RESUME", App->gui->beige, (j1UserInterfaceElement*)settings_window);
+		App->gui->CreateLabel(&scene1Labels, LABEL, 83, 22, App->gui->font2, "SAVE", App->gui->beige, (j1UserInterfaceElement*)settings_window);
 
 		PlaceEntities(6);
 		App->shop->PlaceShopScene1();
@@ -224,7 +230,8 @@ bool j1Scene1::Update(float dt)
 				App->fade->FadeToBlack();
 			}
 			else if ((*item)->bfunction == SAVE_GAME) {
-				App->SaveGame("save_game.xml");
+				mustSave = true;
+				closeSettings = true;
 			}
 			else if ((*item)->bfunction == CLOSE_GAME) {
 				continueGame = false;
@@ -243,8 +250,10 @@ bool j1Scene1::Update(float dt)
 		App->LoadGame("save_game.xml");
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN || mustSave) {
 		App->SaveGame("save_game.xml");
+		mustSave = false;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 		App->entity->currentPlayer->victory = true;

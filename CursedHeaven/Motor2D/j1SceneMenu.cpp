@@ -64,6 +64,7 @@ bool j1SceneMenu::Start()
 
 		// Loading textures
 		gui_tex2 = App->tex->Load("gui/uipack_rpg_sheet.png");
+		logo_tex = App->tex->Load("gui/CursedHeavenLogo.png");
 		
 		// Loading fonts
 		font = App->font->Load("fonts/Pixeled.ttf", 5);
@@ -181,8 +182,8 @@ bool j1SceneMenu::Update(float dt)
 	App->map->Draw();
 
 	// Blitting the logo
-	SDL_Rect logo = { 854, 92, 801, 166 };
-	App->render->Blit(gui_tex2, 30, 30, &logo, SDL_FLIP_NONE, true, App->gui->logoScale);
+	SDL_Rect logo = { 93, 44, 926, 272 };
+	App->render->Blit(logo_tex, 27, 20, &logo, SDL_FLIP_NONE, true, 0.30f);
 
 	// Blitting the buttons and labels of the menu
 

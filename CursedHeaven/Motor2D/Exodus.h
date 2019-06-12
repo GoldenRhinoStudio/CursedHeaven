@@ -65,8 +65,8 @@ public:
 	bool dead = false;
 	bool receivedBasicDamage = false;
 	bool receivedAbilityDamage = false;
-	bool start_fight = false;
 	int life_points = 0;
+	int maxlife = 0;
 	float multiplier = 0;
 };
 #endif // __j1MINDFLYER_H__

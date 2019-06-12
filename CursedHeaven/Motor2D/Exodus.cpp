@@ -46,7 +46,7 @@ bool Exodus::Start()
 
 	height = 1;
 
-	multiplier = 163 / (float)lifePoints;
+	multiplier = 163 / (float)maxlife;
 
 	return true;
 }
@@ -173,11 +173,10 @@ bool Exodus::PostUpdate() {
 	App->render->Blit(hud_tex, App->win->width / 4, App->win->height - 50, &lifebar, SDL_FLIP_NONE, false);
 	App->render->Blit(hud_tex, App->win->width / 4 + 3, App->win->height - 47, &lifebar_r, SDL_FLIP_NONE, false);
 
-
 	SDL_Rect temp;
 	temp.x = temp.y = 0;
 	temp.w = temp.h = 10;
-	SDL_Texture* title = App->font->Print("EXODUS", temp.w, temp.h, 0, App->gui->white, App->gui->font1);
+	SDL_Texture* title = App->font->Print("EXODUS", temp.w, temp.h, 0, App->gui->brown, App->gui->font1);
 
 	App->render->BlitHUD(title, App->win->width / 4, App->win->height - 90, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, INT_MAX, INT_MAX,false);
 
@@ -190,7 +189,7 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
-			col_2->to_delete = true;
+			if (App->entity->player_type == MAGE) col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 			receivedBasicDamage = true; 
@@ -236,7 +235,6 @@ bool Exodus::Save(pugi::xml_node& data) const
 	pugi::xml_node stats = data.append_child("stats");
 	stats.append_attribute("life") = lifePoints;
 	stats.append_attribute("dead") = dead;
-	stats.append_attribute("fightOn") = start_fight;
 
 	return true;
 }
@@ -260,11 +258,11 @@ void Exodus::LoadProperties()
 	if (App->entity->loadingExo) {
 		lifePoints = App->entity->exo_lifePoints;
 		App->entity->loadingExo = false;
-		start_fight = App->entity->exoFightOn;
 	}
 	else
 		lifePoints = exodus.attribute("life").as_int();
 
+	maxlife = exodus.attribute("life").as_int();
 	speed = exodus.attribute("speed").as_int();
 	shotTime = exodus.child("combat").attribute("shotTime").as_int();
 	damage = exodus.child("combat").attribute("damage").as_int();

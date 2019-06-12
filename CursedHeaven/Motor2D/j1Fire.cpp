@@ -190,12 +190,12 @@ void j1Fire::OnCollision(Collider * col_1, Collider * col_2)
 			int item = rand() % 10 + 1;
 
 			if (item > 7) {
-				App->entity->AddItem(position.x - 10, position.y - 10, LIFE);
-				App->entity->AddItem(position.x + 20, position.y, LIFE);
-				App->entity->AddItem(position.x - 20, position.y + 20, LIFE);
+				App->entity->AddItem(position.x - 5, position.y - 5, LIFE);
+				App->entity->AddItem(position.x + 5, position.y, LIFE);
+				App->entity->AddItem(position.x - 5, position.y + 5, LIFE);
 			}
 			else {
-				App->entity->AddItem(position.x - 10, position.y, COIN);
+				App->entity->AddItem(position.x - 5, position.y, COIN);
 			}
 
 			for (std::list<j1Entity*>::iterator item = App->entity->entities.begin(); item != App->entity->entities.end(); ++item) {

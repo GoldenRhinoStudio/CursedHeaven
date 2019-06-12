@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Textures.h"
 #include "j1Fonts.h"
+#include "j1Video.h"
 
 #include "SDL\include\SDL.h"
 #include "SDL_TTF\include\SDL_ttf.h"
@@ -22,6 +23,9 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 {
 	LOG("Init True Type Font library");
 	bool ret = true;
+
+	if (App->video->active)
+		active = false;
 
 	if (TTF_Init() == -1)
 	{

@@ -15,7 +15,7 @@
 #include "j1Input.h"
 #include "j1Window.h"
 #include "j1TransitionManager.h"
-
+#include "j1Video.h"
 #include "Brofiler/Brofiler.h"
 
 j1SceneSettings::j1SceneSettings()
@@ -29,6 +29,9 @@ bool j1SceneSettings::Awake(pugi::xml_node &)
 {
 	LOG("Loading Settings");
 	bool ret = true;
+
+	if (App->video->active)
+		active = false;
 
 	if (App->menu->active == true)
 		active = false;

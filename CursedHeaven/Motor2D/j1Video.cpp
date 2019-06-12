@@ -22,7 +22,8 @@ extern "C" {
 #include "j1Window.h"
 #include "p2Log.h"
 #include "j1Video.h"
-#include "j1FadeToBlack.h"
+#include "j1TransitionManager.h"
+#include "j1SceneMenu.h"
 
 #define DEFAULT_AUDIO_BUF_SIZE 1024
 #define MAX_AUDIOQ_SIZE (5 * 256 * 1024)
@@ -122,8 +123,9 @@ bool j1Video::Awake(pugi::xml_node&)
 
 bool j1Video::Start()
 {
-	App->win->scale = 1;
 	PlayVideo("textures/intro.mp4");
+	App->win->scale = 1;
+
 	return true;
 }
 
@@ -143,18 +145,18 @@ bool j1Video::Update(float dt)
 	if (quit && video.finished)
 	{
 		CloseVideo();
-		App->win->scale = 3;
 	}
-
+	if (playing)
+	{
+		App->render->Blit(texture, 0, 0, nullptr);
+	}
+	
 	return true;
 }
 
 bool j1Video::PostUpdate()
 {
-	if (playing)
-	{
-		App->render->Blit(texture, 0, 0, nullptr);
-	}
+
 	return true;
 }
 
@@ -354,12 +356,13 @@ void j1Video::CloseVideo()
 
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
-	SDL_CloseAudio();
-	audio_buf_index = 0;
-	audio_buf_size = 0;
+
 	quit = false;
 
+	App->win->scale = 3;
 
+	App->transitions->FadingToColor(VIDEO, MENU, White);
+	
 	LOG("Video closed");
 }
 
@@ -418,7 +421,7 @@ void j1Video::DecodeVideo()
 	}
 
 	//Prepare VideoCallback on ms
-	SDL_AddTimer((Uint32)(delay * 60 + 0.5), (SDL_TimerCallback)VideoCallback, this);
+	SDL_AddTimer((Uint32)(delay * 50 + 0.5), (SDL_TimerCallback)VideoCallback, this);
 	av_packet_unref(&pkt);
 }
 

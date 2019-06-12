@@ -99,7 +99,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(victory);
 	AddModule(video);
 
-
 	// render last to swap buffer
 	AddModule(render);
 }

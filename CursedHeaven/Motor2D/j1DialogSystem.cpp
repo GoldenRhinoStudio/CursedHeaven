@@ -14,6 +14,7 @@
 #include "j1Fonts.h"
 #include "j1DragoonKnight.h"
 #include "j1BlackMage.h"
+#include "j1SceneKeyConfig.h"
 #include <time.h>
 
 j1DialogSystem::j1DialogSystem()
@@ -110,7 +111,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -143,7 +144,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) 
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -176,7 +177,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene1->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -223,7 +224,7 @@ bool j1DialogSystem::Update(float dt) {
 						canSkip = true;
 					}
 
-				if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+				if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 					&& canSkip && App->scene1->settings_window->visible == false) {
 					times++;
 					canSkip = false;
@@ -270,7 +271,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -303,7 +304,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;
@@ -336,7 +337,7 @@ bool j1DialogSystem::Update(float dt) {
 				canSkip = true;
 			}
 
-			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 				&& canSkip && App->scene2->settings_window->visible == false) {
 				times++;
 				canSkip = false;

@@ -48,6 +48,7 @@ public:
 	int	heal_sound;
 	int	potion_sound;
 	int shield_sound;
+	int change_key_sound;
 
 private:
 

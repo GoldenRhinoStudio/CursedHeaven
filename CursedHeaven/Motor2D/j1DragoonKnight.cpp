@@ -15,6 +15,7 @@
 #include "j1Scene2.h"
 #include "j1Audio.h"
 #include "j1DialogSystem.h"
+#include "j1SceneKeyConfig.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -129,7 +130,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 			if (GodMode == false && dead == false && changing_room == false && !App->gamePaused) {
 				if (!attacking) {
 					// Attack control
-					if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
+					if ((App->input->GetMouseButtonDown(1) == KEY_DOWN || App->input->GetKey(App->key_config->NORMAL_ATTACK) || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) == KEY_DOWN)) {
 
 						App->audio->PlayFx(App->audio->attack_dk);
 						attacking = true;
@@ -159,7 +160,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 				else available_E = false;
 
 				// Ability control
-				if ((App->input->GetKey(SDL_SCANCODE_Q) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY1) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_Y) == KEY_DOWN)
 					&& (firstTimeQ || (active_Q == false && cooldown_Q.Read() >= lastTime_Q + cooldownTime_Q))) {
 
 					if (dialog->law == 1) App->entity->currentPlayer->lifePoints -= 38;
@@ -179,7 +180,7 @@ bool j1DragoonKnight::Update(float dt, bool do_logic) {
 					active_Q = false;
 				}
 
-				if ((App->input->GetKey(SDL_SCANCODE_E) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
+				if ((App->input->GetKey(App->key_config->ABILITY2) == j1KeyState::KEY_DOWN || SDL_GameControllerGetButton(App->input->controller, SDL_CONTROLLER_BUTTON_B) == KEY_DOWN)
 					&& (firstTimeE || (active_E == false && cooldown_E.Read() >= lastTime_E + cooldownTime_E))) {
 
 					App->audio->PlayFx(App->audio->rage_dk);

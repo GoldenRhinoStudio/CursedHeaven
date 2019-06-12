@@ -11,6 +11,7 @@
 #include "j1Input.h"
 #include "j1Shop.h"
 #include "j1Window.h"
+#include "j1Shop.h"
 
 j1Hud::j1Hud() 
 {
@@ -40,6 +41,8 @@ bool j1Hud::Update(float dt)
 	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
 	SDL_Rect bm_profile = { 42,0,43,42 };
+
+	SDL_Rect upgrade = { 561,587,28,28 };
 
 	SDL_Rect profile_frame = { 0, 0, 403, 190 };
 	SDL_Rect potion_frame = { 0, 200, 104, 186 };
@@ -173,10 +176,94 @@ bool j1Hud::Update(float dt)
 		if (black_mage) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_1, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 185, 220, &blackMage, SDL_FLIP_NONE, false, 0.3f);
+			
+			//HEART
+			if (App->shop->heartLevel == 1 || App->shop->heartLevel >= 2)
+				App->render->Blit(profile_text, 520, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+				
+			else if (App->shop->heartLevel == 1)
+				App->render->Blit(profile_text, 553, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SWORD
+			if (App->shop->swordLevel == 1 || App->shop->swordLevel >= 2)
+				App->render->Blit(profile_text, 520, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->swordLevel == 1)
+				App->render->Blit(profile_text, 553, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SHIELD
+			if (App->shop->bookLevel == 1 || App->shop->bookLevel >= 2)
+				App->render->Blit(profile_text, 520, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bookLevel == 1)
+				App->render->Blit(profile_text, 553, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SPEED
+			if (App->shop->bootsLevel == 1 || App->shop->bootsLevel >= 2)
+				App->render->Blit(profile_text, 731, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bootsLevel == 1)
+				App->render->Blit(profile_text, 764, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+			
+			//ABILITY1
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//ABILITY2
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
 		}
 		else if (dragoon_knight) {
 			App->render->Blit(profile_text, 150, 100, &window_profile_2, SDL_FLIP_NONE, false, 0.3f);
 			App->render->Blit(profile_text, 158, 220, &dragoonKnight, SDL_FLIP_NONE, false, 0.3f);
+
+			//HEART
+			if (App->shop->heartLevel == 1 || App->shop->heartLevel >= 2)
+				App->render->Blit(profile_text, 520, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->heartLevel == 1)
+				App->render->Blit(profile_text, 553, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SWORD
+			if (App->shop->swordLevel == 1 || App->shop->swordLevel >= 2)
+				App->render->Blit(profile_text, 520, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->swordLevel == 1)
+				App->render->Blit(profile_text, 553, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SHIELD
+			if (App->shop->bookLevel == 1 || App->shop->bookLevel >= 2)
+				App->render->Blit(profile_text, 520, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bookLevel == 1)
+				App->render->Blit(profile_text, 553, 494, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//SPEED
+			if (App->shop->bootsLevel == 1 || App->shop->bootsLevel >= 2)
+				App->render->Blit(profile_text, 731, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->bootsLevel == 1)
+				App->render->Blit(profile_text, 764, 248, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//ABILITY1
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 368, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			//ABILITY2
+			if (App->shop->hourglassLevel == 1 || App->shop->hourglassLevel >= 2)
+				App->render->Blit(profile_text, 731, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
+
+			else if (App->shop->hourglassLevel == 1)
+				App->render->Blit(profile_text, 764, 495, &upgrade, SDL_FLIP_NONE, false, 0.3f);
 		}
 
 	}

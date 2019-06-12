@@ -13,6 +13,7 @@
 #include "j1Scene1.h"
 #include "j1Particles.h"
 #include "j1Audio.h"
+#include "j1Fonts.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -45,6 +46,7 @@ bool j1MindFlyer::Start()
 	LOG("Loading mindflyer texture");
 	sprites = App->tex->Load("textures/enemies/bosses/mindflyer.png");
 	debug_tex = App->tex->Load("maps/path2.png");
+	hud_tex = App->tex->Load("gui/hud.png");
 
 	LoadProperties();
 
@@ -54,6 +56,10 @@ bool j1MindFlyer::Start()
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
+	multiplier = 163 / (float)lifePoints;
+
+	start_battle = false;
+
 	return true;
 }
 
@@ -61,6 +67,8 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 {
 	BROFILER_CATEGORY("MindFlyerUpdate", Profiler::Color::LightSeaGreen)
 
+	life_points = lifePoints * multiplier;
+	
 	if (!dead) {
 		collider->SetPos(position.x + margin.x, position.y + margin.y);
 		if (!App->entity->currentPlayer->attacking) receivedBasicDamage = false;
@@ -73,6 +81,9 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 		if (distance <= MF_DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
+			if (!start_battle) {
+				start_battle = true;
+			}
 
 			if (App->entity->currentPlayer->dead == false)
 			{
@@ -147,7 +158,7 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 							if (loopAngle % 5 == 0) {
 
 								fPoint speed_particle[8];
-								fPoint particle_speed = { 200, 200 };
+								fPoint particle_speed = { 100, 100 };
 
 								speed_particle[0].x = particle_speed.x * cos((0 + loopAngle) * DEGTORAD);
 								speed_particle[0].y = particle_speed.y * sin((0 + loopAngle) * DEGTORAD);
@@ -235,6 +246,24 @@ bool j1MindFlyer::CleanUp()
 }
 
 bool j1MindFlyer::PostUpdate() {
+	if (start_battle) {
+		// Lifebar
+		SDL_Rect lifebar = { 0,239,163,8 };
+		SDL_Rect lifebar_r = { 0,247,life_points,6 };
+
+		App->render->Blit(hud_tex, App->win->width / 4, App->win->height - 50, &lifebar, SDL_FLIP_NONE, false);
+		App->render->Blit(hud_tex, App->win->width / 4 + 3, App->win->height - 47, &lifebar_r, SDL_FLIP_NONE, false);
+
+
+		SDL_Rect temp;
+		temp.x = temp.y = 0;
+		temp.w = temp.h = 10;
+		SDL_Texture* title = App->font->Print("MINDFLYER", temp.w, temp.h, 0, App->gui->white, App->gui->font1);
+
+		App->render->BlitHUD(title, App->win->width / 4, App->win->height - 90, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, INT_MAX, INT_MAX, false);
+
+		App->tex->UnLoad(title);
+	}
 	return true;
 }
 

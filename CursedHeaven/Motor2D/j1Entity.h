@@ -65,6 +65,7 @@ public:
 	Collider* collider = nullptr;
 	SDL_Texture* sprites = nullptr;
 	SDL_Texture* debug_tex = nullptr;
+	SDL_Texture* hud_tex = nullptr;
 
 	float height = 0;
 	float order = 0;

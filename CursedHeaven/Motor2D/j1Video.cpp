@@ -122,8 +122,8 @@ bool j1Video::Awake(pugi::xml_node&)
 
 bool j1Video::Start()
 {
-	//App->win->scale = 1;
-	//PlayVideo("textures/intro.mp4");
+	App->win->scale = 1;
+	PlayVideo("textures/intro.mp4");
 	return true;
 }
 
@@ -144,6 +144,7 @@ bool j1Video::Update(float dt)
 	{
 		CloseVideo();
 		App->win->scale = 3;
+		//active = false;
 	}
 
 	return true;
@@ -354,9 +355,7 @@ void j1Video::CloseVideo()
 
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
-	SDL_CloseAudio();
-	audio_buf_index = 0;
-	audio_buf_size = 0;
+	
 	quit = false;
 
 

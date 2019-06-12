@@ -25,6 +25,7 @@ bool j1Hud::Start()
 	profile_text = App->tex->Load("gui/player_profile.png");
 	dialog_tex = App->tex->Load("textures/dialog_cursedheaven.png");
 	potion_tex = App->tex->Load("gui/potion.png");
+	frames_tex = App->tex->Load("gui/UIFrames.png");
 	life_points = 82;
 	life_points_max = App->entity->currentPlayer->lifePoints;
 	multiplier = 82 / life_points_max;
@@ -39,6 +40,10 @@ bool j1Hud::Update(float dt)
 	// Profiles
 	SDL_Rect dk_profile = { 0,0,42,42 };
 	SDL_Rect bm_profile = { 42,0,43,42 };
+
+	SDL_Rect profile_frame = { 0, 0, 403, 190 };
+	SDL_Rect potion_frame = { 0, 200, 104, 186 };
+	SDL_Rect frame = { 228, 196, 399, 200 };
 
 	// Tab clicked
 	SDL_Rect blackMage = { 0,568,190,366 };
@@ -78,10 +83,16 @@ bool j1Hud::Update(float dt)
 	else if (App->entity->player_type == KNIGHT)
 		dragoon_knight = true;
 
+	if (frames_tex != nullptr) {
+		App->render->Blit(frames_tex, -10, -13, &profile_frame, SDL_FLIP_NONE, false, 0.35f);
+		App->render->Blit(frames_tex, -10, 190, &potion_frame, SDL_FLIP_NONE, false, 0.35f);
+		App->render->Blit(frames_tex, 620, 565, &frame, SDL_FLIP_NONE, false, 0.35f);
+	}
+
 	if (hud_text != nullptr) {
 		if (black_mage) {
 			// Icon profile
-			App->render->Blit(hud_text, 5, 5, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
+			App->render->Blit(hud_text, 11, 6, &bm_profile, SDL_FLIP_NONE, false, 1.0f);
 
 			// Abilities
 			// Q
@@ -90,14 +101,14 @@ bool j1Hud::Update(float dt)
 				App->render->Blit(hud_text, 15, 400, &bm_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
 			}
 			// E
-			App->render->Blit(hud_text, 15, 500, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
+			App->render->Blit(hud_text, 15, 465, &bm_available_e, SDL_FLIP_NONE, false, 0.5f);
 			if (!App->entity->currentPlayer->available_E) {
-				App->render->Blit(hud_text, 15, 500, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
+				App->render->Blit(hud_text, 15, 465, &bm_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 			}
 		}
 		else if (dragoon_knight) {
 			// Icon profile
-			App->render->Blit(hud_text, 5, 5, &dk_profile, SDL_FLIP_NONE, false);
+			App->render->Blit(hud_text, 11, 6, &dk_profile, SDL_FLIP_NONE, false);
 
 			// Abilities
 			// Q
@@ -106,9 +117,9 @@ bool j1Hud::Update(float dt)
 				App->render->Blit(hud_text, 15, 400, &dk_notavailable_q, SDL_FLIP_NONE, false, 0.5f);
 			}
 			// E
-			App->render->Blit(hud_text, 15, 500, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
+			App->render->Blit(hud_text, 15, 465, &dk_available_e, SDL_FLIP_NONE, false, 0.5f);
 			if (!App->entity->currentPlayer->available_E) {
-				App->render->Blit(hud_text, 15, 500, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
+				App->render->Blit(hud_text, 15, 465, &dk_notavailable_e, SDL_FLIP_NONE, false, 0.5f);
 			}
 		}
 	}
@@ -147,18 +158,15 @@ bool j1Hud::Update(float dt)
 		}
 	}
 
-	App->render->Blit(hud_text, 16, 135, &coins_r, SDL_FLIP_NONE, false);
+	App->render->Blit(hud_text, 16, 140, &coins_r, SDL_FLIP_NONE, false);
 
 	App->tex->UnLoad(score);
 	score = App->font->Print(current_points, temp.w, temp.h, 0, App->gui->brown, App->gui->font1);
 
-	App->render->BlitHUD(score, 69, 130, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
+	App->render->BlitHUD(score, 69, 135, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, pivot, pivot, false);
 
 	App->render->Blit(hud_text, 140, 10, &lifebar, SDL_FLIP_NONE, false);
 	App->render->Blit(hud_text, 143, 13, &lifebar_r, SDL_FLIP_NONE, false);
-
-
-
 
 	if (App->scene1->profile_active) {
 		
@@ -178,10 +186,12 @@ bool j1Hud::Update(float dt)
 
 bool j1Hud::CleanUp()
 {
-	App->tex->UnLoad(hud_text);
-	App->tex->UnLoad(profile_text);
-	App->tex->UnLoad(score);
+	App->tex->UnLoad(frames_tex);
 	App->tex->UnLoad(potion_tex);
+	App->tex->UnLoad(dialog_tex);
+	App->tex->UnLoad(profile_text);
+	App->tex->UnLoad(hud_text);
+	App->tex->UnLoad(score);
 
 	//for (std::list<j1Button*>::iterator item = hud_buttons.begin(); item != hud_buttons.end(); ++item) {
 	//	(*item)->CleanUp();

@@ -99,5 +99,6 @@ private:
 	bool start_battle = false;
 	float multiplier = 0;
 	int life_points = 0;
+	int maxlife = 0;
 };
 #endif // __j1MINDFLYER_H__

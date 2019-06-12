@@ -5,8 +5,10 @@
 #include "j1Textures.h"
 #include "j1Collisions.h"
 #include "j1EntityManager.h"
+#include "j1Audio.h"
 #include "j1Entity.h"
 #include "j1Scene1.h"
+#include "j1Scene2.h"
 #include "j1DragoonKnight.h"
 #include "j1BlackMage.h"
 #include "j1Rogue.h"
@@ -322,10 +324,10 @@ bool j1EntityManager::Load(pugi::xml_node& data)
 	// Loading Exodus
 	bool exo_dead = exodus.child("stats").attribute("dead").as_bool(true);
 
-	if (!exo_dead) {
-		App->entity->AddEnemy(exodus.child("position").attribute("x").as_float(), exodus.child("position").attribute("y").as_float(), EXODUS);
+	if (!exo_dead && App->scene2->spawn) {
+		App->entity->AddEnemy(38, 64, EXODUS);
+		App->audio->PlayMusic("audio/music/song021.ogg", 0.0f);
 		exo_lifePoints = exodus.child("stats").attribute("life").as_int();
-		exoFightOn = exodus.child("stats").attribute("fightOn").as_bool();
 		loadingExo = true;
 	}
 

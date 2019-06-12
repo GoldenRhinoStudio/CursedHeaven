@@ -56,7 +56,7 @@ bool j1MindFlyer::Start()
 
 	collider = App->collisions->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
-	multiplier = 163 / (float)lifePoints;
+	multiplier = 163 / (float)maxlife;
 
 	start_battle = false;
 
@@ -254,11 +254,10 @@ bool j1MindFlyer::PostUpdate() {
 		App->render->Blit(hud_tex, App->win->width / 4, App->win->height - 50, &lifebar, SDL_FLIP_NONE, false);
 		App->render->Blit(hud_tex, App->win->width / 4 + 3, App->win->height - 47, &lifebar_r, SDL_FLIP_NONE, false);
 
-
 		SDL_Rect temp;
 		temp.x = temp.y = 0;
 		temp.w = temp.h = 10;
-		SDL_Texture* title = App->font->Print("MINDFLYER", temp.w, temp.h, 0, App->gui->white, App->gui->font1);
+		SDL_Texture* title = App->font->Print("MINDFLYER", temp.w, temp.h, 0, App->gui->brown, App->gui->font1);
 
 		App->render->BlitHUD(title, App->win->width / 4, App->win->height - 90, &temp, SDL_FLIP_NONE, 1.0f, 1.0f, 0.0, INT_MAX, INT_MAX, false);
 
@@ -365,6 +364,7 @@ void j1MindFlyer::LoadProperties()
 	}else
 		lifePoints = mindflyer.attribute("life").as_int();
 
+	maxlife = mindflyer.attribute("life").as_int();
 	speed = mindflyer.attribute("speed").as_int();
 	score = mindflyer.attribute("score").as_int();
 	cooldown_Shot = mindflyer.child("combat").attribute("shotTime").as_uint();

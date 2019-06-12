@@ -25,7 +25,7 @@ j1Particles::j1Particles()
 
 	// Mage basic attack
 	mageShot.anim.LoadAnimation("shot", "mage");
-	mageShot.life = 300;
+	mageShot.life = 350;
 	mageShot.type = BASIC_SHOOT;
 
 	// Mage Q

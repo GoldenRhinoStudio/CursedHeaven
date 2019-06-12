@@ -109,7 +109,8 @@ void j1Player::ManagePlayerMovement(DIRECTION& direction, float dt, bool do_logi
 
 					if (App->entity->currentPlayer->lifePoints <= 0) App->entity->currentPlayer->dead = true;
 				}
-				else App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
+				else 
+					App->entity->currentPlayer->lifePoints += App->shop->potionHealing;
 
 				App->audio->PlayFx(App->audio->potion_sound);
 			}

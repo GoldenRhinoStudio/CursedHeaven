@@ -38,6 +38,16 @@ bool j1SceneKeyConfig::Awake(pugi::xml_node &) {
 
 	if (!active) LOG("Key Config Scene not active.");
 
+	move_up = "MOVE UP   W";
+	move_down = "MOVE DOWN   S";
+	move_right = "MOVE RIGHT   D";
+	move_left = "MOVE LEFT   A";
+	ability1_text = "ABILITY 1   Q";
+	ability2_text = "ABILITY 2   E";
+	item_text = "BUY ITEM   ENTER";
+	potion_text = "USE POTION   R";
+	stats_text = "STATS   TAB";
+	
 	return ret;
 }
 
@@ -67,21 +77,21 @@ bool j1SceneKeyConfig::Start() {
 		App->gui->CreateButton(&key_buttons, BUTTON, 60, 180, idle, hovered, clicked, key_tex, MOVE_LEFT_BUT);
 		App->gui->CreateButton(&key_buttons, BUTTON, 60, 220, idle, hovered, clicked, key_tex, TABULADOR_BUT);
 
-		up = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 60 + 1, App->gui->font1, "MOVE UP   W", App->gui->beige);
-		down = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 100 + 1, App->gui->font1, "MOVE DOWN   S", App->gui->beige);
-		right = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 140 + 1, App->gui->font1, "MOVE RIGHT   D", App->gui->beige);
-		left = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 180 + 1, App->gui->font1, "MOVE LEFT   A", App->gui->beige);
-		stats = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 220 + 1, App->gui->font1, "STATS   TAB", App->gui->beige);
+		up = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 60 + 1, App->gui->font1, move_up, App->gui->beige);
+		down = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 100 + 1, App->gui->font1, move_down, App->gui->beige);
+		right = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 140 + 1, App->gui->font1, move_right, App->gui->beige);
+		left = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 180 + 1, App->gui->font1, move_left, App->gui->beige);
+		stats = App->gui->CreateLabel(&key_labels, LABEL, 60 + 2, 220 + 1, App->gui->font1, stats_text, App->gui->beige);
 
 		App->gui->CreateButton(&key_buttons, BUTTON, 200, 60, idle, hovered, clicked, key_tex, ABILITY1_BUT);
 		App->gui->CreateButton(&key_buttons, BUTTON, 200, 100, idle, hovered, clicked, key_tex, ABILITY2_BUT);
 		App->gui->CreateButton(&key_buttons, BUTTON, 200, 140, idle, hovered, clicked, key_tex, BUY_ITEM_BUT);
 		App->gui->CreateButton(&key_buttons, BUTTON, 200, 180, idle, hovered, clicked, key_tex, USE_POTION_BUT);
 
-		ability1 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 60 + 1, App->gui->font1, "ABILITY 1   Q", App->gui->beige);
-		ability2 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 100 + 1, App->gui->font1, "ABILITY 2   E", App->gui->beige);
-		item = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 140 + 1, App->gui->font1, "BUY ITEM   ENTER", App->gui->beige);
-		potion = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 180 + 1, App->gui->font1, "USE POTION   R", App->gui->beige);
+		ability1 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 60 + 1, App->gui->font1, ability1_text, App->gui->beige);
+		ability2 = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 100 + 1, App->gui->font1, ability2_text, App->gui->beige);
+		item = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 140 + 1, App->gui->font1, item_text, App->gui->beige);
+		potion = App->gui->CreateLabel(&key_labels, LABEL, 200 + 2, 180 + 1, App->gui->font1, potion_text, App->gui->beige);
 
 	}
 	return true;
@@ -492,6 +502,36 @@ int j1SceneKeyConfig::ChangeKey(int key_to_change)
 		break;
 	}
 
+	switch (last_changed)
+	{
+	case 1:
+		move_up = key_label->text;
+		break;
+	case 2:
+		move_down = key_label->text;
+		break;
+	case 3:
+		move_left = key_label->text;
+		break;
+	case 4:
+		move_right = key_label->text;
+		break;
+	case 6:
+		stats_text = key_label->text;
+		break;
+	case 7:
+		item_text = key_label->text;
+		break;
+	case 8:
+		potion_text = key_label->text;
+		break;
+	case 9:
+		ability1_text = key_label->text;
+		break;
+	case 10:
+		ability2_text = key_label->text;
+		break;
+	}
 
 	waiting = false;
 

@@ -47,6 +47,13 @@ public:
 
 	int ChangeKey(int key_to_change);
 
+	SDL_Rect idle5 = { 382, 508, 37, 36 };
+	SDL_Rect hovered5 = { 343, 508, 37, 36 };
+	SDL_Rect clicked5 = { 421, 508, 37, 36 };
+	SDL_Rect idle = { 631, 12, 151, 38 };
+	SDL_Rect hovered = { 963, 12, 151, 38 };
+	SDL_Rect clicked = { 797, 12, 151, 38 };
+
 	int MOVE_UP = SDL_SCANCODE_W;
 	int MOVE_DOWN = SDL_SCANCODE_S;
 	int MOVE_LEFT = SDL_SCANCODE_A;
@@ -92,8 +99,15 @@ public:
 	char text33[20];
 
 
-
-
+	const char* move_up = nullptr;
+	const char* move_down = nullptr;
+	const char* move_right = nullptr;
+	const char* move_left = nullptr;
+	const char* ability1_text = nullptr;
+	const char* ability2_text = nullptr;
+	const char* item_text = nullptr;
+	const char* potion_text = nullptr;
+	const char* stats_text = nullptr;
 
 	int last_changed = -1;
 

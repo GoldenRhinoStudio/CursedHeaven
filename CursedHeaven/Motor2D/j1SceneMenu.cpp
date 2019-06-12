@@ -226,7 +226,7 @@ bool j1SceneMenu::CleanUp()
 {
 	LOG("Freeing all textures");
 	App->tex->UnLoad(gui_tex2);
-	
+
 	App->map->CleanUp();
 	App->tex->CleanUp();
 

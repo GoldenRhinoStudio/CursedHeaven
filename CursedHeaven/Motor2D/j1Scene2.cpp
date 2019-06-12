@@ -148,7 +148,7 @@ bool j1Scene2::Update(float dt) {
 		(pos.x >= 64 && pos.x <= 65 && pos.y >= 67 && pos.y <= 68)) && !spawn){
 		spawn = true;
 		App->entity->AddEnemy(38, 64, EXODUS);
-		App->audio->PlayMusic("audio/music/song021.ogg", 1.0f);
+		App->audio->PlayMusic("audio/music/song021.ogg", 0.0f);
 	}
 
 	time_scene2 = startup_time.ReadSec();

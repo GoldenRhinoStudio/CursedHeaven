@@ -125,7 +125,6 @@ bool j1Video::Start()
 {
 	PlayVideo("textures/intro.mp4");
 	App->win->scale = 1;
-
 	return true;
 }
 
@@ -356,7 +355,6 @@ void j1Video::CloseVideo()
 
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
-
 	quit = false;
 
 	App->win->scale = 3;

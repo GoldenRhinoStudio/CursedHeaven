@@ -91,6 +91,8 @@ bool j1ChooseCharacter::Start() {
 
 		App->menu->player_created = false;
 
+		App->video->active = false;
+
 		startup_time.Start();
 	}
 
@@ -209,6 +211,9 @@ bool j1ChooseCharacter::CleanUp() {
 	LOG("Freeing all textures");
 
 	App->tex->UnLoad(button_tex);
+	App->tex->UnLoad(gui_tex2);
+	App->tex->UnLoad(info_tex);
+
 	App->map->CleanUp();
 	App->tex->CleanUp();
 

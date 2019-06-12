@@ -187,12 +187,14 @@ void Exodus::OnCollision(Collider * col_1, Collider * col_2)
 	if (col_2->type == COLLIDER_ATTACK || col_2->type == COLLIDER_ABILITY) {
 
 		if (!receivedBasicDamage && col_2->type == COLLIDER_ATTACK) {
+			col_2->to_delete = true;
 			lifePoints -= App->entity->currentPlayer->basicDamage;
 			App->audio->PlayFx(App->audio->boss_damage);
 			receivedBasicDamage = true; 
 		}
 
 		if (!receivedAbilityDamage && col_2->type == COLLIDER_ABILITY) {
+			col_2->to_delete = true;
 			if (App->entity->mage != nullptr)
 				lifePoints -= App->entity->mage->fireDamage;
 			App->audio->PlayFx(App->audio->boss_damage);

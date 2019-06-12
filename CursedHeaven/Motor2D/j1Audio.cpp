@@ -188,6 +188,16 @@ unsigned int j1Audio::LoadFx(const char* path)
 	return ret;
 }
 
+void j1Audio::UnloadFx() {
+	std::list<Mix_Chunk*>::iterator* item;
+
+	for (std::list<Mix_Chunk*>::iterator item = fx.begin(); item != fx.end(); ++item)
+	{
+		Mix_FreeChunk(*item);
+	}
+	fx.clear();
+}
+
 // Play WAV
 bool j1Audio::PlayFx(unsigned int id, int repeat)
 {

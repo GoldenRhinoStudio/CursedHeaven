@@ -81,9 +81,6 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 
 		if (distance <= MF_DETECTION_RANGE && App->entity->currentPlayer->collider->type == COLLIDER_PLAYER)
 		{
-			if (!start_battle) {
-				start_battle = true;
-			}
 
 			if (App->entity->currentPlayer->dead == false)
 			{
@@ -95,6 +92,9 @@ bool j1MindFlyer::Update(float dt, bool do_logic)
 						path = App->path->GetLastPath();
 						target_found = true;
 						node = 0;
+						if (!start_battle) {
+							start_battle = true;
+						}
 					}
 					else {
 						target_found = false;

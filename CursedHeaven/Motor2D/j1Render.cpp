@@ -595,19 +595,19 @@ void j1Render::reOrder() {
 				pos1 = App->map->WorldToMap((int)img1->col->rect.x + img1->col->rect.w / 2, (int)img1->col->rect.y + img1->col->rect.h);
 				//App->map->Tile_WorldMap(pos1, img1->height);
 
-				if ((pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//down-right
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
-					(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
-					(pos2.x == pos1.x && pos2.y == pos1.y) || //current
-					(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) ||
-					(pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
-					(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
-					(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
-					(pos2.x == pos1.x + 1 && pos2.y == pos1.y)) {
-					if (img2->order > img1->order)
-						img1->order = img2->order + 0.5f;
-				}
-				//img1->order = img2->order + 0.5f;
+				//if ((pos2.x == pos1.x + 1 && pos2.y == pos1.y + 1) ||//down-right
+				//	(pos2.x == pos1.x + 1 && pos2.y == pos1.y - 1) ||//top-right
+				//	(pos2.x == pos1.x && pos2.y == pos1.y + 1) ||//down
+				//	(pos2.x == pos1.x && pos2.y == pos1.y) || //current
+				//	(pos2.x == pos1.x - 1 && pos2.y == pos1.y + 1) ||
+				//	(pos2.x == pos1.x - 1 && pos2.y == pos1.y) || //left
+				//	(pos2.x == pos1.x - 1 && pos2.y == pos1.y - 1) || //top-left
+				//	(pos2.x == pos1.x && pos2.y == pos1.y - 1) ||//top
+				//	(pos2.x == pos1.x + 1 && pos2.y == pos1.y)) {
+				//	if (img2->order > img1->order)
+				//		img1->order = img2->order + 0.5f;
+				//}
+				img1->order = img2->order + 0.5f;
 			}
 		}
 		OrderToRender.push(img2);

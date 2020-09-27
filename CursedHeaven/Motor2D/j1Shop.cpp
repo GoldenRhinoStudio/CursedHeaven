@@ -164,14 +164,14 @@ bool j1Shop::CleanUp()
 {
 	LOG("Freeing all items");
 
-	for (std::list<j1Label*>::iterator item = itemLabels.begin(); item != itemLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = itemLabels.begin(); item != itemLabels.end();) {
 		(*item)->CleanUp();
-		itemLabels.remove(*item);
+		itemLabels.erase(item++);
 	}
 
-	for (std::list<j1Item*>::iterator item = items.begin(); item != items.end(); ++item) {
+	for (std::list<j1Item*>::iterator item = items.begin(); item != items.end();) {
 		(*item)->CleanUp();
-		items.remove(*item);
+		items.erase(item++);
 	}
 
 	if (restartingShop) {

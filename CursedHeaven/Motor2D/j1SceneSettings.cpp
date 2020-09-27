@@ -224,19 +224,19 @@ bool j1SceneSettings::CleanUp()
 	App->map->CleanUp();
 	App->tex->CleanUp();
 
-	for (std::list<j1Button*>::iterator item = settingButtons.begin(); item != settingButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = settingButtons.begin(); item != settingButtons.end();) {
 		(*item)->CleanUp();
-		settingButtons.remove(*item);
+		settingButtons.erase(item++);
 	}
 
-	for (std::list<j1Label*>::iterator item = settingLabels.begin(); item != settingLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = settingLabels.begin(); item != settingLabels.end();) {
 		(*item)->CleanUp();
-		settingLabels.remove(*item);
+		settingLabels.erase(item++);
 	}
 
-	for (std::list<j1Box*>::iterator item = settingBoxes.begin(); item != settingBoxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = settingBoxes.begin(); item != settingBoxes.end();) {
 		(*item)->CleanUp();
-		settingBoxes.remove(*item);
+		settingBoxes.erase(item++);
 	}
 
 	delete sets_window;

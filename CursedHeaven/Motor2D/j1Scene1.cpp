@@ -412,19 +412,19 @@ bool j1Scene1::CleanUp()
 	if (App->entity->knight) App->entity->knight->CleanUp();
 	if (App->entity->mage) App->entity->mage->CleanUp();
 
-	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = scene1Buttons.begin(); item != scene1Buttons.end();) {
 		(*item)->CleanUp();
-		scene1Buttons.remove(*item);
+		scene1Buttons.erase(item++);
 	}
 
-	for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = scene1Labels.begin(); item != scene1Labels.end();) {
 		(*item)->CleanUp();
-		scene1Labels.remove(*item);
+		scene1Labels.erase(item++);
 	}
 
-	for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = scene1Boxes.begin(); item != scene1Boxes.end();) {
 		(*item)->CleanUp();
-		scene1Boxes.remove(*item);
+		scene1Boxes.erase(item++);
 	}
 
 	delete settings_window;

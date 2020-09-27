@@ -9,70 +9,80 @@
 	<menu />
 	<credits />
 	<settings />
-	<:anonymous />
+	<key_config />
 	<choose_character />
 	<lose />
 	<scene1>
-		<activated value="false" />
-		<dialogs dialog="false" sellerDialog="true" />
+		<activated value="true" />
+		<dialogs dialog="true" sellerDialog="true" />
 		<potions counter="0" />
 	</scene1>
 	<scene2>
-		<activated value="true" />
-		<dialogs dialog="true" />
-		<potions counter="1" />
+		<activated value="false" />
+		<dialogs dialog="false" />
+		<potions counter="0" />
 		<exodus spawned="false" />
 	</scene2>
 	<shop>
-		<potions number="1" />
+		<potions number="0" />
 		<boots level="0" />
 		<sword level="0" />
-		<heart level="1" />
+		<heart level="0" />
 		<armour level="0" />
-		<hourglass level="1" />
+		<hourglass level="0" />
 		<book level="0" />
 	</shop>
 	<entityManager>
 		<player>
-			<position x="-632.397095" y="520.641052" />
+			<position x="144.240005" y="786.799744" />
 			<points value="0" />
 			<scorePoints value="0" />
-			<life value="305" />
-			<coins value="2" />
+			<life value="200" />
+			<coins value="0" />
 			<godmode value="false" />
 		</player>
-		<playerType type="0" />
+		<playerType type="1" />
 		<gamePaused value="false" />
 		<slime>
-			<position x="33" y="88" />
-			<position x="83" y="12" />
-			<position x="91" y="17" />
+			<position x="6" y="57" />
+			<position x="15" y="54" />
+			<position x="17" y="61" />
+			<position x="31" y="65" />
+			<position x="28" y="65" />
+			<position x="28" y="53" />
+			<position x="29" y="40" />
+			<position x="33" y="41" />
+			<position x="14" y="41" />
+			<position x="45" y="45" />
+			<position x="43" y="39" />
+			<position x="38" y="41" />
+			<position x="29" y="19" />
+			<position x="28" y="22" />
+			<position x="26" y="26" />
+			<position x="46" y="25" />
+			<position x="45" y="32" />
+			<position x="38" y="28" />
+			<position x="23" y="4" />
+			<position x="12" y="4" />
+			<position x="17" y="13" />
+			<position x="49" y="4" />
+			<position x="60" y="7" />
+			<position x="59" y="11" />
+			<position x="70" y="8" />
+			<position x="85" y="23" />
+			<position x="80" y="19" />
+			<position x="70" y="25" />
+			<position x="88" y="46" />
+			<position x="80" y="42" />
+			<position x="85" y="60" />
+			<position x="80" y="65" />
 		</slime>
-		<fire>
-			<position x="77" y="78" />
-			<position x="76" y="73" />
-			<position x="72" y="66" />
-			<position x="35" y="38" />
-			<position x="87" y="29" />
-			<position x="51" y="25" />
-			<position x="49" y="18" />
-			<position x="42" y="18" />
-			<position x="46" y="12" />
-		</fire>
-		<turret>
-			<position x="92" y="58" />
-			<position x="84" y="55" />
-			<position x="36" y="36" />
-			<position x="40" y="31" />
-			<position x="39" y="72" />
-			<position x="32" y="74" />
-			<position x="40" y="84" />
-			<position x="68" y="8" />
-			<position x="63" y="10" />
-			<position x="67" y="23" />
-			<position x="71" y="22" />
-		</turret>
-		<mindflyer />
+		<fire />
+		<turret />
+		<mindflyer>
+			<position x="53" y="68" />
+			<stats life="3000" dead="false" />
+		</mindflyer>
 		<exodus />
 		<life />
 		<coin />
@@ -87,12 +97,12 @@
 	</dialog>
 	<fade />
 	<transitions>
-		<scene1 active="false" />
-		<scene2 active="true" />
+		<scene1 active="true" />
+		<scene2 active="false" />
 	</transitions>
 	<victory />
 	<video />
 	<renderer>
-		<camera x="2409" y="-1177" />
+		<camera x="79" y="-1976" />
 	</renderer>
 </game_state>

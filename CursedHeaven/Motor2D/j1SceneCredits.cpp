@@ -199,18 +199,18 @@ bool j1SceneCredits::CleanUp()
 	App->map->CleanUp();
 	App->tex->CleanUp();
 	
-	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = creditsButtons.begin(); item != creditsButtons.end();) {
 		(*item)->CleanUp();
-		creditsButtons.remove(*item);
+		creditsButtons.erase(item++);
 	}
 
-	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end(); ++item) {
-		creditsLabels.remove(*item);
+	for (std::list<j1Label*>::iterator item = creditsLabels.begin(); item != creditsLabels.end();) {
+		creditsLabels.erase(item++);
 	}
 
-	for (std::list<j1Box*>::iterator item = creditsBoxes.begin(); item != creditsBoxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = creditsBoxes.begin(); item != creditsBoxes.end();) {
 		(*item)->CleanUp();
-		creditsBoxes.remove(*item);
+		creditsBoxes.erase(item++);
 	}
 
 	delete credits_window;

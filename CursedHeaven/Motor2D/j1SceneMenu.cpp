@@ -231,19 +231,19 @@ bool j1SceneMenu::CleanUp()
 	App->map->CleanUp();
 	App->tex->CleanUp();
 
-	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = menuButtons.begin(); item != menuButtons.end();) {
 		(*item)->CleanUp();
-		menuButtons.remove(*item);
+		menuButtons.erase(item++);
 	}
 
-	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = menuLabels.begin(); item != menuLabels.end();) {
 		(*item)->CleanUp();
-		menuLabels.remove(*item);
+		menuLabels.erase(item++);
 	}
 
-	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = menuBoxes.begin(); item != menuBoxes.end();) {
 		(*item)->CleanUp();
-		menuBoxes.remove(*item);
+		menuBoxes.erase(item++);
 	}
 
 	delete settings_window;

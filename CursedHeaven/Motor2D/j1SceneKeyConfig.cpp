@@ -226,19 +226,19 @@ bool j1SceneKeyConfig::CleanUp() {
 	App->map->CleanUp();
 	App->tex->CleanUp();
 
-	for (std::list<j1Button*>::iterator item = key_buttons.begin(); item != key_buttons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = key_buttons.begin(); item != key_buttons.end();) {
 		(*item)->CleanUp();
-		key_buttons.remove(*item);
+		key_buttons.erase(item++);
 	}
 
-	for (std::list<j1Label*>::iterator item = key_labels.begin(); item != key_labels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = key_labels.begin(); item != key_labels.end();) {
 		(*item)->CleanUp();
-		key_labels.remove(*item);
+		key_labels.erase(item++);
 	}
 
-	for (std::list<j1Box*>::iterator item = key_boxes.begin(); item != key_boxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = key_boxes.begin(); item != key_boxes.end();) {
 		(*item)->CleanUp();
-		key_boxes.remove(*item);
+		key_boxes.erase(item++);
 	}
 
 	return true;

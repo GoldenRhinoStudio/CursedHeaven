@@ -139,9 +139,9 @@ bool j1ChooseCharacter::Update(float dt) {
 						App->gui->CreateLabel(&chooseCharacterLabels, LABEL, 140, 180, App->gui->font2, "LOCKED", App->gui->brown);
 					}
 					else if ((*item)->bfunction == NONE_BUT) {
-						for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
+						for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end();) {
 							(*item)->CleanUp();
-							chooseCharacterLabels.remove(*item);
+							chooseCharacterLabels.erase(item++);
 						}
 					}
 				}
@@ -216,20 +216,19 @@ bool j1ChooseCharacter::CleanUp() {
 
 	App->map->CleanUp();
 	App->tex->CleanUp();
-
-	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end(); ++item) {
+	for (std::list<j1Button*>::iterator item = chooseCharacterButtons.begin(); item != chooseCharacterButtons.end();) {
 		(*item)->CleanUp();
-		chooseCharacterButtons.remove(*item);
+		chooseCharacterButtons.erase(item++);
 	}
 
-	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end(); ++item) {
+	for (std::list<j1Label*>::iterator item = chooseCharacterLabels.begin(); item != chooseCharacterLabels.end();) {
 		(*item)->CleanUp();
-		chooseCharacterLabels.remove(*item);
+		chooseCharacterLabels.erase(item++);
 	}
 
-	for (std::list<j1Box*>::iterator item = chooseCharacterBoxes.begin(); item != chooseCharacterBoxes.end(); ++item) {
+	for (std::list<j1Box*>::iterator item = chooseCharacterBoxes.begin(); item != chooseCharacterBoxes.end();) {
 		(*item)->CleanUp();
-		chooseCharacterBoxes.remove(*item);
+		chooseCharacterBoxes.erase(item++);
 	}
 
 	return true;

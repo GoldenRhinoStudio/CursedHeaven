@@ -34,9 +34,13 @@ j1TransitionManager::~j1TransitionManager()
 bool j1TransitionManager::PostUpdate() {
 
 	// Calls PostUpdate (switch of states) of every transition in the list
-	for (std::list<j1Transitions*>::iterator item = transitions_list.begin(); item != transitions_list.end(); ++item) {
+	
+	for (std::list<j1Transitions*>::iterator item = transitions_list.begin(); item != transitions_list.end(); ++item) 
+	{
 		(*item)->PostUpdate();
+		if (!transition) break;
 	}
+	
 	return true;
 }
 
